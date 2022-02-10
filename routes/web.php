@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+// admin controller 
+use App\Http\Controllers\Admin\DashboardController;
+
+// customer controller 
+use App\Http\Controllers\Customer\InformationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +19,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [HomeController::class, 'welcome'])->name('home');
+
+Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// admin routes 
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+});
+
+// customer routes 
+Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['auth', 'customer']], function () {
+    Route::get('/information', [InformationController::class, 'index'])->name('information');
 });
