@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 // admin controller 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\WebsiteController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -28,7 +29,12 @@ Auth::routes();
 // admin routes 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+    Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::post('profile/{id}', [DashboardController::class, 'profileUpdate'])->name('profile.update');
+    Route::post('pass-updated/{id}', [DashboardController::class, 'updatePass'])->name('password.update');
+    // website seeting
+    Route::resource('website', WebsiteController::class);
+    Route::post('get-add-row-', [WebsiteController::class, 'addRemoveRow'])->name('row.addremove');
 });
 
 // customer routes 

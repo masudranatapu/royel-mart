@@ -1,7 +1,7 @@
 @extends('layouts.backend.app')
 
 @section('title')
-{{$title}}
+    {{$title}}
 @stop
 
 @push('css')
