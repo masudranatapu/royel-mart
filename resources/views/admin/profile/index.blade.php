@@ -185,7 +185,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 col-form-label">Phone</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" name="phone" placeholder="Phone Number" value="{{Auth::user()->phone}}">
+                                                        <input type="number" class="form-control" name="phone" placeholder="Phone Number" value="{{Auth::user()->phone}}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">

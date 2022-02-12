@@ -9,7 +9,7 @@
             </a>
         </li>
         <!-- {{ Request::is('admin/dashboard') ? 'pcoded-trigger' : '' }} -->
-        <li class="pcoded-hasmenu">
+        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/parent-category') || Request::is('admin/child-category') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-sidebar"></i>
@@ -17,27 +17,29 @@
                 <span class="pcoded-mtext">Category</span>
             </a>
             <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="menu-bottom.html">
-                        <span class="pcoded-mtext">Category</span>
+                <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
+                    <a href="{{ route('admin.category.index') }}">
+                        <span class="pcoded-mtext">Main Category</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="box-layout.html">
-                        <span class="pcoded-mtext">Sub Category</span>
+                <li class="{{ Request::is('admin/parent-category') ? 'active' : '' }}">
+                    <a href="{{ route('admin.parent-category.index') }}">
+                        <span class="pcoded-mtext">Parent Category</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="menu-rtl.html">
-                        <span class="pcoded-mtext">Sub Sub Category</span>
+                <li class="{{ Request::is('admin/child-category') ? 'active' : '' }}">
+                    <a href="{{ route('admin.child-category.index') }}">
+                        <span class="pcoded-mtext">Child Category</span>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="">
-            <a href="navbar-light.html">
-                <span class="pcoded-micon"><i class="feather icon-menu"></i></span>
-                <span class="pcoded-mtext">Navigation</span>
+        <li class="{{ Request::is('admin/brand') ? 'active' : '' }}">
+            <a href="{{ route('admin.brand.index') }}">
+                <span class="pcoded-micon">
+                    <i class="feather icon-menu"></i>
+                </span>
+                <span class="pcoded-mtext">Brand</span>
             </a>
         </li>
         <li class="pcoded-hasmenu">
@@ -48,7 +50,7 @@
             </a>
             <ul class="pcoded-submenu">
                 <li class=" ">
-                    <a href="widget-statistic.html">
+                    <a href="{{route('admin.unit.index')}}">
                         <span class="pcoded-mtext">Statistic</span>
                     </a>
                 </li>

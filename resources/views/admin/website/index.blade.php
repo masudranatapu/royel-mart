@@ -129,19 +129,19 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Phone Number</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="phone" value="{{$website->phone}}" placeholder="Phone Number">
+                                                <input type="number" class="form-control" name="phone" value="{{$website->phone}}" placeholder="Phone Number">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Fax Number</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="fax" value="{{$website->fax}}" placeholder="Fax number">
+                                                <input type="number" class="form-control" name="fax" value="{{$website->fax}}" placeholder="Fax number">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Telephone Number</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="tel" value="{{$website->tel}}" placeholder="Telephone number">
+                                                <input type="number" class="form-control" name="tel" value="{{$website->tel}}" placeholder="Telephone number">
                                             </div>
                                         </div>
                                         <div class="form-group row">
