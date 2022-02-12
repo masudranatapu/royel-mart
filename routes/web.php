@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\SubSubCategoryController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\SubUnitController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -59,6 +61,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     
     // Unit
     Route::resource('unit', UnitController::class);
+    Route::get('unit-active/{id}', [UnitController::class, 'unitActive'])->name('unit.active');
+    Route::get('unit-inactive/{id}', [UnitController::class, 'unitInactive'])->name('unit.inactive');
+
+    Route::resource('sub-unit', SubUnitController::class);
+    Route::get('sub-unit-active/{id}', [SubUnitController::class, 'subUnitActive'])->name('subunit.active');
+    Route::get('sub-unit-inactive/{id}', [SubUnitController::class, 'subUnitInactive'])->name('subunit.inactive');
 });
 
 // customer routes 

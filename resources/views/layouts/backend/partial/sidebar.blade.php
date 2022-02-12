@@ -42,26 +42,22 @@
                 <span class="pcoded-mtext">Brand</span>
             </a>
         </li>
-        <li class="pcoded-hasmenu">
+        <li class="pcoded-hasmenu {{ Request::is('admin/unit') || Request::is('admin/sub-unit') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-layers"></i></span>
-                <span class="pcoded-mtext">Widget</span>
-                <span class="pcoded-badge label label-danger">100+</span>
+                <span class="pcoded-micon">
+                    <i class="feather icon-layers"></i>
+                </span>
+                <span class="pcoded-mtext">Unit</span>
             </a>
             <ul class="pcoded-submenu">
-                <li class=" ">
+                <li class="{{ Request::is('admin/unit') ? 'active' : '' }}">
                     <a href="{{route('admin.unit.index')}}">
-                        <span class="pcoded-mtext">Statistic</span>
+                        <span class="pcoded-mtext">Unit</span>
                     </a>
                 </li>
-                <li class=" ">
-                    <a href="widget-data.html">
-                        <span class="pcoded-mtext">Data</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="widget-chart.html">
-                        <span class="pcoded-mtext">Chart Widget</span>
+                <li class="{{ Request::is('admin/sub-unit') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sub-unit.index') }}">
+                        <span class="pcoded-mtext">Sub Unit</span>
                     </a>
                 </li>
             </ul>

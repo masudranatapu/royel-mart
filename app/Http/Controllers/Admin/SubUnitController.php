@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Unit;
+use App\Models\SubUnit;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
-class UnitController extends Controller
+class SubUnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +19,10 @@ class UnitController extends Controller
     public function index()
     {
         //
-        $title = "Unit";
-        $units = Unit::latest()->get();
-        return view('admin.unit.index', compact('title', 'units'));
+        $title = "Sub Unit";
+        $units = Unit::where('status', 1)->latest()->get();
+        $subunits = SubUnit::latest()->get();
+        return view('admin.unit.subunit', compact('title', 'units', 'subunits'));
     }
 
     /**
@@ -43,13 +45,17 @@ class UnitController extends Controller
     {
         //
         $this->validate($request, [
+            'unit_id' => 'required',
             'name' => 'required',
         ]);
-        Unit::insert([
+
+        SubUnit::insert([
+            'unit_id' => $request->unit_id,
             'name' => $request->name,
             'status' => "1",
         ]);
-        Toastr::success('Unit successfully save :-)','Success');
+
+        Toastr::success('Sub unit successfully save :-)','Success');
         return redirect()->back();
     }
 
@@ -60,11 +66,11 @@ class UnitController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function unitActive($id)
+    public function subUnitActive($id)
     {
         //
-        Unit::findOrFail($id)->update(['status' => '1']);
-        Toastr::info('Unit successfully Active :-)','Success');
+        SubUnit::findOrFail($id)->update(['status' => '1']);
+        Toastr::info('Sub unit successfully Active :-)','Success');
         return redirect()->back();
     }
 
@@ -74,12 +80,11 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
-    public function unitInactive($id)
+    public function subUnitInactive($id)
     {
         //
-        Unit::findOrFail($id)->update(['status' => '0']);
-        Toastr::info('Unit successfully Active :-)','Success');
+        SubUnit::findOrFail($id)->update(['status' => '0']);
+        Toastr::info('Sub unit successfully Active :-)','Success');
         return redirect()->back();
     }
 
@@ -96,10 +101,11 @@ class UnitController extends Controller
         $this->validate($request, [
             'name' => 'required',
         ]);
-        Unit::findOrFaiL($id)->update([
+        SubUnit::findOrFaiL($id)->update([
+            'unit_id' => $request->unit_id,
             'name' => $request->name,
         ]);
-        Toastr::info('Unit successfully updated :-)','Success');
+        Toastr::info('Sub unit successfully updated :-)','Success');
         return redirect()->back();
     }
 
