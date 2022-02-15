@@ -4,14 +4,11 @@
 <script type="text/javascript" src="{{asset('backend/bower_components/popper.js/dist/umd/popper.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('backend/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- jquery slimscroll js -->
-
 <script type="text/javascript" src="{{asset('backend/bower_components/jquery-slimscroll/jquery.slimscroll.js')}}"></script>
 <!-- modernizr js -->
-
 <script type="text/javascript" src="{{asset('backend/bower_components/modernizr/modernizr.js')}}"></script>
 <script type="text/javascript" src="{{asset('backend/bower_components/modernizr/feature-detects/css-scrollbars.js')}}"></script>
 <!-- data-table js -->
-
 <script src="{{asset('backend/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('backend/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('backend/assets/pages/data-table/js/jszip.min.js')}}"></script>

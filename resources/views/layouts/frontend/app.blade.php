@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>@yield('title') - {{ config('app.name', 'Laravel') }}</title>
         @php
@@ -21,8 +20,11 @@
     <body>
         @include('layouts.frontend.partial.header')
         @yield('content')
+        <div class="overlay"></div>
+        <button class="scrollTop"><i class="bi bi-chevron-up"></i></button>
         @include('layouts.frontend.partial.footer')
         @include('layouts.frontend.partial.foot')
+
         <script src="{{asset('massage/toastr/toastr.js')}}"></script>
         {!! Toastr::message() !!}
         <script>

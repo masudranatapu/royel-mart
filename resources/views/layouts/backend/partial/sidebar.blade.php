@@ -63,12 +63,13 @@
             </ul>
         </li>
     </ul>
-    <div class="pcoded-navigatio-lavel">App</div>
     <ul class="pcoded-item pcoded-left-item">
-        <li class=" ">
-            <a href="chat.html">
-                <span class="pcoded-micon"><i class="feather icon-message-square"></i></span>
-                <span class="pcoded-mtext">Chat</span>
+        <li class="{{ Request::is('admin/product') || Request::is('admin/product/create') ? 'active' : '' }}">
+            <a href="{{ route('admin.product.index') }}">
+                <span class="pcoded-micon">
+                    <i class="feather icon-message-square"></i>
+                </span>
+                <span class="pcoded-mtext">Product</span>
             </a>
         </li>
         <li class="pcoded-hasmenu ">
@@ -117,87 +118,37 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu ">
-            <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-image"></i></span>
-                <span class="pcoded-mtext">Gallery</span>
-            </a>
-            <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="gallery-grid.html">
-                        <span class="pcoded-mtext">Gallery-Grid</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="gallery-masonry.html">
-                        <span class="pcoded-mtext">Masonry Gallery</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="gallery-advance.html">
-                        <span class="pcoded-mtext">Advance Gallery</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="pcoded-hasmenu ">
-            <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-search"></i><b>S</b></span>
-                <span class="pcoded-mtext">Search</span>
-            </a>
-            <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="search-result.html">
-                        <span class="pcoded-mtext">Simple Search</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="search-result2.html">
-                        <span class="pcoded-mtext">Grouping Search</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="pcoded-hasmenu ">
-            <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-award"></i></span>
-                <span class="pcoded-mtext">Job Search</span>
-                <span class="pcoded-badge label label-danger">NEW</span>
-            </a>
-            <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="job-card-view.html">
-                        <span class="pcoded-mtext">Card View</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="job-details.html">
-                        <span class="pcoded-mtext">Job Detailed</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="job-find.html">
-                        <span class="pcoded-mtext">Job Find</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="job-panel-view.html">
-                        <span class="pcoded-mtext">Job Panel View</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/website') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
                 </span>
-                <span class="pcoded-mtext">Website Setting</span>
+                <span class="pcoded-mtext">Website</span>
             </a>
             <ul class="pcoded-submenu">
+                <li class="">
+                    <a href="">
+                        <span class="pcoded-mtext">About Us</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/slider')? 'active' : '' }}">
+                    <a href="{{ route('admin.slider.index') }}">
+                        <span class="pcoded-mtext">Slider</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/banner')? 'active' : '' }}">
+                    <a href="{{ route('admin.banner.index') }}">
+                        <span class="pcoded-mtext">Banner</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/happy-client')? 'active' : '' }}">
+                    <a href="{{ route('admin.happy-client.index') }}">
+                        <span class="pcoded-mtext">Happy Client</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/website') ? 'active' : '' }}">
                     <a href="{{ route('admin.website.index') }}">
-                        <span class="pcoded-mtext">Website</span>
+                        <span class="pcoded-mtext">Website Setting</span>
                     </a>
                 </li>
             </ul>
