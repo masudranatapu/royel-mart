@@ -118,7 +118,7 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -144,6 +144,11 @@
                 <li class="{{ Request::is('admin/happy-client')? 'active' : '' }}">
                     <a href="{{ route('admin.happy-client.index') }}">
                         <span class="pcoded-mtext">Happy Client</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/mission-vision')? 'active' : '' }}">
+                    <a href="{{ route('admin.mission-vision.index') }}">
+                        <span class="pcoded-mtext">Mission Vision</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/website') ? 'active' : '' }}">

@@ -145,7 +145,7 @@ class ProductController extends Controller
                 $unitImage_name = $slug3.'-'.uniqid().'.'.$getUnitImage->getClientOriginalExtension();
                 $upload_path = 'media/unitimage/';
                 $unitImage_image_url = $upload_path.$unitImage_name;
-                $unitImage->move($upload_path, $unitImage_name);
+                $getUnitImage->move($upload_path, $unitImage_name);
                 $product_unitImage = $unitImage_image_url;
             }else {
                 $product_unitImage = NULL;
@@ -232,7 +232,7 @@ class ProductController extends Controller
                     </div>
                     <div class="col-md-3">
                         <label>Unit Image</label>
-                        <input type="file" class="form-control" name="image_'.$unitId->id.'[]" id="image_' . $unitId->id . '">
+                        <input type="file" class="form-control" name="image_'.$unitId->id.'" id="image_' . $unitId->id . '">
                     </div>
                     <div class="col-md-4">
                         <label>Unit Image</label>

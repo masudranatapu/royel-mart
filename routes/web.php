@@ -15,9 +15,13 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\HappyClientController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\MissionVisionController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
+
+// all controller
+use App\Http\Controllers\ViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +37,9 @@ use App\Http\Controllers\Customer\InformationController;
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
 
 Auth::routes();
+
+// category product
+Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -88,6 +95,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('banner', BannerController::class);
     Route::get('banner-active/{id}', [BannerController::class, 'bannerActive'])->name('banner.active');
     Route::get('banner-inactive/{id}', [BannerController::class, 'bannerInactive'])->name('banner.inactive');
+    // mission vision
+    Route::resource('mission-vision', MissionVisionController::class);
+    Route::get('missionvison-active/{id}', [MissionVisionController::class, 'missionVisionActive'])->name('missionvision.active');
+    Route::get('missionvison-inactive/{id}', [MissionVisionController::class, 'missionVisionInactive'])->name('missionvision.inactive');
     
 });
 

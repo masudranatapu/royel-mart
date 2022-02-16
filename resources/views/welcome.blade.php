@@ -20,51 +20,50 @@
                     <div class="inner-category-slider">
                         <div class="category-area checknav">
                             <ul class="category-list">
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/vegetable.png')}}" alt=""><span>Daily Needs</a></span>
-                                    <ul>
-                                        <li><a href="#">2nd step</a>
+                                @php
+                                    $categories = App\Models\Category::where('status', 1)->latest()->get();
+                                @endphp
+                                @foreach($categories as $category)
+                                    <li>
+                                        <a href="{{ route('category',$category->slug) }}">
+                                            <img src="{{ asset($category->image) }}" alt="">
+                                            <span>
+                                                {{ $category->name }}
+                                            </span>
+                                        </a>
+                                        @php
+                                            $parentcategories = App\Models\SubCategory::where('category_id', $category->id)->latest()->get();
+                                        @endphp
+                                        @if (count($parentcategories) > 0)
                                             <ul>
-                                                <li><a href="#">3rd step</a></li>
-                                                <li><a href="#">3rd step</a></li>
-                                                <li><a href="#">3rd step</a></li>
-                                                <li><a href="#">3rd step</a></li>
-                                                <li><a href="#">3rd step</a></li>
+                                                @foreach($parentcategories as $parentcategory)
+                                                    <li>
+                                                        <a href="{{ route('category',$parentcategory->slug) }}">{{ $parentcategory->name }}</a>
+                                                        @php
+                                                            $childcategories = App\Models\SubSubCategory::where('subcategory_id', $parentcategory->id)->latest()->get();
+                                                        @endphp
+                                                        @if (count($childcategories) > 0)
+                                                            <ul>
+                                                                @foreach($childcategories as $childcategory)
+                                                                    <li><a href="{{ route('category',$childcategory->slug) }}">{{ $childcategory->name }}</a></li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
                                             </ul>
-                                        </li>
-                                        <li><a href="#">2nd step</a></li>
-                                        <li><a href="#">2nd step</a></li>
-                                        <li><a href="#">2nd step</a></li>
-                                        <li><a href="#">2nd step</a></li>
-                                        <li><a href="#">2nd step</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/tv.png')}}" alt=""><span>Electronics & Home Appliance</a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/first-aid-kit.png')}}" alt=""><span>Health & Nutrition </a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/skincare.png')}}" alt=""><span>Cosmetics & Beauty Care</a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/baby.png')}}" alt=""><span>Baby Food & Fashions</a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/fashion.png')}}" alt=""><span>Women’s Fashions</a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/sport-watch.png')}}" alt=""><span>Men’s Fashions </a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/console.png')}}" alt=""><span>Stationery, Toys & Games </a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/sport.png')}}" alt=""><span>Sports & Fitness </a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/decorating.png')}}" alt=""><span>Lifestyle & Home Decor</a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/real-estate.png')}}" alt=""><span>Real Estate & Property </a></span></li>
-                                <li><a href="#"><img src="{{asset('frontend/images/icons/motorcycle.png')}}" alt=""><span>Automobile & Motor Bikes </a></span></li>
+                                        @endif
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                         <div class="slider-area">
                             <div class="main-slider owl-carousel">
-                                <div class="single-slide">
-                                    <img src="{{asset('frontend/images/slider/1.jpg')}}" alt="">
-                                </div>
-                                <div class="single-slide">
-                                    <img src="{{asset('frontend/images/slider/2.jpg')}}" alt="">
-                                </div>
-                                <div class="single-slide">
-                                    <img src="{{asset('frontend/images/slider/3.jpg')}}" alt="">
-                                </div>
-                                <div class="single-slide">
-                                    <img src="{{asset('frontend/images/slider/4.jpg')}}" alt="">
-                                </div>
+                                @foreach($sliders as $slider)
+                                    <div class="single-slide">
+                                        <img src="{{ asset($slider->image) }}" alt="">
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -96,29 +95,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Send List -->
                         </div>
-                        <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
-                            <div class="single-banner">
-                                <a href="#">
-                                    <img src="{{asset('frontend/images/banner/1.jpg')}}" alt="">
-                                </a>
+                        @foreach($banners as $banner)
+                            <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
+                                <div class="single-banner">
+                                    <a href="#">
+                                        <img src="{{asset($banner->image)}}" alt="">
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
-                            <div class="single-banner">
-                                <a href="#">
-                                    <img src="{{asset('frontend/images/banner/2.jpg')}}" alt="">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
-                            <div class="single-banner">
-                                <a href="#">
-                                    <img src="{{asset('frontend/images/banner/3.jpg')}}" alt="">
-                                </a>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -139,7 +125,6 @@
                 </div>
             </div>
             <!-- End Heading Area -->
-            
             <div class="product-area">
                 <div class="row">
                     <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
@@ -2034,7 +2019,6 @@
                     <a class="lg-btn" href="#">See More...</a>
                 </div>
             </div>
-            <!-- End Product Area -->
         </div>
     </section>
     <!-- End All Products -->
@@ -2042,42 +2026,19 @@
         <div class="container-fluid">
             <div class="content-area">
                 <div class="info-carousel owl-carousel">
-                    <div class="single-item">
-                        <figure>
-                            <img src="{{asset('frontend/images/about/1.jpg')}}" alt="">
-                        </figure>
-                        <div class="content">
-                            <h2 class="title">mission</h2>
-                            <p class="desc">Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Voluptates praesentium ab sed rerum dolores corrupti facilis, blanditiis omnis ex dicta, cum incidunt officiis nisi facere maxime earum nobis adipisci vitae.</p>
+                    @foreach($missionvissions as $missionvission)
+                        <div class="single-item">
+                            <figure>
+                                <img src="{{ asset($missionvission->image) }}" alt="">
+                            </figure>
+                            <div class="content">
+                                <h2 class="title">{{ $missionvission->name }}</h2>
+                                <p class="desc">
+                                    {!! $missionvission->details !!}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="single-item">
-                        <figure>
-                            <img src="{{asset('frontend/images/about/2.jpg')}}" alt="">
-                        </figure>
-                        <div class="content">
-                            <h2 class="title">vision</h2>
-                            <p class="desc">Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Voluptates praesentium ab sed rerum dolores corrupti facilis, blanditiis omnis ex dicta, cum incidunt officiis nisi facere maxime earum nobis adipisci vitae.</p>
-                        </div>
-                    </div>
-                    <div class="single-item">
-                        <figure>
-                            <img src="{{asset('frontend/images/about/1.jpg')}}" alt="">
-                        </figure>
-                        <div class="content">
-                            <h2 class="title">mission</h2>
-                            <p class="desc">Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Voluptates praesentium ab sed rerum dolores corrupti facilis, blanditiis omnis ex dicta, cum incidunt officiis nisi facere maxime earum nobis adipisci vitae.</p>
-                        </div>
-                    </div>
-                    <div class="single-item">
-                        <figure>
-                            <img src="{{asset('frontend/images/about/2.jpg')}}" alt="">
-                        </figure>
-                        <div class="content">
-                            <h2 class="title">vision</h2>
-                            <p class="desc">Lorem, ipsum dolor sit amet, consectetur adipisicing elit. Voluptates praesentium ab sed rerum dolores corrupti facilis, blanditiis omnis ex dicta, cum incidunt officiis nisi facere maxime earum nobis adipisci vitae.</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div> 
         </div>

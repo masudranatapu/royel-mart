@@ -1,5 +1,6 @@
 @php
     $website = App\Models\Website::latest()->first();
+    $clients = App\Models\Client::latest()->get();
 @endphp
 <section class="informations-section padding-20-20">
     <div class="container-fluid">
@@ -19,12 +20,9 @@
                 <div class="single-info">
                     <h4 class="title text-center">client slide set</h4>
                     <ul class="client-carousel owl-carousel">
-                        <li><img src="{{asset('frontend/images/clients/1.png')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/clients/2.png')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/clients/3.png')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/clients/4.png')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/clients/1.png')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/clients/2.png')}}" alt=""></li>
+                        @foreach($clients as $client)
+                            <li><img src="{{ asset($client->image) }}" alt=""></li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -32,10 +30,13 @@
                 <div class="single-info">
                     <h4 class="title">Social Link</h4>
                     <ul class="social">
-                        <li class="facebook"><a href="#"><i class="ri-facebook-fill"></i></a></li>
-                        <li class="twitter"><a href="#"><i class="ri-twitter-fill"></i></a></li>
-                        <li class="youtube"><a href="#"><i class="ri-youtube-fill"></i></a></li>
-                        <li class="dribbble"><a href="#"><i class="ri-dribbble-fill"></i></a></li>
+                        @php
+                            $icon = explode("|",$website->icon);
+                            $link = explode("|",$website->link);
+                        @endphp
+                        @foreach($icon as $key=>$icon)
+                            <li class="{{$icon}}"><a href="@if(isset($link[$key])){{$link[$key]}}@endif"><i class="fa fa-{{$icon}}"></i></a></li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
