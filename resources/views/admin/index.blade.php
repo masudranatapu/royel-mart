@@ -14,7 +14,6 @@
             <div class="page-wrapper">
                 <div class="page-body">
                     <div class="row">
-                        <!-- statustic-card start -->
                         <div class="col-xl-3 col-md-6">
                             <div class="card bg-c-yellow text-white">
                                 <div class="card-block">

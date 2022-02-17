@@ -23,33 +23,6 @@
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
-                <div class="page-header">
-                    <div class="row align-items-end">
-                        <div class="col-lg-8">
-                            <div class="page-header-title">
-                                <div class="d-inline">
-                                    <h4>Child {{ $title }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="page-header-breadcrumb">
-                                <ul class="breadcrumb-title">
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="{{ route('admin.dashboard') }}">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="javascript:;">
-                                            Child {{$title}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="page-body">
                     <div class="card">
                         <div class="card-header">
@@ -140,7 +113,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-md-3 col-form-label"></label>
                                                             <div class="col-md-9 text-left">
-                                                                <input type="submit" class="btn btn-success" value="Create Clild Category">
+                                                                <input type="submit" class="btn btn-success" value="Create child category">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -304,7 +277,7 @@
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 col-form-label"></label>
                                                                         <div class="col-md-9 text-left">
-                                                                            <input type="submit" class="btn btn-success" value="Update Clild Category">
+                                                                            <input type="submit" class="btn btn-success" value="Update clild category">
                                                                         </div>
                                                                     </div>
                                                                 </form>

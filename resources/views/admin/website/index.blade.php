@@ -25,33 +25,6 @@
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
-                <div class="page-header">
-                    <div class="row align-items-end">
-                        <div class="col-lg-8">
-                            <div class="page-header-title">
-                                <div class="d-inline">
-                                    <h4>{{ $title }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="page-header-breadcrumb">
-                                <ul class="breadcrumb-title">
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="{{ route('admin.dashboard') }}">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="javascript:;">
-                                            {{$title}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="page-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -59,10 +32,10 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h5>Update Your Website</h5>
+                                    <div class="card-header bg-success">
+                                        <h4 class="text-white">Update Your Website</h4>
                                     </div>
-                                    <div class="card-block">
+                                    <div class="card-body">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Website Name</label>
                                             <div class="col-sm-9">
@@ -205,7 +178,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-header">
+                                    <div class="card-header bg-info">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <h4>Website links</h4>
@@ -217,6 +190,10 @@
                                                     Add More Links
                                                 </button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
                                             <div class="col-md-12 mt-2">
                                                 <table class="table table-bordered">
                                                     <tbody>

@@ -23,39 +23,12 @@
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
-                <div class="page-header">
-                    <div class="row align-items-end">
-                        <div class="col-lg-8">
-                            <div class="page-header-title">
-                                <div class="d-inline">
-                                    <h4>{{$title}}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="page-header-breadcrumb">
-                                <ul class="breadcrumb-title">
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="{{ route('admin.dashboard') }}">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="javascript:;">
-                                            {{$title}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="page-body">
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2>client<small class="badge bg-success text-white">{{ $clients->count() }}</small></h2>
+                                    <h2>Client <small class="badge bg-success text-white">{{ $clients->count() }}</small></h2>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
@@ -76,31 +49,31 @@
                                                     <form action="{{ route('admin.happy-client.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Name</label>
+                                                            <label class="col-md-3 text-right">Name</label>
                                                             <div class="col-md-9">
                                                                 <input type="text" class="form-control" name="name" placeholder="Name">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Link</label>
+                                                            <label class="col-md-3 text-right">Link</label>
                                                             <div class="col-md-9">
                                                                 <input type="text" class="form-control" name="link" placeholder="Link">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Imge</label>
+                                                            <label class="col-md-3 text-right">Imge</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label"></label>
-                                                            <div class="col-md-9">
-                                                                <img class="category-image" src="" id="showTham">
+                                                            <label class="col-md-3 text-right"></label>
+                                                            <div class="col-md-9 text-left">
+                                                                <img width="100" height="100" src="{{ asset('demomedia/demo.png') }}" id="showTham">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label"></label>
+                                                            <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
                                                                 <input type="submit" class="btn btn-success" value="Create Main Category">
                                                             </div>
@@ -118,40 +91,35 @@
                                 <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>SL No</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Link</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th class="text-center">SL No</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Image</th>
+                                            <th class="text-center">Link</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($clients as $key => $client)
                                             <tr>
-                                                <td>{{  $key + 1 }}</td>
-                                                <td>{{$client->link}}</td>
-                                                <td>
-                                                    <img class="slider-image-size" src="{{ asset($client->image) }}" alt="">
-                                                </td>
-                                                <td>{{ $client->link }}</td>
-                                                <td>
+                                                <td class="text-center">{{  $key + 1 }}</td>
+                                                <td class="text-center">{{$client->link}}</td>
+                                                <td class="text-center">
+                                                    <img wodth="60" height="60" src="{{ asset($client->image) }}">
+                                                </td class="text-center">
+                                                <td class="text-center">{{ $client->link }}</td>
+                                                <td class="text-center">
                                                     @if($client->status == 1)
-                                                        <span class="badge bg-success">Active</span>
-                                                    @else 
-                                                        <span class="badge bg-info">Inctive</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($client->status == 1)
-                                                        <a title="Inactive Brand" href="{{ route('admin.client.inactive', $client->id) }}" class="btn btn-danger">
-                                                            <i class="ml-1 fa fa-angle-down"></i>
+                                                        <a title="Inactive Now" href="{{ route('admin.client.inactive', $client->id) }}" class="btn btn-success">
+                                                            Active
                                                         </a>
                                                     @else
-                                                        <a title="Active Brand" href="{{ route('admin.client.active', $client->id) }}" class="btn btn-success">
-                                                            <i class="ml-1 fa fa-angle-up"></i>
+                                                        <a title="Active Now" href="{{ route('admin.client.active', $client->id) }}" class="btn btn-danger">
+                                                            Inactive
                                                         </a>
                                                     @endif
+                                                </td>
+                                                <td class="text-center">
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
@@ -177,31 +145,31 @@
                                                                     @csrf
                                                                     @method('PUT')
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Name</label>
+                                                                        <label class="col-md-3 text-right">Name</label>
                                                                         <div class="col-md-9">
                                                                             <input type="text" class="form-control" name="name" value="{{ $client->name }}" placeholder="Name">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Link</label>
+                                                                        <label class="col-md-3 text-right">Link</label>
                                                                         <div class="col-md-9">
                                                                             <input type="text" class="form-control" name="link" value="{{ $client->link }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Imge</label>
+                                                                        <label class="col-md-3 text-right">Imge</label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label"></label>
-                                                                        <div class="col-md-9">
-                                                                            <img class="category-image showThamEdit" src="{{ asset($client->image) }}">
+                                                                        <label class="col-md-3 text-right"></label>
+                                                                        <div class="col-md-9 text-left">
+                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($client->image) }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label"></label>
+                                                                        <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9 text-left">
                                                                             <input type="submit" class="btn btn-success" value="Update client">
                                                                         </div>
@@ -214,16 +182,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>SL No</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Link</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

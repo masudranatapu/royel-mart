@@ -5,51 +5,13 @@
 @stop
 
 @push('css')
-    <style>
-        .brand-image {
-            width: 100px;
-            height: 100px;
-            float: left;
-        }
-        .brand-image-size {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-    </style>
+
 @endpush
 
 @section('content')
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
-                <div class="page-header">
-                    <div class="row align-items-end">
-                        <div class="col-lg-8">
-                            <div class="page-header-title">
-                                <div class="d-inline">
-                                    <h4>{{ $title }}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="page-header-breadcrumb">
-                                <ul class="breadcrumb-title">
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="{{ route('admin.dashboard') }}">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="javascript:;">
-                                            {{$title}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="page-body">
                     <div class="card">
                         <div class="card-header">
@@ -60,14 +22,14 @@
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
                                         <i class="fa fa-plus"></i>
-                                        Mission Vision
+                                        Add Mission Vision
                                     </button>
                                     <!-- crate modal  -->
                                     <div class="modal fade" id="large-Modal" tabindex="-1" role="dialog">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Create Mission Vision</h4>
+                                                    <h4 class="modal-title">Mission Vision</h4>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true"> &times; </span>
                                                     </button>
@@ -76,31 +38,31 @@
                                                     <form action="{{ route('admin.mission-vision.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Name</label>
+                                                            <label class="col-md-3 text-right">Name</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="name" placeholder="Name">
+                                                                <input type="text" class="form-control" name="name" placeholder="Mission vision name">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Image</label>
+                                                            <label class="col-md-3 text-right">Image</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label"></label>
-                                                            <div class="col-md-9">
-                                                                <img class="brand-image" src="" id="showTham">
+                                                            <label class="col-md-3 text-right"></label>
+                                                            <div class="col-md-9 text-left">
+                                                                <img width="100" height="100" src="{{ asset('demomedia/demo.png') }}" id="showTham">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Details</label>
+                                                            <label class="col-md-3 text-right">Details</label>
                                                             <div class="col-md-9">
                                                                 <textarea name="details" id="" cols="30" rows="5" class="form-control" placeholder="Details"></textarea>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label"></label>
+                                                            <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
                                                                 <input type="submit" class="btn btn-success" value="Add Mission Vision">
                                                             </div>
@@ -113,47 +75,42 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-block">
+                        <div class="card-body">
                             <div class="table-responsive dt-responsive">
                                 <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>SL No</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Details</th>
-                                            <th>Active Status</th>
-                                            <th>Action</th>
+                                            <th class="text-center">SL No</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Image</th>
+                                            <th class="text-center">Details</th>
+                                            <th class="text-center">Active Status</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($missionvisions as $key => $missionvision)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $missionvision->name }}</td>
-                                                <td>
-                                                    <img class="brand-image-size" src="{{ asset($missionvision->image) }}" alt="">
+                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                <td class="text-center">{{ $missionvision->name }}</td>
+                                                <td class="text-center">
+                                                    <img width="60" height="60" src="{{ asset($missionvision->image) }}" alt="">
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     {{ substr($missionvision->details, 0,  25) }}
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     @if($missionvision->status == 1)
-                                                        <span class="badge bg-success text-white">Active</span>
+                                                        <a title="Inactive Now" href="{{ route('admin.missionvision.inactive', $missionvision->id) }}" class="btn btn-success">
+                                                            Active
+                                                        </a>
                                                     @else
-                                                        <span class="badge bg-danger text-white">Inactive</span>
+                                                        <a title="Active Now" href="{{ route('admin.missionvision.active', $missionvision->id) }}" class="btn btn-danger">
+                                                            Inactive
+                                                        </a>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    @if($missionvision->status == 1)
-                                                        <a title="Inactive missionvision" href="{{ route('admin.missionvision.inactive', $missionvision->id) }}" class="btn btn-danger">
-                                                            <i class="ml-1 fa fa-angle-down"></i>
-                                                        </a>
-                                                    @else
-                                                        <a title="Active missionvision" href="{{ route('admin.missionvision.active', $missionvision->id) }}" class="btn btn-success">
-                                                            <i class="ml-1 fa fa-angle-up"></i>
-                                                        </a>
-                                                    @endif
+                                                <td class="text-center">
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
@@ -179,33 +136,33 @@
                                                                     @csrf
                                                                     @method('PUT')
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Name</label>
+                                                                        <label class="col-md-3 text-right">Name</label>
                                                                         <div class="col-md-9">
                                                                             <input type="text" class="form-control" name="name" value="{{ $missionvision->name }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Image</label>
+                                                                        <label class="col-md-3 text-right">Image</label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label"></label>
+                                                                        <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9">
-                                                                            <img class="brand-image showThamEdit" src="{{ asset($missionvision->image) }}">
+                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($missionvision->image) }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Details</label>
+                                                                        <label class="col-md-3 text-right">Details</label>
                                                                         <div class="col-md-9">
                                                                             <textarea name="details" cols="30" rows="5" class="form-control" placeholder="Details"> {{ $missionvision->details }} </textarea>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label"></label>
+                                                                        <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9 text-left">
-                                                                            <input type="submit" class="btn btn-success" value="Update">
+                                                                            <input type="submit" class="btn btn-success" value="Update Missio Vision">
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -216,16 +173,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>SL No</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Details</th>
-                                            <th>Active Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

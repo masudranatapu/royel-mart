@@ -17,7 +17,7 @@ class Category extends Model
         'menu',
         'feature',
         'serial_number',
-        'show_hide_status',
+        'show_hide',
         'status',
     ];
 }

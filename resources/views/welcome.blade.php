@@ -18,45 +18,39 @@
             <div class="row">
                 <div class="col-12 px-1">
                     <div class="inner-category-slider">
-                        <div class="category-area checknav">
-                            <ul class="category-list">
-                                @php
-                                    $categories = App\Models\Category::where('status', 1)->latest()->get();
-                                @endphp
-                                @foreach($categories as $category)
-                                    <li>
-                                        <a href="{{ route('category',$category->slug) }}">
-                                            <img src="{{ asset($category->image) }}" alt="">
-                                            <span>
-                                                {{ $category->name }}
-                                            </span>
-                                        </a>
-                                        @php
-                                            $parentcategories = App\Models\SubCategory::where('category_id', $category->id)->latest()->get();
-                                        @endphp
-                                        @if (count($parentcategories) > 0)
-                                            <ul>
-                                                @foreach($parentcategories as $parentcategory)
-                                                    <li>
-                                                        <a href="{{ route('category',$parentcategory->slug) }}">{{ $parentcategory->name }}</a>
-                                                        @php
-                                                            $childcategories = App\Models\SubSubCategory::where('subcategory_id', $parentcategory->id)->latest()->get();
-                                                        @endphp
-                                                        @if (count($childcategories) > 0)
-                                                            <ul>
-                                                                @foreach($childcategories as $childcategory)
-                                                                    <li><a href="{{ route('category',$childcategory->slug) }}">{{ $childcategory->name }}</a></li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @endif
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+						<div class="category-area checknav">
+							<ul class="category-list">
+								<li><a href="#"><img src="{{asset('frontend/images/icons/vegetable.png')}}" alt=""><span>Daily Needs</a></span>
+									<ul>
+										<li><a href="#">2nd step</a>
+											<ul>
+												<li><a href="#">3rd step</a></li>
+												<li><a href="#">3rd step</a></li>
+												<li><a href="#">3rd step</a></li>
+												<li><a href="#">3rd step</a></li>
+												<li><a href="#">3rd step</a></li>
+											</ul>
+										</li>
+										<li><a href="#">2nd step</a></li>
+										<li><a href="#">2nd step</a></li>
+										<li><a href="#">2nd step</a></li>
+										<li><a href="#">2nd step</a></li>
+										<li><a href="#">2nd step</a></li>
+									</ul>
+								</li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/tv.png')}}" alt=""><span>Electronics & Home Appliance</a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/first-aid-kit.png')}}" alt=""><span>Health & Nutrition </a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/skincare.png')}}" alt=""><span>Cosmetics & Beauty Care</a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/baby.png')}}" alt=""><span>Baby Food & Fashions</a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/fashion.png')}}" alt=""><span>Women’s Fashions</a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/sport-watch.png')}}" alt=""><span>Men’s Fashions </a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/console.png')}}" alt=""><span>Stationery, Toys & Games </a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/sport.pn')}}g" alt=""><span>Sports & Fitness </a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/decorating.png')}}" alt=""><span>Lifestyle & Home Decor</a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/real-estate.png')}}" alt=""><span>Real Estate & Property </a></span></li>
+								<li><a href="#"><img src="{{asset('frontend/images/icons/motorcycle.png')}}" alt=""><span>Automobile & Motor Bikes </a></span></li>
+							</ul>
+						</div>
                         <div class="slider-area">
                             <div class="main-slider owl-carousel">
                                 @foreach($sliders as $slider)

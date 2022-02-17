@@ -5,57 +5,19 @@
 @stop
 
 @push('css')
-    <style>
-        .category-image {
-            width: 100px;
-            height:100px;
-            float: left;
-        }
-        .slider-image-size {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-    </style>
+
 @endpush
 
 @section('content')
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
-                <div class="page-header">
-                    <div class="row align-items-end">
-                        <div class="col-lg-8">
-                            <div class="page-header-title">
-                                <div class="d-inline">
-                                    <h4>{{$title}}</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="page-header-breadcrumb">
-                                <ul class="breadcrumb-title">
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="{{ route('admin.dashboard') }}">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="javascript:;">
-                                            {{$title}}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="page-body">
                     <div class="card">
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2>Slider<small class="badge bg-success text-white">{{ $sliders->count() }}</small></h2>
+                                    <h2>Slider  <small class="badge bg-success text-white">{{ $sliders->count() }}</small></h2>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
@@ -76,27 +38,27 @@
                                                     <form action="{{ route('admin.slider.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Link</label>
+                                                            <label class="col-md-3 text-right">Link</label>
                                                             <div class="col-md-9">
                                                                 <input type="text" class="form-control" name="link" placeholder="Link">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label">Imge</label>
+                                                            <label class="col-md-3 text-right">Imge</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label"></label>
-                                                            <div class="col-md-9">
-                                                                <img class="category-image" src="" id="showTham">
+                                                            <label class="col-md-3 text-right"></label>
+                                                            <div class="col-md-9 text-left">
+                                                                <img width="100" height="100" src="{{ asset('demomedia/demo.png') }}" id="showTham">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 col-form-label"></label>
+                                                            <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
-                                                                <input type="submit" class="btn btn-success" value="Crate Slider">
+                                                                <input type="submit" class="btn btn-success" value="Add Slider">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -112,38 +74,33 @@
                                 <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>SL No</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            <th class="text-center">SL No</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Image</th>
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($sliders as $key => $slider)
                                             <tr>
-                                                <td>{{  $key + 1 }}</td>
-                                                <td>{{$slider->link}}</td>
-                                                <td>
-                                                    <img class="slider-image-size" src="{{ asset($slider->image) }}" alt="">
+                                                <td class="text-center">{{  $key + 1 }}</td>
+                                                <td class="text-center">{{$slider->link}}</td>
+                                                <td class="text-center">
+                                                    <img width="60" height="60" src="{{ asset($slider->image) }}">
                                                 </td>
-                                                <td>
+                                                <td class="text-center">
                                                     @if($slider->status == 1)
-                                                        <span class="badge bg-success">Active</span>
-                                                    @else 
-                                                        <span class="badge bg-info">Inctive</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($slider->status == 1)
-                                                        <a title="Inactive Brand" href="{{ route('admin.slider.inactive', $slider->id) }}" class="btn btn-danger">
-                                                            <i class="ml-1 fa fa-angle-down"></i>
+                                                        <a title="Inactive Now" href="{{ route('admin.slider.inactive', $slider->id) }}" class="btn btn-success">
+                                                            Active
                                                         </a>
                                                     @else
-                                                        <a title="Active Brand" href="{{ route('admin.slider.active', $slider->id) }}" class="btn btn-success">
-                                                            <i class="ml-1 fa fa-angle-up"></i>
+                                                        <a title="Active Now" href="{{ route('admin.slider.active', $slider->id) }}" class="btn btn-danger">
+                                                            Inactive
                                                         </a>
                                                     @endif
+                                                </td>
+                                                <td class="text-center">
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
@@ -169,25 +126,25 @@
                                                                     @csrf
                                                                     @method('PUT')
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Link</label>
+                                                                        <label class="col-md-3 text-right">Link</label>
                                                                         <div class="col-md-9">
                                                                             <input type="text" class="form-control" name="link" value="{{ $slider->link }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label">Imge</label>
+                                                                        <label class="col-md-3 text-right">Imge</label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label"></label>
+                                                                        <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9">
-                                                                            <img class="category-image showThamEdit" src="{{ asset($slider->image) }}">
+                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($slider->image) }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 col-form-label"></label>
+                                                                        <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9 text-left">
                                                                             <input type="submit" class="btn btn-success" value="Update Slider">
                                                                         </div>
@@ -200,15 +157,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>SL No</th>
-                                            <th>Name</th>
-                                            <th>Image</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

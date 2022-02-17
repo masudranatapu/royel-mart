@@ -6,184 +6,217 @@
 
 @push('css')
     <link rel="stylesheet" href="{{asset('backend/select2/css/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('backend/summernote/summernote-bs4.min.css')}}">
 @endpush
 
 @section('content')
     <div class="pcoded-inner-content">
         <div class="main-body">
             <div class="page-wrapper">
-                <div class="page-header">
-                    <div class="row align-items-end">
-                        <div class="col-lg-8">
-                            <div class="page-header-title">
-                                <div class="d-inline">
-                                    <h4>
-                                        {{ $title }}
-                                    </h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="page-header-breadcrumb">
-                                <ul class="breadcrumb-title">
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="{{ route('admin.dashboard') }}">
-                                            Home
-                                        </a>
-                                    </li>
-                                    <li class="breadcrumb-item"  style="float: left;">
-                                        <a href="javascript:;">
-                                            {{ $title }}
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="page-body">
                     <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <label for="">Product Name</label>
-                                        <input type="text"  class="form-control" name="name" placeholder="Product Name">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-success">
+                                        <h4>Product Info</h4>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label>Cover Image <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" onChange="mainTham(this)" name="thambnail" class="custom-file-input">
-                                                <label class="custom-file-label">Choose cover image</label>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="">Product Name</label>
+                                                <input type="text"  class="form-control" name="name" placeholder="Product Name">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label for="">Product Bangla name</label>
+                                                <input type="text"  class="form-control" name="name_bg" placeholder="Product Bangla name">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Buying price</label>
+                                                        <input type="number" min="0" value="0"  class="form-control" name="buying_price" placeholder="Buying price" id="regular_price">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label >Discount</label>
+                                                        <input type="number" min="0" value="0"  class="form-control" name="discount" placeholder="Discount" id="discount" pattern="[0-9]*\.?[0-9]*">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label >Sell Price <span class="text-danger"> *</span></label>
+                                                        <input type="number" min="0" value="0"  class="form-control" name="sale_price" placeholder="Sell price" id="sale_price">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Minimum Quantity</label>
+                                                        <input type="number" name="minimum_quantity" class="form-control" value="5" placeholder="Minimum Quantity">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Cover Image <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" onChange="mainTham(this)" name="thambnail" class="custom-file-input">
+                                                        <label class="custom-file-label">Choose cover image</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <img width="100" height="100" src="{{ asset('demomedia/demoproduct.png') }}" id="showTham">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>More Image</label>
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <input type="file" name="multi_thambnail[]" multiple="" id="multi_tham" class="custom-file-input">
+                                                        <label class="custom-file-label">Choose More Image</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <div class="row" id="preview_image"></div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6">
-                                        <img src="" id="showTham">
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <label>Buying price</label>
-                                        <input type="number" min="0" value="0"  class="form-control" name="buying_price" placeholder="Buying price" id="regular_price">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label >Discount</label>
-                                        <input type="number" min="0" value="0"  class="form-control" name="discount" placeholder="Discount" id="discount" pattern="[0-9]*\.?[0-9]*">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label >Sell Price <span class="text-danger"> *</span></label>
-                                        <input type="number" min="0" value="0"  class="form-control" name="sale_price" placeholder="Sell price" id="sale_price">
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <label>More Image</label>
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <input type="file" name="multi_thambnail[]" multiple="" id="multi_tham" class="custom-file-input">
-                                                <label class="custom-file-label">Choose More Image</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="row" id="preview_image"></div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3" id="showSelectedUnits">
-                                    <div class="col-md-6">
-                                        <label>Units</label>
-                                        <select id="getUnitId" class="form-control">
-                                            <option value="">Select One</option>
-                                            @foreach($units as $key=>$unit)
-                                                <option value="{{ $unit->id }}">{{ $unit->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Minimum Quantity</label>
-                                        <input type="number" name="minimum_quantity" class="form-control" value="5" placeholder="Minimum Quantity">
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <label>Description </label>
-                                        <textarea class="form-control" rows="5" name="description" placeholder="Description"></textarea>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <label >Brand</label>
-                                        <select name="brand_id" id="" class="form-control">
-                                            <option value="" disabled selected>Select One</option>
-                                            @foreach($brands as $brand)
-                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label >Category <span class="text-danger"> *</span></label>
-                                        <select name="category_id" id="category" class="form-control">
-                                            <option value="">Select One</option>
-                                            @foreach($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Sub Category</label>
-                                        <select name="subcategory_id" id="subcategory" class="form-control">
-                                            <option value="">First Select Category</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label>Sub Sub Category</label>
-                                        <select name="subsubcategory_id" id="subsubcategory" class="form-control">
-                                            <option value="">First Select Sub Category</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <label>Product Type <span class="text-danger"> *</span></label>
-                                        <select name="product_type" class="form-control">
-                                            <option value="" disabled>Select One</option>
-                                            <option value="New Arrival" selected>New Arrival</option>
-                                            <option value="Hot Deals">Hot Deals</option>
-                                            <option value="Features">Features</option>
-                                            <option value="Best Selling">Best Selling</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label>Status<span class="text-danger"> *</span></label>
-                                        <select name="status" id="" class="form-control">
-                                            <option value="" disabled >Select One</option>
-                                            <option value="1" selected>Active</option>
-                                            <option class="0">Inactive</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <label>Schema</label>
-                                        <textarea class="form-control" rows="3" name="schema" placeholder="Schema"></textarea>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>Meta Keyword</label>
-                                        <textarea class="form-control" rows="3" name="meta_keyword" placeholder="Meta Keyword"></textarea>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label >Meta Description</label>
-                                        <textarea class="form-control" rows="3" name="meta_description" placeholder="Meta Description"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer text-center">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-success">
+                                        <H4>Other Info</H4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Brand</label>
+                                                        <select name="brand_id" class="form-control">
+                                                            <option value="" disabled selected>Select One</option>
+                                                            @foreach($brands as $brand)
+                                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Category <span class="text-danger"> * </span></label>
+                                                        <select name="category_id" id="category" class="form-control">
+                                                            <option value="">Select One</option>
+                                                            @foreach($categories as $category)
+                                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6" id="ParentCategorydisplay" style="display:none;">
+                                                        <label>Parent Category</label>
+                                                        <select name="parent_id" id="parent_category" class="form-control">
+                                                            
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6" id="childCategoryDisplay" style="display:none;">
+                                                        <label>Child Category</label>
+                                                        <select name="child_id" id="child_category" class="form-control">
+                                                            
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row mt-2">
+                                                    <div class="col-md-6">
+                                                        <label>Product Type <span class="text-danger"> *</span></label>
+                                                        <select name="product_type" class="form-control">
+                                                            <option value="" disabled>Select One</option>
+                                                            <option value="New Arrival" selected>New Arrival</option>
+                                                            <option value="Hot Deals">Hot Deals</option>
+                                                            <option value="Features">Features</option>
+                                                            <option value="Best Selling">Best Selling</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Status<span class="text-danger"> *</span></label>
+                                                        <select name="status" id="" class="form-control">
+                                                            <option value="" disabled >Select One</option>
+                                                            <option value="1" selected>Active</option>
+                                                            <option class="0">Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Outside Delivery </label>
+                                                <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 120 TK ">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Inside Delivery </label>
+                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 80 TK ">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Return Status </label>
+                                                <input type="text" name="return_status" class="form-control" value="7 Days Return Change Of Mind Available">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Warranty Policy</label>
+                                                <input type="text" name="warranty_policy" class="form-control" value="Warranty Not Available">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-success">
+                                        <h4>More Info</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" id="showSelectedUnits">
+                                            <div class="col-md-12">
+                                                <label>Units</label>
+                                                <select id="getUnitId" class="form-control">
+                                                    <option value="">Select One</option>
+                                                    @foreach($units as $key=>$unit)
+                                                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card-header bg-success">
+                                                <h4>Product Information & S.E.O</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-2">
+                                                        <label>Description </label>
+                                                        <textarea class="form-control summernote" rows="5" name="description" placeholder="Description"></textarea>
+                                                    </div>
+                                                    <div class="col-md-12 mt-2">
+                                                        <label>Schema</label>
+                                                        <textarea class="form-control" rows="3" name="schema" placeholder="Schema"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-2">
+                                                        <label>Meta Keyword</label>
+                                                        <textarea class="form-control" rows="3" name="meta_keyword" placeholder="Meta Keyword"></textarea>
+                                                    </div>
+                                                    <div class="col-md-12 mt-2">
+                                                        <label >Meta Description</label>
+                                                        <textarea class="form-control" rows="3" name="meta_description" placeholder="Meta Description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
                                 <input type="submit" class="btn btn-success" value="Create Product">
                             </div>
                         </div>
@@ -195,9 +228,13 @@
 @endsection
 
 @push('js')
+    <script src="{{asset('backend/summernote/summernote-bs4.min.js')}}"></script>
     <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('massage/sweetalert/sweetalert.all.js') }}"></script>
     <script>
+        // Summernote
+        $('.summernote').summernote()
+
         $('.select2').select2()
         // show thambnill
         function mainTham(input) {

@@ -8,31 +8,13 @@
                 <span class="pcoded-mtext">Dashboard</span>
             </a>
         </li>
-        <!-- {{ Request::is('admin/dashboard') ? 'pcoded-trigger' : '' }} -->
-        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/parent-category') || Request::is('admin/child-category') ? 'pcoded-trigger' : '' }}">
-            <a href="javascript:void(0)">
+        <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
+            <a href="{{ route('admin.category.index') }}">
                 <span class="pcoded-micon">
                     <i class="feather icon-sidebar"></i>
                 </span>
                 <span class="pcoded-mtext">Category</span>
             </a>
-            <ul class="pcoded-submenu">
-                <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
-                    <a href="{{ route('admin.category.index') }}">
-                        <span class="pcoded-mtext">Main Category</span>
-                    </a>
-                </li>
-                <li class="{{ Request::is('admin/parent-category') ? 'active' : '' }}">
-                    <a href="{{ route('admin.parent-category.index') }}">
-                        <span class="pcoded-mtext">Parent Category</span>
-                    </a>
-                </li>
-                <li class="{{ Request::is('admin/child-category') ? 'active' : '' }}">
-                    <a href="{{ route('admin.child-category.index') }}">
-                        <span class="pcoded-mtext">Child Category</span>
-                    </a>
-                </li>
-            </ul>
         </li>
         <li class="{{ Request::is('admin/brand') ? 'active' : '' }}">
             <a href="{{ route('admin.brand.index') }}">
@@ -126,11 +108,6 @@
                 <span class="pcoded-mtext">Website</span>
             </a>
             <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="">
-                        <span class="pcoded-mtext">About Us</span>
-                    </a>
-                </li>
                 <li class="{{ Request::is('admin/slider')? 'active' : '' }}">
                     <a href="{{ route('admin.slider.index') }}">
                         <span class="pcoded-mtext">Slider</span>

@@ -56,13 +56,11 @@ class CategoryController extends Controller
         }else {
             $featureStatus = "0";
         }
-
-        if($request->show_hide_status) {
-            $showHideStatus = $request->show_hide_status;
+        if($request->show_hide) {
+            $showHideStatus = $request->show_hide;
         }else {
             $showHideStatus = "0";
         }
-
         $category_image = $request->file('image');
         $slug = 'category';
         if(isset($category_image)) {
@@ -78,15 +76,13 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'image' => $image_url,
-            'icon' => $request->icon,
             'menu' => $menuStatus,
             'feature' => $featureStatus,
             'serial_number' => $request->serial_number,
-            'show_hide_status' => $showHideStatus,
+            'show_hide' => $showHideStatus,
             'status' => "1",
             'created_at' => Carbon::now(),
         ]);
-
         Toastr::success('Category successfully save :-)','Success');
         return redirect()->back();
     }
@@ -100,13 +96,10 @@ class CategoryController extends Controller
     public function categoryActive($id)
     {
         //
-        
         Category::findOrFail($id)->update(['status' => '1']);
         Toastr::info('Category Successfully Active :-)','Success');
         return redirect()->back();
     }
-
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -134,7 +127,6 @@ class CategoryController extends Controller
         $this->validate($request, [
             'name' => 'required',
         ]);
-        
         if($request->menu) {
             $menuStatus = $request->menu;
         }else{
@@ -145,13 +137,11 @@ class CategoryController extends Controller
         }else {
             $featureStatus = "0";
         }
-
-        if($request->show_hide_status) {
-            $showHideStatus = $request->show_hide_status;
+        if($request->show_hide) {
+            $showHideStatus = $request->show_hide;
         }else {
             $showHideStatus = "0";
         }
-
         $category_image = $request->file('image');
         $slug = 'category';
         if(isset($category_image)) {
@@ -163,36 +153,29 @@ class CategoryController extends Controller
             if ($category_old_image->image) {
                 unlink($category_old_image->image);
             }
-            
             $image_url = $upload_path.$category_image_name;
-
             Category::findOrFail($id)->update([
                 'name' => $request->name,
                 'slug' => strtolower(str_replace(' ', '-', $request->name)),
                 'image' => $image_url,
-                'icon' => $request->icon,
                 'menu' => $menuStatus,
                 'feature' => $featureStatus,
                 'serial_number' => $request->serial_number,
-                'show_hide_status' => $showHideStatus,
+                'show_hide' => $showHideStatus,
                 'updated_at' => Carbon::now(),
             ]);
-    
             Toastr::info('Category successfully updated :-)','Success');
             return redirect()->back();
-
         }else {
             Category::findOrFail($id)->update([
                 'name' => $request->name,
                 'slug' => strtolower(str_replace(' ', '-', $request->name)),
-                'icon' => $request->icon,
                 'menu' => $menuStatus,
                 'feature' => $featureStatus,
                 'serial_number' => $request->serial_number,
-                'show_hide_status' => $showHideStatus,
+                'show_hide' => $showHideStatus,
                 'updated_at' => Carbon::now(),
             ]);
-
             Toastr::info('Category successfully updated :-)','Success');
             return redirect()->back();
         }
