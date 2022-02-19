@@ -13,7 +13,7 @@ class Category extends Model
         'name',
         'slug',
         'image',
-        'icon',
+        'category_color',
         'menu',
         'feature',
         'serial_number',

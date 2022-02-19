@@ -5,7 +5,10 @@
 @stop
 
 @push('css')
-
+    <!-- Color Picker css -->
+    <link rel="stylesheet" type="text/css" href="{{asset('backend/bower_components/spectrum/spectrum.css')}}"/>
+    <!-- Mini-color css -->
+    <link rel="stylesheet" type="text/css" href="{{asset('backend/bower_components/jquery-minicolors/jquery.minicolors.css')}}"/>
 @endpush
 
 @section('content')
@@ -59,6 +62,12 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
+                                                            <label class="col-md-3 text-right">Category Color</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" id="hue-demo" class="form-control demo" data-control="hue" value="#ff6161">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
                                                             <label class="col-md-3 text-right mt-1">SL No</label>
                                                             <div class="col-md-9">
                                                                 <input type="number" class="form-control" name="serial_number" value="{{ $categories->count() + $i }}" placeholder="Serial Number">
@@ -74,7 +83,7 @@
                                                                 <label for="featureChecked">Feature Status</label>
                                                                 <br>
                                                                 <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
-                                                                <label for="showHideChecked" id="showHide">Show Status</label>
+                                                                <label for="showHideChecked" id="showHide">Show</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -236,6 +245,8 @@
 @endsection
 
 @push('js')
+    <script type="text/javascript" src="{{asset('backend/bower_components/spectrum/spectrum.js')}}"></script>
+    <script type="text/javascript" src="{{asset('backend/bower_components/jscolor/jscolor.js')}}"></script>
     <script>
         function mainTham(input) {
             if (input.files && input.files[0]) {
@@ -255,5 +266,14 @@
                 reader.readAsDataURL(input.files[0]);
             }
         };
+        $("#showHideChecked").on('click', function() {
+             // access properties using this keyword
+             var showHide = ("#showHide").text();
+            if ( this.checked ) {
+                $("#showHide").text("Hide");
+            } else {
+                $("#showHide").text("Show");
+            }
+        });
     </script>
 @endpush

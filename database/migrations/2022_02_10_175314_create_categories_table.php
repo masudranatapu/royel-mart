@@ -20,6 +20,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->string('image')->nullable();
+            $table->string('category_color')->nullable();
             $table->string('menu');
             $table->string('feature');
             $table->string('serial_number')->nullable();

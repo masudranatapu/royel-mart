@@ -193,6 +193,13 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
+        $category = Category::where('parent_id', NULL)->where('child_id', NULL)->latest()->get();
+        $subcategory = Category::where('parent_id', '!=', NULL)->where('child_id', NULL)->latest()->get();
+        $subsubcategory = Category::where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->latest()->get();
+        $title = "Edit Product";
+        $products = Product::where('id', $id)->first();
+        return view('admin.product.edit', compact('title', 'category', 'subcategory', 'subsubcategory', 'products'));
+
     }
 
     /**

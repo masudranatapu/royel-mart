@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('category_id');
             $table->string('brand_id');
             $table->string('name');
+            $table->string('name_bg');
             $table->string('slug');
             $table->string('thambnail')->nullable();
             $table->text('multi_thambnail')->nullable();

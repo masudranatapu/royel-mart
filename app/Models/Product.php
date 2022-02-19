@@ -14,6 +14,7 @@ class Product extends Model
         'category_id',
         'brand_id',
         'name',
+        'name_bg',
         'slug',
         'thambnail',
         'multi_thambnail',

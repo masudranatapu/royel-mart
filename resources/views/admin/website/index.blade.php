@@ -1,24 +1,11 @@
 @extends('layouts.backend.app')
 
 @section('title')
-{{$title}}
+    {{$title}}
 @stop
 
 @push('css')
-    <style>
-        .website-logo {
-            height: 80px;
-            width: 80px;
-        }
-        .website-favicon {
-            height: 50px;
-            width: 50px;
-         }
-         .website-footer-logo {
-            height: 80px;
-            width: 80px;
-         }
-    </style>
+
 @endpush
 
 @section('content')
@@ -62,7 +49,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label"></label>
                                             <div class="col-sm-9">
-                                                <img class="website-logo" src="@if($website->logo) {{ asset($website->logo) }} @else {{ asset('demomedia/projanmoitlogo.png') }} @endif" id="showTham">
+                                                <img width="80" height="80" src="@if($website->logo) {{ asset($website->logo) }} @else {{ asset('demomedia/projanmoitlogo.png') }} @endif" id="showTham">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -79,7 +66,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label"></label>
                                             <div class="col-sm-9">
-                                                <img class="website-favicon" src="@if($website->favicon) {{ asset($website->favicon) }} @else {{ asset('demomedia/projanmoitlogo.png') }} @endif" id="favion">
+                                                <img  width="50" height="50" src="@if($website->favicon) {{ asset($website->favicon) }} @else {{ asset('demomedia/projanmoitlogo.png') }} @endif" id="favion">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -96,7 +83,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label"></label>
                                             <div class="col-sm-9">
-                                                <img class="website-footer-logo" src="@if($website->footer_logo) {{ asset($website->footer_logo) }} @else {{ asset('demomedia/projanmoitlogo.png') }} @endif" id="footerlogo">
+                                                <img width="80" height="80" src="@if($website->footer_logo) {{ asset($website->footer_logo) }} @else {{ asset('demomedia/projanmoitlogo.png') }} @endif" id="footerlogo">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -144,37 +131,37 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Twitter Api</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="twitter_api" value="{{$website->twitter_api}}" placeholder="Twitter Api">
+                                                <textarea class="form-control" name="twitter_api" id="" cols="30" rows="3" placeholder="Twitter Api">{{$website->twitter_api}}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Google map</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="google_map" value="{{$website->google_map}}" placeholder="Google map">
+                                                <textarea class="form-control" name="google_map" id="" cols="30" rows="3" placeholder="Google map">{{$website->google_map}}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Facebook Pixel </label>
+                                            <label class="col-sm-3 col-form-label">Facebook Pixel</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="facebook_pixel" value="{{$website->facebook_pixel}}" placeholder="Facebook pixel">
+                                                <textarea class="form-control" name="facebook_pixel" id="" cols="30" rows="3" placeholder="Facebook pixel">{{$website->facebook_pixel}}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Google Analytics</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="google_analytics" value="{{$website->google_analytics}}" placeholder="Google analytics">
+                                                <textarea class="form-control" name="google_analytics" id="" cols="30" rows="3" placeholder="Google analytics">{{$website->google_analytics}}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Schema</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="schema" value="{{$website->schema}}" placeholder="Schema">
+                                                <textarea class="form-control" name="schema" id="" cols="30" rows="3" placeholder="Schema">{{$website->schema}}</textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Canonical link</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="canonical_link" value="{{$website->canonical_link}}" placeholder="Canonical link">
+                                                <textarea class="form-control" name="canonical_link" id="" cols="30" rows="3" placeholder="Canonical link">{{$website->canonical_link}}</textarea>
                                             </div>
                                         </div>
                                     </div>
