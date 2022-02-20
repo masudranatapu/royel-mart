@@ -9,7 +9,7 @@
                     <ul class="list">
                         <li><a href="#">EN</a></li>
                         <li><a href="#">BN</a></li>
-                        <li><a href="tel:{{ $website->phone }}"><span class="material-icons-outlined">Call</span>(+88) {{ $website->phone }}</a></li>
+                        <li><a href="tel: (+88) {{ $website->phone }}"><span class="material-icons-outlined">call</span>(+88) {{ $website->phone }}</a></li>
                     </ul>
                 </div>
                 <div class="right-area">
@@ -35,12 +35,13 @@
         </div>
     </div>
     <!-- End Header Top -->
+    <!-- End Header Top -->
     <div class="header-bottom">
         <div class="container-fluid">
             <div class="inner-header-bottom">
                 <div class="logo-area">
                     <button class="privacy-trigger"><span class="material-icons">reorder</span></button>
-                    <div class="logo"><a href="{{ route('home') }}"><img src="{{asset('frontend/images/logo/logo.png')}}" alt=""></a></div>
+                    <div class="logo"><a href="{{ route('home') }}"><img src="{{ asset($website->logo) }}" alt=""></a></div>
                 </div>
                 <div class="search-area">
                     <div class="search-wrapper">
