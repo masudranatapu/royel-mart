@@ -20,7 +20,7 @@
                                     <h2>Product <small class="badge bg-success text-white">{{ $products->count() }}</small></h2>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a class="btn btn-success" href="{{ route('admin.product.create') }}" target="__blank">
+                                    <a class="btn btn-success" href="{{ route('admin.product.create') }}">
                                         <i class="fa fa-plus"></i>
                                         Add product
                                     </a>

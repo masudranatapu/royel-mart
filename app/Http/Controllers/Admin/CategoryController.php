@@ -19,7 +19,7 @@ class CategoryController extends Controller
     {
         //
         $title = "Category";
-        $categories = Category::latest()->get();
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->latest()->get();
         return view('admin.category.index', compact('title', 'categories'));
     }
 
@@ -51,16 +51,19 @@ class CategoryController extends Controller
         }else{
             $menuStatus = "0";
         }
+
         if($request->feature) {
             $featureStatus = $request->feature;
         }else {
             $featureStatus = "0";
         }
+
         if($request->show_hide) {
             $showHideStatus = $request->show_hide;
         }else {
             $showHideStatus = "0";
         }
+
         $category_image = $request->file('image');
         $slug = 'category';
         if(isset($category_image)) {
@@ -73,11 +76,14 @@ class CategoryController extends Controller
             $image_url = NULL;
         }
         Category::insert([
+            'parent_id' => $request->parent_id,
+            'child_id' => $request->child_id,
             'name' => $request->name,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'image' => $image_url,
             'menu' => $menuStatus,
             'feature' => $featureStatus,
+            'category_color' => $request->category_color,
             'serial_number' => $request->serial_number,
             'show_hide' => $showHideStatus,
             'status' => "1",
@@ -127,21 +133,25 @@ class CategoryController extends Controller
         $this->validate($request, [
             'name' => 'required',
         ]);
+
         if($request->menu) {
             $menuStatus = $request->menu;
         }else{
             $menuStatus = "0";
         }
+
         if($request->feature) {
             $featureStatus = $request->feature;
         }else {
             $featureStatus = "0";
         }
+
         if($request->show_hide) {
             $showHideStatus = $request->show_hide;
         }else {
             $showHideStatus = "0";
         }
+
         $category_image = $request->file('image');
         $slug = 'category';
         if(isset($category_image)) {
@@ -155,11 +165,14 @@ class CategoryController extends Controller
             }
             $image_url = $upload_path.$category_image_name;
             Category::findOrFail($id)->update([
+                'parent_id' => $request->parent_id,
+                'child_id' => $request->child_id,
                 'name' => $request->name,
                 'slug' => strtolower(str_replace(' ', '-', $request->name)),
                 'image' => $image_url,
                 'menu' => $menuStatus,
                 'feature' => $featureStatus,
+                'category_color' => $request->category_color,
                 'serial_number' => $request->serial_number,
                 'show_hide' => $showHideStatus,
                 'updated_at' => Carbon::now(),
@@ -168,10 +181,13 @@ class CategoryController extends Controller
             return redirect()->back();
         }else {
             Category::findOrFail($id)->update([
+                'parent_id' => $request->parent_id,
+                'child_id' => $request->child_id,
                 'name' => $request->name,
                 'slug' => strtolower(str_replace(' ', '-', $request->name)),
                 'menu' => $menuStatus,
                 'feature' => $featureStatus,
+                'category_color' => $request->category_color,
                 'serial_number' => $request->serial_number,
                 'show_hide' => $showHideStatus,
                 'updated_at' => Carbon::now(),
@@ -190,5 +206,31 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+        $categories =Category::findOrFail($id);
+        $deleteImage = $categories->image;
+        if(file_exists($deleteImage)) {
+            unlink($deleteImage);
+        }
+        $categories->delete();
+        Toastr::warning('Category Successfully delete :-)','Info');
+        return redirect()->back();
+    }
+    
+    public function viewParentCategory($id)
+    {
+        //
+        $parentcategory = Category::findOrFail($id);
+        $title = "Parent Category";
+        $parentcategories = Category::where('parent_id', $id)->where('child_id', NULL)->latest()->get();
+        return view('admin.category.parentcategory', compact('title', 'parentcategory', 'parentcategories'));
+    }
+    public function viewChildCategory($id)
+    {
+        //
+        $childcategory = Category::findOrFail($id);
+        // return $childcategory;
+        $title = "Child Category";
+        $childcategories = Category::where('child_id', $id)->latest()->get();
+        return view('admin.category.childcategory', compact('title', 'childcategory', 'childcategories'));
     }
 }

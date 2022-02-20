@@ -46,13 +46,25 @@
         </li>
     </ul>
     <ul class="pcoded-item pcoded-left-item">
-        <li class="{{ Request::is('admin/product') || Request::is('admin/product/create') ? 'active' : '' }}">
-            <a href="{{ route('admin.product.index') }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/product') || Request::is('admin/product/create') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-message-square"></i>
                 </span>
                 <span class="pcoded-mtext">Product</span>
             </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/product/create') ? 'active' : '' }}">
+                    <a href="{{ route('admin.product.create') }}">
+                        <span class="pcoded-mtext">New Product</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/product') ? 'active' : '' }}">
+                    <a href="{{ route('admin.product.index') }}">
+                        <span class="pcoded-mtext">Product list</span>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="pcoded-hasmenu ">
             <a href="javascript:void(0)">

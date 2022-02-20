@@ -56,7 +56,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
         $this->validate($request, [
             'name' => 'required',
             'sale_price' => 'required',
@@ -65,7 +65,6 @@ class ProductController extends Controller
             'category_id' => 'required',
             'unit_id' => 'required',
         ]);
-        
         $product_thambnail = $request->file('thambnail');
         $slug1 = "product";
         if (isset($product_thambnail)) {
@@ -79,7 +78,6 @@ class ProductController extends Controller
         } else {
             $thambnail_name = NULL;
         }
-
         // others photo
         $multiThambnail = $request->file('multi_thambnail');
         $slug2 = "multiproduct";
@@ -92,14 +90,12 @@ class ProductController extends Controller
                 $multiThamb->move($upload_path, $multiThamb_name);
                 $img_arr[$key] = $multiThamb_image_url;
             }
-
             $multiThamb__photo = trim(implode('|', $img_arr), '|');
         } else {
             $multiThamb__photo = NULL;
         }
         // uniq product code setup 
         $product_last = Product::select('id')->latest()->first();
-
         if (isset($product_last)) {
             $product_code = 'PP'.sprintf('%03d', $product_last->id + 1);
         } else {
@@ -112,13 +108,13 @@ class ProductController extends Controller
         }else {
             $category_id = $request->category_id;
         }
-
         $product_id = Product::insertGetId([
             'user_id' => Auth::user()->id,
             'product_code' => $product_code,
             'category_id' => $category_id,
             'brand_id' => $request->brand_id,
             'name' => $request->name,
+            'name_bg' => $request->name_bg,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'thambnail' => $thambnail_name,
             'multi_thambnail' => $multiThamb__photo,
@@ -129,18 +125,19 @@ class ProductController extends Controller
             'description' => $request->description,
             'meta_description' => $request->meta_description,
             'meta_keyword' => $request->meta_keyword,
+            'outside_delivery' => $request->outside_delivery,
+            'inside_delivery' => $request->inside_delivery,
+            'warranty_policy' => $request->warranty_policy,
             'schema' => $request->schema,
             'product_type' => $request->product_type,
             'status' => $request->status,
             'created_at' => Carbon::now(),
         ]);
-        
         foreach($request->unit_id as $key=>$unit_id){
             // unit Image photo
             $unitImageGet = 'image_'.$unit_id;
             $getUnitImage = $request->file($unitImageGet);
             $slug3 = "unitimage";
-            
             if (isset($getUnitImage)) {
                 $unitImage_name = $slug3.'-'.uniqid().'.'.$getUnitImage->getClientOriginalExtension();
                 $upload_path = 'media/unitimage/';
@@ -150,23 +147,21 @@ class ProductController extends Controller
             }else {
                 $product_unitImage = NULL;
             }
-
             ProductUnit::insert([
                 'product_id' => $product_id,
                 'unit_id' => $unit_id,
                 'image' => $product_unitImage,
+                'created_at' => Carbon::now(),
             ]);
-            
             $req_subunit_id = 'subunit_id_'.$unit_id;
-
             foreach($request->$req_subunit_id as $key=>$subunit_id){
                 ProductSubUnit::insert([
                     'product_id' => $product_id,
                     'unit_id' => $unit_id,
                     'subunit_id' => $subunit_id,
+                    'created_at' => Carbon::now(),
                 ]);
             }
-
         }
 
         Toastr::success('Product Successfully Save :-)','Success');
@@ -232,7 +227,7 @@ class ProductController extends Controller
         $subunits = SubUnit::where('unit_id', $unitId->id)->latest()->get();
         $data = NULL;
         $data .= '<div class="row mt-3" id="new_color_area_' . $unitId->id . '">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <input type="hidden" class="form-control" name="unit_id[]" value="' . $unitId->id . '">
                         <label>Unit Name</label>
                         <input type="text" class="form-control" readonly value="' . $unitId->name . '">
@@ -242,14 +237,14 @@ class ProductController extends Controller
                         <input type="file" class="form-control" name="image_'.$unitId->id.'" id="image_' . $unitId->id . '">
                     </div>
                     <div class="col-md-4">
-                        <label>Unit Image</label>
+                        <label>Sub Unit</label>
                         <select name="subunit_id_'.$unitId->id.'[]" class="form-control select2" multiple="multiple" data-placeholder="Select Sub Unit">';
                             foreach($subunits as $subunit){
                                 $data .= '<option value="'.$subunit->id.'">'. $subunit->name .'</option>';
                             }
         $data .=        '</select>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <label>Action</label><br>
                         <button type="button" class="btn btn-danger" id="' . $unitId->id . '" onclick="removeNewColorAre(this)">
                             <i class="ml-1 fa fa-times"></i>

@@ -56,6 +56,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('category', CategoryController::class);
     Route::get('category-active/{id}', [CategoryController::class, 'categoryActive'])->name('category.active');
     Route::get('category-inactive/{id}', [CategoryController::class, 'categoryInactive'])->name('category.inactive');
+    Route::get('parent-category-view/{id}', [CategoryController::class, 'viewParentCategory'])->name('viewparentcategory');
+    Route::get('child-category-view/{id}', [CategoryController::class, 'viewChildCategory'])->name('viewchildcategory');
     // brand
     Route::resource('brand', BrandController::class);
     Route::get('brand-active/{id}', [BrandController::class, 'brandActive'])->name('brand.active');

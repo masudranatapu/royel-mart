@@ -19,18 +19,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card">
-                                    <div class="card-header bg-success">
-                                        <h4>Product Info</h4>
-                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <label for="">Product Name</label>
+                                                <label>Product Name</label>
                                                 <input type="text"  class="form-control" name="name" placeholder="Product Name">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label for="">Product Bangla name</label>
-                                                <input type="text"  class="form-control" name="name_bg" placeholder="Product Bangla name">
+                                                <label>Product Name ( Bangla )</label>
+                                                <input type="text"  class="form-control" name="name_bg" placeholder="Product Name ( Bangla )">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <div class="row">
@@ -39,11 +36,11 @@
                                                         <input type="number" min="0" value="0"  class="form-control" name="buying_price" placeholder="Buying price" id="regular_price">
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label >Discount</label>
+                                                        <label>Discount</label>
                                                         <input type="number" min="0" value="0"  class="form-control" name="discount" placeholder="Discount" id="discount" pattern="[0-9]*\.?[0-9]*">
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label >Sell Price <span class="text-danger"> *</span></label>
+                                                        <label>Sell Price <span class="text-danger"> * </span></label>
                                                         <input type="number" min="0" value="0"  class="form-control" name="sale_price" placeholder="Sell price" id="sale_price">
                                                     </div>
                                                     <div class="col-md-6">
@@ -52,29 +49,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 mt-2">
-                                                <label>Cover Image <span class="text-danger">*</span></label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" onChange="mainTham(this)" name="thambnail" class="custom-file-input">
-                                                        <label class="custom-file-label">Choose cover image</label>
+                                            <div class="col-md-12 mt-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label>Cover Image <span class="text-danger">*</span></label>
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" onChange="mainTham(this)" name="thambnail" class="custom-file-input">
+                                                                <label class="custom-file-label">Uploade</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>More Image</label>
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" name="multi_thambnail[]" multiple="" id="multi_tham" class="custom-file-input">
+                                                                <label class="custom-file-label">Uploade</label>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 mt-2">
-                                                <img width="100" height="100" src="{{ asset('demomedia/demoproduct.png') }}" id="showTham">
-                                            </div>
-                                            <div class="col-md-12 mt-2">
-                                                <label>More Image</label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input type="file" name="multi_thambnail[]" multiple="" id="multi_tham" class="custom-file-input">
-                                                        <label class="custom-file-label">Choose More Image</label>
+                                            <div class="col-md-12 mt-3">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <img width="50" height="50" src="{{ asset('demomedia/demoproduct.png') }}" id="showTham">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="row" id="preview_image"></div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-12 mt-2">
-                                                <div class="row" id="preview_image"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -82,28 +87,25 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="card">
-                                    <div class="card-header bg-success">
-                                        <H4>Other Info</H4>
-                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Brand</label>
-                                                        <select name="brand_id" class="form-control">
-                                                            <option value="" disabled selected>Select One</option>
-                                                            @foreach($brands as $brand)
-                                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
                                                     <div class="col-md-6">
                                                         <label>Category <span class="text-danger"> * </span></label>
                                                         <select name="category_id" id="category" class="form-control">
                                                             <option value="">Select One</option>
                                                             @foreach($categories as $category)
                                                                 <option value="{{$category->id}}">{{$category->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Brand</label>
+                                                        <select name="brand_id" class="form-control">
+                                                            <option value="" disabled selected>Select One</option>
+                                                            @foreach($brands as $brand)
+                                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -148,6 +150,43 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mt-2">
+                                                <div class="row" id="showSelectedUnits">
+                                                    <div class="col-md-12">
+                                                        <label>Units</label>
+                                                        <select id="getUnitId" class="form-control">
+                                                            <option value="">Select One</option>
+                                                            @foreach($units as $key=>$unit)
+                                                                <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-2">
+                                                        <label>Product Description</label>
+                                                        <textarea class="form-control summernote" style="height: 500px;" name="description" placeholder="Description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mt-2">
                                                 <label>Outside Delivery </label>
                                                 <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 120 TK ">
                                             </div>
@@ -167,57 +206,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="card">
-                                    <div class="card-header bg-success">
-                                        <h4>More Info</h4>
-                                    </div>
                                     <div class="card-body">
-                                        <div class="row" id="showSelectedUnits">
-                                            <div class="col-md-12">
-                                                <label>Units</label>
-                                                <select id="getUnitId" class="form-control">
-                                                    <option value="">Select One</option>
-                                                    @foreach($units as $key=>$unit)
-                                                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                        <div class="row">
+                                            <div class="col-md-12 mt-2">
+                                                <label>Schema</label>
+                                                <textarea class="form-control" rows="3" name="schema" placeholder="Schema"></textarea>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card-header bg-success">
-                                                <h4>Product Information & S.E.O</h4>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Meta Keyword</label>
+                                                <textarea class="form-control" rows="3" name="meta_keyword" placeholder="Meta Keyword"></textarea>
                                             </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-12 mt-2">
-                                                        <label>Description </label>
-                                                        <textarea class="form-control summernote" rows="5" name="description" placeholder="Description"></textarea>
-                                                    </div>
-                                                    <div class="col-md-12 mt-2">
-                                                        <label>Schema</label>
-                                                        <textarea class="form-control" rows="3" name="schema" placeholder="Schema"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12 mt-2">
-                                                        <label>Meta Keyword</label>
-                                                        <textarea class="form-control" rows="3" name="meta_keyword" placeholder="Meta Keyword"></textarea>
-                                                    </div>
-                                                    <div class="col-md-12 mt-2">
-                                                        <label >Meta Description</label>
-                                                        <textarea class="form-control" rows="3" name="meta_description" placeholder="Meta Description"></textarea>
-                                                    </div>
-                                                </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label >Meta Description</label>
+                                                <textarea class="form-control" rows="3" name="meta_description" placeholder="Meta Description"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12 text-center">
-                                <input type="submit" class="btn btn-success" value="Create Product">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa fa-plus"></i>
+                                    Upload Product
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -241,7 +254,7 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                    $('#showTham').attr('src', e.target.result).width(100).height(80);
+                    $('#showTham').attr('src', e.target.result).width(50).height(50);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
@@ -284,8 +297,8 @@
                             var fRead = new FileReader(); //new filereader
                             fRead.onload = (function(file){ //trigger function on successful read
                             return function(e) {
-                                var img = $('<img/>').addClass('thumb').attr('src', e.target.result) .width(100)
-                            .height(100); //create image element 
+                                var img = $('<img/>').addClass('thumb').attr('src', e.target.result).width(50)
+                            .height(50); //create image element 
                                 $('#preview_image').append(img); //append image to output element
                             };
                             })(file);
