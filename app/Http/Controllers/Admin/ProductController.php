@@ -92,6 +92,8 @@ class ProductController extends Controller
                 $img_arr[$key] = $multiThamb_image_url;
             }
             $multiThamb__photo = trim(implode('|', $img_arr), '|');
+        }else {
+            $multiThamb__photo = NULL;
         }
         // uniq product code setup 
         $product_last = Product::select('id')->latest()->first();
@@ -265,7 +267,8 @@ class ProductController extends Controller
             }
             $multiThamb__photo = trim(implode('|', $img_arr), '|');
         } else {
-            $multiThamb__photo = NULL;
+            $old_multi_thamb = Product::findOrFail($id);
+            $multiThamb__photo = $old_multi_thamb->multi_thambnail;
         }
         // uniq product code setup 
         $product_last = Product::select('id')->latest()->first();
@@ -322,23 +325,20 @@ class ProductController extends Controller
             }else {
                 $product_unitImage = NULL;
             }
-            ProductUnit::insert([
-                'product_id' => $product_id,
+            ProductUnit::where('product_id', $id)->update([
                 'unit_id' => $unit_id,
                 'image' => $product_unitImage,
                 'created_at' => Carbon::now(),
             ]);
             $req_subunit_id = 'subunit_id_'.$unit_id;
             foreach($request->$req_subunit_id as $key=>$subunit_id){
-                ProductSubUnit::insert([
-                    'product_id' => $product_id,
+                ProductSubUnit::where('unit_id', $unit_id)->update([
                     'unit_id' => $unit_id,
                     'subunit_id' => $subunit_id,
                     'created_at' => Carbon::now(),
                 ]);
             }
         }
-
         Toastr::success('Product Successfully Save :-)','Success');
         return redirect()->back();
     }
@@ -400,7 +400,7 @@ class ProductController extends Controller
                         <input type="text" class="form-control" readonly value="' . $unitId->name . '">
                     </div>
                     <div class="col-md-3">
-                        <label>Unit Image</label>
+                        <label>Image</label>
                         <input type="file" class="form-control" name="image_'.$unitId->id.'" id="image_' . $unitId->id . '">
                     </div>
                     <div class="col-md-4">
