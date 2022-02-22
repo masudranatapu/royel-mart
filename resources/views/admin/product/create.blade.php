@@ -113,15 +113,15 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="row">
-                                                    <div class="col-md-6" id="ParentCategorydisplay" style="display:none;">
+                                                    <div class="col-md-6" id="sub_cate_display" style="display:none;">
                                                         <label>Parent Category</label>
-                                                        <select name="parent_id" id="parent_category" class="form-control">
+                                                        <select name="parent_id" id="subcategory" class="form-control">
                                                             
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-6" id="childCategoryDisplay" style="display:none;">
+                                                    <div class="col-md-6" id="sub_sub_cate_display" style="display: none;">
                                                         <label>Child Category</label>
-                                                        <select name="child_id" id="child_category" class="form-control">
+                                                        <select name="child_id" id="subsubcategory" class="form-control">
                                                             
                                                         </select>
                                                     </div>
@@ -134,7 +134,6 @@
                                                         <select name="product_type" class="form-control">
                                                             <option value="" disabled>Select One</option>
                                                             <option value="New Arrival" selected>New Arrival</option>
-                                                            <option value="Hot Deals">Hot Deals</option>
                                                             <option value="Features">Features</option>
                                                             <option value="Best Selling">Best Selling</option>
                                                         </select>
@@ -228,7 +227,7 @@
                             </div>
                             <div class="col-md-12 text-center">
                                 <button type="submit" class="btn btn-success">
-                                    <i class="fa fa-plus"></i>
+                                    <i class="fa fa-upload"></i>
                                     Upload Product
                                 </button>
                             </div>
@@ -262,7 +261,8 @@
         $('#regular_price').on('wheel keyup change', function(event) {
             var regular_price = $("#regular_price").val();
             var discount = $("#discount").val();
-            var sale_price = regular_price - (regular_price*(discount/100));
+            var sale_price = regular_price - discount;
+
             $("#sale_price").val(sale_price);
         });
         $('#discount').on('wheel keyup change', function(event) {
@@ -273,17 +273,18 @@
             var sale_price = regular_price - discount;
 
             $("#sale_price").val(sale_price);
+
         });
         $('#sale_price').on('wheel keyup change', function(event) {
             var regular_price = $("#regular_price").val();
             var sale_price = $("#sale_price").val();
 
             var diff = regular_price - sale_price;
-            var discount = (diff/regular_price)*100;
+
             if (regular_price=='') {
                 discount = 0;
             }
-            $("#discount").val(discount);
+            $("#discount").val(diff);
         });
     </script>
     <script>
@@ -307,52 +308,6 @@
                     });
                 }else{
                     alert("Your browser doesn't support File API!"); //if File API is absent
-                }
-            });
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#category').on('change', function(){
-                var category_id = $(this).val();
-                // alert(category_id);
-                if(category_id) {
-                    $.ajax({
-                        url: "{{  url('/admin/product-category/ajax') }}/"+category_id,
-                        type:"GET",
-                        dataType:"json",
-                        success:function(data) {
-                            $('#subsubcategory').html('');
-                            var d =$('#subcategory').empty();
-                            $('#subcategory').append('<option value="" disabled selected> Select One </option>');
-                            $.each(data, function(key, value){
-                                $('#subcategory').append('<option value="'+ value.id +'">' + value.name + '</option>');
-                            });
-                        },
-                    });
-                } else {
-                    alert('danger');
-                }
-            });
-
-            $('#subcategory').on('change', function(){
-                var subcategory_id = $(this).val();
-                // alert(subcategory_id);
-                if(subcategory_id) {
-                    $.ajax({
-                        url: "{{  url('/admin/product-subcategory/ajax') }}/"+subcategory_id,
-                        type:"GET",
-                        dataType:"json",
-                        success:function(data) {
-                        var d =$('#subsubcategory').empty();
-                            $('#subsubcategory').append('<option value="" disabled selected> Select One </option>');
-                            $.each(data, function(key, value){
-                                $('#subsubcategory').append('<option value="'+ value.id +'">' + value.name + '</option>');
-                            });
-                        },
-                    });
-                } else {
-                    alert('danger');
                 }
             });
         });
@@ -387,5 +342,52 @@
             var id = obj.id;
             $('#new_color_area_'+id).remove();
         }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#category').on('change', function(){
+                var category_id = $(this).val();
+                // alert(category_id);
+                if(category_id) {
+                    $.ajax({
+                        url: "{{  url('/admin/product-category/ajax') }}/"+category_id,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data) {
+                            $('#subsubcategory').html('');
+                            $('#sub_cate_display').show();
+                            var d =$('#subcategory').empty();
+                            $('#subcategory').append('<option value="" disabled selected> Select One </option>');
+                            $.each(data, function(key, value){
+                                $('#subcategory').append('<option value="'+ value.id +'">' + value.name + '</option>');
+                            });
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+            $('#subcategory').on('change', function(){
+                var subcategory_id = $(this).val();
+                // alert(subcategory_id);
+                if(subcategory_id) {
+                    $.ajax({
+                        url: "{{  url('/admin/product-subcategory/ajax') }}/"+subcategory_id,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data) {
+                        var d =$('#subsubcategory').empty();
+                            $('#sub_sub_cate_display').show();
+                            $('#subsubcategory').append('<option value="" disabled selected> Select One </option>');
+                            $.each(data, function(key, value){
+                                $('#subsubcategory').append('<option value="'+ value.id +'">' + value.name + '</option>');
+                            });
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+        });
     </script>
 @endpush

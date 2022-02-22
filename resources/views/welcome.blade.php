@@ -127,6 +127,7 @@
             <!-- End Heading Area -->
             <div class="product-area">
                 <div class="row">
+                    
                     <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
                         <div class="single-product">
                             <div class="inner-product">
@@ -361,6 +362,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <!-- End Product Area -->
@@ -379,1648 +381,168 @@
             
             <div class="categories-area">
                 <div class="row">
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/vegetable-1.png')}}" alt=""></a>
+                    @foreach($categories as $category)
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
+                            <div class="single-category">
+                                <div class="icon">
+                                    <a href="{{ route('category', $category->slug) }}">
+                                        <img src="{{asset($category->image)}}" alt="">
+                                    </a>
+                                </div>
+                                <h4 class="category-name">
+                                    <a href="{{ route('category', $category->slug) }}">{{ $category->name }}</a>
+                                </h4>
                             </div>
-                            <h4 class="category-name"><a href="#">daily needs</a></h4>
                         </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/tv-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Electronics & Home Appliance</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/first-aid-kit-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Health & Nutrition</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/skincare-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Cosmetics & Beauty Care</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/baby-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Baby Food & Fashions</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/fashion-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Women’s Fashions</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/sport-watch-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Men’s Fashions</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/console-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Stationery, Toys & Games</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/sport-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Sports & Fitness</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/decorating-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Lifestyle & Home Decor</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/real-estate-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Real Estate & Property</a></h4>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
-                        <div class="single-category">
-                            <div class="icon">
-                                <a href="#"><img src="{{asset('frontend/images/icons/motorcycle-1.png')}}" alt=""></a>
-                            </div>
-                            <h4 class="category-name"><a href="#">Automobile & Motor Bikes</a></h4>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <!-- End Product Area -->			
         </div>
     </section>
     <!-- End Categories -->
-    <section class="new-arrival-section pt-2">
-        <div class="container-fluid">
-            <div class="heading-area">
-                <h1 class="heading">new arrival</h1>
-                <div class="button-area">
-                    <a href="#">See More</a>
-                </div>
-            </div>
-            <!-- End Heading Area -->
-
-            <div class="product-area">
-                <div class="row">
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
-                                    </h3>
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="current-price">৳675,00</span>
-                                        <div class="old-price-discount">
-                                            <del class="old-price">৳534,33</del>
-                                            <span class="discount">24% Off</span>
-                                        </div>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/2.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
-                                    </h3>
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="current-price">৳675,00</span>
-                                        <div class="old-price-discount">
-                                            <del class="old-price">৳534,33</del>
-                                            <span class="discount">24% Off</span>
-                                        </div>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/3.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
-                                    </h3>
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="current-price">৳675,00</span>
-                                        <div class="old-price-discount">
-                                            <del class="old-price">৳534,33</del>
-                                            <span class="discount">24% Off</span>
-                                        </div>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/4.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
-                                    </h3>
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="current-price">৳675,00</span>
-                                        <div class="old-price-discount">
-                                            <del class="old-price">৳534,33</del>
-                                            <span class="discount">24% Off</span>
-                                        </div>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/5.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
-                                    </h3>
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="current-price">৳675,00</span>
-                                        <div class="old-price-discount">
-                                            <del class="old-price">৳534,33</del>
-                                            <span class="discount">24% Off</span>
-                                        </div>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/6.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
-                                    </h3>
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="product-price">
-                                        <span class="current-price">৳675,00</span>
-                                        <div class="old-price-discount">
-                                            <del class="old-price">৳534,33</del>
-                                            <span class="discount">24% Off</span>
-                                        </div>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
+    @if($newArrivals->count() > 0)
+        <section class="new-arrival-section pt-2">
+            <div class="container-fluid">
+                <div class="heading-area">
+                    <h1 class="heading">new arrival</h1>
+                    <div class="button-area">
+                        <a href="#">See More</a>
                     </div>
                 </div>
+                <!-- End Heading Area -->
+                <div class="product-area">
+                    <div class="row">
+                        @foreach($newArrivals as $product)
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
+                                <div class="single-product">
+                                    <div class="inner-product">
+                                        <figure>
+                                            <img src="{{asset($product->thambnail)}}" alt="">
+                                        </figure>
+                                        <div class="product-bottom">
+                                            <div class="reviews">
+                                                <div class="reviews-inner">
+                                                    <div class="reviewed" style="width: 60%">
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                    </div>
+                                                    <div class="blanked">
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h3 class="product-name">
+                                                <a href="">{{ $product->name }}</a>
+                                            </h3>
+                                            <div class="price-cart">
+                                                <div class="product-price">
+                                                    <span class="current-price">৳ {{$product->sale_price}}</span>
+                                                    <div class="old-price-discount">
+                                                        <del class="old-price">৳ {{$product->buying_price}} </del>
+                                                        @php
+                                                            $amount = $product->buying_price - $product->sale_price;
+                                                            $discount = ($amount/$product->sale_price) * 100;
+                                                        @endphp
+                                                        <span class="discount">{{ round($discount)  }} %</span>
+                                                    </div>
+                                                </div>
+                                                <a class="cart-btn" href="">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                    cart
+                                                </a>
+                                            </div>							
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <!-- End Product Area -->			
             </div>
-            <!-- End Product Area -->			
-        </div>
-    </section>
+        </section>
+    @endif
     <!-- End New Arrival -->
-    <section class="all-products-section pt-2">
-        <div class="container-fluid">
-            <div class="heading-area">
-                <h1 class="heading">Only for You</h1>
-                <div class="button-area">
-                    <a href="#">See More</a>
+    @if($products->count() > 0)
+        <section class="all-products-section pt-2">
+            <div class="container-fluid">
+                <div class="heading-area">
+                    <!-- <h1 class="heading">Only for You</h1> -->
+                    <h1 class="heading">Features</h1>
+                    <div class="button-area">
+                        <a href="#">See More</a>
+                    </div>
+                </div>
+                <!-- End Heading Area -->
+                <div class="product-area">
+                    <div class="row">
+                        @foreach($products as $product)
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
+                                <div class="single-product">
+                                    <div class="inner-product">
+                                        <figure>
+                                            <img src="{{asset($product->thambnail)}}" alt="">
+                                        </figure>
+                                        <div class="product-bottom">
+                                            <div class="reviews">
+                                                <div class="reviews-inner">
+                                                    <div class="reviewed" style="width: 60%">
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <i class="bi bi-star-fill"></i>
+                                                    </div>
+                                                    <div class="blanked">
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                        <i class="bi bi-star"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <h3 class="product-name">
+                                                <a href="">{{ $product->name }}</a>
+                                            </h3>
+                                            <div class="price-cart">
+                                                <div class="product-price">
+                                                    <span class="current-price">৳ {{$product->sale_price}}</span>
+                                                    <div class="old-price-discount">
+                                                        <del class="old-price">৳ {{$product->buying_price}} </del>
+                                                        @php
+                                                            $amount = $product->buying_price - $product->sale_price;
+                                                            $discount = ($amount/$product->sale_price) * 100;
+                                                        @endphp
+                                                        <span class="discount">{{ round($discount)  }} %</span>
+                                                    </div>
+                                                </div>
+                                                <a class="cart-btn" href="">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                    cart
+                                                </a>
+                                            </div>							
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="btn-outer text-center mt-md-3 mt-2">
+                        <a class="lg-btn" href="#">See More...</a>
+                    </div>
                 </div>
             </div>
-            <!-- End Heading Area -->
-            <div class="product-area">
-                <div class="row">
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.pn')}}g" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/1.jpg')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 60%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>							
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/11.png')}}" alt="">
-                                    <span class="discount">-15% </span>
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 80%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
-                        <div class="single-product">
-                            <div class="inner-product">
-                                <figure>
-                                    <img src="{{asset('frontend/images/products/12.png')}}" alt="">
-                                </figure>
-                                <div class="product-bottom">
-                                    <div class="reviews">
-                                        <div class="reviews-inner">
-                                            <div class="reviewed" style="width: 70%">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <div class="blanked">
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="single-product.html">Orient Chair - Crisscross - Sandle Wood (4 pcs) - 6581</a>
-                                    </h3>
-                                    <div class="price-cart">
-                                        <div class="product-price">
-                                            <span class="current-price">৳675,00</span>
-                                            <div class="old-price-discount">
-                                                <del class="old-price">৳534,33</del>
-                                                <span class="discount">24%</span>
-                                            </div>											
-                                        </div>
-                                        <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
-                                    </div>						
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="btn-outer text-center mt-md-3 mt-2">
-                    <a class="lg-btn" href="#">See More...</a>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    @endif
     <!-- End All Products -->
     <section class="mission-vision-section pt-20">
         <div class="container-fluid">

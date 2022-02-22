@@ -32,6 +32,7 @@ class CreateProductsTable extends Migration
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();
             $table->text('outside_delivery')->nullable();
+            $table->text('return_status')->nullable();
             $table->text('inside_delivery')->nullable();
             $table->text('warranty_policy')->nullable();
             $table->string('schema')->nullable();
