@@ -8,6 +8,7 @@ use App\Models\Banner;
 use App\Models\MissionVision;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\About;
 
 class HomeController extends Controller
 {
@@ -22,5 +23,10 @@ class HomeController extends Controller
         $newArrivals = Product::where('product_type', 'New Arrival')->latest()->get();
         return view('welcome', compact('title', 'sliders', 'banners', 'missionvissions', 'categories', 'products', 'newArrivals'));
     }
-    
+    public function aboutUs()
+    {
+        $title = "About Us";
+        $about = About::latest()->first();
+        return view('pages.aboutus', compact('title', 'about'));
+    }
 }

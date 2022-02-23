@@ -440,18 +440,14 @@
                                                 </div>
                                             </div>
                                             <h3 class="product-name">
-                                                <a href="">{{ $product->name }}</a>
+                                                <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
                                             </h3>
                                             <div class="price-cart">
                                                 <div class="product-price">
                                                     <span class="current-price">৳ {{$product->sale_price}}</span>
                                                     <div class="old-price-discount">
-                                                        <del class="old-price">৳ {{$product->buying_price}} </del>
-                                                        @php
-                                                            $amount = $product->buying_price - $product->sale_price;
-                                                            $discount = ($amount/$product->sale_price) * 100;
-                                                        @endphp
-                                                        <span class="discount">{{ round($discount)  }} %</span>
+                                                        <del class="old-price">৳ {{$product->regular_price}}</del>
+                                                        <span class="discount">৳ {{ $product->discount }}</span>
                                                     </div>
                                                 </div>
                                                 <a class="cart-btn" href="">
@@ -511,18 +507,14 @@
                                                 </div>
                                             </div>
                                             <h3 class="product-name">
-                                                <a href="">{{ $product->name }}</a>
+                                                <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
                                             </h3>
                                             <div class="price-cart">
                                                 <div class="product-price">
                                                     <span class="current-price">৳ {{$product->sale_price}}</span>
                                                     <div class="old-price-discount">
-                                                        <del class="old-price">৳ {{$product->buying_price}} </del>
-                                                        @php
-                                                            $amount = $product->buying_price - $product->sale_price;
-                                                            $discount = ($amount/$product->sale_price) * 100;
-                                                        @endphp
-                                                        <span class="discount">{{ round($discount)  }} %</span>
+                                                        <del class="old-price">৳ {{$product->regular_price}} </del>
+                                                        <span class="discount">৳ {{ $product->discount }}</span>
                                                     </div>
                                                 </div>
                                                 <a class="cart-btn" href="">

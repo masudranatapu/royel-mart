@@ -33,7 +33,7 @@
                                     <thead>
                                         <tr>
                                             <th>P Code</th>
-                                            <th>Thambnail</th>
+                                            <th>Image</th>
                                             <th>Name</th>
                                             <th>S. Price</th>
                                             <th>R. Price</th>
@@ -41,7 +41,7 @@
                                             <th>Category</th>
                                             <th>P. Type</th>
                                             <th>Status</th>
-                                            <th width="10%">Action</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -49,31 +49,23 @@
                                             <tr>
                                                 <td>{{$product->product_code}}</td>
                                                 <td>
-                                                    <img src="{{ asset($product->thambnail) }}" style="width: 50px; height: 50px;">
+                                                    <img width="50" height="50" src="{{ asset($product->thambnail) }}">
                                                 </td>
                                                 <td>{{$product->name}}</td>
-                                                <td>{{$product->sell_price}} TK</td>
+                                                <td>{{$product->sale_price}} TK</td>
                                                 <td>
-                                                    @if($product->regular_price)
-                                                        {{ $product->regular_price }} TK
-                                                    @else
-                                                        {{$product->sell_price}} TK
-                                                    @endif
+                                                    {{$product->regular_price}} TK
                                                 </td>
                                                 <td>
-                                                    @if($product->discount)
-                                                        {{ $product->discount }} % 
-                                                    @else 
-                                                        <span class="badge bg-warning">No Discount</span>
-                                                    @endif
+                                                    {{$product->discount}} TK
                                                 </td>
                                                 <td>{{$product['category']['name']}}</td>
                                                 <td>{{$product->product_type}}</td>
                                                 <td>
-                                                    @if($product->product_type == 1)
-                                                        <span class="badge bg-sucess text-white">Active</span>
+                                                    @if($product->status == 1)
+                                                        <span class="bg-success badge">Active</span>
                                                     @else
-                                                        <span class="badge bg-warning text-white">Active</span>
+                                                        <span class="badge bg-warning text-white">Inactive</span>
                                                     @endif
                                                 </td>
                                                 <td width="10%">

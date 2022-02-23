@@ -26,14 +26,14 @@
                                                 <input type="text"  class="form-control" name="name" placeholder="Product Name">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Product Name ( Bangla )</label>
-                                                <input type="text"  class="form-control" name="name_bg" placeholder="Product Name ( Bangla )">
+                                                <label>Product Name ( Eng )</label>
+                                                <input type="text"  class="form-control" name="name_en" placeholder="Product Name ( Eng )">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <label>Buying price</label>
-                                                        <input type="number" min="0" value="0"  class="form-control" name="buying_price" placeholder="Buying price" id="regular_price">
+                                                        <label>Regular Price</label>
+                                                        <input type="number" min="0" value="0"  class="form-control" name="regular_price" placeholder="Buying price" id="regular_price">
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Discount</label>
@@ -187,15 +187,19 @@
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
                                                 <label>Outside Delivery </label>
-                                                <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 120 TK ">
+                                                <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 120 ৳">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <label>Inside Delivery </label>
-                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 80 TK ">
+                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 80 ৳">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <label>Return Status </label>
                                                 <input type="text" name="return_status" class="form-control" value="7 Days Return Change Of Mind Available">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label>Cash on Delivery</label>
+                                                <input type="text" name="cash_delivery" class="form-control" value="Cash on Delivery Available">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <label>Warranty Policy</label>

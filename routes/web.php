@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\HappyClientController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\MissionVisionController;
+use App\Http\Controllers\Admin\CategoryBannerController;
+use App\Http\Controllers\Admin\AboutController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -38,8 +40,12 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 
 Auth::routes();
 
+Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
 // category product
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
+
+// details and  view
+Route::get('product-details/{slug}', [ViewController::class, 'productDetails'])->name('productdetails');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -58,11 +64,16 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('category-inactive/{id}', [CategoryController::class, 'categoryInactive'])->name('category.inactive');
     Route::get('parent-category-view/{id}', [CategoryController::class, 'viewParentCategory'])->name('viewparentcategory');
     Route::get('child-category-view/{id}', [CategoryController::class, 'viewChildCategory'])->name('viewchildcategory');
+    // categoryBanner
+    Route::resource('category-banner', CategoryBannerController::class);
+    Route::get('category-banner-active/{id}', [CategoryBannerController::class, 'categoryBannerActive'])->name('categorybanner.active');
+    Route::get('category-banner-inactive/{id}', [CategoryBannerController::class, 'categoryBannerInactive'])->name('categorybanner.inactive');
     // brand
     Route::resource('brand', BrandController::class);
     Route::get('brand-active/{id}', [BrandController::class, 'brandActive'])->name('brand.active');
     Route::get('brand-inactive/{id}', [BrandController::class, 'brandInactive'])->name('brand.inactive');
-    
+    // about
+    Route::resource('abouts', AboutController::class);
     // Unit
     Route::resource('unit', UnitController::class);
     Route::get('unit-active/{id}', [UnitController::class, 'unitActive'])->name('unit.active');

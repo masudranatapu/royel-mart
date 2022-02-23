@@ -73,7 +73,7 @@
                 <div class="col-lg-2 col-md-3 col-6 mb-lg-0 mb-sm-4 mb-3">
                     <h3 class="footer-title">our services</h3>
                     <ul class="footer-links">
-                        <li><a href="#">about us</a></li>
+                        <li><a href="{{ route('about') }}">about us</a></li>
                         <li><a href="#">return policy</a></li>
                         <li><a href="#">privacy policy</a></li>
                         <li><a href="#">cookie policy</a></li>

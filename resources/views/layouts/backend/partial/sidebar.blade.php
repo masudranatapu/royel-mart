@@ -112,7 +112,7 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/abouts')|| Request::is('admin/website') || Request::is('admin/category-banner') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -120,6 +120,11 @@
                 <span class="pcoded-mtext">Website</span>
             </a>
             <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/abouts')? 'active' : '' }}">
+                    <a href="{{ route('admin.abouts.index') }}">
+                        <span class="pcoded-mtext">About</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/slider')? 'active' : '' }}">
                     <a href="{{ route('admin.slider.index') }}">
                         <span class="pcoded-mtext">Slider</span>
@@ -128,6 +133,11 @@
                 <li class="{{ Request::is('admin/banner')? 'active' : '' }}">
                     <a href="{{ route('admin.banner.index') }}">
                         <span class="pcoded-mtext">Banner</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
+                    <a href="{{ route('admin.category-banner.index') }}">
+                        <span class="pcoded-mtext">Category Banner</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/happy-client')? 'active' : '' }}">

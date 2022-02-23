@@ -119,7 +119,7 @@ class HappyClientController extends Controller
             $upload_path = 'media/client/';
             $client_image->move($upload_path, $client_image_name);
             
-            $old_client_image = client::findOrFail($id);
+            $old_client_image = Client::findOrFail($id);
             if($old_client_image->image){
                 unlink($old_client_image->image);
             }

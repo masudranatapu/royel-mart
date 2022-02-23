@@ -5,18 +5,7 @@
 @stop
 
 @push('css')
-    <style>
-        .category-image {
-            width: 100px;
-            height:100px;
-            float: left;
-        }
-        .slider-image-size {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-    </style>
+
 @endpush
 
 @section('content')
@@ -28,25 +17,25 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2>Client <small class="badge bg-success text-white">{{ $clients->count() }}</small></h2>
+                                    <h2>Category Banner <small class="badge bg-success text-white">{{ $categorybanners->count() }}</small></h2>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
                                         <i class="fa fa-plus"></i>
-                                        Add client
+                                        Add Category Banner
                                     </button>
                                     <!-- crate modal  -->
                                     <div class="modal fade" id="large-Modal" tabindex="-1" role="dialog">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Add client</h4>
+                                                    <h4 class="modal-title">Category Banner</h4>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true"> &times; </span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('admin.happy-client.store') }}" method="POST" enctype="multipart/form-data">
+                                                    <form action="{{ route('admin.category-banner.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right">Image</label>
@@ -63,7 +52,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
-                                                                <input type="submit" class="btn btn-success" value="Create Client">
+                                                                <input type="submit" class="btn btn-success" value="Create Category Banner">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -80,29 +69,25 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">SL No</th>
-                                            <th class="text-center">Name</th>
                                             <th class="text-center">Image</th>
-                                            <th class="text-center">Link</th>
                                             <th class="text-center">Status</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($clients as $key => $client)
+                                        @foreach($categorybanners as $key => $categorybanner)
                                             <tr>
                                                 <td class="text-center">{{  $key + 1 }}</td>
-                                                <td class="text-center">{{$client->link}}</td>
                                                 <td class="text-center">
-                                                    <img wodth="60" height="60" src="{{ asset($client->image) }}">
-                                                </td class="text-center">
-                                                <td class="text-center">{{ $client->link }}</td>
+                                                    <img wodth="60" height="60" src="{{ asset($categorybanner->image) }}">
+                                                </td>
                                                 <td class="text-center">
-                                                    @if($client->status == 1)
-                                                        <a title="Inactive Now" href="{{ route('admin.client.inactive', $client->id) }}" class="btn btn-success">
+                                                    @if($categorybanner->status == 1)
+                                                        <a title="Inactive Now" href="{{ route('admin.categorybanner.inactive', $categorybanner->id) }}" class="btn btn-success">
                                                             Active
                                                         </a>
                                                     @else
-                                                        <a title="Active Now" href="{{ route('admin.client.active', $client->id) }}" class="btn btn-danger">
+                                                        <a title="Active Now" href="{{ route('admin.categorybanner.active', $categorybanner->id) }}" class="btn btn-danger">
                                                             Inactive
                                                         </a>
                                                     @endif
@@ -111,10 +96,10 @@
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
-                                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $client->id }})">
+                                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $categorybanner->id }})">
                                                         <i class="ml-1 fa fa-trash"></i>
                                                     </button>
-                                                    <form id="delete-form-{{ $client->id }}" action="{{ route('admin.happy-client.destroy', $client->id) }}" method="POST" style="display: none;">
+                                                    <form id="delete-form-{{ $categorybanner->id }}" action="{{ route('admin.category-banner.destroy', $categorybanner->id) }}" method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
@@ -129,21 +114,9 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form action="{{ route('admin.happy-client.update', $client->id) }}" method="POST" enctype="multipart/form-data">
+                                                                <form action="{{ route('admin.category-banner.update', $categorybanner->id) }}" method="POST" enctype="multipart/form-data">
                                                                     @csrf
                                                                     @method('PUT')
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Name</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="text" class="form-control" name="name" value="{{ $client->name }}" placeholder="Name">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Link</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="text" class="form-control" name="link" value="{{ $client->link }}">
-                                                                        </div>
-                                                                    </div>
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right">Image</label>
                                                                         <div class="col-md-9">
@@ -153,13 +126,13 @@
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9 text-left">
-                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($client->image) }}">
+                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($categorybanner->image) }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9 text-left">
-                                                                            <input type="submit" class="btn btn-success" value="Update client">
+                                                                            <input type="submit" class="btn btn-success" value="Update Category Banner">
                                                                         </div>
                                                                     </div>
                                                                 </form>
