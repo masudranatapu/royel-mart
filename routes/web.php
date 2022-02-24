@@ -18,12 +18,15 @@ use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\MissionVisionController;
 use App\Http\Controllers\Admin\CategoryBannerController;
 use App\Http\Controllers\Admin\AboutController;
+use App\Http\Controllers\Admin\PolicyController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
+use App\Http\Controllers\Customer\CheckoutController;
 
 // all controller
 use App\Http\Controllers\ViewController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +44,21 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Auth::routes();
 
 Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
+Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy');
+Route::get('contact-us', [HomeController::class, 'contact'])->name('contact');
+Route::post('contact-us', [HomeController::class, 'contactStore'])->name('contact.store');
+Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('arrival');
+Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
 // category product
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
 
+// cart area routes
+Route::get('cart', [CartController::class, 'cart'])->name('cart');
+Route::get('add-to-cart/{product_id}', [CartController::class, 'addToCart'])->name('add_to_cart');
+Route::post('add-to-cart-with-quantity', [CartController::class, 'addToCartWithQuantity'])->name('addtocart.withQuantity');
+Route::post('add-to-cart-with-size-color-quantity', [CartController::class, 'addToCartWithSizeColorQuantity'])->name('addtocart.withSizeColorQuantity');
+Route::get('cart-remove/{id}', [CartController::class, 'cartRemove'])->name('cart.remove');
+Route::patch('update-cart', [CartController::class, 'cartUpdate'])->name('update_cart');
 // details and  view
 Route::get('product-details/{slug}', [ViewController::class, 'productDetails'])->name('productdetails');
 
@@ -55,6 +70,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::post('profile/{id}', [DashboardController::class, 'profileUpdate'])->name('profile.update');
     Route::post('pass-updated/{id}', [DashboardController::class, 'updatePass'])->name('password.update');
+    Route::get('contact-massage', [DashboardController::class, 'contactMassage'])->name('contact-massage');
+    Route::get('contact-delete/{id}', [DashboardController::class, 'contactDelete'])->name('contact.delete');
+    
     // website seeting
     Route::resource('website', WebsiteController::class);
     Route::post('get-add-row-', [WebsiteController::class, 'addRemoveRow'])->name('row.addremove');
@@ -91,7 +109,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('slider', SliderController::class);
     Route::get('slider-active/{id}', [SliderController::class, 'sliderActive'])->name('slider.active');
     Route::get('slider-inactive/{id}', [SliderController::class, 'sliderInactive'])->name('slider.inactive');
-    // happy client 
+    // happy client
     Route::resource('happy-client', HappyClientController::class);
     Route::get('client-active/{id}', [HappyClientController::class, 'clientActive'])->name('client.active');
     Route::get('client-inactive/{id}', [HappyClientController::class, 'clientInactive'])->name('client.inactive');
@@ -103,10 +121,15 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('mission-vision', MissionVisionController::class);
     Route::get('missionvison-active/{id}', [MissionVisionController::class, 'missionVisionActive'])->name('missionvision.active');
     Route::get('missionvison-inactive/{id}', [MissionVisionController::class, 'missionVisionInactive'])->name('missionvision.inactive');
-    
+    // policy
+    Route::resource('policy', PolicyController::class);
+    Route::get('policy-inactive/{id}', [PolicyController::class, 'policyInactive'])->name('policy.inactive');
+    Route::get('policy-active/{id}', [PolicyController::class, 'policyActive'])->name('policy.active');
 });
 
 // customer routes 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('/information', [InformationController::class, 'index'])->name('information');
+    
+    Route::resource('checkout', CheckoutController::class);
 });

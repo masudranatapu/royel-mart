@@ -21,6 +21,7 @@ class Product extends Model
         'buying_price',
         'sale_price',
         'discount',
+        'discount_tk',
         'minimum_quantity',
         'description',
         'meta_description',

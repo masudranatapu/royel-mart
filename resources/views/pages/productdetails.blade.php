@@ -59,100 +59,105 @@
 							</div>
 						</div>
 						<div class="col-lg-6 mb-2">
-							<div class="product-info-area">
-								<h4 class="product-name">{{ $products->name }}</h4>
-								<div class="reviews">
-									<div class="reviews-inner">
-										<div class="reviewed" style="width: 80%">
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
-											<i class="bi bi-star-fill"></i>
+							<form action="">
+								<div class="product-info-area">
+									<h4 class="product-name">{{ $products->name }}</h4>
+									<div class="reviews">
+										<div class="reviews-inner">
+											<div class="reviewed" style="width: 80%">
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+												<i class="bi bi-star-fill"></i>
+											</div>
+											<div class="blanked">
+												<i class="bi bi-star"></i>
+												<i class="bi bi-star"></i>
+												<i class="bi bi-star"></i>
+												<i class="bi bi-star"></i>
+												<i class="bi bi-star"></i>
+											</div>
 										</div>
-										<div class="blanked">
-											<i class="bi bi-star"></i>
-											<i class="bi bi-star"></i>
-											<i class="bi bi-star"></i>
-											<i class="bi bi-star"></i>
-											<i class="bi bi-star"></i>
-										</div>
-									</div>
-									<div class="reviews-answer">
-										<span class="count-reviews">(3 ratings)</span>
-										<span class="count-answers">54 answered questions</span>
-									</div>
-								</div>
-								<div class="divider"></div>
-								<div class="category-brand">
-                                    @if($products->brand)
-                                        <div class="brand">
-                                            <label for="">brand:</label><a href="#">{{ $products['brand']['name'] }}</a>
-                                        </div>
-                                    @endif
-									<div class="category">
-										<label for="">category:</label><a href="#">{{ $products['category']['name'] }}</a>
-									</div>
-								</div>
-								<div class="price">
-									<span class="product-price">৳ {{ $products->sale_price }}</span>
-									<div class="old-price-discount">
-										<del class="old-price">৳ {{ $products->regular_price }}</del>
-										<span class="discount">৳ {{ $products->discount }} Off</span>
-									</div>
-								</div>
-								<div class="divider"></div>
-								<div class="size">
-									<label for="">size:</label>
-									<select name="" class="form-select" id="">
-										<option selected value="">size</option>
-										<option selected value="36">36</option>
-										<option selected value="38">38</option>
-										<option selected value="40">40</option>
-										<option selected value="42">42</option>
-									</select>
-									<a id="size-chart" href="#">Size Chart</a>
-									<div id="chart-popup" class="chart-popup">
-										<div class="inner-popup">
-											<button class="close-chart">
-												<i class="bi bi-x"></i>
-											</button>
-											<img src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
+										<div class="reviews-answer">
+											<span class="count-reviews">(3 ratings)</span>
+											<span class="count-answers">54 answered questions</span>
 										</div>
 									</div>
-								</div>
-								<div class="colors">
-									<label for="">colors:</label>
-									<ul class="colors-wrapper">
-										<li class="black active" style="background-color: #020202"></li>
-										<li class="grey" style="background-color: #95A9B2"></li>
-										<li class="brown" style="background-color: #B82222"></li>
-										<li class="lite-brown" style="background-color: #BEA9A9"></li>
-										<li class="blue" style="background-color: #151867"></li>
-									</ul>
-								</div>
-								<div class="unit">
-									<label for="">unit: </label>
-									@foreach($productsunits as $productsunit)
-										<a href="#">{{ $productsunit['unit']['name'] }} </a>
-									@endforeach
-								</div>
-								<div class="divider"></div>
-								<div class="quantity">
-									<label for="">quantity:</label>
-									<div class="quantity-wrapper">
-										<button class="qty qty-minus"><i class="bi bi-dash"></i></button>
-										<div class="input-wrapper">
-											<input type="number" value="1">
+									<div class="divider"></div>
+									<div class="category-brand">
+										@if($products->brand)
+											<div class="brand">
+												<label for="">brand:</label><a href="javascript:;">{{ $products['brand']['name'] }}</a>
+											</div>
+										@endif
+										<div class="category">
+											<label for="">category:</label><a href="javascript:;">{{ $products['category']['name'] }}</a>
 										</div>
-										<button class="qty qty-plus"><i class="bi bi-plus"></i></button>
+									</div>
+									<div class="price">
+										<span class="product-price">৳ {{ $products->sale_price }}</span>
+										<div class="old-price-discount">
+											<del class="old-price">৳ {{ $products->regular_price }}</del>
+											<span class="discount">{{ $products->discount_tk }} ৳ Off</span>
+										</div>
+									</div>
+									<div class="divider"></div>
+									<div class="size">
+										<label for="">size:</label>
+										<select name="" class="form-select" id="">
+											<option selected value="">size</option>
+											<option selected value="36">36</option>
+											<option selected value="38">38</option>
+											<option selected value="40">40</option>
+											<option selected value="42">42</option>
+										</select>
+										<a id="size-chart" href="#">Size Chart</a>
+										<div id="chart-popup" class="chart-popup">
+											<div class="inner-popup">
+												<button class="close-chart">
+													<i class="bi bi-x"></i>
+												</button>
+												<img src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
+											</div>
+										</div>
+									</div>
+									<div class="colors">
+										<label for="">colors:</label>
+										<ul class="colors-wrapper">
+											<li class="black active" style="background-color: #020202"></li>
+											<li class="grey" style="background-color: #95A9B2"></li>
+											<li class="brown" style="background-color: #B82222"></li>
+											<li class="lite-brown" style="background-color: #BEA9A9"></li>
+											<li class="blue" style="background-color: #151867"></li>
+										</ul>
+									</div>
+									<div class="unit">
+										<label for="">unit: </label>
+										@foreach($productsunits as $productsunit)
+											<a href="javascript:;">{{ $productsunit['unit']['name'] }} </a>
+										@endforeach
+									</div>
+									<div class="divider"></div>
+									<div class="quantity">
+										<label for="">quantity:</label>
+										<div class="quantity-wrapper">
+											<button class="qty qty-minus"><i class="bi bi-dash"></i></button>
+											<div class="input-wrapper">
+												<input type="number" value="1">
+											</div>
+											<button class="qty qty-plus"><i class="bi bi-plus"></i></button>
+										</div>
+									</div>
+									<div class="action-buttons">
+										<button class="product-btn buy-btn"><i class="bi bi-heart"></i>buy now</button>
+										<a href="" class="product-btn cart-btn">
+											<i class="bi bi-cart2"></i>
+											add to cart
+										</a>
 									</div>
 								</div>
-								<div class="action-buttons">
-									<button class="product-btn buy-btn"><i class="bi bi-heart"></i>buy now</button>
-									<a href="" class="product-btn cart-btn"><i class="bi bi-cart2"></i>add to cart</a>
-								</div>
-							</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -496,7 +501,7 @@
                                                 <span class="current-price">৳ {{$product->sale_price}}</span>
                                                 <div class="old-price-discount">
                                                     <del class="old-price">৳ {{$product->regular_price}} </del>
-                                                    <span class="discount">৳ {{ $product->discount }}</span>
+                                                    <span class="discount">{{ $product->discount }} % </span>
                                                 </div>
                                             </div>
                                         </div>							

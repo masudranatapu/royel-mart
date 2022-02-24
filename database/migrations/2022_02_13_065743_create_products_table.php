@@ -26,7 +26,8 @@ class CreateProductsTable extends Migration
             $table->text('multi_thambnail')->nullable();
             $table->double('regular_price');
             $table->double('sale_price');
-            $table->double('discount');
+            $table->integer('discount')->default(0);
+            $table->integer('discount_tk')->default(0);
             $table->string('minimum_quantity');
             $table->longText('description')->nullable();
             $table->text('meta_description')->nullable();

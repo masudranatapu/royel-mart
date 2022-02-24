@@ -112,7 +112,7 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/abouts')|| Request::is('admin/website') || Request::is('admin/category-banner') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/category-banner') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -135,6 +135,11 @@
                         <span class="pcoded-mtext">Banner</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/policy')? 'active' : '' }}">
+                    <a href="{{ route('admin.policy.index') }}">
+                        <span class="pcoded-mtext">Policy</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
                     <a href="{{ route('admin.category-banner.index') }}">
                         <span class="pcoded-mtext">Category Banner</span>
@@ -148,6 +153,11 @@
                 <li class="{{ Request::is('admin/mission-vision')? 'active' : '' }}">
                     <a href="{{ route('admin.mission-vision.index') }}">
                         <span class="pcoded-mtext">Mission Vision</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/contact-massage')? 'active' : '' }}">
+                    <a href="{{ route('admin.contact-massage') }}">
+                        <span class="pcoded-mtext">Contact Massage</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/website') ? 'active' : '' }}">

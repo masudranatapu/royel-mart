@@ -405,9 +405,9 @@
         <section class="new-arrival-section pt-2">
             <div class="container-fluid">
                 <div class="heading-area">
-                    <h1 class="heading">new arrival</h1>
+                    <h1 class="heading">New Arrival</h1>
                     <div class="button-area">
-                        <a href="#">See More</a>
+                        <a href="{{ route('arrival') }}">See More</a>
                     </div>
                 </div>
                 <!-- End Heading Area -->
@@ -447,10 +447,10 @@
                                                     <span class="current-price">৳ {{$product->sale_price}}</span>
                                                     <div class="old-price-discount">
                                                         <del class="old-price">৳ {{$product->regular_price}}</del>
-                                                        <span class="discount">৳ {{ $product->discount }}</span>
+                                                        <span class="discount">{{ $product->discount }} % </span>
                                                     </div>
                                                 </div>
-                                                <a class="cart-btn" href="">
+                                                <a class="cart-btn" href="{{ route('add_to_cart', $product->id) }}">
                                                     <i class="bi bi-cart-plus"></i>
                                                     cart
                                                 </a>
@@ -472,9 +472,9 @@
             <div class="container-fluid">
                 <div class="heading-area">
                     <!-- <h1 class="heading">Only for You</h1> -->
-                    <h1 class="heading">Features</h1>
+                    <h1 class="heading">Only For You</h1>
                     <div class="button-area">
-                        <a href="#">See More</a>
+                        <a href="{{ route('allproduct') }}">See More</a>
                     </div>
                 </div>
                 <!-- End Heading Area -->
@@ -514,10 +514,10 @@
                                                     <span class="current-price">৳ {{$product->sale_price}}</span>
                                                     <div class="old-price-discount">
                                                         <del class="old-price">৳ {{$product->regular_price}} </del>
-                                                        <span class="discount">৳ {{ $product->discount }}</span>
+                                                        <span class="discount">{{ $product->discount }} % </span>
                                                     </div>
                                                 </div>
-                                                <a class="cart-btn" href="">
+                                                <a class="cart-btn" href="{{ route('add_to_cart', $product->id) }}">
                                                     <i class="bi bi-cart-plus"></i>
                                                     cart
                                                 </a>

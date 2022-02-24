@@ -31,23 +31,45 @@
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Regular Price</label>
-                                                        <input type="number" min="0" value="0"  class="form-control" name="regular_price" placeholder="Buying price" id="regular_price">
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label>Regular Price</label>
+                                                                <input name="regular_price" type="number" class="form-control" id="regular_price" placeholder="Only number" value="0">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>Sell Price <span class="text-danger"> * </span></label>
+                                                                <input name="sale_price" readonly  type="number" class="form-control" id="sell_price" placeholder="Only number" value="0">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label>Discount</label>
-                                                        <input type="number" min="0" value="0"  class="form-control" name="discount" placeholder="Discount" id="discount" pattern="[0-9]*\.?[0-9]*">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Sell Price <span class="text-danger"> * </span></label>
-                                                        <input type="number" min="0" value="0"  class="form-control" name="sale_price" placeholder="Sell price" id="sale_price">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Minimum Quantity</label>
-                                                        <input type="number" name="minimum_quantity" class="form-control" value="5" placeholder="Minimum Quantity">
+                                                    <div class="col-md-12 mt-2">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label>Discount</label>
+                                                                <div class="input-group mt-2">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-addon2">৳</span>
+                                                                    </div>
+                                                                    <input class="form-control" id="discount_tk" type="number" pattern="[0-9]*\.?[0-9]*" title="Numbers only and dot" name="discount_tk" value="0">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label></label>
+                                                                <div class="input-group mt-3">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-addon2">%</span>
+                                                                    </div>
+                                                                    <input class="form-control" id="discount" type="number" pattern="[0-9]*\.?[0-9]*" title="Numbers only and dot" name="discount" value="0">
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label>Minimum Quantity</label>
+                                                <input type="number" name="minimum_quantity" class="form-control" value="5" placeholder="Minimum Quantity">
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -135,7 +157,6 @@
                                                             <option value="" disabled>Select One</option>
                                                             <option value="New Arrival" selected>New Arrival</option>
                                                             <option value="Features">Features</option>
-                                                            <option value="Best Selling">Best Selling</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">
@@ -248,6 +269,52 @@
     <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('massage/sweetalert/sweetalert.all.js') }}"></script>
     <script>
+        $('#regular_price').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var discount = $("#discount").val();
+
+            var sell_price = regular_price - (regular_price*(discount/100));
+
+            $("#sell_price").val(sell_price);
+        });
+        $('#discount').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var discount = $("#discount").val();
+
+            var dis_price = regular_price*(discount/100);
+            var sell_price = regular_price - (regular_price*(discount/100));
+
+            $("#discount_tk").val(Math.ceil(dis_price));
+            $("#sell_price").val(Math.ceil(sell_price));
+        });
+        $('#discount_tk').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var discount_tk = $("#discount_tk").val();
+
+            var sell_price = regular_price - discount_tk;
+            var discount = (discount_tk*100)/regular_price;
+
+            $("#discount").val(Math.ceil(discount));
+            $("#sell_price").val(sell_price);
+        });
+        $('#sell_price').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var sell_price = $("#sell_price").val();
+            var discount_tk = $("#discount_tk").val();
+
+            var diff = regular_price - sell_price;
+            var discount = (diff/regular_price)*100;
+            if (regular_price=='') {
+                discount = 0;
+                diff = 0;
+                // regular_price = sell_price;
+            }
+            $("#discount").val(Math.ceil(discount));
+            $("#discount_tk").val(diff);
+            // $("#regular_price").val(regular_price);
+        });
+    </script>
+    <script>
         // Summernote
         $('.summernote').summernote()
 
@@ -262,34 +329,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        $('#regular_price').on('wheel keyup change', function(event) {
-            var regular_price = $("#regular_price").val();
-            var discount = $("#discount").val();
-            var sale_price = regular_price - discount;
-
-            $("#sale_price").val(sale_price);
-        });
-        $('#discount').on('wheel keyup change', function(event) {
-
-            var regular_price = $("#regular_price").val();
-            var discount = $("#discount").val();
-
-            var sale_price = regular_price - discount;
-
-            $("#sale_price").val(sale_price);
-
-        });
-        $('#sale_price').on('wheel keyup change', function(event) {
-            var regular_price = $("#regular_price").val();
-            var sale_price = $("#sale_price").val();
-
-            var diff = regular_price - sale_price;
-
-            if (regular_price=='') {
-                discount = 0;
-            }
-            $("#discount").val(diff);
-        });
     </script>
     <script>
         $(document).ready(function(){

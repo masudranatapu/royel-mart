@@ -1,6 +1,7 @@
 @php
     $website = App\Models\Website::latest()->first();
     $clients = App\Models\Client::latest()->get();
+    $policies = App\Models\Policy::where('status', 1)->latest()->limit(4)->get();
 @endphp
 <section class="informations-section padding-20-20">
     <div class="container-fluid">
@@ -62,11 +63,8 @@
                 <div class="col-lg-2 col-md-3 col-6 mb-lg-0 mb-sm-4 mb-3">
                     <h3 class="footer-title">information</h3>
                     <ul class="footer-links">
-                        <li><a href="#">new arrival</a></li>
-                        <li><a href="#">specials</a></li>
-                        <li><a href="#">hot deals</a></li>
-                        <li><a href="#">backpacks</a></li>
-                        <li><a href="#">women's fashion</a></li>
+                        <li><a href="{{ route('arrival') }}">new arrival</a></li>
+                        <li><a href="{{ route('allproduct') }}">all product</a></li>
                     </ul>
                 </div>
                 <div class="mobile-border"></div>
@@ -74,11 +72,9 @@
                     <h3 class="footer-title">our services</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('about') }}">about us</a></li>
-                        <li><a href="#">return policy</a></li>
-                        <li><a href="#">privacy policy</a></li>
-                        <li><a href="#">cookie policy</a></li>
-                        <li><a href="#">purchasing policy</a></li>
-                        <li><a href="#">terms & conditions</a></li>
+                        @foreach($policies as $policy)
+                            <li><a href="{{ route('policy', $policy->slug) }}">{{ $policy->name }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-lg-4 col-md-4 col-6 mb-lg-0 mb-sm-4 mb-3">
