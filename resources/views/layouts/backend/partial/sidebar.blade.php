@@ -66,30 +66,29 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu ">
+        <li class="pcoded-hasmenu {{ Request::is('admin/purchase') || Request::is('admin/sold-product') || Request::is('admin/sold-product-report') ? 'pcoded-trigger' : '' }}"">
             <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-check-circle"></i></span>
-                <span class="pcoded-mtext">Task</span>
+                <span class="pcoded-micon">
+                    <i class="feather icon-check-circle"></i>
+                </span>
+                <span class="pcoded-mtext">
+                    Stock Management
+                </span>
             </a>
             <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="task-list.html">
-                        <span class="pcoded-mtext">Task List</span>
+                <li class="{{ Request::is('admin/purchase') ? 'active' : '' }}">
+                    <a href="{{ route('admin.purchase.index') }}">
+                        <span class="pcoded-mtext">Purchase Product</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="task-board.html">
-                        <span class="pcoded-mtext">Task Board</span>
+                <li class="{{ Request::is('admin/sold-product') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sold-product.index') }}">
+                        <span class="pcoded-mtext">Sold Product</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="task-detail.html">
-                        <span class="pcoded-mtext">Task Detail</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="issue-list.html">
-                        <span class="pcoded-mtext">Issue List</span>
+                <li class="{{ Request::is('admin/sold-product-report') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sold-product.report') }}">
+                        <span class="pcoded-mtext">Stock Report</span>
                     </a>
                 </li>
             </ul>

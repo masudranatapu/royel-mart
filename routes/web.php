@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\MissionVisionController;
 use App\Http\Controllers\Admin\CategoryBannerController;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\PolicyController;
+use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\StockController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -125,6 +127,13 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('policy', PolicyController::class);
     Route::get('policy-inactive/{id}', [PolicyController::class, 'policyInactive'])->name('policy.inactive');
     Route::get('policy-active/{id}', [PolicyController::class, 'policyActive'])->name('policy.active');
+    // purchase
+    Route::resource('purchase', PurchaseController::class);
+    Route::post('stock-purchase', [PurchaseController::class, 'stockPurchase'])->name('stock.purchase');
+    Route::resource('sold-product', StockController::class);
+    Route::get('sold-search', [StockController::class, 'soldSearch'])->name('sold.search');
+    Route::get('sold-product-report', [StockController::class, 'showReport'])->name('sold-product.report');
+    Route::get('sold-product-report-search', [StockController::class, 'showReportSearch'])->name('sold-product-report.search');
 });
 
 // customer routes 
