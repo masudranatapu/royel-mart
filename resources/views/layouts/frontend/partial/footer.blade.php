@@ -51,7 +51,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-6 mb-lg-0 mb-sm-4 mb-3">
                     <div class="footer-logo">
-                        <a href="{{ route('home') }}"><img src="{{asset('frontend/images/logo/logo.png')}}" alt=""></a>
+                        <a href="{{ route('home') }}"><img src="{{asset($website->logo)}}" alt=""></a>
                     </div>
                     <p class="footer-contact">
                         <span class="d-block">Address : {{ $website->address }}</span>

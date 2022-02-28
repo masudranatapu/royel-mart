@@ -32,24 +32,21 @@
                                 <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>SL</th>
-                                            <th>Product code</th>
+                                            <th>P Code</th>
                                             <th>Thambnail</th>
                                             <th>Name</th>
-                                            <th>Sell price</th>
-                                            <th>Regular price</th>
+                                            <th>S. Price</th>
+                                            <th>R. Price</th>
                                             <th>Discount</th>
-                                            <th>Category Name</th>
-                                            <th>Availability</th>
-                                            <th>Product Type</th>
-                                            <th>Product Status</th>
-                                            <th>Action</th>
+                                            <th>Category</th>
+                                            <th>P. Type</th>
+                                            <th>Status</th>
+                                            <th width="10%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($products as $key => $product)
                                             <tr>
-                                                <td>{{$key + 1}}</td>
                                                 <td>{{$product->product_code}}</td>
                                                 <td>
                                                     <img src="{{ asset($product->thambnail) }}" style="width: 50px; height: 50px;">
@@ -71,13 +68,6 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$product['category']['name']}}</td>
-                                                <td>
-                                                    @if($product->availability == 1)
-                                                        <span class="badge bg-success">Availability</span>
-                                                    @else 
-                                                        <span class="badge bg-warning">Unavailability</span>
-                                                    @endif
-                                                </td>
                                                 <td>{{$product->product_type}}</td>
                                                 <td>
                                                     @if($product->product_type == 1)
@@ -86,14 +76,14 @@
                                                         <span class="badge bg-warning text-white">Active</span>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-info waves-effect btn-xs" target="blank">
-                                                        <i class="fas fa-edit"></i>
+                                                <td width="10%">
+                                                    <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-info btn-xs waves-effect btn-xs">
+                                                        <i class="fa fa-edit"></i>
                                                     </a>
                                                     <button class="btn btn-danger waves-effect btn-xs" type="button" onclick="deleteData({{ $product->id }})">
-                                                        <i class="fa fa-trash"></i>
+                                                        <i class="fa fa-trash mr-1"></i>
                                                     </button>
-                                                    <form id="delete-form-{{ $product->id }}" action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display: none;">
+                                                    <form id="delete-form-{{ $product->id }}" action="{{ route('admin.product.destroy', $product->id) }}" method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
@@ -112,5 +102,37 @@
 @endsection
 
 @push('js')
-
+    <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
+    <script type="text/javascript">
+        function deleteData(id) {
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    // event.preventDefault();
+                    document.getElementById('delete-form-'+id).submit();
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    swal(
+                        'Cancelled',
+                        'Your data is safe :)',
+                        'error'
+                    )
+                }
+            })
+        }
+    </script>
 @endpush
