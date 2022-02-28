@@ -44,6 +44,26 @@
                 </li>
             </ul>
         </li>
+        <li class="pcoded-hasmenu {{ Request::is('admin/division') || Request::is('admin/district') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-bookmark"></i>
+                </span>
+                <span class="pcoded-mtext">Location</span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/division') ? 'active' : '' }}">
+                    <a href="{{ route('admin.division.index') }}">
+                        <span class="pcoded-mtext">Division</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/district') ? 'active' : '' }}">
+                    <a href="{{ route('admin.district.index') }}">
+                        <span class="pcoded-mtext">District</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
     <ul class="pcoded-item pcoded-left-item">
         <li class="pcoded-hasmenu {{ Request::is('admin/product') || Request::is('admin/product/create') ? 'pcoded-trigger' : '' }}">
@@ -95,7 +115,9 @@
         </li>
         <li class="pcoded-hasmenu ">
             <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-bookmark"></i></span>
+                <span class="pcoded-micon">
+                    <i class="feather icon-bookmark"></i>
+                </span>
                 <span class="pcoded-mtext">To-Do</span>
             </a>
             <ul class="pcoded-submenu">

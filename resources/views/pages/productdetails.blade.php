@@ -115,9 +115,9 @@
 										<a id="size-chart" href="#">Size Chart</a>
 										<div id="chart-popup" class="chart-popup">
 											<div class="inner-popup">
-												<button class="close-chart">
+												<a href="javascript:;" class="close-chart">
 													<i class="bi bi-x"></i>
-												</button>
+												</a>
 												<img src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
 											</div>
 										</div>
@@ -125,18 +125,12 @@
 									<div class="colors">
 										<label for="">colors:</label>
 										<ul class="colors-wrapper">
-											<li class="black active" style="background-color: #020202"></li>
-											<li class="grey" style="background-color: #95A9B2"></li>
-											<li class="brown" style="background-color: #B82222"></li>
-											<li class="lite-brown" style="background-color: #BEA9A9"></li>
-											<li class="blue" style="background-color: #151867"></li>
+											<li class="active" style="background-color: red"></li>
+											<li class="" style="background-color: #95A9B2"></li>
+											<li class="" style="background-color: #B82222"></li>
+											<li class="" style="background-color: #BEA9A9"></li>
+											<li class="" style="background-color: blue"></li>
 										</ul>
-									</div>
-									<div class="unit">
-										<label for="">unit: </label>
-										@foreach($productsunits as $productsunit)
-											<a href="javascript:;">{{ $productsunit['unit']['name'] }} </a>
-										@endforeach
 									</div>
 									<div class="divider"></div>
 									<div class="quantity">
@@ -150,11 +144,14 @@
 										</div>
 									</div>
 									<div class="action-buttons">
-										<button class="product-btn buy-btn"><i class="bi bi-heart"></i>buy now</button>
 										<a href="" class="product-btn cart-btn">
 											<i class="bi bi-cart2"></i>
 											add to cart
 										</a>
+										<button class="product-btn buy-btn">
+											<i class="bi bi-heart"></i>
+											buy now
+										</button>
 									</div>
 								</div>
 							</form>
@@ -324,13 +321,16 @@
                                     <div class="review-stars">
                                         <label>rating</label>
                                         <div class="wrapper">
-                                            <i class="bi bi-star"></i>
-                                            <i class="bi bi-star"></i>
-                                            <i class="bi bi-star"></i>
-                                            <i class="bi bi-star"></i>
-                                            <i class="bi bi-star"></i>
+                                            <i class="bi bi-star" onclick="reviewVal(1)"></i>
+                                            <i class="bi bi-star" onclick="reviewVal(2)"></i>
+                                            <i class="bi bi-star" onclick="reviewVal(3)"></i>
+                                            <i class="bi bi-star" onclick="reviewVal(4)"></i>
+                                            <i class="bi bi-star" onclick="reviewVal(5)"></i>
                                         </div>
+										<span id="review-display-val"></span>
                                     </div>
+                                        
+									<input name="name" class="form-control" id="review-val" type="text" placeholder="Your Name">
                                     <div class="single-input">
                                         <label>Your Name</label>
                                         <input name="name" class="form-control" type="text" placeholder="Your Name">
@@ -519,4 +519,12 @@
 
 @push('js')
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-61385eedbd8b385d"></script>
+
+	<script>		 
+
+		 function reviewVal(val){
+			$('#review-display-val').text(val);
+			$('#review-val').val(val);
+		}
+	</script>
 @endpush

@@ -314,7 +314,6 @@ class ProductController extends Controller
             'status' => $request->status,
             'created_at' => Carbon::now(),
         ]);
-        
         foreach($request->unit_id as $key=>$unit_id){
             // unit Image photo
             $unitImageGet = 'image_'.$unit_id;
@@ -332,18 +331,18 @@ class ProductController extends Controller
             ProductUnit::where('product_id', $id)->update([
                 'unit_id' => $unit_id,
                 'image' => $product_unitImage,
-                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
             $req_subunit_id = 'subunit_id_'.$unit_id;
             foreach($request->$req_subunit_id as $key=>$subunit_id){
                 ProductSubUnit::where('unit_id', $unit_id)->update([
                     'unit_id' => $unit_id,
                     'subunit_id' => $subunit_id,
-                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ]);
             }
         }
-        Toastr::success('Product Successfully Save :-)','Success');
+        Toastr::success('Product Successfully update :-)','Success');
         return redirect()->back();
     }
 

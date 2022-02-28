@@ -48,26 +48,18 @@
                                     <input id="phone" class="form-control" type="text">
                                 </div>
                                 <div class="single-input">
-                                    <select name="country" class="form-select" id="country">
-                                        <option selected value="Bangladesh">Bangladesh</option>
-                                        <option value="Bangladesh">Pakistan</option>
-                                        <option value="Bangladesh">India</option>
-                                    </select>
-                                </div>
-                                <div class="single-input">
                                     <div class="row mx-0">
                                         <div class="col-6 px-3 ps-0">
-                                            <select name="country" class="form-select" id="country">
-                                                <option selected value="Bangladesh">Select City</option>
-                                                <option value="Bangladesh">Pakistan</option>
-                                                <option value="Bangladesh">India</option>
+                                            <select name="billing_division_id" id="billing_div_id" class="form-control">
+                                                <option value="" disabled selected>Select One</option>
+                                                @foreach($divisions as $division)
+                                                    <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-6 px-3 pe-0">
-                                            <select name="country" class="form-select" id="country">
-                                                <option selected value="Bangladesh">Select Area</option>
-                                                <option value="Bangladesh">Pakistan</option>
-                                                <option value="Bangladesh">India</option>
+                                            <select name="billing_district_id" id="billing_dis_id" class="form-control">
+                                                <option disabled selected> First Select Area/ District / City</option>
                                             </select>
                                         </div>
                                     </div>
@@ -80,24 +72,41 @@
                     </div>
                 </div>
                 <div class="summary-area">
+                    @php 
+                        $total = 0;
+                    @endphp
+                    @if(session('cart'))
+                        @foreach(session('cart') as $key => $checkoutDetails)
+                            @php
+                                $total += $checkoutDetails['price'] * $checkoutDetails['quantity'];
+                            @endphp
+                            <input type="hidden" name="product_id[]" value="{{ $key }}">
+                            <input type="hidden" name="quantity[]" value="{{ $checkoutDetails['quantity'] }}">
+                            <input type="hidden" name="size_id[]" value="{{ $checkoutDetails['size_id'] }}">
+                            <input type="hidden" name="color_id[]" value="{{ $checkoutDetails['color_id'] }}">
+                            <th class="text-center">
+                                <img class="checkout_image_size" src="{{asset($checkoutDetails['image'])}}" alt="">
+                            </th>
+                        @endforeach
+                    @endif
                     <h3 class="area-title">Checkout Summary</h3>
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td>Subtotal</td>
-                                <td>400 TK.</td>
+                                <td>Subtotal </td>
+                                <td>{{ $total }} TK</td>
                             </tr>
                             <tr>
-                                <td>Shipping</td>
-                                <td>50 TK.</td>
+                                <td>Shipping </td>
+                                <td>{{ $total }} TK.</td>
                             </tr>
                             <tr>
-                                <td>Total amount</td>
-                                <td>5314.00 TK</td>
+                                <td>Total amount </td>
+                                <td>{{ $total }} TK</td>
                             </tr>
                             <tr>
-                                <td>Payable Total</td>
-                                <td>5314.00 TK</td>
+                                <td>Payable Total </td>
+                                <td>{{ $total }} TK</td>
                             </tr>
                         </tbody>
                     </table>
