@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\DistrictController;
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
 use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\WishlistController;
 
 // all controller
 use App\Http\Controllers\ViewController;
@@ -61,10 +62,13 @@ Route::get('cart', [CartController::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{product_id}', [CartController::class, 'addToCart'])->name('add_to_cart');
 Route::post('add-to-cart-with-quantity', [CartController::class, 'addToCartWithQuantity'])->name('addtocart.withQuantity');
 Route::post('add-to-cart-with-size-color-quantity', [CartController::class, 'addToCartWithSizeColorQuantity'])->name('addtocart.withSizeColorQuantity');
+Route::post('buy-product-with-quantity', [CartController::class, 'buyNowWithQuantity'])->name('buynow');
+Route::post('buy-product-with-size-color-quantity', [CartController::class, 'buyNowWithSizeColorQuantity'])->name('buynow.sizecolor.quantity');
 Route::get('cart-remove/{id}', [CartController::class, 'cartRemove'])->name('cart.remove');
 Route::patch('update-cart', [CartController::class, 'cartUpdate'])->name('update_cart');
 // details and  view
 Route::get('product-details/{slug}', [ViewController::class, 'productDetails'])->name('productdetails');
+Route::post('color-size-ajax', [ViewController::class, 'colorSizeAjax'])->name('color-size.ajax');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -150,4 +154,9 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['aut
     Route::get('/information', [InformationController::class, 'index'])->name('information');
     
     Route::resource('checkout', CheckoutController::class);
+});
+
+Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer'], function () {
+    // wishlist area with un authentication
+    Route::post('review', [WishlistController::class, 'review'])->name('review');
 });

@@ -59,7 +59,8 @@
 							</div>
 						</div>
 						<div class="col-lg-6 mb-2">
-							<form action="">
+							<form action="{{ route('addtocart.withSizeColorQuantity') }}" method="POST">
+                        		@csrf
 								<div class="product-info-area">
 									<h4 class="product-name">{{ $products->name }}</h4>
 									<div class="reviews">
@@ -103,14 +104,27 @@
 										</div>
 									</div>
 									<div class="divider"></div>
-									<div class="size">
-										<label for="">size:</label>
-										<select name="" class="form-select" id="">
-											<option selected value="">size</option>
-											<option selected value="36">36</option>
-											<option selected value="38">38</option>
-											<option selected value="40">40</option>
-											<option selected value="42">42</option>
+									<div class="colors">
+										<label for="">colors:</label>
+										<ul class="colors-wrapper">
+											@php
+												$colors = App\Models\ProductUnit::where('product_id', $products->id)->get();
+											@endphp
+											@foreach($colors as $key => $color)
+												@php
+													$colorname = App\Models\Unit::where('id', $color->unit_id)->first();
+												@endphp
+												<li class="" onclick="getColorId({{$colorname->id}})" style="background-color: {{ $colorname->name }}"></li>
+											@endforeach
+										</ul>
+										<input type="hidden" name="color_id" value="" id="viewValue">
+										<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
+									</div>
+									<div class="divider" id="showDivider" style="display:none;"></div>
+									<div class="size" id="showSize" style="display:none;">
+										<label for="">Size </label>
+										<select name="size_id" class="form-select" id="sizeShow">
+
 										</select>
 										<a id="size-chart" href="#">Size Chart</a>
 										<div id="chart-popup" class="chart-popup">
@@ -122,38 +136,37 @@
 											</div>
 										</div>
 									</div>
-									<div class="colors">
-										<label for="">colors:</label>
-										<ul class="colors-wrapper">
-											<li class="active" style="background-color: red"></li>
-											<li class="" style="background-color: #95A9B2"></li>
-											<li class="" style="background-color: #B82222"></li>
-											<li class="" style="background-color: #BEA9A9"></li>
-											<li class="" style="background-color: blue"></li>
-										</ul>
-									</div>
 									<div class="divider"></div>
 									<div class="quantity">
 										<label for="">quantity:</label>
 										<div class="quantity-wrapper">
-											<button class="qty qty-minus"><i class="bi bi-dash"></i></button>
+											<button type="button" class="qty qty-minus">
+												<i class="bi bi-dash"></i>
+											</button>
 											<div class="input-wrapper">
-												<input type="number" value="1">
+												<input type="number" name="quantity" value="1">
 											</div>
-											<button class="qty qty-plus"><i class="bi bi-plus"></i></button>
+											<button type="button" class="qty qty-plus">
+												<i class="bi bi-plus"></i>
+											</button>
 										</div>
 									</div>
 									<div class="action-buttons">
-										<a href="" class="product-btn cart-btn">
+										<button type="submit" class="product-btn cart-btn">
 											<i class="bi bi-cart2"></i>
 											add to cart
-										</a>
-										<button class="product-btn buy-btn">
+										</button>
+										<a href="javascript:;" class="product-btn buy-btn" onclick="buynow_product_submit({{$products->id}})">
 											<i class="bi bi-heart"></i>
 											buy now
-										</button>
+										</a>
 									</div>
 								</div>
+							</form>
+							<form action="{{ route('buynow') }}" method="POST" id="buynow_product_submit_form_{{ $products->id }}">
+								@csrf
+								<!-- this form only for buynow  -->
+								<input type="hidden" name="product_id" value="{{ $products->id }}">
 							</form>
 						</div>
 					</div>
@@ -234,7 +247,7 @@
 				<div class="review-wrapper">
 					<div class="left-area">
 						<h2 class="rating">4.3</h2>
-						<span class="count-rating">23 ratings</span>
+						<span class="count-rating">{{ $reviews->count() }} ratings</span>
 					</div>
 					<div class="right-area">
 						<div class="rating-wrapper">
@@ -278,23 +291,23 @@
 							<div class="count-area">
 								<div class="single-count">
 									<span class="count-line" style="width: 60%"></span>
-									<span class="count">12</span>
+									<span class="count">{{ $fiveStarReviews->count() }}</span>
 								</div>
 								<div class="single-count">
 									<span class="count-line" style="width: 30%"></span>
-									<span class="count">4</span>
+									<span class="count">{{ $fourStarReviews->count() }}</span>
 								</div>
 								<div class="single-count">
 									<span class="count-line" style="width: 20%"></span>
-									<span class="count">3</span>
+									<span class="count">{{ $threeStarReviews->count() }}</span>
 								</div>
 								<div class="single-count">
 									<span class="count-line" style="width: 15%"></span>
-									<span class="count">2</span>
+									<span class="count">{{ $twoStarReviews->count() }}</span>
 								</div>
 								<div class="single-count">
 									<span class="count-line" style="width: 5%"></span>
-									<span class="count">0</span>
+									<span class="count">{{ $oneStarReviews->count() }}</span>
 								</div>
 							</div>
 						</div>
@@ -310,7 +323,8 @@
                             <i class="bi bi-pencil-fill"></i>
                             Write a review
                         </button>
-                        <form action="">
+                        <form action="{{ route('customer.review') }}" method="POST">
+                            @csrf
 							<input type="hidden" value="{{ $products->id }}" name="product_id">
                             <div class="add-review-popup" id="add-review-popup">
                                 <div class="inner-popup">
@@ -327,10 +341,8 @@
                                             <i class="bi bi-star" onclick="reviewVal(4)"></i>
                                             <i class="bi bi-star" onclick="reviewVal(5)"></i>
                                         </div>
-										<span id="review-display-val"></span>
                                     </div>
-                                        
-									<input name="name" class="form-control" id="review-val" type="text" placeholder="Your Name">
+									<input name="rating" class="form-control" id="review-val" type="hidden" placeholder="Your Name">
                                     <div class="single-input">
                                         <label>Your Name</label>
                                         <input name="name" class="form-control" type="text" placeholder="Your Name">
@@ -407,50 +419,138 @@
 						<span>8 reviews</span>
 					</div>
 					<div class="all-reviews">
-                        
-						<div class="single-review">
-							<div class="review-head">
-								<div class="user-area">
-									<div class="user-photo">
-										<img src="{{asset('frontend/images/users/1.jpg')}}" alt="">
-									</div>
-									<div class="user-meta">
-										<h4 class="username">Helene Moore 1</h4>
-										<div class="reviews">
-											<div class="reviews-inner">
-												<div class="reviewed" style="width: 80%">
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-												</div>
-												<div class="blanked">
-													<i class="bi bi-star"></i>
-													<i class="bi bi-star"></i>
-													<i class="bi bi-star"></i>
-													<i class="bi bi-star"></i>
-													<i class="bi bi-star"></i>
-												</div>
+                    	@if($reviews->count() > 0)
+                            @foreach($reviews as $review)
+								<div class="single-review">
+									<div class="review-head">
+										<div class="user-area">
+											<div class="user-photo">
+												<img src="@if($review->user_id) {{ asset($review['reviewuser']['image']) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
+											</div>
+											<div class="user-meta">
+												@if($review->name == NULL)
+													<h4 class="username">No Name Reviewer</h4>
+												@else
+													<h4 class="username">{{$review->name}}</h4>
+												@endif
+												@if($review->rating == 5)
+													<div class="reviews">
+														<div class="reviews-inner">
+															<div class="reviewed" style="width: 100%">
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</div>
+															<div class="blanked">
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+															</div>
+														</div>
+													</div>
+												@elseif($review->rating == 4)
+													<div class="reviews">
+														<div class="reviews-inner">
+															<div class="reviewed" style="width: 80%">
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</div>
+															<div class="blanked">
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+															</div>
+														</div>
+													</div>
+												@elseif($review->rating == 3)
+													<div class="reviews">
+														<div class="reviews-inner">
+															<div class="reviewed" style="width: 60%">
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</div>
+															<div class="blanked">
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+															</div>
+														</div>
+													</div>
+												@elseif($review->rating == 2)
+													<div class="reviews">
+														<div class="reviews-inner">
+															<div class="reviewed" style="width: 40%">
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</div>
+															<div class="blanked">
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+															</div>
+														</div>
+													</div>
+
+												@elseif($review->rating == 1)
+													<div class="reviews">
+														<div class="reviews-inner">
+															<div class="reviewed" style="width: 20%">
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+																<i class="bi bi-star-fill"></i>
+															</div>
+															<div class="blanked">
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+																<i class="bi bi-star"></i>
+															</div>
+														</div>
+													</div>
+                                                @endif
 											</div>
 										</div>
+										<div class="date-area">
+											<span class="date">
+												{{ $review->created_at->format('d M Y h:i A') }}
+											</span>
+										</div>
+									</div>
+									<div class="review-body">
+										<p>
+											{!! $review->opinion !!}
+										</p>
+									</div>
+									<div class="review-footer">
+										<button class="helpful-btn">Helpful
+											<span class="material-icons-outlined round">thumb_up</span>
+										</button>
 									</div>
 								</div>
-								<div class="date-area">
-									<span class="date">June 5, 2019</span>
-								</div>
-							</div>
-							<div class="review-body">
-								<p>
-                                    Product review adds
-                                </p>
-							</div>
-							<div class="review-footer">
-								<button class="helpful-btn">Helpful
-                                    <span class="material-icons-outlined round">thumb_up</span>
-                                </button>
-							</div>
-						</div>
+							@endforeach
+						@endif
 					</div>
 				</div>
 			</div>
@@ -518,13 +618,41 @@
 @endsection
 
 @push('js')
+	<!-- buy now product  -->
+	<script>
+		function buynow_product_submit(id) {
+		    document.getElementById('buynow_product_submit_form_'+id).submit();
+		}
+	</script>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-61385eedbd8b385d"></script>
-
-	<script>		 
-
+	<script>
 		 function reviewVal(val){
-			$('#review-display-val').text(val);
 			$('#review-val').val(val);
+		}
+		function getColorId(val){
+			$("#viewValue").val(val);
+			var product_id = $("#product_id").val();
+			if(val) {
+				// alert(val);
+				$.ajax({
+					type    : "POST",
+					url     : "{{ route('color-size.ajax') }}",
+					data    : {
+						id      : val,
+						p_id 	: product_id,
+						_token  : '{{csrf_token()}}',
+					},
+					success:function(data) {
+						console.log(data);
+						$("#showDivider").show();
+						$("#showSize").show();
+                        $("#sizeShow").empty();
+						$('#sizeShow').html(data);
+					},
+				});
+			}else {
+				alert("Please select your color");
+			}
 		}
 	</script>
 @endpush

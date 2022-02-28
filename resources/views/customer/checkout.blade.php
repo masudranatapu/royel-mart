@@ -84,9 +84,6 @@
                             <input type="hidden" name="quantity[]" value="{{ $checkoutDetails['quantity'] }}">
                             <input type="hidden" name="size_id[]" value="{{ $checkoutDetails['size_id'] }}">
                             <input type="hidden" name="color_id[]" value="{{ $checkoutDetails['color_id'] }}">
-                            <th class="text-center">
-                                <img class="checkout_image_size" src="{{asset($checkoutDetails['image'])}}" alt="">
-                            </th>
                         @endforeach
                     @endif
                     <h3 class="area-title">Checkout Summary</h3>
@@ -98,11 +95,7 @@
                             </tr>
                             <tr>
                                 <td>Shipping </td>
-                                <td>{{ $total }} TK.</td>
-                            </tr>
-                            <tr>
-                                <td>Total amount </td>
-                                <td>{{ $total }} TK</td>
+                                <td> </td>
                             </tr>
                             <tr>
                                 <td>Payable Total </td>

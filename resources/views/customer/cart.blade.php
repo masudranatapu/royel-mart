@@ -41,22 +41,22 @@
                                             {{ $cartdetails['name'] }}
                                         </h4>
                                         <div class="product-info">
-                                            @if($cartdetails['size_id'])
+                                            @if($cartdetails['color_id'])
                                                 @php
-                                                    $size = App\Models\Size::findOrFail($cartdetails['size_id']);
+                                                    $color = App\Models\Unit::findOrFail($cartdetails['color_id']);
                                                 @endphp
                                                 <div class="single-info">
                                                     <label for="">Color:</label>
-                                                    <span>blue</span>
+                                                    <span>{{ $color->name }}</span>
                                                 </div>
                                             @endif
-                                            @if($cartdetails['color_id'])
+                                            @if($cartdetails['size_id'])
                                                 @php
-                                                    $color = App\Models\Color::findOrFail($cartdetails['color_id']);
+                                                    $size = App\Models\SubUnit::findOrFail($cartdetails['size_id']);
                                                 @endphp
                                                 <div class="single-info">
-                                                    <label for="">size:</label>
-                                                    <span>L</span>
+                                                    <label for="">Size:</label>
+                                                    <span>{{ $size->name }}</span>
                                                 </div>
                                             @endif
                                             <div class="single-info mobile">
