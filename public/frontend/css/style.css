@@ -2933,13 +2933,14 @@ display: flex;
 }
 .product-info-area .size label {}
 .product-info-area .size select {
-    width: 80px;
+    width: auto;
     padding: 3px 10px;
     font-size: 14px;
     color: var(--dark-color);
     background-color: var(--border-color);
     border: none;
     cursor: pointer;
+    min-width: 90px;
 }
 .product-info-area .size a {
     font-size: 14px;

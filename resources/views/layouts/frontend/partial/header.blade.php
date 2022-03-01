@@ -17,18 +17,26 @@
                         <li><a href="#">privacy policy</a></li>
                         <li><a href="#">find a store</a></li>
                         <li><a href="#">track my order</a></li>
-                        <li><a href="#">contact us</a></li>
+                        <li><a href="{{ route('contact') }}">contact us</a></li>
                         <li><a href="#">return</a></li>
                         <li><a href="#">FAQ</a></li>
                     </ul>
                     <ul class="social-list">
-                        <li><a href="#"><i class="ri-facebook-fill"></i></a></li>
-                        <li><a href="#"><i class="ri-twitter-fill"></i></a></li>
-                        <li><a href="#"><i class="ri-youtube-fill"></i></a></li>
-                        <li><a href="#"><i class="ri-whatsapp-fill"></i></a></li>
+                        @php
+                            $icon = explode("|", $website->icon);
+                            $link = explode("|", $website->link);
+                        @endphp
+                        @foreach($icon as $key=>$icon)
+                            <li><a target="blank" href="@if(isset($link[$key])){{$link[$key]}}@endif"><i class="fa fa-{{$icon}}"></i></a></li>
+                        @endforeach
                     </ul>
                     <ul class="download-area">
-                        <li><a href="#"><i class="ri-download-2-fill"></i>download app</a></li>
+                        <li>
+                            <a href="#">
+                                <i class="ri-download-2-fill"></i>
+                                download app
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -86,76 +94,55 @@
                             </div>
                         </li>
                         <li class="dropdown">
-                            <a class="cart-trigger" href="javascript:;"><i class="bi bi-cart"></i><span class="quantity">4</span></a>
+                            <a class="cart-trigger" href="javascript:;">
+                                <i class="bi bi-cart"></i>
+                                <span class="quantity">
+                                    @if(session('cart'))
+                                        {{ count(session('cart')) }}
+                                    @else
+                                        0
+                                    @endif
+                                </span>
+                            </a>
                             <div class="dropdown-menu cart">
                                 <div class="dropdown-cart">
                                     <div class="cart-header">
-                                        <h4 class="title">3 iteam in cart</h4>
+                                        <h4 class="title">
+                                            @if(session('cart'))
+                                                {{ count(session('cart')) }}
+                                            @else
+                                                0
+                                            @endif
+
+                                            iteam in cart
+                                        </h4>
                                     </div>
                                     <div class="cart-body">
-                                        <div class="single-item">
-                                            <figure><a href="#"><img src="{{asset('frontend/images/products/1.jpg')}}" alt=""></a></figure>
-                                            <div class="contents">
-                                                <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                                                <div class="qty-price">
-                                                    <span>1</span> * <span>৳ 2592.00</span>
+                                        @if(session('cart'))
+                                            @foreach(session('cart') as $key => $cartdetails)
+                                                <div class="single-item">
+                                                    <figure>
+                                                        <a href="#">
+                                                            <img src="{{ asset($cartdetails['image']) }}" alt="">
+                                                        </a>
+                                                    </figure>
+                                                    <div class="contents">
+                                                        <h5 class="product-name">
+                                                            <a href="javascript:;">{{ $cartdetails['name'] }}</a>
+                                                        </h5>
+                                                        <div class="qty-price">
+                                                            <span>{{ $cartdetails['quantity'] }}</span> * <span>{{$cartdetails['price']}} ৳</span>
+                                                        </div>
+                                                    </div>
+                                                    <a class="remove" href="{{ route('cart.remove', $key) }}" onclick="return confirm('Are you sure, you want to remove this product from cart ? ')" type="button">
+                                                        <i class="bi bi-x"></i>
+                                                    </a>
                                                 </div>
-                                            </div>
-                                            <button class="remove" type="button"><i class="bi bi-x"></i></button>
-                                        </div>
-                                        <div class="single-item">
-                                            <figure><a href="#"><img src="{{asset('frontend/images/products/2.jpg')}}" alt=""></a></figure>
-                                            <div class="contents">
-                                                <h5 class="product-name"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum iusto quidem.</a></h5>
-                                                <div class="qty-price">
-                                                    <span>1</span> * <span>৳ 2592.00</span>
-                                                </div>
-                                            </div>
-                                            <button class="remove" type="button"><i class="bi bi-x"></i></button>
-                                        </div>
-                                        <div class="single-item">
-                                            <figure><a href="#"><img src="{{asset('frontend/images/products/3.jpg')}}" alt=""></a></figure>
-                                            <div class="contents">
-                                                <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                                                <div class="qty-price">
-                                                    <span>1</span> * <span>৳ 2592.00</span>
-                                                </div>
-                                            </div>
-                                            <button class="remove" type="button"><i class="bi bi-x"></i></button>
-                                        </div>
-                                        <div class="single-item">
-                                            <figure><a href="#"><img src="{{asset('frontend/images/products/1.jpg')}}" alt=""></a></figure>
-                                            <div class="contents">
-                                                <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                                                <div class="qty-price">
-                                                    <span>1</span> * <span>৳ 2592.00</span>
-                                                </div>
-                                            </div>
-                                            <button class="remove" type="button"><i class="bi bi-x"></i></button>
-                                        </div>
-                                        <div class="single-item">
-                                            <figure><a href="#"><img src="{{asset('frontend/images/products/2.jpg')}}" alt=""></a></figure>
-                                            <div class="contents">
-                                                <h5 class="product-name"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum iusto quidem.</a></h5>
-                                                <div class="qty-price">
-                                                    <span>1</span> * <span>৳ 2592.00</span>
-                                                </div>
-                                            </div>
-                                            <button class="remove" type="button"><i class="bi bi-x"></i></button>
-                                        </div>
-                                        <div class="single-item">
-                                            <figure><a href="#"><img src="{{asset('frontend/images/products/3.jpg')}}" alt=""></a></figure>
-                                            <div class="contents">
-                                                <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                                                <div class="qty-price">
-                                                    <span>1</span> * <span>৳ 2592.00</span>
-                                                </div>
-                                            </div>
-                                            <button class="remove" type="button"><i class="bi bi-x"></i></button>
-                                        </div>
+                                            @endforeach
+                                        @endif
                                         <div class="single-item cart-footer">
-                                            <button type="button" class="sm-btn">Checkout</button>
-                                            <button type="button" class="sm-btn">View cart</button>
+                                            <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+                                            <a href="{{ route('cart') }}" type="button" class="sm-btn">View cart</a>
                                         </div>
                                     </div>
                                 </div>

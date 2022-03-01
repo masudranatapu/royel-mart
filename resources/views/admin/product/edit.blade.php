@@ -27,28 +27,50 @@
                                                 <input type="text"  class="form-control" name="name" value="{{ $products->name }}">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Product Name ( Bangla )</label>
-                                                <input type="text"  class="form-control" name="name_bg" value="{{ $products->name_bg }}" placeholder="Product Name ( Bangla )">
+                                                <label>Product Name ( Eng )</label>
+                                                <input type="text"  class="form-control" name="name_en" value="{{ $products->name_en }}" placeholder="Product Name ( Eng )">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Buying price</label>
-                                                        <input type="number" min="0" value="{{ $products->buying_price }}" class="form-control" name="buying_price" placeholder="Buying price" id="regular_price">
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label>Regular Price</label>
+                                                                <input name="regular_price" type="number" class="form-control" id="regular_price" value="{{ $products->regular_price }}">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label>Sell Price <span class="text-danger"> * </span></label>
+                                                                <input name="sale_price" readonly  type="number" class="form-control" id="sell_price" placeholder="Only number" value="{{ $products->sale_price }}">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label>Discount</label>
-                                                        <input type="number" min="0" value="{{ $products->discount }}"  class="form-control" name="discount" placeholder="Discount" id="discount" pattern="[0-9]*\.?[0-9]*">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Sell Price <span class="text-danger"> * </span></label>
-                                                        <input type="number" min="0" value="{{ $products->sale_price }}"  class="form-control" name="sale_price" placeholder="Sell price" id="sale_price">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Minimum Quantity</label>
-                                                        <input type="number" name="minimum_quantity" class="form-control" value="{{ $products->minimum_quantity }}" placeholder="Minimum Quantity">
+                                                    <div class="col-md-12 mt-2">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label>Discount</label>
+                                                                <div class="input-group mt-2">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-addon2">৳</span>
+                                                                    </div>
+                                                                    <input class="form-control" id="discount_tk" type="number" pattern="[0-9]*\.?[0-9]*" title="Numbers only and dot" name="discount_tk" value="{{ $products->discount_tk }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label></label>
+                                                                <div class="input-group mt-3">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-addon2">%</span>
+                                                                    </div>
+                                                                    <input class="form-control" id="discount" type="number" pattern="[0-9]*\.?[0-9]*" title="Numbers only and dot" name="discount" value="{{ $products->discount }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label>Minimum Quantity</label>
+                                                <input type="number" name="minimum_quantity" class="form-control" value="{{ $products->minimum_quantity }}" placeholder="Minimum Quantity">
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -154,7 +176,6 @@
                                                             <option value="" disabled>Select One</option>
                                                             <option @if($products->product_type == 'New Arrival') selected @endif value="New Arrival" selected>New Arrival</option>
                                                             <option @if($products->product_type == 'Features') selected @endif value="Features">Features</option>
-                                                            <option @if($products->product_type == 'Best Selling') selected @endif value="Best Selling">Best Selling</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">
@@ -247,6 +268,10 @@
                                                 <input type="text" name="return_status" class="form-control" value="{{ $products->return_status }}">
                                             </div>
                                             <div class="col-md-12 mt-2">
+                                                <label>Cash on Delivery</label>
+                                                <input type="text" name="cash_delivery" class="form-control" value="{{ $products->cash_delivery }}">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
                                                 <label>Warranty Policy</label>
                                                 <input type="text" name="warranty_policy" class="form-control" value="{{ $products->warranty_policy }}">
                                             </div>
@@ -293,6 +318,52 @@
     <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('massage/sweetalert/sweetalert.all.js') }}"></script>
     <script>
+        $('#regular_price').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var discount = $("#discount").val();
+
+            var sell_price = regular_price - (regular_price*(discount/100));
+
+            $("#sell_price").val(sell_price);
+        });
+        $('#discount').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var discount = $("#discount").val();
+
+            var dis_price = regular_price*(discount/100);
+            var sell_price = regular_price - (regular_price*(discount/100));
+
+            $("#discount_tk").val(Math.ceil(dis_price));
+            $("#sell_price").val(Math.ceil(sell_price));
+        });
+        $('#discount_tk').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var discount_tk = $("#discount_tk").val();
+
+            var sell_price = regular_price - discount_tk;
+            var discount = (discount_tk*100)/regular_price;
+
+            $("#discount").val(Math.ceil(discount));
+            $("#sell_price").val(sell_price);
+        });
+        $('#sell_price').on('wheel keyup change', function(event) {
+            var regular_price = $("#regular_price").val();
+            var sell_price = $("#sell_price").val();
+            var discount_tk = $("#discount_tk").val();
+
+            var diff = regular_price - sell_price;
+            var discount = (diff/regular_price)*100;
+            if (regular_price=='') {
+                discount = 0;
+                diff = 0;
+                // regular_price = sell_price;
+            }
+            $("#discount").val(Math.ceil(discount));
+            $("#discount_tk").val(diff);
+            // $("#regular_price").val(regular_price);
+        });
+    </script>
+    <script>
         // Summernote
         $('.summernote').summernote()
 
@@ -307,34 +378,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        $('#regular_price').on('wheel keyup change', function(event) {
-            var regular_price = $("#regular_price").val();
-            var discount = $("#discount").val();
-            var sale_price = regular_price - discount;
-
-            $("#sale_price").val(sale_price);
-        });
-        $('#discount').on('wheel keyup change', function(event) {
-
-            var regular_price = $("#regular_price").val();
-            var discount = $("#discount").val();
-
-            var sale_price = regular_price - discount;
-
-            $("#sale_price").val(sale_price);
-
-        });
-        $('#sale_price').on('wheel keyup change', function(event) {
-            var regular_price = $("#regular_price").val();
-            var sale_price = $("#sale_price").val();
-
-            var diff = regular_price - sale_price;
-
-            if (regular_price=='') {
-                discount = 0;
-            }
-            $("#discount").val(diff);
-        });
     </script>
     <script>
         $(document).ready(function(){

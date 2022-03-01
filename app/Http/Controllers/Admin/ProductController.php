@@ -115,19 +115,21 @@ class ProductController extends Controller
             'category_id' => $category_id,
             'brand_id' => $request->brand_id,
             'name' => $request->name,
-            'name_bg' => $request->name_bg,
+            'name_en' => $request->name_en,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'thambnail' => $thambnail_name,
             'multi_thambnail' => $multiThamb__photo,
-            'buying_price' => $request->buying_price,
+            'regular_price' => $request->regular_price,
             'sale_price' => $request->sale_price,
             'discount' => $request->discount,
+            'discount_tk' => $request->discount_tk,
             'minimum_quantity' => $request->minimum_quantity,
             'description' => $request->description,
             'meta_description' => $request->meta_description,
             'meta_keyword' => $request->meta_keyword,
             'outside_delivery' => $request->outside_delivery,
             'return_status' => $request->return_status,
+            'cash_delivery' => $request->cash_delivery,
             'inside_delivery' => $request->inside_delivery,
             'warranty_policy' => $request->warranty_policy,
             'schema' => $request->schema,
@@ -290,19 +292,21 @@ class ProductController extends Controller
             'category_id' => $category_id,
             'brand_id' => $request->brand_id,
             'name' => $request->name,
-            'name_bg' => $request->name_bg,
+            'name_en' => $request->name_en,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'thambnail' => $thambnail_name,
             'multi_thambnail' => $multiThamb__photo,
-            'buying_price' => $request->buying_price,
+            'regular_price' => $request->regular_price,
             'sale_price' => $request->sale_price,
             'discount' => $request->discount,
+            'discount_tk' => $request->discount_tk,
             'minimum_quantity' => $request->minimum_quantity,
             'description' => $request->description,
             'meta_description' => $request->meta_description,
             'meta_keyword' => $request->meta_keyword,
             'outside_delivery' => $request->outside_delivery,
             'return_status' => $request->return_status,
+            'cash_delivery' => $request->cash_delivery,
             'inside_delivery' => $request->inside_delivery,
             'warranty_policy' => $request->warranty_policy,
             'schema' => $request->schema,
@@ -310,7 +314,6 @@ class ProductController extends Controller
             'status' => $request->status,
             'created_at' => Carbon::now(),
         ]);
-        
         foreach($request->unit_id as $key=>$unit_id){
             // unit Image photo
             $unitImageGet = 'image_'.$unit_id;
@@ -328,18 +331,18 @@ class ProductController extends Controller
             ProductUnit::where('product_id', $id)->update([
                 'unit_id' => $unit_id,
                 'image' => $product_unitImage,
-                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
             $req_subunit_id = 'subunit_id_'.$unit_id;
             foreach($request->$req_subunit_id as $key=>$subunit_id){
                 ProductSubUnit::where('unit_id', $unit_id)->update([
                     'unit_id' => $unit_id,
                     'subunit_id' => $subunit_id,
-                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ]);
             }
         }
-        Toastr::success('Product Successfully Save :-)','Success');
+        Toastr::success('Product Successfully update :-)','Success');
         return redirect()->back();
     }
 

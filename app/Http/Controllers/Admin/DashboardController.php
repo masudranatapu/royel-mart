@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Auth;
+use App\Models\Contact;
 
 class DashboardController extends Controller
 {
@@ -110,5 +111,19 @@ class DashboardController extends Controller
             Toastr::warning('something is worng. Please try agian :-)','warning');
             return redirect()->back();
         }
+    }
+    
+    public function contactMassage()
+    {
+        $title = "Contact Massage";
+        $contacts = Contact::latest()->get();
+        return view('admin.contact.index', compact('title', 'contacts'));
+    }
+    public function contactDelete($id)
+    {
+        //
+        Contact::findOrFail($id)->delete();
+        Toastr::info('Contact successfully delete :-)','Success');
+        return redirect()->back();
     }
 }

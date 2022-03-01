@@ -49,19 +49,7 @@
                                                     <form action="{{ route('admin.happy-client.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Name</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="name" placeholder="Name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Link</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="link" placeholder="Link">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Imge</label>
+                                                            <label class="col-md-3 text-right">Image</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
@@ -75,7 +63,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
-                                                                <input type="submit" class="btn btn-success" value="Create Main Category">
+                                                                <input type="submit" class="btn btn-success" value="Create Client">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -157,7 +145,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Imge</label>
+                                                                        <label class="col-md-3 text-right">Image</label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>

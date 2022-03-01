@@ -16,7 +16,7 @@ class CreateProductUnitsTable extends Migration
         Schema::create('product_units', function (Blueprint $table) {
             $table->id();
             $table->string('product_id');
-            $table->string('unit_id');
+            $table->string('unit_id')->nullable();
             $table->text('image')->nullable();
             $table->timestamps();
         });

@@ -16,8 +16,8 @@ class CreateProductSubUnitsTable extends Migration
         Schema::create('product_sub_units', function (Blueprint $table) {
             $table->id();
             $table->string('product_id');
-            $table->string('unit_id');
-            $table->string('subunit_id');
+            $table->string('unit_id')->nullable();
+            $table->string('subunit_id')->nullable();
             $table->timestamps();
         });
     }

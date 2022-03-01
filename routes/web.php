@@ -16,12 +16,22 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\HappyClientController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\MissionVisionController;
+use App\Http\Controllers\Admin\CategoryBannerController;
+use App\Http\Controllers\Admin\AboutController;
+use App\Http\Controllers\Admin\PolicyController;
+use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\DistrictController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
+use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\WishlistController;
 
 // all controller
 use App\Http\Controllers\ViewController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +48,27 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 
 Auth::routes();
 
+Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
+Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy');
+Route::get('contact-us', [HomeController::class, 'contact'])->name('contact');
+Route::post('contact-us', [HomeController::class, 'contactStore'])->name('contact.store');
+Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('arrival');
+Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
 // category product
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
+
+// cart area routes
+Route::get('cart', [CartController::class, 'cart'])->name('cart');
+Route::get('add-to-cart/{product_id}', [CartController::class, 'addToCart'])->name('add_to_cart');
+Route::post('add-to-cart-with-quantity', [CartController::class, 'addToCartWithQuantity'])->name('addtocart.withQuantity');
+Route::post('add-to-cart-with-size-color-quantity', [CartController::class, 'addToCartWithSizeColorQuantity'])->name('addtocart.withSizeColorQuantity');
+Route::post('buy-product-with-quantity', [CartController::class, 'buyNowWithQuantity'])->name('buynow');
+Route::post('buy-product-with-size-color-quantity', [CartController::class, 'buyNowWithSizeColorQuantity'])->name('buynow.sizecolor.quantity');
+Route::get('cart-remove/{id}', [CartController::class, 'cartRemove'])->name('cart.remove');
+Route::patch('update-cart', [CartController::class, 'cartUpdate'])->name('update_cart');
+// details and  view
+Route::get('product-details/{slug}', [ViewController::class, 'productDetails'])->name('productdetails');
+Route::post('color-size-ajax', [ViewController::class, 'colorSizeAjax'])->name('color-size.ajax');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -49,6 +78,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('profile', [DashboardController::class, 'profile'])->name('profile');
     Route::post('profile/{id}', [DashboardController::class, 'profileUpdate'])->name('profile.update');
     Route::post('pass-updated/{id}', [DashboardController::class, 'updatePass'])->name('password.update');
+    Route::get('contact-massage', [DashboardController::class, 'contactMassage'])->name('contact-massage');
+    Route::get('contact-delete/{id}', [DashboardController::class, 'contactDelete'])->name('contact.delete');
+    
     // website seeting
     Route::resource('website', WebsiteController::class);
     Route::post('get-add-row-', [WebsiteController::class, 'addRemoveRow'])->name('row.addremove');
@@ -58,11 +90,16 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('category-inactive/{id}', [CategoryController::class, 'categoryInactive'])->name('category.inactive');
     Route::get('parent-category-view/{id}', [CategoryController::class, 'viewParentCategory'])->name('viewparentcategory');
     Route::get('child-category-view/{id}', [CategoryController::class, 'viewChildCategory'])->name('viewchildcategory');
+    // categoryBanner
+    Route::resource('category-banner', CategoryBannerController::class);
+    Route::get('category-banner-active/{id}', [CategoryBannerController::class, 'categoryBannerActive'])->name('categorybanner.active');
+    Route::get('category-banner-inactive/{id}', [CategoryBannerController::class, 'categoryBannerInactive'])->name('categorybanner.inactive');
     // brand
     Route::resource('brand', BrandController::class);
     Route::get('brand-active/{id}', [BrandController::class, 'brandActive'])->name('brand.active');
     Route::get('brand-inactive/{id}', [BrandController::class, 'brandInactive'])->name('brand.inactive');
-    
+    // about
+    Route::resource('abouts', AboutController::class);
     // Unit
     Route::resource('unit', UnitController::class);
     Route::get('unit-active/{id}', [UnitController::class, 'unitActive'])->name('unit.active');
@@ -80,7 +117,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('slider', SliderController::class);
     Route::get('slider-active/{id}', [SliderController::class, 'sliderActive'])->name('slider.active');
     Route::get('slider-inactive/{id}', [SliderController::class, 'sliderInactive'])->name('slider.inactive');
-    // happy client 
+    // happy client
     Route::resource('happy-client', HappyClientController::class);
     Route::get('client-active/{id}', [HappyClientController::class, 'clientActive'])->name('client.active');
     Route::get('client-inactive/{id}', [HappyClientController::class, 'clientInactive'])->name('client.inactive');
@@ -92,10 +129,34 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('mission-vision', MissionVisionController::class);
     Route::get('missionvison-active/{id}', [MissionVisionController::class, 'missionVisionActive'])->name('missionvision.active');
     Route::get('missionvison-inactive/{id}', [MissionVisionController::class, 'missionVisionInactive'])->name('missionvision.inactive');
-    
+    // policy
+    Route::resource('policy', PolicyController::class);
+    Route::get('policy-inactive/{id}', [PolicyController::class, 'policyInactive'])->name('policy.inactive');
+    Route::get('policy-active/{id}', [PolicyController::class, 'policyActive'])->name('policy.active');
+    // purchase
+    Route::resource('purchase', PurchaseController::class);
+    Route::post('stock-purchase', [PurchaseController::class, 'stockPurchase'])->name('stock.purchase');
+    Route::resource('sold-product', StockController::class);
+    Route::get('sold-search', [StockController::class, 'soldSearch'])->name('sold.search');
+    Route::get('sold-product-report', [StockController::class, 'showReport'])->name('sold-product.report');
+    Route::get('sold-product-report-search', [StockController::class, 'showReportSearch'])->name('sold-product-report.search');
+    // location
+    Route::resource('division', DivisionController::class);
+    Route::get('division-active/{id}', [DivisionController::class, 'divisionActive'])->name('division.active');
+    Route::get('division-inactive/{id}', [DivisionController::class, 'divisionInactive'])->name('division.inactive');
+    Route::resource('district', DistrictController::class);
+    Route::get('district-active/{id}', [DistrictController::class, 'districtActive'])->name('district.active');
+    Route::get('district-inactive/{id}', [DistrictController::class, 'districtInactive'])->name('district.inactive');
 });
 
 // customer routes 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('/information', [InformationController::class, 'index'])->name('information');
+    
+    Route::resource('checkout', CheckoutController::class);
+});
+
+Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer'], function () {
+    // wishlist area with un authentication
+    Route::post('review', [WishlistController::class, 'review'])->name('review');
 });

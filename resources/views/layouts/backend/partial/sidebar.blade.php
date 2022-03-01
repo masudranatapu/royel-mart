@@ -44,6 +44,26 @@
                 </li>
             </ul>
         </li>
+        <li class="pcoded-hasmenu {{ Request::is('admin/division') || Request::is('admin/district') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-bookmark"></i>
+                </span>
+                <span class="pcoded-mtext">Location</span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/division') ? 'active' : '' }}">
+                    <a href="{{ route('admin.division.index') }}">
+                        <span class="pcoded-mtext">Division</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/district') ? 'active' : '' }}">
+                    <a href="{{ route('admin.district.index') }}">
+                        <span class="pcoded-mtext">District</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
     <ul class="pcoded-item pcoded-left-item">
         <li class="pcoded-hasmenu {{ Request::is('admin/product') || Request::is('admin/product/create') ? 'pcoded-trigger' : '' }}">
@@ -66,37 +86,38 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu ">
+        <li class="pcoded-hasmenu {{ Request::is('admin/purchase') || Request::is('admin/sold-product') || Request::is('admin/sold-product-report') ? 'pcoded-trigger' : '' }}"">
             <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-check-circle"></i></span>
-                <span class="pcoded-mtext">Task</span>
+                <span class="pcoded-micon">
+                    <i class="feather icon-check-circle"></i>
+                </span>
+                <span class="pcoded-mtext">
+                    Stock Management
+                </span>
             </a>
             <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="task-list.html">
-                        <span class="pcoded-mtext">Task List</span>
+                <li class="{{ Request::is('admin/purchase') ? 'active' : '' }}">
+                    <a href="{{ route('admin.purchase.index') }}">
+                        <span class="pcoded-mtext">Purchase Product</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="task-board.html">
-                        <span class="pcoded-mtext">Task Board</span>
+                <li class="{{ Request::is('admin/sold-product') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sold-product.index') }}">
+                        <span class="pcoded-mtext">Sold Product</span>
                     </a>
                 </li>
-                <li class="">
-                    <a href="task-detail.html">
-                        <span class="pcoded-mtext">Task Detail</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="issue-list.html">
-                        <span class="pcoded-mtext">Issue List</span>
+                <li class="{{ Request::is('admin/sold-product-report') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sold-product.report') }}">
+                        <span class="pcoded-mtext">Stock Report</span>
                     </a>
                 </li>
             </ul>
         </li>
         <li class="pcoded-hasmenu ">
             <a href="javascript:void(0)">
-                <span class="pcoded-micon"><i class="feather icon-bookmark"></i></span>
+                <span class="pcoded-micon">
+                    <i class="feather icon-bookmark"></i>
+                </span>
                 <span class="pcoded-mtext">To-Do</span>
             </a>
             <ul class="pcoded-submenu">
@@ -112,7 +133,7 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/category-banner') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -120,6 +141,11 @@
                 <span class="pcoded-mtext">Website</span>
             </a>
             <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/abouts')? 'active' : '' }}">
+                    <a href="{{ route('admin.abouts.index') }}">
+                        <span class="pcoded-mtext">About</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/slider')? 'active' : '' }}">
                     <a href="{{ route('admin.slider.index') }}">
                         <span class="pcoded-mtext">Slider</span>
@@ -130,6 +156,16 @@
                         <span class="pcoded-mtext">Banner</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/policy')? 'active' : '' }}">
+                    <a href="{{ route('admin.policy.index') }}">
+                        <span class="pcoded-mtext">Policy</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
+                    <a href="{{ route('admin.category-banner.index') }}">
+                        <span class="pcoded-mtext">Category Banner</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/happy-client')? 'active' : '' }}">
                     <a href="{{ route('admin.happy-client.index') }}">
                         <span class="pcoded-mtext">Happy Client</span>
@@ -138,6 +174,11 @@
                 <li class="{{ Request::is('admin/mission-vision')? 'active' : '' }}">
                     <a href="{{ route('admin.mission-vision.index') }}">
                         <span class="pcoded-mtext">Mission Vision</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/contact-massage')? 'active' : '' }}">
+                    <a href="{{ route('admin.contact-massage') }}">
+                        <span class="pcoded-mtext">Contact Massage</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/website') ? 'active' : '' }}">
