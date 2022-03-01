@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\DistrictController;
+use App\Http\Controllers\Admin\MessageController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -147,6 +148,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('district', DistrictController::class);
     Route::get('district-active/{id}', [DistrictController::class, 'districtActive'])->name('district.active');
     Route::get('district-inactive/{id}', [DistrictController::class, 'districtInactive'])->name('district.inactive');
+    // Message
+    Route::resource('message', MessageController::class);
 });
 
 // customer routes 

@@ -81,8 +81,7 @@
 											</div>
 										</div>
 										<div class="reviews-answer">
-											<span class="count-reviews">(3 ratings)</span>
-											<span class="count-answers">54 answered questions</span>
+											<span class="count-reviews">( {{ $reviews->count() }} ratings)</span>
 										</div>
 									</div>
 									<div class="divider"></div>

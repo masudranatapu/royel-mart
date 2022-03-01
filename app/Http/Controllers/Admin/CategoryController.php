@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
@@ -211,6 +212,10 @@ class CategoryController extends Controller
         if(file_exists($deleteImage)) {
             unlink($deleteImage);
         }
+        Product::where('category_id', $id)->update([
+            'category_id' => '1',
+        ]);
+        
         $categories->delete();
         Toastr::warning('Category Successfully delete :-)','Info');
         return redirect()->back();

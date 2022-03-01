@@ -21,38 +21,44 @@
 				<div class="category-wrapper">
 					<h4 class="dropdown-title">categories<i class="bi bi-chevron-down"></i></h4>
 					<div class="category-area">
-						<div class="scroll-btn">
-							<span class="prev hide"><i class="bi bi-chevron-up"></i></span>
-							<span class="next"><i class="bi bi-chevron-down"></i></span>
-						</div>
-						<button class="close-menu"><i class="bi bi-x"></i></button>
 						<h3 class="mobile-title">categories</h3>
-						<ul class="category-list">
-							<li><a href="#"><img src="{{asset('frontend/images/icons/vegetable.png')}}" alt=""><span>Daily Needs</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/tv.png')}}" alt=""><span>Electronics &amp; Home Appliance</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/first-aid-kit.png')}}" alt=""><span>Health &amp; Nutrition </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/skincare.png')}}" alt=""><span>Cosmetics &amp; Beauty Care</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/baby.png')}}" alt=""><span>Baby Food &amp; Fashions</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/fashion.png')}}" alt=""><span>Women’s Fashions</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/sport-watch.png')}}" alt=""><span>Men’s Fashions </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/console.png')}}" alt=""><span>Stationery, Toys &amp; Games </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/sport.pn')}}g" alt=""><span>Sports &amp; Fitness </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/decorating.png')}}" alt=""><span>Lifestyle &amp; Home Decor</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/real-estate.png')}}" alt=""><span>Real Estate &amp; Property </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/motorcycle.png')}}" alt=""><span>Automobile &amp; Motor Bikes </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/vegetable.png')}}" alt=""><span>Daily Needs</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/tv.png')}}" alt=""><span>Electronics &amp; Home Appliance</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/first-aid-kit.png')}}" alt=""><span>Health &amp; Nutrition </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/skincare.png')}}" alt=""><span>Cosmetics &amp; Beauty Care</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/baby.png')}}" alt=""><span>Baby Food &amp; Fashions</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/fashion.png')}}" alt=""><span>Women’s Fashions</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/sport-watch.png')}}" alt=""><span>Men’s Fashions </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/console.png')}}" alt=""><span>Stationery, Toys &amp; Games </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/sport.png')}}" alt=""><span>Sports &amp; Fitness </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/decorating.png')}}" alt=""><span>Lifestyle &amp; Home Decor</span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/real-estate.png')}}" alt=""><span>Real Estate &amp; Property </span></a></li>
-							<li><a href="#"><img src="{{asset('frontend/images/icons/motorcycle.png')}}" alt=""><span>Automobile &amp; Motor Bikes </span></a></li>
-						</ul>
+                        @php
+                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->latest()->limit(18)->get();
+                        @endphp
+                        <ul class="category-list">
+                            @foreach($categories as $category)
+                                <li>
+                                    <a href="{{ route('category', $category->slug) }}">
+                                        <img src="{{ asset($category->image) }}" alt="">
+                                        <span>{{ $category->name }}</span>
+                                    </a>
+                                    @php
+                                        $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->latest()->get();
+                                    @endphp
+                                    <ul>
+                                        @foreach($parentcategories as $parentcategory)
+                                            <li>
+                                                <a href="{{ route('category', $parentcategory->slug) }}">
+                                                    {{ $parentcategory->name }}
+                                                </a>
+                                                @php
+                                                    $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
+                                                @endphp
+                                                <ul>
+                                                    @foreach($childcategories as $childcategory)
+                                                        <li>
+                                                            <a href="{{ route('category', $childcategory->slug) }}">
+                                                                {{ $childcategory->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @endforeach
+                        </ul>
 					</div>
 				</div>
 				<div class="breadcrumb-area">
@@ -117,7 +123,6 @@
 		</div>
 	</section>
 	<!-- End Login Register Section -->
-
 @endsection
 
 @push('js')

@@ -143,9 +143,13 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    <a title="View Parent Cateogory" href="{{ route('admin.viewparentcategory', $category->id) }}" class="btn btn-success">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
+                                                    @if($category->id == 1)
+
+                                                    @else
+                                                        <a title="View Parent Cateogory" href="{{ route('admin.viewparentcategory', $category->id) }}" class="btn btn-success">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if($category->status == 1)
@@ -162,13 +166,17 @@
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
-                                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $category->id }})">
-                                                        <i class="ml-1 fa fa-trash"></i>
-                                                    </button>
-                                                    <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy', $category->id) }}" method="POST" style="display: none;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
+                                                    @if($category->id == 1)
+
+                                                    @else
+                                                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $category->id }})">
+                                                            <i class="ml-1 fa fa-trash"></i>
+                                                        </button>
+                                                        <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy', $category->id) }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    @endif
                                                 </td>
                                                 <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg" role="document">
