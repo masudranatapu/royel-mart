@@ -74,22 +74,28 @@
 		<div class="container">
 			<div class="login-reg-box">
 				<div class="inner-box">
-					<form method="POST" action="{{ route('customer.register.confirm') }}">
+					<form method="POST" action="{{ route('customer.info.save') }}">
                         @csrf
 						<div class="title-box">
 							<h3 class="title">Create an account</h3>
 						</div>
 						<div class="single-input">
-							<input class="form-control" type="text" name="name" placeholder="Full name">
+							<input class="form-control" readonly type="text" name="name" value="{{ $getName }}">
 						</div>
 						<div class="single-input">
-							<input class="form-control" type="email" name="email" placeholder="Email Address">
+							<input class="form-control" readonly type="email" name="email" value="{{ $getEmail }}">
 						</div>
 						<div class="single-input">
-							<input class="form-control" type="number" name="phone" placeholder="Mobile Number">
+							<input class="form-control" readonly type="number" name="phone" value="{{ $getPhone }}">
 						</div>
 						<div class="single-input">
-							<input class="form-control" type="text" name="address" placeholder="Address">
+							<input class="form-control" readonly type="text" name="address" value="{{ $getAddress }}">
+						</div>
+						<div class="single-input">
+							<input class="form-control" type="password" name="password" placeholder="Password">
+						</div>
+						<div class="single-input">
+							<input class="form-control" type="password" name="password_confirmation" placeholder="Password Confirmation">
 						</div>
 						<button type="submit" class="submit-btn">Next</button>
 						<label for="" class="alter">Or</label>

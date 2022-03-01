@@ -19,7 +19,7 @@
 		<div class="category-page-slider owl-carousel">
 			@foreach($categorybanners as $categorybanner)
 				<div class="single-slide">
-					<img src="{{ asset($categorybanner->image) }}">
+					<img src="@if($categorybanner->image) {{ asset($categorybanner->image) }}  @else {{ asset('demomedia/category.png') }} @endif">
 				</div>
 			@endforeach
 		</div>
@@ -33,7 +33,7 @@
                         <div class="single-featured-category">
                             <figure>
                                 <a href="{{ route('category', $category->slug) }}">
-                                    <img src="{{ asset($category->image) }}" alt=""></a>
+                                    <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt=""></a>
                             </figure>
                             <h3 class="title">
                                 <a href="{{ route('category', $category->slug) }}">
@@ -58,7 +58,7 @@
                         @foreach($relatedcategory as $category)
                             <li class="col-md-3">
                                 <a href="{{ route('category', $category->slug) }}">
-                                    <img src="{{ asset($category->image) }}" alt="">
+                                    <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                     <span>{{ $category->name }}</span>
                                 </a>
                             </li>
@@ -148,15 +148,9 @@
 								<h3 class="widget-title">brand</h3>
 								<div class="filter-list-wrapper exerp-menu">
 									<ul class="filter-list">
-										<li class="active"><a href="#">Cotton</a></li>
-										<li><a href="#">Poly-Cotton</a></li>
-										<li><a href="#">Silk</a></li>
-										<li><a href="#">Denim</a></li>
-										<li><a href="#">Synthetic</a></li>
-										<li><a href="#">Poly-Cotton</a></li>
-										<li><a href="#">Silk</a></li>
-										<li><a href="#">Denim</a></li>
-										<li><a href="#">Synthetic</a></li>
+										@foreach($brands as $brand)
+											<li class=""><a href="#">{{ $brand->name }}</a></li>
+										@endforeach
 									</ul>
 									<div class="text-end pe-2">
 										<a class="viewmore-btn" href="#">view more<i class="bi bi-chevron-right"></i></a>
@@ -185,12 +179,6 @@
 							<div class="single-widget">
 								<h3 class="widget-title">size</h3>
 								<div class="filter-size">
-									<select class="form-select" aria-label="Default select">
-									    <option selected="">EU</option>
-									    <option value="1">One</option>
-									    <option value="2">Two</option>
-									    <option value="3">Three</option>
-									</select>
 									<ul class="filter-list">
 										<li class="active"><a href="#">36</a></li>
 										<li><a href="#">36</a></li>
@@ -199,72 +187,6 @@
 										<li><a href="#">42</a></li>
 										<li><a href="#">44</a></li>
 									</ul>
-								</div>
-							</div>
-							<div class="single-widget">
-								<h3 class="widget-title">rating</h3>
-								<div class="filter-rating">
-									<div class="rating-wrapper">
-										<div class="star-area">
-											<a href="#">
-												<div class="single-stars">
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-												</div>
-											</a>
-											<a href="#">
-												<div class="single-stars">
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-												</div>
-											</a>
-											<a href="#">
-												<div class="single-stars">
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-												</div>
-											</a>
-											<a href="#">
-												<div class="single-stars">
-													<i class="bi bi-star-fill"></i>
-													<i class="bi bi-star-fill"></i>
-												</div>
-											</a>
-											<a href="#">
-												<div class="single-stars">
-													<i class="bi bi-star-fill"></i>
-												</div>
-											</a>
-										</div>
-										<div class="count-area">
-											<div class="single-count">
-												<span class="count-line" style="width: 60%"></span>
-												<span class="count">12</span>
-											</div>
-											<div class="single-count">
-												<span class="count-line" style="width: 30%"></span>
-												<span class="count">4</span>
-											</div>
-											<div class="single-count">
-												<span class="count-line" style="width: 20%"></span>
-												<span class="count">3</span>
-											</div>
-											<div class="single-count">
-												<span class="count-line" style="width: 15%"></span>
-												<span class="count">2</span>
-											</div>
-											<div class="single-count">
-												<span class="count-line" style="width: 5%"></span>
-												<span class="count">0</span>
-											</div>
-										</div>
-									</div>
 								</div>
 							</div>
 							<div class="single-widget">

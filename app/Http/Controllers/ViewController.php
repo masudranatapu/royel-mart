@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\CategoryBanner;
 use App\Models\ProductUnit;
 use App\Models\SubUnit;
+use App\Models\Brand;
 use App\Models\Review;
 use App\Models\ProductSubUnit;
 
@@ -36,7 +37,8 @@ class ViewController extends Controller
         $products = Product::where('category_id', $category->id)->latest()->get();
         $latestcategory = Category::where('parent_id', NULL)->where('child_id', NULL)->latest()->limit(3)->get();
         $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
-        return view('pages.categoryproduct', compact('title', 'category', 'products', 'relatedcategory', 'latestcategory', 'categorybanners'));
+        $brands = Brand::where('status', 1)->latest()->get();
+        return view('pages.categoryproduct', compact('title', 'category', 'products', 'relatedcategory', 'latestcategory', 'categorybanners', 'brands'));
     }
     public function colorSizeAjax(Request $request)
     {

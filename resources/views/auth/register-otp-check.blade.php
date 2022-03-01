@@ -1,7 +1,7 @@
 @extends('layouts.frontend.app')
 
 @section('title')
-    {{$title}}
+    {{ $title }}
 @endsection
     @php
         $website = App\Models\Website::latest()->first();
@@ -21,7 +21,7 @@
 				<div class="category-wrapper">
 					<h4 class="dropdown-title">categories<i class="bi bi-chevron-down"></i></h4>
 					<div class="category-area checknav">
-						@php
+                        @php
                             $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->latest()->get();
                         @endphp
                         <ul class="category-list">
@@ -63,59 +63,33 @@
 				<div class="breadcrumb-area">
 					<ul class="breadcrumb">
 						<li><a href="{{ route('home') }}">Home</a></li>
-						<li>{{$title}}</li>
+						<li>{{ $title }}</li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</section>
 	<!-- End Breadcrumb -->
-	<section class="login-register-section">
+	<section class="phone-verification-section">
 		<div class="container">
-			<div class="login-reg-box">
-				<div class="inner-box">
-					<form method="POST" action="{{ route('customer.register.confirm') }}">
-                        @csrf
-						<div class="title-box">
-							<h3 class="title">Create an account</h3>
-						</div>
-						<div class="single-input">
-							<input class="form-control" type="text" name="name" placeholder="Full name">
-						</div>
-						<div class="single-input">
-							<input class="form-control" type="email" name="email" placeholder="Email Address">
-						</div>
-						<div class="single-input">
-							<input class="form-control" type="number" name="phone" placeholder="Mobile Number">
-						</div>
-						<div class="single-input">
-							<input class="form-control" type="text" name="address" placeholder="Address">
-						</div>
-						<button type="submit" class="submit-btn">Next</button>
-						<label for="" class="alter">Or</label>
-						<div class="login-options">
-							<div class="single-option">
-								<a href="#">
-									<span class="icon"><img src="{{asset('frontend/images/icons/facebook.png')}}" alt=""></span>
-									<span>SignIn With Facebook</span>
-								</a>
-							</div>
-							<div class="single-option">
-								<a href="#">
-									<span class="icon"><img src="{{asset('frontend/images/icons/google.png')}}" alt=""></span>
-									<span>SignIn With Google</span>
-								</a>
-							</div>
-						</div>
-						<div class="signup-option">
-							<label for="">Already have an account? <a href="{{ route('login') }}">Login</a></label>							
-						</div>
-					</form>
-				</div>
+			<div class="verification-body">
+				<form method="POST" action="{{ route('customer.otp.check') }}" class="send-pin pt-0">
+                    @csrf
+					<div class="mini-toast">
+						<span>{{ $getName }} We've sent a 5-digit one time PIN in your phone# {{ $getPhone }}, Please type PIN</span>
+						<button class="close-toast" type="button">
+                            <i class="bi bi-x"></i>
+                        </button>
+					</div>
+                    <div class="single-input">
+                        <input class="form-control" type="number" name="otp_code" placeholder="OPT Code">
+                    </div>
+					<button type="submit" class="verify-btn">submit OTP</button>
+				</form>
 			</div>
 		</div>
 	</section>
-	<!-- End Login Register Section -->
+	<!-- End Phone Verification Section -->
 @endsection
 
 @push('js')

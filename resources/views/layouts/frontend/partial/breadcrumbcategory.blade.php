@@ -11,7 +11,7 @@
                         @foreach($categories as $category)
                             <li>
                                 <a href="{{ route('category', $category->slug) }}">
-                                    <img src="{{ asset($category->image) }}" alt="">
+                                    <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                     <span>{{ $category->name }}</span>
                                 </a>
                                 @php

@@ -18,7 +18,7 @@
             <ul class="pcoded-submenu">
                 <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
                     <a href="{{ route('admin.category.index') }}">
-                        <span class="pcoded-mtext">Category</span>
+                        <span class="pcoded-mtext">Add Category</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
@@ -121,26 +121,6 @@
                 <li class="{{ Request::is('admin/sold-product-report') ? 'active' : '' }}">
                     <a href="{{ route('admin.sold-product.report') }}">
                         <span class="pcoded-mtext">Stock Report</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="pcoded-hasmenu ">
-            <a href="javascript:void(0)">
-                <span class="pcoded-micon">
-                    <i class="feather icon-bookmark"></i>
-                </span>
-                <span class="pcoded-mtext">To-Do</span>
-            </a>
-            <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="todo.html">
-                        <span class="pcoded-mtext">To-Do</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="notes.html">
-                        <span class="pcoded-mtext">Notes</span>
                     </a>
                 </li>
             </ul>

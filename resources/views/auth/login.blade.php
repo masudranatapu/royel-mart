@@ -15,21 +15,20 @@
 @endpush
 
 @section('content')
-    <section class="breadcrumb-section">
+	<section class="breadcrumb-section">
 		<div class="container-fluid">
 			<div class="category-breadcrumb">
 				<div class="category-wrapper">
 					<h4 class="dropdown-title">categories<i class="bi bi-chevron-down"></i></h4>
-					<div class="category-area">
-						<h3 class="mobile-title">categories</h3>
+					<div class="category-area checknav">
                         @php
-                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->latest()->limit(18)->get();
+                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->latest()->get();
                         @endphp
                         <ul class="category-list">
                             @foreach($categories as $category)
                                 <li>
                                     <a href="{{ route('category', $category->slug) }}">
-                                        <img src="{{ asset($category->image) }}" alt="">
+                                        <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                         <span>{{ $category->name }}</span>
                                     </a>
                                     @php
@@ -92,7 +91,7 @@
 						</div>
 						<div class="label-group">
 							<div class="single">
-								<input type="checkbox" id="Remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
+								<input type="checkbox" id="Remember" name="remember">
 								<label for="Remember">Remember me</label>
 							</div>
 							<div class="single">
@@ -115,7 +114,7 @@
 							</div>
 						</div>
 						<div class="signup-option">
-							<label for="">Need an account? <a href="{{ route('register') }}">SignUp</a></label>							
+							<label for="">Need an account? <a href="{{ route('customer.register') }}">SignUp</a></label>							
 						</div>
 					</form>
 				</div>
