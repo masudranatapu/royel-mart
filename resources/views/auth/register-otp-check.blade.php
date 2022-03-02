@@ -76,8 +76,10 @@
 				<form method="POST" action="{{ route('customer.otp.check') }}" class="send-pin pt-0">
                     @csrf
 					<div class="mini-toast">
-						<span>{{ $getName }} We've sent a 5-digit one time PIN in your phone number {{ $getPhone }} Please type PIN</span>
-						<button class="close-toast" type="button"><i class="bi bi-x"></i></button>
+						<span>{{ $getName }} , We sent one time OTP in your phone number {{ $getPhone }} Please type OTP</span>
+						<button class="close-toast" type="button">
+                            <i class="bi bi-x"></i>
+                        </button>
 					</div>
 					<div class="verify-codes">
 						<input type="text" name="code_one" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
@@ -86,10 +88,10 @@
 						<input type="text" name="code_four" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
 						<input type="text" name="code_five" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
 					</div>
-					<button class="verify-btn">submit OTP</button>
+					<button class="verify-btn">Submit OTP</button>
                     <br>
                     <br>
-					<a href="{{ route('customer.otp.resend') }}" class="btn btn-danger" title="Resend OTP on your phone number">Resend OTP</a>
+					<a href="{{ route('customer.otp.resend') }}" title="Resend OTP on your phone number">Resend OTP</a>
 				</form>
 			</div>
 		</div>

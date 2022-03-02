@@ -52,7 +52,7 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-6 mb-lg-0 mb-sm-4 mb-3">
                     <div class="footer-logo">
-                        <a href="{{ route('home') }}"><img src="{{asset($website->logo)}}" alt=""></a>
+                        <a href="{{ route('home') }}"><img src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt=""></a>
                     </div>
                     <p class="footer-contact">
                         <span class="d-block">Address : {{ $website->address }}</span>
@@ -84,8 +84,8 @@
                             <img src="{{asset('frontend/images/icons/qrcode.png')}}" alt="">
                         </div>
                         <div class="btn-area">
-                            <a href="#"><img src="{{asset('frontend/images/icons/appstore.png')}}" alt=""></a>
-                            <a href="#"><img src="{{asset('frontend/images/icons/playstore.png')}}" alt=""></a>
+                            <a href="javascript:;"><img src="{{asset('frontend/images/icons/appstore.png')}}" alt=""></a>
+                            <a href="javascript:;"><img src="{{asset('frontend/images/icons/playstore.png')}}" alt=""></a>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,6 @@
         </div>
     </div>
     <!-- End Footer Top -->
-
     <div class="footer-bottom">
         <div class="container-fluid">
             <p class="copyright">copyright @ 2022 All rights reserved and developed by <a href="https://projanmoit.com/" target="__blank">Projanmo IT</a></p>
@@ -102,13 +101,12 @@
     <!-- End Footer Bottom -->
 </footer>
 <!-- End Footer -->
-
 <div class="mobile-footer-bar">
     <div class="inner-footer-bar">
         <ul>
             <li><a class="home" href="{{ route('home') }}"><i class="bi bi-house-door"></i><span>home</span></a></li>
             <li><a class="mobile-nav-trigger" href="#"><i class="ri-function-line"></i><span>Categories</span></a></li>
-            <li><a class="shop" href="#"><span class="img"><img src="assets/images/logo/icon.png" alt=""></span><span>shop</span></a></li>
+            <li><a class="shop" href="{{ route('allproduct') }}"><span class="img"><img src="{{asset('frontend/images/logo/icon.png')}}" alt=""></span><span>shop</span></a></li>
             <li><a class="mobile-search-trigger" href="#"><i class="bi bi-search"></i><span>search</span></a></li>
             <li><a class="privacy-trigger" href="#"><i class="ri-user-line"></i><span>account</span></a></li>
         </ul>
@@ -123,20 +121,13 @@
                 <span class="material-icons">account_circle</span>
             </div>
             <div class="user-login">
-                <ul>
-                    <li><a href="{{ route('login') }}">sign in</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="language-area">
-            <div class="switch">
-                <a href="#">
-                    <span>EN</span>
-                    <span class="icon">
-                        <i class="material-icons en">toggle_off</i>
-                    </span>
-                    <span>BN</span>
-                </a>
+                @auth
+
+                @else
+                    <ul>
+                        <li><a href="{{ route('login') }}">sign in</a></li>
+                    </ul>
+                @endauth
             </div>
         </div>
         <button type="button" class="close-nav"><i class="bi bi-x"></i></button>
@@ -145,18 +136,50 @@
         <div class="top-area">
             <div class="top-nav">
                 <ul>
-                    <li><a href="{{ route('home') }}"><i class="bi bi-house-door"></i>home</a></li>
-                    <li><a href="#"><i class="bi bi-person-fill"></i>account information</a></li>
-                    <li><a href="#"><i class="material-icons">content_paste</i>my orders</a></li>
-                    <li><a href="#"><i class="bi bi-heart"></i>my wishlist</a></li>
-                    <li><a href="#"><i class="material-icons-outlined">lock</i>change password</a></li>
-                    <li><a href="#"><i class="material-icons">logout</i>logout</a></li>
+                    @auth
+                        @if(Auth::check() && auth()->user()->role_id == 1)
+                            <li><a href="{{ route('home') }}"><i class="bi bi-house-door"></i>home</a></li>
+                            <li><a href="{{ route('admin.dashboard') }}"><i class="bi bi-person-fill"></i>account information</a></li>
+                            <li>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="material-icons">logout</i>
+                                    logout
+                                </a>
+                            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @endif
+                        @if(Auth::check() && auth()->user()->role_id == 2)
+                            <li><a href="{{ route('home') }}"><i class="bi bi-house-door"></i>home</a></li>
+                            <li><a href="{{ route('customer.information') }}"><i class="bi bi-person-fill"></i>account information</a></li>
+                            <li>
+                                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="material-icons">logout</i>
+                                    logout
+                                </a>
+                            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <li><a href="#"><i class="bi bi-person-fill"></i>account information</a></li>
+                            <li><a href="#"><i class="material-icons">content_paste</i>my orders</a></li>
+                            <li><a href="#"><i class="bi bi-heart"></i>my wishlist</a></li>
+                            <li><a href="#"><i class="material-icons-outlined">lock</i>change password</a></li>
+                        @endif
+                    @else
+                    @endauth
                 </ul>
             </div>
             <div class="divider"></div>
             <div class="bottom-nav">
                 <ul>
-                    <li><a href="#"><i class="bi bi-telephone-plus"></i><span><strong>helpline</strong> <br> 01712690082</span></a></li>
+                    <li>
+                        <a href="tel:{{ $website->phone }}">
+                            <i class="bi bi-telephone-plus"></i>
+                            <span><strong>helpline</strong> <br> {{ $website->phone }}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="divider"></div>
@@ -172,89 +195,83 @@
         <div class="bottom-area">
             <div class="divider"></div>
             <div class="download-area">
-                <button class="download-app-btn"><span>download app</span><i class="android ri-android-fill"></i><i class="ios bi bi-apple"></i></button>
+                <button class="download-app-btn">
+                    <span>download app</span>
+                    <i class="android ri-android-fill"></i>
+                    <i class="ios bi bi-apple"></i>
+                </button>
             </div>
             <div class="divider"></div>
             <div class="social-area">
                 <ul class="social">
-                    <li class="facebook"><a href="#"><i class="ri-facebook-fill"></i></a></li>
-                    <li class="twitter"><a href="#"><i class="ri-twitter-fill"></i></a></li>
-                    <li class="youtube"><a href="#"><i class="ri-youtube-fill"></i></a></li>
-                    <li class="dribbble"><a href="#"><i class="ri-dribbble-fill"></i></a></li>
+                    @php
+                        $icon = explode("|",$website->icon);
+                        $link = explode("|",$website->link);
+                    @endphp
+                    @foreach($icon as $key=>$icon)
+                        <li class="{{$icon}}">
+                            <a href="@if(isset($link[$key])){{$link[$key]}}@endif">
+                                <i class="fa fa-{{$icon}}"></i>
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
         </div>
     </div>
 </div>
 <!-- End Mobile Privacy Nav -->
-
 <div class="mobile-nav">
     <div class="inner-mobile-nav checknav">
         <div class="nav-head">
             <div class="logo-area">
-                <a href="{{ route('home') }}"><img src="{{asset('frontend/images/logo/logo.png')}}" alt=""></a>
-                <button type="button" class="close-nav"><i class="bi bi-x"></i></button>
+                <a href="{{ route('home') }}">
+                    <img src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt="">
+                </a>
+                <button type="button" class="close-nav">
+                    <i class="bi bi-x"></i>
+                </button>
             </div>
             <div class="title-area">
                 <h3 class="title">categories</h3>
-                <a href="#">see all</a>
+                <a href="">see all</a>
             </div>
         </div>
+        @php
+            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->latest()->limit(18)->get();
+        @endphp
         <ul>
-            <li><a href="#"><span>Daily Needs</span></a>
-                <ul>
-                    <li><a href="#">Daily Needs</a>
-                        <ul>
-                            <li><a href="#">Daily Needs</a></li>
-                            <li><a href="#">Needs</a></li>
-                            <li><a href="#">Daily Needs</a></li>
-                            <li><a href="#">Needs</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Daily Needs</a></li>
-                    <li><a href="#">Daily Needs</a></li>
-                    <li><a href="#">Daily Needs</a></li>
-                    <li><a href="#">Daily Needs</a></li>
-                </ul>
-            </li>
-            <li><a href="#"><span>Electronics &amp; Home Appliance</span></a>
-                <ul>
-                    <li><a href="#">Daily Needs</a>
-                        <ul>
-                            <li><a href="#">Daily Needs</a></li>
-                            <li><a href="#">Needs</a></li>
-                            <li><a href="#">Daily Needs</a></li>
-                            <li><a href="#">Needs</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Daily Needs</a></li>
-                    <li><a href="#">Daily Needs</a></li>
-                    <li><a href="#">Daily Needs</a></li>
-                    <li><a href="#">Daily Needs</a></li>
-                </ul>
-            </li>
-            <li><a href="#"><span>Health &amp; Nutrition </span></a></li>
-            <li><a href="#"><span>Cosmetics &amp; Beauty Care</span></a></li>
-            <li><a href="#"><span>Baby Food &amp; Fashions</span></a></li>
-            <li><a href="#"><span>Women’s Fashions</span></a></li>
-            <li><a href="#"><span>Men’s Fashions </span></a></li>
-            <li><a href="#"><span>Stationery, Toys &amp; Games </span></a></li>
-            <li><a href="#"><span>Sports &amp; Fitness </span></a></li>
-            <li><a href="#"><span>Lifestyle &amp; Home Decor</span></a></li>
-            <li><a href="#"><span>Real Estate &amp; Property </span></a></li>
-            <li><a href="#"><span>Automobile &amp; Motor Bikes </span></a></li>
-            <li><a href="#"><span>Daily Needs</span></a></li>
-            <li><a href="#"><span>Electronics &amp; Home Appliance</span></a></li>
-            <li><a href="#"><span>Health &amp; Nutrition </span></a></li>
-            <li><a href="#"><span>Cosmetics &amp; Beauty Care</span></a></li>
-            <li><a href="#"><span>Baby Food &amp; Fashions</span></a></li>
-            <li><a href="#"><span>Women’s Fashions</span></a></li>
-            <li><a href="#"><span>Men’s Fashions </span></a></li>
-            <li><a href="#"><span>Stationery, Toys &amp; Games </span></a></li>
-            <li><a href="#"><span>Sports &amp; Fitness </span></a></li>
-            <li><a href="#"><span>Lifestyle &amp; Home Decor</span></a></li>
-            <li><a href="#"><span>Real Estate &amp; Property </span></a></li>
-            <li><a href="#"><span>Automobile &amp; Motor Bikes </span></a></li>
+            @foreach($categories as $category)
+                <li>
+                    <a href="{{ route('category', $category->slug) }}">
+                        <span>{{ $category->name }}</span>
+                    </a>
+                    @php
+                        $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->latest()->get();
+                    @endphp
+                    <ul>
+                        @foreach($parentcategories as $parentcategory)
+                            <li>
+                                <a href="{{ route('category', $parentcategory->slug) }}">
+                                    {{ $parentcategory->name }}
+                                </a>
+                                @php
+                                    $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
+                                @endphp
+                                <ul>
+                                    @foreach($childcategories as $childcategory)
+                                        <li>
+                                            <a href="{{ route('category', $childcategory->slug) }}">
+                                                {{ $childcategory->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @endforeach
         </ul>
     </div>
 </div>
@@ -263,124 +280,47 @@
 <div class="mobile-cart">
     <div class="inner-mobile-cart">
         <div class="cart-head">
-            <h3 class="title">16 items in cart</h3>
-            <button type="button" class="close-cart"><i class="bi bi-x"></i></button>
+            <h3 class="title">
+                @if(session('cart'))
+                    {{ count(session('cart')) }}
+                @else
+                    0
+                @endif
+                items in cart
+            </h3>
+            <button type="button" class="close-cart">
+                <i class="bi bi-x"></i>
+            </button>
         </div>
         <div class="cart-body">
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/1.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
+            @if(session('cart'))
+                @foreach(session('cart') as $key => $cartdetails)
+                    <div class="single-item">
+                        <figure>
+                            <a href="javascript:;">
+                                <img src="{{ asset($cartdetails['image']) }}" alt="">
+                            </a>
+                        </figure>
+                        <div class="contents">
+                            <h5 class="product-name">
+                                <a href="javascript:;">
+                                    {{ $cartdetails['name'] }}
+                                </a>
+                            </h5>
+                            <div class="qty-price">
+                                <span> {{ $cartdetails['quantity'] }} </span> * <span>{{$cartdetails['price']}} ৳</span>
+                            </div>
+                        </div>
+                        <a class="remove" href="{{ route('cart.remove', $key) }}" onclick="return confirm('Are you sure, you want to remove this product from cart ? ')" type="button">
+                            <i class="bi bi-x"></i>
+                        </a>
                     </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/2.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum iusto quidem.</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/3.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/1.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/2.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum iusto quidem.</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/3.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/1.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/2.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum iusto quidem.</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/3.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/2.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum iusto quidem.</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
-            <div class="single-item">
-                <figure><a href="#"><img src="{{asset('frontend/images/products/3.jpg')}}" alt=""></a></figure>
-                <div class="contents">
-                    <h5 class="product-name"><a href="#">Syntax Chair</a></h5>
-                    <div class="qty-price">
-                        <span>1</span> * <span>৳ 2592.00</span>
-                    </div>
-                </div>
-                <button class="remove" type="button"><i class="bi bi-x"></i></button>
-            </div>
+                @endforeach
+            @endif
         </div>
         <div class="cart-footer">
-            <button type="button" class="sm-btn">Checkout</button>
-            <button type="button" class="sm-btn">View cart</button>
+            <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+            <a href="{{ route('cart') }}" type="button" class="sm-btn">View cart</a>
         </div>
     </div>
 </div>

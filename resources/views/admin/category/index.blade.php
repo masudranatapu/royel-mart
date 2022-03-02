@@ -115,60 +115,56 @@
                                     </thead>
                                     <tbody>
                                         @foreach($categories as $key => $category)
-                                            <tr>
-                                                <td class="text-center">{{ $category->serial_number }}</td>
-                                                <td class="text-center">{{ $category->name }}</td>
-                                                <td class="text-center">
-                                                    <img width="60" height="60" src="{{ asset($category->image) }}" alt="">
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->menu == 1)
-                                                        <span class="badge bg-success text-white">Active</span>
-                                                    @else
-                                                        <span class="badge bg-danger text-white">Inactive</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->feature == 1)
-                                                        <span class="badge bg-success text-white">Active</span>
-                                                    @else
-                                                        <span class="badge bg-danger text-white">Inactive</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->show_hide == 1)
-                                                        <span class="badge bg-success text-white">Show</span>
-                                                    @else
-                                                        <span class="badge bg-info text-white">Hide</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->id == 1)
+                                            @if($category->id == 1)
 
-                                                    @else
+                                            @else
+                                                <tr>
+                                                    <td class="text-center">{{ $category->serial_number }}</td>
+                                                    <td class="text-center">{{ $category->name }}</td>
+                                                    <td class="text-center">
+                                                        <img width="60" height="60" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if($category->menu == 1)
+                                                            <span class="badge bg-success text-white">Active</span>
+                                                        @else
+                                                            <span class="badge bg-danger text-white">Inactive</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if($category->feature == 1)
+                                                            <span class="badge bg-success text-white">Active</span>
+                                                        @else
+                                                            <span class="badge bg-danger text-white">Inactive</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if($category->show_hide == 1)
+                                                            <span class="badge bg-success text-white">Show</span>
+                                                        @else
+                                                            <span class="badge bg-info text-white">Hide</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
                                                         <a title="View Parent Cateogory" href="{{ route('admin.viewparentcategory', $category->id) }}" class="btn btn-success">
                                                             <i class="fa fa-eye"></i>
                                                         </a>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->status == 1)
-                                                        <a title="Inactive Now" href="{{ route('admin.category.inactive', $category->id) }}" class="btn btn-success">
-                                                            Active
-                                                        </a>
-                                                    @else
-                                                        <a title="Active Now" href="{{ route('admin.category.active', $category->id) }}" class="btn btn-danger">
-                                                            Inactive
-                                                        </a>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
-                                                        <i class="ml-1 fa fa-edit"></i>
-                                                    </button>
-                                                    @if($category->id == 1)
-
-                                                    @else
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if($category->status == 1)
+                                                            <a title="Inactive Now" href="{{ route('admin.category.inactive', $category->id) }}" class="btn btn-success">
+                                                                Active
+                                                            </a>
+                                                        @else
+                                                            <a title="Active Now" href="{{ route('admin.category.active', $category->id) }}" class="btn btn-danger">
+                                                                Inactive
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
+                                                            <i class="ml-1 fa fa-edit"></i>
+                                                        </button>
                                                         <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $category->id }})">
                                                             <i class="ml-1 fa fa-trash"></i>
                                                         </button>
@@ -176,76 +172,76 @@
                                                             @csrf
                                                             @method('DELETE')
                                                         </form>
-                                                    @endif
-                                                </td>
-                                                <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Edit Category</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true"> &times; </span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{ route('admin.category.update', $category->id) }}" method="POST" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Name</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="text" class="form-control" name="name" value="{{ $category->name }}">
+                                                    </td>
+                                                    <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Edit Category</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true"> &times; </span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{{ route('admin.category.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right">Name</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="text" class="form-control" name="name" value="{{ $category->name }}">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Image</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right">Image</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right"></label>
-                                                                        <div class="col-md-9">
-                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($category->image) }}">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right"></label>
+                                                                            <div class="col-md-9">
+                                                                                <img width="100" height="100" class="showThamEdit" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Color Code</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="text" class="form-control" name="category_color" value="{{ $category->category_color }}" placeholder="Color code = ff6161" >
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right">Color Code</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="text" class="form-control" name="category_color" value="{{ $category->category_color }}" placeholder="Color code = ff6161" >
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right mt-1">SL No</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="number" class="form-control" name="serial_number" value="{{ $category->serial_number }}">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right mt-1">SL No</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="number" class="form-control" name="serial_number" value="{{ $category->serial_number }}">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right"></label>
-                                                                        <div class="col-md-9 text-left">
-                                                                            <input type="checkbox" name="menu" value="1" @if($category->menu == 1) checked @endif id="menuChecked">
-                                                                            <label for="menuChecked">Menu Status</label>
-                                                                            <br>
-                                                                            <input type="checkbox" name="feature" value="1" @if($category->feature == 1) checked @endif id="featureChecked">
-                                                                            <label for="featureChecked">Feature Status</label>
-                                                                            <br>
-                                                                            <input type="checkbox" class="editShowHide" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="editshowHideChecked">
-                                                                            <label for="editshowHideChecked" class="showHide">Show</label>
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right"></label>
+                                                                            <div class="col-md-9 text-left">
+                                                                                <input type="checkbox" name="menu" value="1" @if($category->menu == 1) checked @endif id="menuChecked">
+                                                                                <label for="menuChecked">Menu Status</label>
+                                                                                <br>
+                                                                                <input type="checkbox" name="feature" value="1" @if($category->feature == 1) checked @endif id="featureChecked">
+                                                                                <label for="featureChecked">Feature Status</label>
+                                                                                <br>
+                                                                                <input type="checkbox" class="editShowHide" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="editshowHideChecked">
+                                                                                <label for="editshowHideChecked" class="showHide">Show</label>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right"></label>
-                                                                        <div class="col-md-9 text-left">
-                                                                            <input type="submit" class="btn btn-success" value="Update Category">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right"></label>
+                                                                            <div class="col-md-9 text-left">
+                                                                                <input type="submit" class="btn btn-success" value="Update Category">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </form>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </tr>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>

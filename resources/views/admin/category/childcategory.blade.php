@@ -128,7 +128,7 @@
                                                 <td class="text-center">{{ $category->serial_number }}</td>
                                                 <td class="text-center">{{ $category->name }}</td>
                                                 <td class="text-center">
-                                                    <img width="60" height="60" src="{{ asset($category->image) }}" alt="">
+                                                    <img width="60" height="60" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                                 </td>
                                                 <td class="text-center">
                                                     @if($category->menu == 1)
@@ -204,7 +204,7 @@
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9">
-                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($category->image) }}">
+                                                                            <img width="100" height="100" class="showThamEdit" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
