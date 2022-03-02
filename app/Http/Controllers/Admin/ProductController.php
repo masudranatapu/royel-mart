@@ -64,7 +64,6 @@ class ProductController extends Controller
             'product_type' => 'required',
             'status' => 'required',
             'category_id' => 'required',
-            'unit_id' => 'required',
         ]);
         $product_thambnail = $request->file('thambnail');
         $slug1 = "product";
@@ -137,37 +136,38 @@ class ProductController extends Controller
             'status' => $request->status,
             'created_at' => Carbon::now(),
         ]);
-        foreach($request->unit_id as $key=>$unit_id){
-            // unit Image photo
-            $unitImageGet = 'image_'.$unit_id;
-            $getUnitImage = $request->file($unitImageGet);
-            $slug3 = "unitimage";
-            if (isset($getUnitImage)) {
-                $unitImage_name = $slug3.'-'.uniqid().'.'.$getUnitImage->getClientOriginalExtension();
-                $upload_path = 'media/unitimage/';
-                $unitImage_image_url = $upload_path.$unitImage_name;
-                $getUnitImage->move($upload_path, $unitImage_name);
-                $product_unitImage = $unitImage_image_url;
-            }else {
-                $product_unitImage = NULL;
-            }
-            ProductUnit::insert([
-                'product_id' => $product_id,
-                'unit_id' => $unit_id,
-                'image' => $product_unitImage,
-                'created_at' => Carbon::now(),
-            ]);
-            $req_subunit_id = 'subunit_id_'.$unit_id;
-            foreach($request->$req_subunit_id as $key=>$subunit_id){
-                ProductSubUnit::insert([
+        if(is_array($request->unit_id) || is_object($request->unit_id)){
+            foreach($request->unit_id as $key=>$unit_id){
+                // unit Image photo
+                $unitImageGet = 'image_'.$unit_id;
+                $getUnitImage = $request->file($unitImageGet);
+                $slug3 = "unitimage";
+                if (isset($getUnitImage)) {
+                    $unitImage_name = $slug3.'-'.uniqid().'.'.$getUnitImage->getClientOriginalExtension();
+                    $upload_path = 'media/unitimage/';
+                    $unitImage_image_url = $upload_path.$unitImage_name;
+                    $getUnitImage->move($upload_path, $unitImage_name);
+                    $product_unitImage = $unitImage_image_url;
+                }else {
+                    $product_unitImage = NULL;
+                }
+                ProductUnit::insert([
                     'product_id' => $product_id,
                     'unit_id' => $unit_id,
-                    'subunit_id' => $subunit_id,
+                    'image' => $product_unitImage,
                     'created_at' => Carbon::now(),
                 ]);
+                $req_subunit_id = 'subunit_id_'.$unit_id;
+                foreach($request->$req_subunit_id as $key=>$subunit_id){
+                    ProductSubUnit::insert([
+                        'product_id' => $product_id,
+                        'unit_id' => $unit_id,
+                        'subunit_id' => $subunit_id,
+                        'created_at' => Carbon::now(),
+                    ]);
+                }
             }
         }
-
         Toastr::success('Product Successfully Save :-)','Success');
         return redirect()->back();
     }
@@ -221,7 +221,6 @@ class ProductController extends Controller
             'product_type' => 'required',
             'status' => 'required',
             'category_id' => 'required',
-            'unit_id' => 'required',
         ]);
         $product_thambnail = $request->file('thambnail');
         $slug1 = "product";

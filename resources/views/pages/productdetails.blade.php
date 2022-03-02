@@ -109,12 +109,14 @@
 											@php
 												$colors = App\Models\ProductUnit::where('product_id', $products->id)->get();
 											@endphp
-											@foreach($colors as $key => $color)
-												@php
-													$colorname = App\Models\Unit::where('id', $color->unit_id)->first();
-												@endphp
-												<li class="" onclick="getColorId({{$colorname->id}})" style="background-color: {{ $colorname->name }}"></li>
-											@endforeach
+											@if($colors->count() > 0 )
+												@foreach($colors as $key => $color)
+													@php
+														$colorname = App\Models\Unit::where('id', $color->unit_id)->first();
+													@endphp
+													<li class="" onclick="getColorId({{$colorname->id}})" style="background-color: {{ $colorname->name }}"></li>
+												@endforeach
+											@endif
 										</ul>
 										<input type="hidden" name="color_id" value="" id="viewValue">
 										<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">

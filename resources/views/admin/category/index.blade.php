@@ -25,7 +25,7 @@
                                         Category
                                     </button>
                                     @php
-                                        $i = 1
+                                        $i = 0 ;
                                     @endphp
                                     <!-- crate modal  -->
                                     <div class="modal fade" id="large-Modal" tabindex="-1" role="dialog">
@@ -47,7 +47,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Imge</label>
+                                                            <label class="col-md-3 text-right">Image</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
@@ -56,12 +56,6 @@
                                                             <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
                                                                 <img width="100" height="100" src="{{ asset('demomedia/demo.png') }}" id="showTham">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Color Code</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="category_color" placeholder="Color code = ff6161" >
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -74,13 +68,13 @@
                                                             <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
                                                                 <input type="checkbox" name="menu" value="1" id="menuChecked">
-                                                                <label for="menuChecked">Menu Status</label>
+                                                                <label for="menuChecked">Menu</label>
                                                                 <br>
                                                                 <input type="checkbox" name="feature" value="1" id="featureChecked">
-                                                                <label for="featureChecked">Feature Status</label>
+                                                                <label for="featureChecked">Feature</label>
                                                                 <br>
                                                                 <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
-                                                                <label for="showHideChecked" id="showHide">Hide</label>
+                                                                <label for="showHideChecked" id="showHide">Show</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -108,6 +102,7 @@
                                             <th class="text-center">Menu</th>
                                             <th class="text-center">Feature</th>
                                             <th class="text-center">Show / Hide</th>
+                                            <th class="text-center">Link</th>
                                             <th class="text-center">Parent Category</th>
                                             <th class="text-center">Active Status</th>
                                             <th class="text-center">Action</th>
@@ -144,6 +139,9 @@
                                                         @else
                                                             <span class="badge bg-info text-white">Hide</span>
                                                         @endif
+                                                    </td>
+                                                    <td>
+                                                        
                                                     </td>
                                                     <td class="text-center">
                                                         <a title="View Parent Cateogory" href="{{ route('admin.viewparentcategory', $category->id) }}" class="btn btn-success">
@@ -205,12 +203,6 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-group row">
-                                                                            <label class="col-md-3 text-right">Color Code</label>
-                                                                            <div class="col-md-9">
-                                                                                <input type="text" class="form-control" name="category_color" value="{{ $category->category_color }}" placeholder="Color code = ff6161" >
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
                                                                             <label class="col-md-3 text-right mt-1">SL No</label>
                                                                             <div class="col-md-9">
                                                                                 <input type="number" class="form-control" name="serial_number" value="{{ $category->serial_number }}">
@@ -220,10 +212,10 @@
                                                                             <label class="col-md-3 text-right"></label>
                                                                             <div class="col-md-9 text-left">
                                                                                 <input type="checkbox" name="menu" value="1" @if($category->menu == 1) checked @endif id="menuChecked">
-                                                                                <label for="menuChecked">Menu Status</label>
+                                                                                <label for="menuChecked">Menu</label>
                                                                                 <br>
                                                                                 <input type="checkbox" name="feature" value="1" @if($category->feature == 1) checked @endif id="featureChecked">
-                                                                                <label for="featureChecked">Feature Status</label>
+                                                                                <label for="featureChecked">Feature</label>
                                                                                 <br>
                                                                                 <input type="checkbox" class="editShowHide" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="editshowHideChecked">
                                                                                 <label for="editshowHideChecked" class="showHide">Show</label>
@@ -277,10 +269,10 @@
         $("#showHideChecked").on('click', function() {
              // access properties using this keyword
             if($(this).prop("checked") == true){
-                $("#showHide").text("Show");showHide
+                $("#showHide").text("Hide");
             }
             else if($(this).prop("checked") == false){
-                $(".showHide").text("Hide");
+                $("#showHide").text("Show");
             }
         });
         

@@ -5,18 +5,7 @@
 @stop
 
 @push('css')
-    <style>
-        .category-image {
-            width: 100px;
-            height:100px;
-            float: left;
-        }
-        .category-image-size {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-    </style>
+
 @endpush
 
 @section('content')
@@ -28,31 +17,36 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2>Parent Category <small class="badge bg-success text-white">{{ $parentcategories->count() }}</small></h2>
+                                    <h2>Category Ads<small class="badge bg-success text-white">{{ $categoryads->count() }}</small></h2>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
                                         <i class="fa fa-plus"></i>
-                                        Parent Category
+                                        Add Category Ads
                                     </button>
                                     <!-- crate modal  -->
                                     <div class="modal fade" id="large-Modal" tabindex="-1" role="dialog">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Parent Category</h4>
+                                                    <h4 class="modal-title">Category Ads</h4>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true"> &times; </span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
+                                                    <form action="{{ route('admin.category-ads.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
-                                                        <input type="hidden" value="{{ $parentcategory->id }}" name="parent_id">
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right">Name</label>
                                                             <div class="col-md-9">
                                                                 <input type="text" class="form-control" name="name" placeholder="Name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-3 text-right">Link</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" name="link" placeholder="link">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -68,28 +62,9 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right mt-1">SL No</label>
-                                                            <div class="col-md-9">
-                                                                <input type="number" class="form-control" name="serial_number" placeholder="Serial Number">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
                                                             <label class="col-md-3 text-right"></label>
                                                             <div class="col-md-9 text-left">
-                                                                <input type="checkbox" name="menu" value="1" id="menuChecked">
-                                                                <label for="menuChecked">Menu</label>
-                                                                <br>
-                                                                <input type="checkbox" name="feature" value="1" id="featureChecked">
-                                                                <label for="featureChecked">Feature</label>
-                                                                <br>
-                                                                <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
-                                                                <label for="showHideChecked" id="showHide">Hide</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-md-3 text-right"></label>
-                                                            <div class="col-md-9 text-left">
-                                                                <input type="submit" class="btn btn-success" value="Create Category">
+                                                                <input type="submit" class="btn btn-success" value="Create Category Ads">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -108,59 +83,27 @@
                                             <th class="text-center">SL No</th>
                                             <th class="text-center">Name</th>
                                             <th class="text-center">Image</th>
-                                            <th class="text-center">Menu</th>
-                                            <th class="text-center">Feature</th>
-                                            <th class="text-center">Show / Hide</th>
-                                            <th class="text-center">Link</th>
-                                            <th class="text-center">Child Category</th>
-                                            <th class="text-center">Active Status</th>
+                                            <th class="text-center">link</th>
+                                            <th class="text-center">Status</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($parentcategories as $key => $category)
+                                        @foreach($categoryads as $key => $category)
                                             <tr>
-                                                <td class="text-center">{{ $category->serial_number }}</td>
+                                                <td class="text-center">{{ $key + 1 }}</td>
                                                 <td class="text-center">{{ $category->name }}</td>
                                                 <td class="text-center">
                                                     <img width="60" height="60" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                                 </td>
-                                                <td class="text-center">
-                                                    @if($category->menu == 1)
-                                                        <span class="badge bg-success text-white">Active</span>
-                                                    @else
-                                                        <span class="badge bg-danger text-white">Inactive</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->feature == 1)
-                                                        <span class="badge bg-success text-white">Active</span>
-                                                    @else
-                                                        <span class="badge bg-danger text-white">Inactive</span>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($category->show_hide == 1)
-                                                        <span class="badge bg-success text-white">Show</span>
-                                                    @else
-                                                        <span class="badge bg-info text-white">Hide</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    
-                                                </td>
-                                                <td class="text-center">
-                                                    <a title="View Parent Cateogory" href="{{ route('admin.viewchildcategory', $category->id) }}" class="btn btn-success">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
-                                                </td>
+                                                <td class="text-center">{{ $category->link }}</td>
                                                 <td class="text-center">
                                                     @if($category->status == 1)
-                                                        <a title="Inactive Now" href="{{ route('admin.category.inactive', $category->id) }}" class="btn btn-success">
+                                                        <a title="Inactive Now" href="{{ route('admin.category-ads.inactive', $category->id) }}" class="btn btn-success">
                                                             Active
                                                         </a>
                                                     @else
-                                                        <a title="Active Now" href="{{ route('admin.category.active', $category->id) }}" class="btn btn-danger">
+                                                        <a title="Active Now" href="{{ route('admin.category-ads.active', $category->id) }}" class="btn btn-danger">
                                                             Inactive
                                                         </a>
                                                     @endif
@@ -172,7 +115,7 @@
                                                     <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $category->id }})">
                                                         <i class="ml-1 fa fa-trash"></i>
                                                     </button>
-                                                    <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy', $category->id) }}" method="POST" style="display: none;">
+                                                    <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category-ads.destroy', $category->id) }}" method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
@@ -181,20 +124,25 @@
                                                     <div class="modal-dialog modal-lg" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h4 class="modal-title">Edit Category</h4>
+                                                                <h4 class="modal-title">Category Ads</h4>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true"> &times; </span>
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form action="{{ route('admin.category.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+                                                                <form action="{{ route('admin.category-ads.update', $category->id) }}" method="POST" enctype="multipart/form-data">
                                                                     @csrf
                                                                     @method('PUT')
-                                                                    <input type="hidden" value="{{ $category->parent_id }}" name="parent_id">
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right">Name</label>
                                                                         <div class="col-md-9">
                                                                             <input type="text" class="form-control" name="name" value="{{ $category->name }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-3 text-right">Link</label>
+                                                                        <div class="col-md-9">
+                                                                            <input type="text" class="form-control" name="link" value="{{ $category->link }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -210,28 +158,9 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 text-right mt-1">SL No</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="number" class="form-control" name="serial_number" value="{{ $category->serial_number }}">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
                                                                         <label class="col-md-3 text-right"></label>
                                                                         <div class="col-md-9 text-left">
-                                                                            <input type="checkbox" name="menu" value="1" @if($category->menu == 1) checked @endif id="menuChecked">
-                                                                            <label for="menuChecked">Menu</label>
-                                                                            <br>
-                                                                            <input type="checkbox" name="feature" value="1" @if($category->feature == 1) checked @endif id="featureChecked">
-                                                                            <label for="featureChecked">Feature</label>
-                                                                            <br>
-                                                                            <input type="checkbox" class="editShowHide" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="editshowHideChecked">
-                                                                            <label for="editshowHideChecked" class="showHide">Show</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right"></label>
-                                                                        <div class="col-md-9 text-left">
-                                                                            <input type="submit" class="btn btn-success" value="Update Category">
+                                                                            <input type="submit" class="btn btn-success" value="Update Category Ads">
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -272,24 +201,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         };
-        $("#showHideChecked").on('click', function() {
-             // access properties using this keyword
-            if($(this).prop("checked") == true){
-                $("#showHide").text("Show");
-            }
-            else if($(this).prop("checked") == false){
-                $("#showHide").text("Hide");
-            }
-        });
-        
-        $(".editShowHide").click(function(){
-            if($(this).prop("checked") == true){
-                $(".showHide").text("Hide");
-            }
-            else if($(this).prop("checked") == false){
-                $(".showHide").text("Show");
-            }
-        });
     </script>
     <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
     <script type="text/javascript">

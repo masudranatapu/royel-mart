@@ -20,7 +20,7 @@ class CategoryController extends Controller
     {
         //
         $title = "Category";
-        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->latest()->get();
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->orderBy('serial_number','asc')->get();
         return view('admin.category.index', compact('title', 'categories'));
     }
 
@@ -84,7 +84,6 @@ class CategoryController extends Controller
             'image' => $image_url,
             'menu' => $menuStatus,
             'feature' => $featureStatus,
-            'category_color' => $request->category_color,
             'serial_number' => $request->serial_number,
             'show_hide' => $showHideStatus,
             'status' => "1",
@@ -173,7 +172,6 @@ class CategoryController extends Controller
                 'image' => $image_url,
                 'menu' => $menuStatus,
                 'feature' => $featureStatus,
-                'category_color' => $request->category_color,
                 'serial_number' => $request->serial_number,
                 'show_hide' => $showHideStatus,
                 'updated_at' => Carbon::now(),
@@ -188,7 +186,6 @@ class CategoryController extends Controller
                 'slug' => strtolower(str_replace(' ', '-', $request->name)),
                 'menu' => $menuStatus,
                 'feature' => $featureStatus,
-                'category_color' => $request->category_color,
                 'serial_number' => $request->serial_number,
                 'show_hide' => $showHideStatus,
                 'updated_at' => Carbon::now(),
@@ -226,16 +223,15 @@ class CategoryController extends Controller
         //
         $parentcategory = Category::findOrFail($id);
         $title = "Parent Category";
-        $parentcategories = Category::where('parent_id', $id)->where('child_id', NULL)->latest()->get();
+        $parentcategories = Category::where('parent_id', $id)->where('child_id', NULL)->orderBy('serial_number','asc')->get();
         return view('admin.category.parentcategory', compact('title', 'parentcategory', 'parentcategories'));
     }
     public function viewChildCategory($id)
     {
         //
         $childcategory = Category::findOrFail($id);
-        // return $childcategory;
         $title = "Child Category";
-        $childcategories = Category::where('child_id', $id)->latest()->get();
+        $childcategories = Category::where('child_id', $id)->orderBy('serial_number','asc')->get();
         return view('admin.category.childcategory', compact('title', 'childcategory', 'childcategories'));
     }
 }

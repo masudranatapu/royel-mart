@@ -28,15 +28,15 @@
 	<section class="featured-category-section pt-20">
 		<div class="container-fluid">
 			<div class="row">
-                @foreach($latestcategory as $category)
+                @foreach($latestcategoryads as $category)
                     <div class="col-md-4 px-md-2 px-1">
                         <div class="single-featured-category">
                             <figure>
-                                <a href="{{ route('category', $category->slug) }}">
+                                <a href="{{ $category->link }}">
                                     <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt=""></a>
                             </figure>
                             <h3 class="title">
-                                <a href="{{ route('category', $category->slug) }}">
+                                <a href="{{ $category->link }}">
                                     {{ $category->name }}
                                 </a>
                             </h3>
@@ -149,16 +149,13 @@
 								<div class="filter-list-wrapper exerp-menu">
 									<ul class="filter-list">
 										@foreach($brands as $brand)
-											<li class=""><a href="#">{{ $brand->name }}</a></li>
+											<li class=""><a href="">{{ $brand->name }}</a></li>
 										@endforeach
 									</ul>
-									<div class="text-end pe-2">
-										<a class="viewmore-btn" href="#">view more<i class="bi bi-chevron-right"></i></a>
-									</div>
 								</div>
 							</div>
 							<div class="single-widget">
-								<h3 class="widget-title">services</h3>
+								<h3 class="widget-title">Services</h3>
 								<div class="filter-list-wrapper exerp-menu">
 									<ul class="filter-list">
 										<li class="active"><a href="#">Instalment</a></li>
@@ -171,9 +168,6 @@
 										<li><a href="#">Freeshipping</a></li>
 										<li><a href="#">Royalmall</a></li>
 									</ul>
-									<div class="text-end pe-2">
-										<a class="viewmore-btn" href="#">view more<i class="bi bi-chevron-right"></i></a>
-									</div>
 								</div>
 							</div>
 							<div class="single-widget">
