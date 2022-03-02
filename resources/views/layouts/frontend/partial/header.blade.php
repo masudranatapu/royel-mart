@@ -49,7 +49,11 @@
             <div class="inner-header-bottom">
                 <div class="logo-area">
                     <button class="privacy-trigger"><span class="material-icons">reorder</span></button>
-                    <div class="logo"><a href="{{ route('home') }}"><img src="{{ asset($website->logo) }}" alt=""></a></div>
+                    <div class="logo">
+                        <a href="{{ route('home') }}">
+                            <img src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt="">
+                        </a>
+                    </div>
                 </div>
                 <div class="search-area">
                     <div class="search-wrapper">
