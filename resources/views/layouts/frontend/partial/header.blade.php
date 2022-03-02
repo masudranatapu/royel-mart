@@ -126,7 +126,7 @@
                                             @foreach(session('cart') as $key => $cartdetails)
                                                 <div class="single-item">
                                                     <figure>
-                                                        <a href="#">
+                                                        <a href="javascript:;">
                                                             <img src="{{ asset($cartdetails['image']) }}" alt="">
                                                         </a>
                                                     </figure>

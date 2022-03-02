@@ -26,7 +26,7 @@
                                 @foreach($categories as $category)
                                     <li>
                                         <a href="{{ route('category', $category->slug) }}">
-                                            <img src="{{ asset($category->image) }}" alt="">
+                                            <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                             <span>{{ $category->name }}</span>
                                         </a>
                                         @php
@@ -378,7 +378,6 @@
                 </div>
             </div>
             <!-- End Heading Area -->
-            
             <div class="categories-area">
                 <div class="row">
                     @foreach($categories as $category)
@@ -386,7 +385,7 @@
                             <div class="single-category">
                                 <div class="icon">
                                     <a href="{{ route('category', $category->slug) }}">
-                                        <img src="{{asset($category->image)}}" alt="">
+                                        <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                     </a>
                                 </div>
                                 <h4 class="category-name">
