@@ -102,25 +102,25 @@
 											<span class="discount">{{ $products->discount_tk }} ৳ Off</span>
 										</div>
 									</div>
-									<div class="divider"></div>
-									<div class="colors">
-										<label for="">colors:</label>
-										<ul class="colors-wrapper">
-											@php
-												$colors = App\Models\ProductUnit::where('product_id', $products->id)->get();
-											@endphp
-											@if($colors->count() > 0 )
-												@foreach($colors as $key => $color)
-													@php
-														$colorname = App\Models\Unit::where('id', $color->unit_id)->first();
-													@endphp
-													<li class="" onclick="getColorId({{$colorname->id}})" style="background-color: {{ $colorname->name }}"></li>
-												@endforeach
-											@endif
-										</ul>
-										<input type="hidden" name="color_id" value="" id="viewValue">
-										<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
-									</div>
+									@php
+										$colors = App\Models\ProductUnit::where('product_id', $products->id)->get();
+									@endphp
+									@if($colors->count() > 0 )
+										<div class="divider"></div>
+										<div class="colors">
+											<label for="">colors:</label>
+											<ul class="colors-wrapper">
+													@foreach($colors as $key => $color)
+														@php
+															$colorname = App\Models\Unit::where('id', $color->unit_id)->first();
+														@endphp
+														<li class="" onclick="getColorId({{$colorname->id}})" style="background-color: {{ $colorname->name }}"></li>
+													@endforeach
+											</ul>
+											<input type="hidden" name="color_id" value="" id="viewValue">
+											<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
+										</div>
+									@endif
 									<div class="divider" id="showDivider" style="display:none;"></div>
 									<div class="size" id="showSize" style="display:none;">
 										<label for="">Size </label>
