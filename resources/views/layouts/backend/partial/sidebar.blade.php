@@ -8,7 +8,7 @@
                 <span class="pcoded-mtext">Dashboard</span>
             </a>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/category-banner') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/category-banner') || Request::is('admin/category-ads') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-sidebar"></i>
@@ -18,12 +18,17 @@
             <ul class="pcoded-submenu">
                 <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
                     <a href="{{ route('admin.category.index') }}">
-                        <span class="pcoded-mtext">Add Category</span>
+                        <span class="pcoded-mtext">Category</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
                     <a href="{{ route('admin.category-banner.index') }}">
                         <span class="pcoded-mtext">Category Banner</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/category-ads')? 'active' : '' }}">
+                    <a href="{{ route('admin.category-ads.index') }}">
+                        <span class="pcoded-mtext">Category Ads</span>
                     </a>
                 </li>
             </ul>

@@ -23,7 +23,6 @@ class CategoryDeletedSeeder extends Seeder
             'slug' => 'un-categorized',
             'image' => NULL,
             'status' => '1',
-            'category_color' => 'fcfcfc',
             'menu' => '1',
             'feature' => '1',
             'serial_number' => '1',

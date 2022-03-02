@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\CategoryAdsController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -158,6 +159,9 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('district-inactive/{id}', [DistrictController::class, 'districtInactive'])->name('district.inactive');
     // Message
     Route::resource('message', MessageController::class);
+    Route::resource('category-ads', CategoryAdsController::class);
+    Route::get('category-ads-active/{id}', [CategoryAdsController::class, 'categoryAdsActive'])->name('category-ads.active');
+    Route::get('category-ads-inactive/{id}', [CategoryAdsController::class, 'categoryAdsInactive'])->name('category-ads.inactive');
 });
 
 // customer routes 

@@ -26,36 +26,43 @@
                         @endphp
                         <ul class="category-list">
                             @foreach($categories as $category)
-                                <li>
-                                    <a href="{{ route('category', $category->slug) }}">
-                                        <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
-                                        <span>{{ $category->name }}</span>
-                                    </a>
-                                    @php
-                                        $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->latest()->get();
-                                    @endphp
-                                    <ul>
-                                        @foreach($parentcategories as $parentcategory)
-                                            <li>
-                                                <a href="{{ route('category', $parentcategory->slug) }}">
-                                                    {{ $parentcategory->name }}
-                                                </a>
-                                                @php
-                                                    $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
-                                                @endphp
-                                                <ul>
-                                                    @foreach($childcategories as $childcategory)
-                                                        <li>
-                                                            <a href="{{ route('category', $childcategory->slug) }}">
-                                                                {{ $childcategory->name }}
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </li>
+								@if($category->id == 1)
+								@else
+                                    <li>
+                                        <a href="{{ route('category', $category->slug) }}">
+                                            <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
+                                            <span>{{ $category->name }}</span>
+                                        </a>
+                                        @php
+                                            $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->latest()->get();
+                                        @endphp
+                                        @if($parentcategories->count() > 0)
+                                            <ul>
+                                                @foreach($parentcategories as $parentcategory)
+                                                    <li>
+                                                        <a href="{{ route('category', $parentcategory->slug) }}">
+                                                            {{ $parentcategory->name }}
+                                                        </a>
+                                                        @php
+                                                            $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
+                                                        @endphp
+                                                        @if($childcategories->count() > 0)
+                                                            <ul>
+                                                                @foreach($childcategories as $childcategory)
+                                                                    <li>
+                                                                        <a href="{{ route('category', $childcategory->slug) }}">
+                                                                            {{ $childcategory->name }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
 					</div>
