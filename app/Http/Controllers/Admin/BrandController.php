@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
@@ -57,6 +58,7 @@ class BrandController extends Controller
         
         Brand::insert([
             'name' => $request->name,
+            'slug'=> strtolower(str_replace(' ', '-', $request->name)),
             'image' => $image_url,
             'status' => "1",
             'created_at' => Carbon::now(),
@@ -124,6 +126,7 @@ class BrandController extends Controller
             
             Brand::findOrFail($id)->update([
                 'name'=> $request->name,
+                'slug'=> strtolower(str_replace(' ', '-', $request->name)),
                 'image' => $image_url,
                 'updated_at' => Carbon::now(),
             ]);
@@ -148,5 +151,19 @@ class BrandController extends Controller
     public function destroy($id)
     {
         //
+        $brands =Brand::findOrFail($id);
+        $deleteImage = $brands->image;
+
+        if(file_exists($deleteImage)) {
+            unlink($deleteImage);
+        }
+        // if exsist brnad id on product then update brand id
+        Product::where('brand_id', $id)->update([
+            'brand_id' => '1',
+        ]);
+
+        $brands->delete();
+        Toastr::warning('Brand successfully delete :-)','Success');
+        return redirect()->back();
     }
 }

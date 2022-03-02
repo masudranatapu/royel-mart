@@ -80,7 +80,7 @@
                                                                 <label for="featureChecked">Feature Status</label>
                                                                 <br>
                                                                 <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
-                                                                <label for="showHideChecked" id="showHide">Show</label>
+                                                                <label for="showHideChecked" id="showHide">Hide</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -143,9 +143,13 @@
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    <a title="View Parent Cateogory" href="{{ route('admin.viewparentcategory', $category->id) }}" class="btn btn-success">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
+                                                    @if($category->id == 1)
+
+                                                    @else
+                                                        <a title="View Parent Cateogory" href="{{ route('admin.viewparentcategory', $category->id) }}" class="btn btn-success">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                    @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if($category->status == 1)
@@ -162,13 +166,17 @@
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
-                                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $category->id }})">
-                                                        <i class="ml-1 fa fa-trash"></i>
-                                                    </button>
-                                                    <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy', $category->id) }}" method="POST" style="display: none;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
+                                                    @if($category->id == 1)
+
+                                                    @else
+                                                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $category->id }})">
+                                                            <i class="ml-1 fa fa-trash"></i>
+                                                        </button>
+                                                        <form id="delete-form-{{ $category->id }}" action="{{ route('admin.category.destroy', $category->id) }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    @endif
                                                 </td>
                                                 <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg" role="document">
@@ -222,8 +230,8 @@
                                                                             <input type="checkbox" name="feature" value="1" @if($category->feature == 1) checked @endif id="featureChecked">
                                                                             <label for="featureChecked">Feature Status</label>
                                                                             <br>
-                                                                            <input type="checkbox" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="showHideChecked">
-                                                                            <label for="showHideChecked">Show</label>
+                                                                            <input type="checkbox" class="editShowHide" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="editshowHideChecked">
+                                                                            <label for="editshowHideChecked" class="showHide">Show</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -272,11 +280,20 @@
         };
         $("#showHideChecked").on('click', function() {
              // access properties using this keyword
-             var showHide = ("#showHide").text();
-            if ( this.checked ) {
-                $("#showHide").text("Hide");
-            } else {
-                $("#showHide").text("Show");
+            if($(this).prop("checked") == true){
+                $("#showHide").text("Show");showHide
+            }
+            else if($(this).prop("checked") == false){
+                $(".showHide").text("Hide");
+            }
+        });
+        
+        $(".editShowHide").click(function(){
+            if($(this).prop("checked") == true){
+                $(".showHide").text("Hide");
+            }
+            else if($(this).prop("checked") == false){
+                $(".showHide").text("Show");
             }
         });
     </script>

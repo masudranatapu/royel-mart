@@ -104,6 +104,17 @@
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
                                                         <i class="ml-1 fa fa-edit"></i>
                                                     </button>
+                                                    @if($brand->id == 1)
+
+                                                    @else
+                                                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $brand->id }})">
+                                                            <i class="ml-1 fa fa-trash"></i>
+                                                        </button>
+                                                        <form id="delete-form-{{ $brand->id }}" action="{{ route('admin.brand.destroy', $brand->id) }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    @endif
                                                 </td>
                                                 <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
                                                     <div class="modal-dialog modal-lg" role="document">
@@ -180,5 +191,38 @@
                 reader.readAsDataURL(input.files[0]);
             }
         };
+    </script>
+    <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
+    <script type="text/javascript">
+        function deleteData(id) {
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    // event.preventDefault();
+                    document.getElementById('delete-form-'+id).submit();
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    swal(
+                        'Cancelled',
+                        'Your data is safe :)',
+                        'error'
+                    )
+                }
+            })
+        }
     </script>
 @endpush

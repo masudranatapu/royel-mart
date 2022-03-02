@@ -25,6 +25,7 @@ class User extends Authenticatable
         'cover_image',
         'phone',
         'address',
+        'is_developer',
     ];
 
     /**

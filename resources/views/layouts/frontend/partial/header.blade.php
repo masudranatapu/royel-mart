@@ -88,7 +88,7 @@
                                         @endif
                                     @else
                                         <li><a href="{{ route('login') }}">Sign In</a></li>
-                                        <li><a href="{{ route('register') }}">Sign Up</a></li>
+                                        <li><a href="{{ route('customer.register') }}">Sign Up</a></li>
                                     @endauth
                                 </ul>
                             </div>

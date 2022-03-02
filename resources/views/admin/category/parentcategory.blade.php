@@ -89,7 +89,7 @@
                                                                 <label for="featureChecked">Feature Status</label>
                                                                 <br>
                                                                 <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
-                                                                <label for="showHideChecked" id="showHide">Show</label>
+                                                                <label for="showHideChecked" id="showHide">Hide</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -232,8 +232,8 @@
                                                                             <input type="checkbox" name="feature" value="1" @if($category->feature == 1) checked @endif id="featureChecked">
                                                                             <label for="featureChecked">Feature Status</label>
                                                                             <br>
-                                                                            <input type="checkbox" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="showHideChecked">
-                                                                            <label for="showHideChecked">Show</label>
+                                                                            <input type="checkbox" class="editShowHide" name="show_hide" value="1" @if($category->show_hide == 1) checked @endif id="editshowHideChecked">
+                                                                            <label for="editshowHideChecked" class="showHide">Show</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -280,6 +280,24 @@
                 reader.readAsDataURL(input.files[0]);
             }
         };
+        $("#showHideChecked").on('click', function() {
+             // access properties using this keyword
+            if($(this).prop("checked") == true){
+                $("#showHide").text("Show");
+            }
+            else if($(this).prop("checked") == false){
+                $("#showHide").text("Hide");
+            }
+        });
+        
+        $(".editShowHide").click(function(){
+            if($(this).prop("checked") == true){
+                $(".showHide").text("Hide");
+            }
+            else if($(this).prop("checked") == false){
+                $(".showHide").text("Show");
+            }
+        });
     </script>
     <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
     <script type="text/javascript">

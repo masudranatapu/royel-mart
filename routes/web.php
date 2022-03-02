@@ -23,11 +23,13 @@ use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\DistrictController;
+use App\Http\Controllers\Admin\MessageController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\WishlistController;
+use App\Http\Controllers\Customer\RegisterController;
 
 // all controller
 use App\Http\Controllers\ViewController;
@@ -71,6 +73,12 @@ Route::get('product-details/{slug}', [ViewController::class, 'productDetails'])-
 Route::post('color-size-ajax', [ViewController::class, 'colorSizeAjax'])->name('color-size.ajax');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// register for customer
+Route::get('customer-register', [RegisterController::class, 'customerRegister'])->name('customer.register');
+Route::post('customer-register-confirm', [RegisterController::class, 'customerRegisterConfirm'])->name('customer.register.confirm');
+Route::get('customer-otp-send', [RegisterController::class, 'customerOtpSend'])->name('customer.otp.send');
+Route::post('customer-otp-check', [RegisterController::class, 'customerOtpCheck'])->name('customer.otp.check');
+Route::post('customer-info-save', [RegisterController::class, 'customerInfoSave'])->name('customer.info.save');
 
 // admin routes
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
@@ -147,6 +155,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('district', DistrictController::class);
     Route::get('district-active/{id}', [DistrictController::class, 'districtActive'])->name('district.active');
     Route::get('district-inactive/{id}', [DistrictController::class, 'districtInactive'])->name('district.inactive');
+    // Message
+    Route::resource('message', MessageController::class);
 });
 
 // customer routes 

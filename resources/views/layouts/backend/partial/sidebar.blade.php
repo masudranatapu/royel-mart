@@ -8,13 +8,25 @@
                 <span class="pcoded-mtext">Dashboard</span>
             </a>
         </li>
-        <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
-            <a href="{{ route('admin.category.index') }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/category-banner') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-sidebar"></i>
                 </span>
                 <span class="pcoded-mtext">Category</span>
             </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
+                    <a href="{{ route('admin.category.index') }}">
+                        <span class="pcoded-mtext">Add Category</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
+                    <a href="{{ route('admin.category-banner.index') }}">
+                        <span class="pcoded-mtext">Category Banner</span>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="{{ Request::is('admin/brand') ? 'active' : '' }}">
             <a href="{{ route('admin.brand.index') }}">
@@ -113,27 +125,7 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu ">
-            <a href="javascript:void(0)">
-                <span class="pcoded-micon">
-                    <i class="feather icon-bookmark"></i>
-                </span>
-                <span class="pcoded-mtext">To-Do</span>
-            </a>
-            <ul class="pcoded-submenu">
-                <li class="">
-                    <a href="todo.html">
-                        <span class="pcoded-mtext">To-Do</span>
-                    </a>
-                </li>
-                <li class="">
-                    <a href="notes.html">
-                        <span class="pcoded-mtext">Notes</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/category-banner') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -156,14 +148,14 @@
                         <span class="pcoded-mtext">Banner</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/message')? 'active' : '' }}">
+                    <a href="{{ route('admin.message.index') }}">
+                        <span class="pcoded-mtext">Message</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/policy')? 'active' : '' }}">
                     <a href="{{ route('admin.policy.index') }}">
                         <span class="pcoded-mtext">Policy</span>
-                    </a>
-                </li>
-                <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
-                    <a href="{{ route('admin.category-banner.index') }}">
-                        <span class="pcoded-mtext">Category Banner</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/happy-client')? 'active' : '' }}">

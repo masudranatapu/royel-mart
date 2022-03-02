@@ -118,7 +118,11 @@
                                                         <select name="category_id" id="category" class="form-control">
                                                             <option value="">Select One</option>
                                                             @foreach($categories as $category)
-                                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                                                @if($category->id == 1)
+
+                                                                @else
+                                                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -127,7 +131,11 @@
                                                         <select name="brand_id" class="form-control">
                                                             <option value="" disabled selected>Select One</option>
                                                             @foreach($brands as $brand)
-                                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                                @if($brand->id == 1)
+
+                                                                @else
+                                                                    <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
