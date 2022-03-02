@@ -78,6 +78,7 @@ Route::get('customer-register', [RegisterController::class, 'customerRegister'])
 Route::post('customer-register-confirm', [RegisterController::class, 'customerRegisterConfirm'])->name('customer.register.confirm');
 Route::get('customer-otp-send', [RegisterController::class, 'customerOtpSend'])->name('customer.otp.send');
 Route::post('customer-otp-check', [RegisterController::class, 'customerOtpCheck'])->name('customer.otp.check');
+Route::get('customer-otp-resend', [RegisterController::class, 'customerOtpResend'])->name('customer.otp.resend');
 Route::post('customer-info-save', [RegisterController::class, 'customerInfoSave'])->name('customer.info.save');
 
 // admin routes

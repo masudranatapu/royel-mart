@@ -70,26 +70,30 @@
 		</div>
 	</section>
 	<!-- End Breadcrumb -->
-	<section class="phone-verification-section">
+    <section class="phone-verification-section">
 		<div class="container">
 			<div class="verification-body">
 				<form method="POST" action="{{ route('customer.otp.check') }}" class="send-pin pt-0">
                     @csrf
 					<div class="mini-toast">
-						<span>{{ $getName }} We've sent a 5-digit one time PIN in your phone# {{ $getPhone }}, Please type PIN</span>
-						<button class="close-toast" type="button">
-                            <i class="bi bi-x"></i>
-                        </button>
+						<span>{{ $getName }} We've sent a 5-digit one time PIN in your phone number {{ $getPhone }} Please type PIN</span>
+						<button class="close-toast" type="button"><i class="bi bi-x"></i></button>
 					</div>
-                    <div class="single-input">
-                        <input class="form-control" type="number" name="otp_code" placeholder="OPT Code">
-                    </div>
-					<button type="submit" class="verify-btn">submit OTP</button>
+					<div class="verify-codes">
+						<input type="text" name="code_one" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+						<input type="text" name="code_tow" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+						<input type="text" name="code_three" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+						<input type="text" name="code_four" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+						<input type="text" name="code_five" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+					</div>
+					<button class="verify-btn">submit OTP</button>
+                    <br>
+                    <br>
+					<a href="{{ route('customer.otp.resend') }}" class="btn btn-danger" title="Resend OTP on your phone number">Resend OTP</a>
 				</form>
 			</div>
 		</div>
 	</section>
-	<!-- End Phone Verification Section -->
 @endsection
 
 @push('js')
