@@ -57,9 +57,10 @@ Route::get('contact-us', [HomeController::class, 'contact'])->name('contact');
 Route::post('contact-us', [HomeController::class, 'contactStore'])->name('contact.store');
 Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('arrival');
 Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
-// category product
+// category & brand product
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
-
+Route::get('brand/{slug}', [ViewController::class, 'brandProduct'])->name('brand');
+Route::get('product-price', [ViewController::class, 'priceProduct'])->name('price');
 // cart area routes
 Route::get('cart', [CartController::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{product_id}', [CartController::class, 'addToCart'])->name('add_to_cart');
@@ -146,6 +147,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     // purchase
     Route::resource('purchase', PurchaseController::class);
     Route::post('stock-purchase', [PurchaseController::class, 'stockPurchase'])->name('stock.purchase');
+    Route::post('productpurchase-ajax', [PurchaseController::class, 'productpurchaseAjax'])->name('productpurchase.ajax');
     Route::resource('sold-product', StockController::class);
     Route::get('sold-search', [StockController::class, 'soldSearch'])->name('sold.search');
     Route::get('sold-product-report', [StockController::class, 'showReport'])->name('sold-product.report');
@@ -169,6 +171,12 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['aut
     Route::get('/information', [InformationController::class, 'index'])->name('information');
     
     Route::resource('checkout', CheckoutController::class);
+    Route::get('division-distric/ajax/{div_id}', [CheckoutController::class, 'getDivDis']);
+    Route::get('distric-division/ajax/{dis_id}', [CheckoutController::class, 'getDisDiv']);
+    // my order view
+    Route::get('my-order', [WishlistController::class, 'orderIndex'])->name('order');
+    Route::get('my-order-view/{id}', [WishlistController::class, 'orderView'])->name('order.view');
+    // checkout
 });
 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer'], function () {

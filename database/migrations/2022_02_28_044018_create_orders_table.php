@@ -21,13 +21,13 @@ class CreateOrdersTable extends Migration
             $table->string('size_id')->nullable();
             $table->string('color_id')->nullable();
             $table->string('quantity');
-            $table->string('vat_amount')->nullable();
             $table->string('shipping_amount');
             $table->string('sub_total');
             $table->string('total');
             $table->string('payment_method');
             $table->string('payment_mobile_number')->nullable();
             $table->string('payment_transaction_id')->nullable();
+            $table->string('shippingto')->nullable();
             $table->string('status')->default('Pending');
             $table->string('order_status')->default('Pending');
             $table->string('order_type')->default('General');

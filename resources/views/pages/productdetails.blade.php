@@ -61,6 +61,7 @@
 						<div class="col-lg-6 mb-2">
 							<form action="{{ route('addtocart.withSizeColorQuantity') }}" method="POST">
                         		@csrf
+                        		<input type="hidden" name="product_id" value="{{ $products->id }}">
 								<div class="product-info-area">
 									<h4 class="product-name">{{ $products->name }}</h4>
 									<div class="reviews">

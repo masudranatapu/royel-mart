@@ -104,25 +104,33 @@
 											<div class="price">
 												<span>0</span><span>-</span><span>500</span>
 											</div>
-											<a href="#"><i class="bi bi-chevron-right"></i></a>
+											<a href="{{ route('price', ['min_price'=>0, 'max_price'=>500]) }}">
+												<i class="bi bi-chevron-right"></i>
+											</a>
 										</div>
 										<div class="single-price">
 											<div class="price">
 												<span>500</span><span>-</span><span>1000</span>
 											</div>
-											<a href="#"><i class="bi bi-chevron-right"></i></a>
+											<a href="{{ route('price', ['min_price'=>500, 'max_price'=>1000]) }}">
+												<i class="bi bi-chevron-right"></i>
+											</a>
 										</div>
 										<div class="single-price">
 											<div class="price">
 												<span>1000</span><span>-</span><span>2000</span>
 											</div>
-											<a href="#"><i class="bi bi-chevron-right"></i></a>
+											<a href="{{ route('price', ['min_price'=>1000, 'max_price'=>2000]) }}">
+												<i class="bi bi-chevron-right"></i>
+											</a>
 										</div>
 										<div class="single-price">
 											<div class="price">
 												<span>2000</span><span>-</span><span>5000</span>
 											</div>
-											<a href="#"><i class="bi bi-chevron-right"></i></a>
+											<a href="{{ route('price', ['min_price'=>2000, 'max_price'=>5000]) }}">
+												<i class="bi bi-chevron-right"></i>
+											</a>
 										</div>
 									</div>
 								</div>
@@ -149,7 +157,9 @@
 								<div class="filter-list-wrapper exerp-menu">
 									<ul class="filter-list">
 										@foreach($brands as $brand)
-											<li class=""><a href="">{{ $brand->name }}</a></li>
+											<li class="">
+												<a href="{{ route('brand', $brand->slug) }}">{{ $brand->name }}</a>
+											</li>
 										@endforeach
 									</ul>
 								</div>
@@ -271,7 +281,10 @@
                                                         <span class="discount">৳ {{ $product->discount }}</span>
                                                     </div>										
                                                 </div>
-                                                <a class="cart-btn" href="#"><i class="bi bi-cart-plus"></i>cart</a>
+                                                <a class="cart-btn" href="{{ route('add_to_cart', $product->id) }}">
+													<i class="bi bi-cart-plus"></i>
+													cart
+												</a>
                                             </div>						
                                         </div>
                                     </div>
