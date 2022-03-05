@@ -40,4 +40,11 @@ class WishlistController extends Controller
         Toastr::success('Your review successfully done :-)','success');
         return redirect()->back();
     }
+
+    public function orderView($id)
+    {
+        $title = "Order View";
+        $orders = Order::where('id', $id)->latest()->first();
+        return view('customer.orderview', compact('title', 'orders'));
+    }
 }

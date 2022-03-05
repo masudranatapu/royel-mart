@@ -16,7 +16,7 @@
                     <ul class="list">
                         <li><a href="#">privacy policy</a></li>
                         <li><a href="#">find a store</a></li>
-                        <li><a href="#">track my order</a></li>
+                        <li><a href="{{ route('track.my.order') }}">track my order</a></li>
                         <li><a href="{{ route('contact') }}">contact us</a></li>
                         <li><a href="#">return</a></li>
                         <li><a href="#">FAQ</a></li>

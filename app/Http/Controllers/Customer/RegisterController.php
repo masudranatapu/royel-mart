@@ -10,6 +10,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Division;
 
 class RegisterController extends Controller
 {
@@ -115,6 +116,7 @@ class RegisterController extends Controller
             return view('auth.register-confirm', compact('title', 'getName', 'getPhone', 'getEmail', 'getAddress'));
         }
     }
+    
     public function customerOtpResend(Request $request)
     {
         $otpCode = rand(11111, 99999);
@@ -177,10 +179,10 @@ class RegisterController extends Controller
         Toastr::success('Welcome to your profile :-)','Success');
         return redirect()->route('customer.information');
     }
-    // guestRegisterOtpSend
-    public function guestRegisterOtpSend(Request $request)
+    public function customerGuestRegisterSend(Request $request)
     {
-        $this->validate($request, [
+        
+        $validatedData = $request->validate([
             'phone' => 'required|max:20|unique:users',
         ]);
         // get name and phone in session
@@ -216,14 +218,13 @@ class RegisterController extends Controller
                 'sent' => $sentMessages + 1,
             ]);
             Toastr::success('OTP send on your phone number. Please put your OTP and go to next step :-)','success');
-            return redirect()->route('guest.otp.send');
+            return redirect()->route('customer.guestotp.send');
         }else {
             session()->flush();
             return redirect()->back();
         }
     }
-    
-    public function guestOtpSend(Request $request)
+    public function customerGuestOtpConfirm(Request $request)
     {
         $title = "Guest OTP Check";
         $getPhone = $request->session()->get('phone');
@@ -234,14 +235,20 @@ class RegisterController extends Controller
             return redirect()->back();
         }
     }
-    
-    public function guestOtpResend(Request $request)
+    public function customerGuestOtpResend(Request $request)
     {
+        //
+        $validatedData = $request->validate([
+            'phone' => 'required|max:20|unique:users',
+        ]);
+        // get name and phone in session
+        $request->session()->put('phone', $request->phone);
+
         $otpCode = rand(11111, 99999);
         $request->session()->put('otp_code', $otpCode);
-        
+
         $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
-        $phoneNumber = $request->session()->get('phone');
+        $phoneNumber = $request->phone;
         $messages = Message::latest()->first();
         $allmessages = $messages->message;
         $sentMessages = $messages->sent;
@@ -271,6 +278,37 @@ class RegisterController extends Controller
         }else {
             session()->flush();
             return redirect()->back();
+        }
+    }
+    public function customerGuestOtpCheck(Request $request)
+    {
+        $validatedData = $request->validate([
+            'code_one' => 'required',
+            'code_tow' => 'required',
+            'code_three' => 'required',
+            'code_four' => 'required',
+            'code_five' => 'required',
+        ]);
+        
+        $code_one = $request->code_one;
+        $code_tow = $request->code_tow;
+        $code_three = $request->code_three;
+        $code_four = $request->code_four;
+        $code_five = $request->code_five;
+        
+        $title = "Guest Checkout Product";
+
+        $getOtpCode = $code_one.''.$code_tow.''.$code_three.''.$code_four.''.$code_five;
+        $otpCode = $request->session()->get('otp_code');
+        $getPhone = $request->session()->get('phone');
+
+        if($getOtpCode != $otpCode){
+            Toastr::warning('OTP code not  matched. Please give right otp code for next step :-)','success');
+            return redirect()->back();
+        }else {
+            $divisions = Division::latest()->get();
+            Toastr::success('Now checkout your cart products:-)','success');
+            return view('customer.guest.guestcheckout', compact('title','getPhone', 'divisions'));
         }
     }
 }

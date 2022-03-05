@@ -10,7 +10,6 @@ use Auth;
 use App\Models\Division;
 use App\Models\District;
 use App\Models\ShippingAddress;
-use App\Models\Vat;
 use App\Models\Order;
 
 class CheckoutController extends Controller
@@ -20,7 +19,9 @@ class CheckoutController extends Controller
     {
         $title = "Checkout";
         $divisions = Division::latest()->get();
-        return view('customer.checkout', compact('title', 'divisions'));
+        $districts = District::latest()->get();
+        $shippingaddress = ShippingAddress::where('user_id', Auth::user()->id )->latest()->get();
+        return view('customer.checkout', compact('title', 'divisions', 'shippingaddress', 'districts'));
     }
     // for getDivDis informaiton
     public function getDivDis($div_id)
@@ -129,5 +130,38 @@ class CheckoutController extends Controller
         session()->forget('cart');
         Toastr::success('Order successfully done :-)','Success');
         return redirect()->route('customer.order');
+    }
+    
+    public function shippingAddressUpdate($id)
+    {
+        $this->validate($request, [
+            'shipping_name' => 'required',
+            'shipping_email' => 'required',
+            'shipping_phone' => 'required',
+            'shipping_division_id' => 'required',
+            'shipping_district_id' => 'required',
+            'shipping_address' => 'required',
+        ]);
+
+        ShippingAddress::findOrFail($id)->update([
+            'shipping_name' => $request->shipping_name,
+            'shipping_email' => $request->shipping_email,
+            'shipping_division_id' => $request->shipping_division_id,
+            'shipping_district_id' => $request->shipping_district_id,
+            'shipping_phone' => $request->shipping_phone,
+            'shipping_address' => $request->shipping_address,
+            'updated_at' => Carbon::now(),
+        ]);
+
+        Toastr::info('Shipping address successfully updated :-)','Success');
+        return redirect()->back();
+    }
+
+    // delete shipping address 
+    public function deleteShippingAddress($id)
+    {
+        ShippingAddress::where('id', $id)->delete();
+        Toastr::warning('Shipping address successfully delete :-)','Success');
+        return redirect()->back();
     }
 }

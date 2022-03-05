@@ -15,9 +15,9 @@
 @section('content')
 
     @include('layouts.frontend.partial.breadcrumbcategory')
-    <form action="{{ route('customer.checkout.store') }}" method="POST">
-        @csrf
-        <section class="shipping-summary-section pt-20 pb-60">
+
+	<section class="shipping-summary-section pt-20 pb-60">
+        <form action="">
             <div class="container">
                 <div class="shipping-summary-wrapper">
                     <div class="shipping-area">
@@ -25,57 +25,160 @@
                             <h3 class="area-title">Shipping Address
                                 <span class="d-block">(Please Fill Out Your Information)</span>
                             </h3>
-                            <div class="address">
-                                <div class="delivery-types">
-                                    <label for="">Shipping to</label>
-                                    <div class="type-wrapper">
-                                        <span class="single-type">
-                                            <input type="radio" id="home" name="shippingto" value="home">
-                                            <label for="home">home</label>
-                                        </span>
-                                        <span class="single-type">
-                                            <input type="radio" id="office" name="shippingto" value="office">
-                                            <label for="office">Office</label>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="address-wrapper">
-                                    <div class="single-input">
-                                        <label for="name">Name: </label>
-                                        <input id="name" name="shipping_name" class="form-control" type="text" value="{{ Auth::user()->name }}">
-                                    </div>
-                                    <div class="single-input">
-                                        <label for="email">Email Address: </label>
-                                        <input id="email" name="shipping_email" class="form-control" type="text" value="{{ Auth::user()->email }}">
-                                    </div>
-                                    <div class="single-input">
-                                        <label for="phone">Phone Number: </label>
-                                        <input id="phone" name="shipping_phone" class="form-control" type="text" value="{{ Auth::user()->phone }}">
-                                    </div>
-                                    <div class="single-input">
-                                        <div class="row mx-0">
-                                            <div class="col-6 px-3 ps-0">
-                                                <label for="phone">Division</label>
-                                                <select name="shipping_division_id" id="billing_div_id" class="form-control">
-                                                    <option value="" disabled selected>Select One</option>
-                                                    @foreach($divisions as $division)
-                                                        <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                                    @endforeach
-                                                </select>
+                            <div class="address-area">
+                                <div class="addresses">
+                                    @foreach($shippingaddress as $shippaddress)
+                                        @php
+                                            $orders = App\Models\Order::where('id', $shippaddress->order_id)->latest()->first();
+                                        @endphp
+                                        <div class="single-address">
+                                            <div class="address-head">
+                                                <div class="label-area">
+                                                    <input type="radio" id="address{{$shippaddress->id}}" name="address" value="{{$shippaddress->id}}">
+                                                    <label for="address{{$shippaddress->id}}">address one</label>
+                                                </div>
+                                                <div class="edit-area">
+                                                    <button type="button" class="edit-trigger" data-bs-toggle="modal" data-bs-target="#edit-form{{$shippaddress->id}}">
+                                                        <i class="bi bi-pencil-square"></i>
+                                                        edit
+                                                    </button>
+                                                    <a href="{{ route('customer.deleteshipping.address', $shippaddress->id) }}" onclick="return confirm('Are you sure, you want delete this shipping address ? ')" class="remove-trigger" >
+                                                        <i class="bi bi-trash"></i>
+                                                        delete
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <div class="col-6 px-3 pe-0">
-                                                <label for="phone">District</label>
-                                                <select name="shipping_district_id" id="billing_dis_id" class="form-control">
-                                                    <option disabled selected>First select division</option>
-                                                </select>
+                                            <div class="address-body">
+                                                <div class="address-wrapper">
+                                                    <p><label for="">Shipping To : </label><span>Home</span></p>
+                                                    <p><label for="">name : </label><span>{{  $shippaddress->shipping_name }}</span></p>
+                                                    <p><label for="">Phone : </label><span>{{  $shippaddress->shipping_phone }}</span></p>
+                                                    <p><label for="">Mail : </label><span>{{  $shippaddress->shipping_email }}</span></p>
+                                                    <p><label for="">Address : </label><span>{{  $shippaddress->shipping_address }}</span></p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="single-input">
-                                        <label for="phone">Address</label>
-                                        <textarea class="form-control" name="shipping_address" placeholder="Address" cols="30" rows="3">{{ Auth::user()->address }}</textarea>
-                                    </div>
+                                        <div class="modal fade" id="edit-form{{$shippaddress->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <div class="edit-form">
+                                                        <form action="{{ route('customer.shippingaddress.update', $shippaddress->id) }}" class="address">
+                                                            @csrf
+                                                            <div class="delivery-types">
+                                                                <label for="">Shipping your product to</label>
+                                                                <div class="type-wrapper">
+                                                                    <span class="single-type">
+                                                                        <input type="radio" id="home{{$shippaddress->id}}" name="shippingto" @if($orders->shippingto == 'home') checked @endif>
+                                                                        <label for="home{{$shippaddress->id}}">home</label>
+                                                                    </span>
+                                                                    <span class="single-type">
+                                                                        <input type="radio" id="office{{$shippaddress->id}}" name="shippingto" @if($orders->shippingto == 'office') checked @endif>
+                                                                        <label for="office{{$shippaddress->id}}">Office</label>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="address-wrapper">
+                                                                <div class="single-input">
+                                                                    <label for="name">Name </label>
+                                                                    <input id="name" class="form-control" type="text" name="shipping_name" value="{{ $shippaddress->shipping_name }}">
+                                                                </div>
+                                                                <div class="single-input">
+                                                                    <label for="phone">Email Address </label>
+                                                                    <input id="phone" class="form-control" type="text" name="shipping_email" value="{{ $shippaddress->shipping_email }}">
+                                                                </div>
+                                                                <div class="single-input">
+                                                                    <label for="phone">Phone Number </label>
+                                                                    <input id="phone" class="form-control" type="text" name="shipping_phone" value="{{ $shippaddress->shipping_phone }}">
+                                                                </div>
+                                                                <div class="single-input">
+                                                                    <div class="row mx-0">
+                                                                        <div class="col-6 px-3 ps-0">
+                                                                            <select name="shipping_division_id" class="form-select" id="billing_div_id_{{ $shippaddress->id }}" onChange="editDivision('{{ $shippaddress->id }}')">
+                                                                                <option value="" selected>Select One</option>
+                                                                                @foreach($divisions as $division)
+                                                                                    <option @if($division->id == $shippaddress->shipping_division_id) selected @endif value="{{ $division->id }}">{{ $division->name }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="col-6 px-3 pe-0">
+                                                                            <select name="shipping_district_id" class="form-select" id="billing_dis_id_{{ $shippaddress->id }}">
+                                                                                @foreach($districts as $district)
+                                                                                    <option @if($district->id == $shippaddress->shipping_district_id) selected @endif value="{{ $district->id }}">{{ $district->name }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="single-input">
+                                                                    <textarea class="form-control" name="shipping_address" id="" placeholder="Address" cols="30" rows="10">{{  $shippaddress->shipping_address }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-center">
+                                                                <button type="submit" class="save-address">save</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
+                                <div class="address-footer">
+                                    <button type="button" class="address-trigger">
+                                        <i class="bi bi-plus"></i>
+                                        add new address
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="toggle-form">
+                                <form action="" class="address">
+                                    <div class="delivery-types">
+                                        <label for="">Pick up your product from : </label>
+                                        <div class="type-wrapper">
+                                            <span class="single-type">
+                                                <input type="radio" id="home" name="pickup">
+                                                <label for="home">home</label>
+                                            </span>
+                                            <span class="single-type">
+                                                <input type="radio" id="office" name="pickup">
+                                                <label for="office">Office</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="address-wrapper">
+                                        <div class="single-input">
+                                            <label for="name">Name: </label>
+                                            <input id="name" class="form-control" type="text">
+                                        </div>
+                                        <div class="single-input">
+                                            <label for="phone">Phone Number: </label>
+                                            <input id="phone" class="form-control" type="text">
+                                        </div>
+                                        <div class="single-input">
+                                            <div class="row mx-0">
+                                                <div class="col-6 px-3 ps-0">
+                                                    <label for="phone">Division</label>
+                                                    <select name="" id="billing_div_id" class="form-control">
+                                                        <option value="" disabled selected>Select One</option>
+                                                        @foreach($divisions as $division)
+                                                            <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 px-3 pe-0">
+                                                    <label for="phone">District</label>
+                                                    <select name="" id="billing_dis_id" class="form-control">
+                                                        <option disabled selected>First select division</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="single-input">
+                                            <textarea class="form-control" name="" id="" placeholder="Address" cols="30" rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -199,9 +302,9 @@
                     </div>
                 </div>
             </div>
-        </section>
-    </form>
-    <!-- End Shipping Summary Section -->
+        </form>
+	</section>
+	<!-- End Shipping Summary Section -->
 @endsection
 
 @push('js')
@@ -260,6 +363,30 @@
                 alert("Select your distric");
             };
         });
-    </script>
+        // edit billing
+        function editDivision(id) {
 
+            var billing_div_id = $("#billing_div_id_" + id).val();
+            alert(billing_div_id);
+
+            if(billing_div_id){
+                $.ajax({
+                    url         : "{{ url('customer/division-distric/ajax') }}/" + billing_div_id ,
+                    type        : 'GET',
+                    dataType    : 'json',
+                    success     : function(data) {
+                        // console.log(data);
+                        $("#billing_dis_id_" + id).empty();
+                        $("#billing_dis_id_" + id).append('<option value=""> Select One </option>');
+                        $("#vatDisplay").show();
+                        $.each(data[0], function(key, value){
+                            $("#billing_dis_id_" + id).append('<option value="'+ value.id +'">' + value.name + '</option>');
+                        });
+                    },
+                });
+            }else {
+                alert("Select your division");
+            };
+        };
+    </script>
 @endpush
