@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\CategoryAdsController;
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
 use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\GuestCheckoutController;
 use App\Http\Controllers\Customer\WishlistController;
 use App\Http\Controllers\Customer\RegisterController;
 
@@ -82,7 +83,9 @@ Route::get('customer-otp-send', [RegisterController::class, 'customerOtpSend'])-
 Route::post('customer-otp-check', [RegisterController::class, 'customerOtpCheck'])->name('customer.otp.check');
 Route::get('customer-otp-resend', [RegisterController::class, 'customerOtpResend'])->name('customer.otp.resend');
 Route::post('customer-info-save', [RegisterController::class, 'customerInfoSave'])->name('customer.info.save');
-
+Route::post('guest-register-otp', [RegisterController::class, 'guestRegisterOtpSend'])->name('guest.registerotp.send');
+Route::get('guest-otp-send', [RegisterController::class, 'guestOtpSend'])->name('guest.otp.send');
+Route::get('guest-otp-resend', [RegisterController::class, 'guestOtpResend'])->name('guest.otp.resend');
 // admin routes
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -176,10 +179,11 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['aut
     // my order view
     Route::get('my-order', [WishlistController::class, 'orderIndex'])->name('order');
     Route::get('my-order-view/{id}', [WishlistController::class, 'orderView'])->name('order.view');
+    Route::post('review', [WishlistController::class, 'review'])->name('review');
     // checkout
 });
 
-Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer'], function () {
+Route::group(['as' => 'customer.', 'prefix' => 'customer'], function () {
     // wishlist area with un authentication
-    Route::post('review', [WishlistController::class, 'review'])->name('review');
+    Route::resource('guest-checkout', GuestCheckoutController::class);
 });

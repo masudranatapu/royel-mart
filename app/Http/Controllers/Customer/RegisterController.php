@@ -34,7 +34,7 @@ class RegisterController extends Controller
         $otpCode = rand(11111, 99999);
         $request->session()->put('otp_code', $otpCode);
 
-        $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode;
+        $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
         $phoneNumber = $request->phone;
         $messages = Message::latest()->first();
         $allmessages = $messages->message;
@@ -67,6 +67,7 @@ class RegisterController extends Controller
             return redirect()->back();
         }
     }
+
     public function customerOtpSend(Request $request)
     {
         $title = "OTP Check";
@@ -119,7 +120,7 @@ class RegisterController extends Controller
         $otpCode = rand(11111, 99999);
         $request->session()->put('otp_code', $otpCode);
         
-        $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode;
+        $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
         $phoneNumber = $request->session()->get('phone');
         $messages = Message::latest()->first();
         $allmessages = $messages->message;
@@ -175,5 +176,101 @@ class RegisterController extends Controller
         
         Toastr::success('Welcome to your profile :-)','Success');
         return redirect()->route('customer.information');
+    }
+    // guestRegisterOtpSend
+    public function guestRegisterOtpSend(Request $request)
+    {
+        $this->validate($request, [
+            'phone' => 'required|max:20|unique:users',
+        ]);
+        // get name and phone in session
+        $request->session()->put('phone', $request->phone);
+
+        $otpCode = rand(11111, 99999);
+        $request->session()->put('otp_code', $otpCode);
+
+        $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
+        $phoneNumber = $request->phone;
+        $messages = Message::latest()->first();
+        $allmessages = $messages->message;
+        $sentMessages = $messages->sent;
+
+        // check message
+        if($allmessages != $sentMessages + 1){
+            $smsUrl = "http://66.45.237.70/api.php";
+            $data = [
+                'username'=>"proit24",
+                'password'=>"MHYRNTF5",
+                'number'=> "$phoneNumber",
+                'message'=> "$otp",
+            ];
+
+            $ch = curl_init(); // Initialize cURL
+            curl_setopt($ch, CURLOPT_URL, $smsUrl);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $smsresult = curl_exec($ch);
+            $p = explode('|', $smsresult);
+            $sendstatus = $p[0];
+            Message::where('id', $messages->id)->update([
+                'sent' => $sentMessages + 1,
+            ]);
+            Toastr::success('OTP send on your phone number. Please put your OTP and go to next step :-)','success');
+            return redirect()->route('guest.otp.send');
+        }else {
+            session()->flush();
+            return redirect()->back();
+        }
+    }
+    
+    public function guestOtpSend(Request $request)
+    {
+        $title = "Guest OTP Check";
+        $getPhone = $request->session()->get('phone');
+
+        if($request->session()->get('otp_code')){
+            return view('customer.guest.checkotp', compact('title', 'getPhone'));
+        }else{
+            return redirect()->back();
+        }
+    }
+    
+    public function guestOtpResend(Request $request)
+    {
+        $otpCode = rand(11111, 99999);
+        $request->session()->put('otp_code', $otpCode);
+        
+        $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
+        $phoneNumber = $request->session()->get('phone');
+        $messages = Message::latest()->first();
+        $allmessages = $messages->message;
+        $sentMessages = $messages->sent;
+
+        // check message
+        if($allmessages != $sentMessages + 1){
+            $smsUrl = "http://66.45.237.70/api.php";
+            $data = [
+                'username'=>"proit24",
+                'password'=>"MHYRNTF5",
+                'number'=> "$phoneNumber",
+                'message'=> "$otp",
+            ];
+
+            $ch = curl_init(); // Initialize cURL
+            curl_setopt($ch, CURLOPT_URL, $smsUrl);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $smsresult = curl_exec($ch);
+            $p = explode('|', $smsresult);
+            $sendstatus = $p[0];
+            Message::where('id', $messages->id)->update([
+                'sent' => $sentMessages + 1,
+            ]);
+            Toastr::success('OTP send on your phone number. Please put your OTP and go to next step :-)','success');
+            return redirect()->back();
+        }else {
+            session()->flush();
+            return redirect()->back();
+        }
     }
 }

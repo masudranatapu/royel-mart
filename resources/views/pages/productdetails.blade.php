@@ -121,23 +121,23 @@
 											<input type="hidden" name="color_id" value="" id="viewValue">
 											<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
 										</div>
-									@endif
-									<div class="divider" id="showDivider" style="display:none;"></div>
-									<div class="size" id="showSize" style="display:none;">
-										<label for="">Size </label>
-										<select name="size_id" class="form-select" id="sizeShow">
+										<div class="divider" id="showDivider" style="display:none;"></div>
+										<div class="size" id="showSize" style="display:none;">
+											<label for="">Size </label>
+											<select name="size_id" class="form-select" id="sizeShow" required>
 
-										</select>
-										<a id="size-chart" href="#">Size Chart</a>
-										<div id="chart-popup" class="chart-popup">
-											<div class="inner-popup">
-												<a href="javascript:;" class="close-chart">
-													<i class="bi bi-x"></i>
-												</a>
-												<img src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
+											</select>
+											<a id="size-chart" href="#">Size Chart</a>
+											<div id="chart-popup" class="chart-popup">
+												<div class="inner-popup">
+													<a href="javascript:;" class="close-chart">
+														<i class="bi bi-x"></i>
+													</a>
+													<img src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
+												</div>
 											</div>
 										</div>
-									</div>
+									@endif
 									<div class="divider"></div>
 									<div class="quantity">
 										<label for="">quantity:</label>
