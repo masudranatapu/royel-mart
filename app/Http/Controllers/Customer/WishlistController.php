@@ -7,10 +7,20 @@ use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use App\Models\Review;
+use App\Models\ShippingAddress;
+use App\Models\Order;
+use Auth;
 
 class WishlistController extends Controller
 {
     //
+    public function orderIndex()
+    {
+        $title = "Order View";
+        $orders = Order::where('user_id', Auth::user()->id)->latest()->get();
+        return view('customer.order', compact('title', 'orders'));
+    }
+    
     public function review(Request $request)
     {
         //
@@ -29,5 +39,12 @@ class WishlistController extends Controller
         ]);
         Toastr::success('Your review successfully done :-)','success');
         return redirect()->back();
+    }
+
+    public function orderView($id)
+    {
+        $title = "Order View";
+        $orders = Order::where('id', $id)->latest()->first();
+        return view('customer.orderview', compact('title', 'orders'));
     }
 }

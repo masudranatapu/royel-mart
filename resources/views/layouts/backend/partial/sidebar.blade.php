@@ -93,7 +93,7 @@
             <ul class="pcoded-submenu">
                 <li class="{{ Request::is('admin/product/create') ? 'active' : '' }}">
                     <a href="{{ route('admin.product.create') }}">
-                        <span class="pcoded-mtext">New Product</span>
+                        <span class="pcoded-mtext">Add Product</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/product') ? 'active' : '' }}">
@@ -103,7 +103,7 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/purchase') || Request::is('admin/sold-product') || Request::is('admin/sold-product-report') ? 'pcoded-trigger' : '' }}"">
+        <li class="pcoded-hasmenu {{ Request::is('admin/purchase/create') || Request::is('admin/purchase') || Request::is('admin/sold-product') || Request::is('admin/sold-product-report') ? 'pcoded-trigger' : '' }}"">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-check-circle"></i>
@@ -113,9 +113,14 @@
                 </span>
             </a>
             <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/purchase/create') ? 'active' : '' }}">
+                    <a href="{{ route('admin.purchase.create') }}">
+                        <span class="pcoded-mtext">Add Purchase Product</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/purchase') ? 'active' : '' }}">
                     <a href="{{ route('admin.purchase.index') }}">
-                        <span class="pcoded-mtext">Purchase Product</span>
+                        <span class="pcoded-mtext">Purchase Product List</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/sold-product') ? 'active' : '' }}">

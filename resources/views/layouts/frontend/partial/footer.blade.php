@@ -326,7 +326,11 @@
             @endif
         </div>
         <div class="cart-footer">
-            <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+            @auth
+                <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+            @else
+                <a href="{{ route('customer.guest-checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+            @endauth
             <a href="{{ route('cart') }}" type="button" class="sm-btn">View cart</a>
         </div>
     </div>

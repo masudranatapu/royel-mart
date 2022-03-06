@@ -127,9 +127,19 @@ class CartController extends Controller
     {
         $this->validate($request, [
             'quantity' => 'required',
-            'size_id' => 'required',
-            'color_id' => 'required',
         ]);
+        
+        if($request->size_id){
+            $sizeId = $request->size_id;
+        }else {
+            $sizeId = NULL;
+        }
+
+        if($request->color_id){
+            $colorId = $request->color_id;
+        }else {
+            $colorId = NULL;
+        }
 
         $product_id = $request->product_id;
 
@@ -146,8 +156,8 @@ class CartController extends Controller
                 $product_id => [
                     'name' => $product->name,
                     'quantity' => $request->quantity,
-                    'size_id' => $request->size_id,
-                    'color_id' => $request->color_id,
+                    'size_id' => $sizeId,
+                    'color_id' => $colorId,
                     'price' => $product->sale_price,
                     'image' => $product->thambnail,
                 ]
@@ -170,8 +180,8 @@ class CartController extends Controller
         $cart[$product_id] = [
             'name' => $product->name,
             'quantity' => $request->quantity,
-            'size_id' => $request->size_id,
-            'color_id' => $request->color_id,
+            'size_id' => $sizeId,
+            'color_id' => $colorId,
             'price' => $product->sale_price,
             'image' => $product->thambnail,
         ];
@@ -239,8 +249,6 @@ class CartController extends Controller
     {
         $this->validate($request, [
             'quantity' => 'required',
-            'size_id' => 'required',
-            'color_id' => 'required',
         ]);
 
         $product_id = $request->product_id;
@@ -292,7 +300,6 @@ class CartController extends Controller
         return redirect()->back();
     }
     
-
 	public function cartUpdate(Request $request)
     {
         if($request->id and $request->quantity)

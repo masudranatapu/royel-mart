@@ -29,12 +29,14 @@ use App\Http\Controllers\Admin\CategoryAdsController;
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
 use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\GuestCheckoutController;
 use App\Http\Controllers\Customer\WishlistController;
 use App\Http\Controllers\Customer\RegisterController;
 
 // all controller
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\TrackingOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,9 +59,10 @@ Route::get('contact-us', [HomeController::class, 'contact'])->name('contact');
 Route::post('contact-us', [HomeController::class, 'contactStore'])->name('contact.store');
 Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('arrival');
 Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
-// category product
+// category & brand product
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
-
+Route::get('brand/{slug}', [ViewController::class, 'brandProduct'])->name('brand');
+Route::get('product-price', [ViewController::class, 'priceProduct'])->name('price');
 // cart area routes
 Route::get('cart', [CartController::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{product_id}', [CartController::class, 'addToCart'])->name('add_to_cart');
@@ -81,7 +84,9 @@ Route::get('customer-otp-send', [RegisterController::class, 'customerOtpSend'])-
 Route::post('customer-otp-check', [RegisterController::class, 'customerOtpCheck'])->name('customer.otp.check');
 Route::get('customer-otp-resend', [RegisterController::class, 'customerOtpResend'])->name('customer.otp.resend');
 Route::post('customer-info-save', [RegisterController::class, 'customerInfoSave'])->name('customer.info.save');
-
+// order track my order
+Route::get('tracking-order', [TrackingOrderController::class, 'trackingOrder'])->name('track.my.order');
+Route::get('tracking-order-view', [TrackingOrderController::class, 'trackingorderView'])->name('trackingorder.view');
 // admin routes
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -146,6 +151,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     // purchase
     Route::resource('purchase', PurchaseController::class);
     Route::post('stock-purchase', [PurchaseController::class, 'stockPurchase'])->name('stock.purchase');
+    Route::post('productpurchase-ajax', [PurchaseController::class, 'productpurchaseAjax'])->name('productpurchase.ajax');
     Route::resource('sold-product', StockController::class);
     Route::get('sold-search', [StockController::class, 'soldSearch'])->name('sold.search');
     Route::get('sold-product-report', [StockController::class, 'showReport'])->name('sold-product.report');
@@ -169,9 +175,25 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['aut
     Route::get('/information', [InformationController::class, 'index'])->name('information');
     
     Route::resource('checkout', CheckoutController::class);
+    Route::get('division-distric/ajax/{div_id}', [CheckoutController::class, 'getDivDis']);
+    Route::get('distric-division/ajax/{dis_id}', [CheckoutController::class, 'getDisDiv']);
+    Route::get('delete-shipping-address/{id}', [CheckoutController::class, 'deleteShippingAddress'])->name('deleteshipping.address');
+    Route::get('shippingaddress-update/{id}', [CheckoutController::class, 'shippingAddressUpdate'])->name('shippingaddress.update');
+    // my order view
+    Route::get('my-order', [WishlistController::class, 'orderIndex'])->name('order');
+    Route::get('my-order-view/{id}', [WishlistController::class, 'orderView'])->name('order.view');
+    Route::post('review', [WishlistController::class, 'review'])->name('review');
+    // checkout
 });
 
-Route::group(['as' => 'customer.', 'prefix' => 'customer', 'namespace' => 'Customer'], function () {
+Route::group(['as' => 'customer.', 'prefix' => 'customer'], function () {
     // wishlist area with un authentication
-    Route::post('review', [WishlistController::class, 'review'])->name('review');
+    Route::resource('guest-checkout', GuestCheckoutController::class);
+    Route::get('division-distric/ajax/{div_id}', [GuestCheckoutController::class, 'getDivDis']);
+    Route::get('distric-division/ajax/{dis_id}', [GuestCheckoutController::class, 'getDisDiv']);
+
+    Route::post('guest-register-otp-send', [RegisterController::class, 'customerGuestRegisterSend'])->name('guestregister.send');
+    Route::get('guest-otp-confirm', [RegisterController::class, 'customerGuestOtpConfirm'])->name('guestotp.send');
+    Route::post('guest-otp-resend', [RegisterController::class, 'customerGuestOtpResend'])->name('guestotp.resend');
+    Route::post('guest-checkout-product', [RegisterController::class, 'customerGuestOtpCheck'])->name('guestotp.check');
 });

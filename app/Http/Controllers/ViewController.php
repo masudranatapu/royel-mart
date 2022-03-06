@@ -29,18 +29,7 @@ class ViewController extends Controller
         $oneStarReviews = Review::where('product_id', $products->id)->where('rating', 1)->latest()->get();
         return view('pages.productdetails', compact('title', 'products', 'productsunits', 'reviews', 'fiveStarReviews', 'fourStarReviews', 'threeStarReviews', 'twoStarReviews', 'oneStarReviews'));
     }
-
-    public function categoryProduct($slug)
-    {
-        $category = Category::where('slug', $slug)->first();
-        $title = $category->name;
-        $relatedcategory = Category::latest()->limit(12)->get();
-        $products = Product::where('category_id', $category->id)->latest()->get();
-        $latestcategoryads = CategoryAds::latest()->limit(3)->get();
-        $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
-        $brands = Brand::where('status', 1)->latest()->get();
-        return view('pages.categoryproduct', compact('title', 'category', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
-    }
+    // ajax for product details
     public function colorSizeAjax(Request $request)
     {
         $sizes = ProductSubUnit::where('product_id', $request->p_id)->where('unit_id', $request->id)->get();
@@ -53,5 +42,40 @@ class ViewController extends Controller
             ';
         }
         return $html;
+    }
+
+    public function categoryProduct($slug)
+    {
+        $category = Category::where('slug', $slug)->first();
+        $title = $category->name;
+        $relatedcategory = Category::latest()->limit(12)->get();
+        $products = Product::where('category_id', $category->id)->latest()->get();
+        $latestcategoryads = CategoryAds::latest()->limit(3)->get();
+        $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
+        $brands = Brand::where('status', 1)->latest()->get();
+        return view('pages.categoryproduct', compact('title', 'category', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
+    }
+
+    public function brandProduct($slug)
+    {
+        $findBrands = Brand::where('slug', $slug)->first();
+        $title =  $findBrands->name;
+        $products = Product::where('brand_id', $findBrands->id)->latest()->get();
+        $relatedcategory = Category::latest()->limit(12)->get();
+        $latestcategoryads = CategoryAds::latest()->limit(3)->get();
+        $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
+        $brands = Brand::where('status', 1)->latest()->get();
+        return view('pages.categoryproduct', compact('title', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
+    }
+    
+    public function priceProduct(Request $request)
+    {
+        $title = $request->min_price. ' price ' . ' to '. $request->max_price. ' price product';
+        $relatedcategory = Category::latest()->limit(12)->get();
+        $latestcategoryads = CategoryAds::latest()->limit(3)->get();
+        $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
+        $brands = Brand::where('status', 1)->latest()->get();
+        $products = Product::whereBetween('sale_price', [$request->min_price, $request->max_price])->get();
+        return view('pages.categoryproduct', compact('title', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
     }
 }

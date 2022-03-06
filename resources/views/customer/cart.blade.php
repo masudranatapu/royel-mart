@@ -128,7 +128,11 @@
                 </div>
             </div>
             <div class="text-center mt-40">
-                <a href="{{ route('customer.checkout.index') }}" class="navigation-btn" type="submit">Goto Checkout Page</a>
+                @auth
+                    <a href="{{ route('customer.checkout.index') }}" class="navigation-btn" type="submit">Goto Checkout Page</a>
+                @else
+                    <a href="{{ route('customer.guest-checkout.index') }}" class="navigation-btn" type="submit">Goto Checkout Page</a>
+                @endauth
             </div>
         </div>
     </section>

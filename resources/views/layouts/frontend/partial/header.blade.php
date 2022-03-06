@@ -16,7 +16,7 @@
                     <ul class="list">
                         <li><a href="#">privacy policy</a></li>
                         <li><a href="#">find a store</a></li>
-                        <li><a href="#">track my order</a></li>
+                        <li><a href="{{ route('track.my.order') }}">track my order</a></li>
                         <li><a href="{{ route('contact') }}">contact us</a></li>
                         <li><a href="#">return</a></li>
                         <li><a href="#">FAQ</a></li>
@@ -145,7 +145,11 @@
                                             @endforeach
                                         @endif
                                         <div class="single-item cart-footer">
-                                            <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+                                            @auth
+                                                <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+                                            @else
+                                                <a href="{{ route('customer.guest-checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+                                            @endauth
                                             <a href="{{ route('cart') }}" type="button" class="sm-btn">View cart</a>
                                         </div>
                                     </div>

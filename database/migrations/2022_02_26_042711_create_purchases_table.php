@@ -17,7 +17,10 @@ class CreatePurchasesTable extends Migration
             $table->id();
             $table->string('product_id');
             $table->string('product_code');
+            $table->string('unit_id');
             $table->string('name');
+            $table->string('buying_price');
+            $table->string('sale_price');
             $table->string('quantity');
             $table->timestamps();
         });

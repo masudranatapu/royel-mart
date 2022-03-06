@@ -6,23 +6,27 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
+use App\Models\Message;
 use Auth;
 use App\Models\Division;
 use App\Models\District;
 use App\Models\ShippingAddress;
 use App\Models\Order;
 
-class CheckoutController extends Controller
+class GuestCheckoutController extends Controller
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $title = "Checkout";
-        $divisions = Division::latest()->get();
-        $districts = District::latest()->get();
-        $shippingaddress = ShippingAddress::where('user_id', Auth::user()->id )->latest()->get();
-        return view('customer.checkout', compact('title', 'divisions', 'shippingaddress', 'districts'));
+        //
+        $title = "Guest Checkout";
+        return view('customer.guest.index', compact('title'));
     }
+
     // for getDivDis informaiton
     public function getDivDis($div_id)
     {
@@ -47,6 +51,23 @@ class CheckoutController extends Controller
         return $data = [$disCharge];
     }
     
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -62,6 +83,7 @@ class CheckoutController extends Controller
             'shipping_address' => 'required',
 
         ]);
+        
         // for product id
         if($request->product_id){
             $product_id = trim(implode(',', $request->product_id), ',');
@@ -98,7 +120,6 @@ class CheckoutController extends Controller
         $total = $request->sub_total + $request->shipping_amount ;
         
         $order_id = Order::insertGetId([
-            'user_id' => Auth::user()->id,
             'order_code' => $order_code,
             'product_id' => $product_id,
             'quantity' => $quantity,
@@ -116,7 +137,6 @@ class CheckoutController extends Controller
         ]);
         // for ShippingAddress info
         ShippingAddress::insert([
-            'user_id' => Auth::user()->id,
             'order_id' => $order_id,
             'shipping_name' => $request->shipping_name,
             'shipping_email' => $request->shipping_email,
@@ -127,41 +147,83 @@ class CheckoutController extends Controller
             'created_at' => Carbon::now(),
         ]);
 
-        session()->forget('cart');
-        Toastr::success('Order successfully done :-)','Success');
-        return redirect()->route('customer.order');
+        $title = "Success Checkout";
+
+        $otp = $request->shipping_name. " your Royalmart-bd.com order code is ". $order_code . " .Keep this order code for your product delivery";
+        $phoneNumber = $request->shipping_phone;
+        $messages = Message::latest()->first();
+        $allmessages = $messages->message;
+        $sentMessages = $messages->sent;
+
+        // check message
+        if($allmessages != $sentMessages + 1){
+            $smsUrl = "http://66.45.237.70/api.php";
+            $data = [
+                'username'=>"proit24",
+                'password'=>"MHYRNTF5",
+                'number'=> "$phoneNumber",
+                'message'=> "$otp",
+            ];
+
+            $ch = curl_init(); // Initialize cURL
+            curl_setopt($ch, CURLOPT_URL, $smsUrl);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $smsresult = curl_exec($ch);
+            $p = explode('|', $smsresult);
+            $sendstatus = $p[0];
+            Message::where('id', $messages->id)->update([
+                'sent' => $sentMessages + 1,
+            ]);
+            session()->forget('cart');
+            Toastr::success('Order successfully done :-)','Success');
+            return view('customer.guest.successcheckout', compact('title'));
+        }else {
+            return redirect()->back();
+        }
     }
-    
-    public function shippingAddressUpdate($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $this->validate($request, [
-            'shipping_name' => 'required',
-            'shipping_email' => 'required',
-            'shipping_phone' => 'required',
-            'shipping_division_id' => 'required',
-            'shipping_district_id' => 'required',
-            'shipping_address' => 'required',
-        ]);
-
-        ShippingAddress::findOrFail($id)->update([
-            'shipping_name' => $request->shipping_name,
-            'shipping_email' => $request->shipping_email,
-            'shipping_division_id' => $request->shipping_division_id,
-            'shipping_district_id' => $request->shipping_district_id,
-            'shipping_phone' => $request->shipping_phone,
-            'shipping_address' => $request->shipping_address,
-            'updated_at' => Carbon::now(),
-        ]);
-
-        Toastr::info('Shipping address successfully updated :-)','Success');
-        return redirect()->back();
+        //
     }
 
-    // delete shipping address 
-    public function deleteShippingAddress($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        ShippingAddress::where('id', $id)->delete();
-        Toastr::warning('Shipping address successfully delete :-)','Success');
-        return redirect()->back();
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 }
