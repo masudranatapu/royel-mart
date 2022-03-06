@@ -15,7 +15,6 @@ class BillingAddress extends Model
         'billing_email',
         'billing_division_id',
         'billing_district_id',
-        'billing_thana_code',
         'billing_phone',
         'billing_address',
     ];

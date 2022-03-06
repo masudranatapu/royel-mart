@@ -11,6 +11,7 @@ use Auth;
 use App\Models\Division;
 use App\Models\District;
 use App\Models\ShippingAddress;
+use App\Models\BillingAddress;
 use App\Models\Order;
 
 class GuestCheckoutController extends Controller
@@ -112,9 +113,9 @@ class GuestCheckoutController extends Controller
         $latest_id = Order::select('id')->latest()->first();
 
         if(isset($latest_id)) {
-            $order_code = "O-".sprintf('%04d', $latest_id->id + 1);
+            $order_code = "0".sprintf('%04d', $latest_id->id + 1);
         }else {
-            $order_code = "O-".sprintf('%04d', 1);
+            $order_code = "0".sprintf('%04d', 1);
         }
 
         $total = $request->sub_total + $request->shipping_amount ;
@@ -133,6 +134,17 @@ class GuestCheckoutController extends Controller
             'payment_mobile_number' => $request->payment_mobile_number,
             'payment_transaction_id' => $request->payment_transaction_id,
             'payment_transaction_id' => $request->payment_transaction_id,
+            'created_at' => Carbon::now(),
+        ]);
+        // for billing information
+        BillingAddress::insert([
+            'order_id' => $order_id,
+            'billing_name' => $request->shipping_name,
+            'billing_email' => $request->shipping_email,
+            'billing_division_id' => $request->shipping_division_id,
+            'billing_district_id' => $request->shipping_district_id,
+            'billing_phone' => $request->shipping_phone,
+            'billing_address' => $request->shipping_address,
             'created_at' => Carbon::now(),
         ]);
         // for ShippingAddress info

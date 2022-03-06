@@ -17,7 +17,8 @@
     @include('layouts.frontend.partial.breadcrumbcategory')
 
 	<section class="shipping-summary-section pt-20 pb-60">
-        <form action="">
+        <form action="{{ route('customer.checkout.store') }}" method="POST" >
+            @csrf
             <div class="container">
                 <div class="shipping-summary-wrapper">
                     <div class="shipping-area">
@@ -79,19 +80,19 @@
                                                                 </div>
                                                             </div>
                                                             <div class="address-wrapper">
-                                                                <div class="single-input">
-                                                                    <label for="name">Name </label>
+                                                                <div class="single-input mt-2">
+                                                                    <label for="name" class="mb-2">Name </label>
                                                                     <input id="name" class="form-control" type="text" name="shipping_name" value="{{ $shippaddress->shipping_name }}">
                                                                 </div>
-                                                                <div class="single-input">
-                                                                    <label for="phone">Email Address </label>
+                                                                <div class="single-input mt-2">
+                                                                    <label for="phone" class="mb-2">Email Address </label>
                                                                     <input id="phone" class="form-control" type="text" name="shipping_email" value="{{ $shippaddress->shipping_email }}">
                                                                 </div>
-                                                                <div class="single-input">
-                                                                    <label for="phone">Phone Number </label>
+                                                                <div class="single-input mt-2">
+                                                                    <label for="phone" class="mb-2">Phone Number </label>
                                                                     <input id="phone" class="form-control" type="text" name="shipping_phone" value="{{ $shippaddress->shipping_phone }}">
                                                                 </div>
-                                                                <div class="single-input">
+                                                                <div class="single-input mt-2">
                                                                     <div class="row mx-0">
                                                                         <div class="col-6 px-3 ps-0">
                                                                             <select name="shipping_division_id" class="form-select" id="billing_div_id_{{ $shippaddress->id }}" onChange="editDivision('{{ $shippaddress->id }}')">
@@ -110,7 +111,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="single-input">
+                                                                <div class="single-input mb-3 mt-2">
                                                                     <textarea class="form-control" name="shipping_address" id="" placeholder="Address" cols="30" rows="10">{{  $shippaddress->shipping_address }}</textarea>
                                                                 </div>
                                                             </div>
@@ -134,32 +135,36 @@
                             <div class="toggle-form">
                                 <form action="" class="address">
                                     <div class="delivery-types">
-                                        <label for="">Pick up your product from : </label>
+                                        <label>Shipping to </label>
                                         <div class="type-wrapper">
                                             <span class="single-type">
-                                                <input type="radio" id="home" name="pickup">
+                                                <input type="radio" id="home" name="shippingto" value="home">
                                                 <label for="home">home</label>
                                             </span>
                                             <span class="single-type">
-                                                <input type="radio" id="office" name="pickup">
+                                                <input type="radio" id="office" name="shippingto" value="office">
                                                 <label for="office">Office</label>
                                             </span>
                                         </div>
                                     </div>
                                     <div class="address-wrapper">
-                                        <div class="single-input">
-                                            <label for="name">Name: </label>
-                                            <input id="name" class="form-control" type="text">
+                                        <div class="single-input mt-2">
+                                            <label for="name" class="mb-2">Name: </label>
+                                            <input id="name" name="shipping_name" required class="form-control" type="text" placeholder="Full Name">
                                         </div>
-                                        <div class="single-input">
-                                            <label for="phone">Phone Number: </label>
-                                            <input id="phone" class="form-control" type="text">
+                                        <div class="single-input mt-2">
+                                            <label for="email" class="mb-2">Email Address: </label>
+                                            <input id="email" name="shipping_email" required class="form-control" type="text" placeholder="Email Address">
                                         </div>
-                                        <div class="single-input">
+                                        <div class="single-input mt-2">
+                                            <label for="phone" class="mb-2">Phone Number: </label>
+                                            <input id="phone" name="shipping_phone" class="form-control" type="text" value="" placeholder="Phone">
+                                        </div>
+                                        <div class="single-input mt-2">
                                             <div class="row mx-0">
                                                 <div class="col-6 px-3 ps-0">
-                                                    <label for="phone">Division</label>
-                                                    <select name="" id="billing_div_id" class="form-control">
+                                                    <label for="phone" class="mb-2">Division</label>
+                                                    <select name="shipping_division_id" id="billing_div_id" class="form-control">
                                                         <option value="" disabled selected>Select One</option>
                                                         @foreach($divisions as $division)
                                                             <option value="{{ $division->id }}">{{ $division->name }}</option>
@@ -167,15 +172,16 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-6 px-3 pe-0">
-                                                    <label for="phone">District</label>
-                                                    <select name="" id="billing_dis_id" class="form-control">
+                                                    <label for="phone" class="mb-2">District</label>
+                                                    <select name="shipping_district_id" id="billing_dis_id" class="form-control">
                                                         <option disabled selected>First select division</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="single-input">
-                                            <textarea class="form-control" name="" id="" placeholder="Address" cols="30" rows="10"></textarea>
+                                        <div class="single-input mt-2">
+                                            <label for="phone" class="mb-2">Address</label>
+                                            <textarea class="form-control" name="shipping_address" placeholder="Your Address" cols="30" rows="3"></textarea>
                                         </div>
                                     </div>
                                 </form>
@@ -208,7 +214,7 @@
                                 <tr>
                                     <td>Shipping </td>
                                     <input type="hidden" name="shipping_amount" id="shipping_amount" value="">
-                                    <td> <span id="delivery_amount"> </span> TK</td>
+                                    <td> <span id="delivery_amount"> 0 </span> TK</td>
                                 </tr>
                                 <tr>
                                     <td>Payable Total</td>
@@ -367,7 +373,7 @@
         function editDivision(id) {
 
             var billing_div_id = $("#billing_div_id_" + id).val();
-            alert(billing_div_id);
+            // alert(billing_div_id);
 
             if(billing_div_id){
                 $.ajax({
