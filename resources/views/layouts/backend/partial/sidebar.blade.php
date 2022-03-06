@@ -151,13 +151,23 @@
                         </span>
                     </a>
                 </li>
-                <li class="{{ Request::is('admin/orders-successed') ? 'active' : '' }}">
-                    <a href="{{route('admin.orders.successed')}}">
+                <li class="{{ Request::is('admin/orders-delivered') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.delivered')}}">
                         <span class="pcoded-mtext">
                             Delivered Order
                         </span>
                         <span class="pcoded-badge label label-info">
                             {{ $deliveredOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders-successed') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.successed')}}">
+                        <span class="pcoded-mtext">
+                            Successed Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $successedOrders->count() }}
                         </span>
                     </a>
                 </li>
