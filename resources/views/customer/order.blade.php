@@ -56,8 +56,8 @@
 				                    <p>My Orders</p>
 				                </a>
 				            </li>
-				            <li class="nav-item ">
-				                <a class="nav-link" href="/ui-notifications.html">
+				            <li class="nav-item {{ Route::is('customer.password.change') ? 'active' : '' }}">
+				                <a class="nav-link" href="{{ route('customer.password.change') }}">
 				                    <i class="material-icons">lock</i>
 				                    <p>change passowrd</p>
 				                </a>

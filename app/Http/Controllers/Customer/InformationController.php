@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
+use Auth;
 
 class InformationController extends Controller
 {
@@ -18,70 +23,32 @@ class InformationController extends Controller
         $title = "Customer Profile";
         return view('customer.index', compact('title'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function passChangeView()
     {
-        //
+        $title = "Change Password";
+        return view('customer.password', compact('title'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function updatePass(Request $request, $id)
     {
-        //
-    }
+        $validateData = $request->validate([
+            'oldpassword'=>'required',
+            'password'=>'required|confirmed',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $hasPassword = User::findOrFail($id)->password;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if(Hash::check($request->oldpassword, $hasPassword)) {
+            $userData = User::findOrFail($id);
+            $userData->password = Hash::make($request->password);
+            $userData->save();
+            Auth::logout();
+            
+            Toastr::success('Your Password update successfully :-)','Success');
+            return redirect()->route('login');
+            
+        }else {
+            Toastr::warning('Something is worng. Please try agian :-)','warning');
+            return redirect()->back();
+        }
     }
 }

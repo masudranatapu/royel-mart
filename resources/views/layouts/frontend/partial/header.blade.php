@@ -57,8 +57,8 @@
                 </div>
                 <div class="search-area">
                     <div class="search-wrapper">
-                        <form action="">
-                            <input class="form-control js--search" type="text">
+                        <form action="{{ route('searching') }}" method="get">
+                            <input name="search_product" class="form-control js--search" type="text">
                             <button type="submit" class="submit-search"><i class="ri-search-line"></i></button>
                         </form>
                     </div>

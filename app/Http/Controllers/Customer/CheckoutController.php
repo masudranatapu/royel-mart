@@ -90,9 +90,9 @@ class CheckoutController extends Controller
         $latest_id = Order::select('id')->latest()->first();
 
         if(isset($latest_id)) {
-            $order_code = "O-".sprintf('%04d', $latest_id->id + 1);
+            $order_code = "0".sprintf('%04d', $latest_id->id + 1);
         }else {
-            $order_code = "O-".sprintf('%04d', 1);
+            $order_code = "0".sprintf('%04d', 1);
         }
 
         $total = $request->sub_total + $request->shipping_amount ;

@@ -22,7 +22,7 @@
 			<div class="verification-body">
 				<form action="{{ route('trackingorder.view') }}" method="get">
                     @csrf
-					<input class="form-control" placeholder="Your Order Code like O-0001" name="order_code" type="text">
+					<input class="form-control" placeholder="Your Order Code like 00001" name="order_code" type="text">
 					<button class="verify-btn">Tracking Order</button>
 				</form>
 			</div>
