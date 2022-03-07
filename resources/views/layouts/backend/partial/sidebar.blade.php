@@ -103,6 +103,93 @@
                 </li>
             </ul>
         </li>
+        @php
+            $pendingOrders = App\Models\Order::where('order_status', 'Pending')->latest()->get();
+            $confirmedOrders = App\Models\Order::where('order_status', 'Confirmed')->latest()->get();
+            $processingOrders = App\Models\Order::where('order_status', 'Processing')->latest()->get();
+            $deliveredOrders = App\Models\Order::where('order_status', 'Delivered')->latest()->get();
+            $successedOrders = App\Models\Order::where('order_status', 'Successed')->latest()->get();
+            $canceledOrders = App\Models\Order::where('order_status', 'Canceled')->latest()->get();
+        @endphp
+        <li class="pcoded-hasmenu {{ Request::is('admin/orders') || Request::is('admin/orders-pending') || Request::is('admin/orders-confirmed') || Request::is('admin/orders-processing') ||Request::is('admin/orders-delivered') || Request::is('admin/orders-successed') || Request::is('admin/orders-canceled') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-gitlab"></i>
+                </span>
+                <span class="pcoded-mtext">
+                    Order Management
+                </span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/orders-pending') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.pending')}}">
+                        <span class="pcoded-mtext">
+                            Pending Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $pendingOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders-confirmed') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.confirmed')}}">
+                        <span class="pcoded-mtext">
+                            Confirmed Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $confirmedOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders-processing') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.processing')}}">
+                        <span class="pcoded-mtext">
+                            Processing Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $processingOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders-delivered') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.delivered')}}">
+                        <span class="pcoded-mtext">
+                            Delivered Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $deliveredOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders-successed') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.successed')}}">
+                        <span class="pcoded-mtext">
+                            Successed Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $successedOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders-canceled') ? 'active' : '' }}">
+                    <a href="{{route('admin.orders.canceled')}}">
+                        <span class="pcoded-mtext">
+                            Canceled Order
+                        </span>
+                        <span class="pcoded-badge label label-info">
+                            {{ $canceledOrders->count() }}
+                        </span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/orders') ? 'active' : '' }}">
+                    <a href="{{ route('admin.orders.index') }}">
+                        <span class="pcoded-mtext">
+                            All Orders
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li class="pcoded-hasmenu {{ Request::is('admin/purchase/create') || Request::is('admin/purchase') || Request::is('admin/sold-product') || Request::is('admin/sold-product-report') ? 'pcoded-trigger' : '' }}"">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">

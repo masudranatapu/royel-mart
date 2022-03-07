@@ -81,69 +81,43 @@
 				</div>
 				<div class="main-area">
 					<div class="row">
-						<div class="col-md-4 px-2 single-profile">
-							<div class="card">
-							    <div class="card-header">
-							    	<button class="edit-btn" type="button">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-							    	<div class="wrapper">
-								        <h4 class="card-title">Personal Information</h4>
-								        <p class="card-category">edit profile Information</p>
-							    	</div>
-							    </div>
-							    <div class="card-body">
-							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
-							    	</div>
-							    </div>
-							</div>
-						</div>
-						<div class="col-md-4 px-2 single-profile">
-							<div class="card">
-							    <div class="card-header card-header-primary">
-							    	<button class="edit-btn" type="button">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-							    	<div class="wrapper">
-								        <h4 class="card-title">Shipping Address</h4>
-								        <p class="card-category">edit Shipping address</p>
-							    	</div>
-							    </div>
-							    <div class="card-body">
-							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
-							    	</div>
-							    </div>
-							</div>
-						</div>
-						<div class="col-md-4 px-2 single-profile">
-							<div class="card">
-							    <div class="card-header card-header-primary">
-							    	<button class="edit-btn" type="button">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-							    	<div class="wrapper">
-								        <h4 class="card-title">billing Address</h4>
-								        <p class="card-category">edit billing address</p>
-							    	</div>
-							    </div>
-							    <div class="card-body">
-							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
-							    	</div>
-							    </div>
-							</div>
-						</div>
+                        <div class="col-md-12">
+                            <form action="{{ route('customer.password.update', Auth::user()->id) }}" method="POST">
+                                @csrf
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <label>Old Password</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="password" class="form-control" name="oldpassword" placeholder="Old Password">
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <label>New Password</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="password" class="form-control" name="password" placeholder="New Password">
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <label>Confirm Password</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <label></label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input type="submit" class="btn btn-success" value="Change Password">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 					</div>
 				</div>
 			</div>

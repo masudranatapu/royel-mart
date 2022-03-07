@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\CategoryAdsController;
+use App\Http\Controllers\Admin\OrderController;
 
 // customer controller 
 use App\Http\Controllers\Customer\InformationController;
@@ -37,6 +38,7 @@ use App\Http\Controllers\Customer\RegisterController;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TrackingOrderController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +65,8 @@ Route::get('all-product', [HomeController::class, 'allProduct'])->name('allprodu
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
 Route::get('brand/{slug}', [ViewController::class, 'brandProduct'])->name('brand');
 Route::get('product-price', [ViewController::class, 'priceProduct'])->name('price');
+// searching
+Route::get('searching-product', [SearchController::class, 'searching'])->name('searching');
 // cart area routes
 Route::get('cart', [CartController::class, 'cart'])->name('cart');
 Route::get('add-to-cart/{product_id}', [CartController::class, 'addToCart'])->name('add_to_cart');
@@ -168,12 +172,24 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('category-ads', CategoryAdsController::class);
     Route::get('category-ads-active/{id}', [CategoryAdsController::class, 'categoryAdsActive'])->name('category-ads.active');
     Route::get('category-ads-inactive/{id}', [CategoryAdsController::class, 'categoryAdsInactive'])->name('category-ads.inactive');
+    // Orders 
+    Route::resource('orders', OrderController::class);
+    Route::get('orders-pending', [OrderController::class, 'ordersPending'])->name('orders.pending');
+    Route::get('orders-confirmed', [OrderController::class, 'ordersConfirmed'])->name('orders.confirmed');
+    Route::get('orders-processing', [OrderController::class, 'ordersProcessing'])->name('orders.processing');
+    Route::get('orders-delivered', [OrderController::class, 'ordersDelivered'])->name('orders.delivered');
+    Route::get('orders-successed', [OrderController::class, 'ordersSuccessed'])->name('orders.successed');
+    Route::get('orders-canceled', [OrderController::class, 'ordersCanceled'])->name('orders.canceled');
+    // order status change 
+    Route::post('orders-status', [OrderController::class, 'ordersStatus'])->name('orders.status');
+
 });
 
 // customer routes 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('/information', [InformationController::class, 'index'])->name('information');
-    
+    Route::get('password-change', [InformationController::class, 'passChangeView'])->name('password.change');
+    Route::post('pass-updated/{id}', [InformationController::class, 'updatePass'])->name('password.update');
     Route::resource('checkout', CheckoutController::class);
     Route::get('division-distric/ajax/{div_id}', [CheckoutController::class, 'getDivDis']);
     Route::get('distric-division/ajax/{dis_id}', [CheckoutController::class, 'getDisDiv']);

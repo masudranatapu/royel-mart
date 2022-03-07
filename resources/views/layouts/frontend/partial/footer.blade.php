@@ -105,10 +105,10 @@
     <div class="inner-footer-bar">
         <ul>
             <li><a class="home" href="{{ route('home') }}"><i class="bi bi-house-door"></i><span>home</span></a></li>
-            <li><a class="mobile-nav-trigger" href="#"><i class="ri-function-line"></i><span>Categories</span></a></li>
+            <li><a class="mobile-nav-trigger" href="javascript:;"><i class="ri-function-line"></i><span>Categories</span></a></li>
             <li><a class="shop" href="{{ route('allproduct') }}"><span class="img"><img src="{{asset('frontend/images/logo/icon.png')}}" alt=""></span><span>shop</span></a></li>
-            <li><a class="mobile-search-trigger" href="#"><i class="bi bi-search"></i><span>search</span></a></li>
-            <li><a class="privacy-trigger" href="#"><i class="ri-user-line"></i><span>account</span></a></li>
+            <li><a class="mobile-search-trigger" href="javascript:;"><i class="bi bi-search"></i><span>search</span></a></li>
+            <li><a class="privacy-trigger" href="javascript:;"><i class="ri-user-line"></i><span>account</span></a></li>
         </ul>
     </div>
 </div>
@@ -153,6 +153,8 @@
                         @if(Auth::check() && auth()->user()->role_id == 2)
                             <li><a href="{{ route('home') }}"><i class="bi bi-house-door"></i>home</a></li>
                             <li><a href="{{ route('customer.information') }}"><i class="bi bi-person-fill"></i>account information</a></li>
+                            <li><a href="{{ route('customer.order') }}"><i class="material-icons">content_paste</i>my orders</a></li>
+                            <li><a href="{{ route('customer.password.change') }}"><i class="material-icons-outlined">lock</i>change password</a></li>
                             <li>
                                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="material-icons">logout</i>
@@ -162,10 +164,6 @@
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                            <li><a href="#"><i class="bi bi-person-fill"></i>account information</a></li>
-                            <li><a href="#"><i class="material-icons">content_paste</i>my orders</a></li>
-                            <li><a href="#"><i class="bi bi-heart"></i>my wishlist</a></li>
-                            <li><a href="#"><i class="material-icons-outlined">lock</i>change password</a></li>
                         @endif
                     @else
                     @endauth
@@ -186,7 +184,7 @@
             <div class="links">
                 <ul>
                     <li><a href="#">privacy policy</a></li>
-                    <li><a href="#">track order</a></li>
+                    <li><a href="{{ route('track.my.order') }}">track order</a></li>
                     <li><a href="#">return</a></li>
                     <li><a href="#">FAQ</a></li>
                 </ul>

@@ -78,4 +78,5 @@ class ViewController extends Controller
         $products = Product::whereBetween('sale_price', [$request->min_price, $request->max_price])->get();
         return view('pages.categoryproduct', compact('title', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
     }
+    
 }

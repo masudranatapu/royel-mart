@@ -34,6 +34,46 @@
 		</div>
 		<div class="container">
 			<div class="sidebar-main-wrapper">
+				<div class="sidebar-area">
+				    <div class="logo">
+				        <a target="_blank" href="index.html">
+				        	<img src="{{asset('frontend/images/logo/logo.png')}}" alt="Logo">
+				        	<img src="{{asset('frontend/images/logo/favicon.png')}}" alt="">
+				        </a>
+						<button type="button" class="expand-trigger"><i class="bi bi-chevron-double-right"></i></button>
+				    </div>
+				    <div class="sidebar-wrapper">
+				        <ul class="nav">
+				            <li class="nav-item {{ Route::is('customer.information') ? 'active' : '' }}">
+				                <a class="nav-link" href="{{ route('customer.information') }}">
+				                    <i class="material-icons">person</i>
+				                    <p>Account Information</p>
+				                </a>
+				            </li>
+				            <li class="nav-item {{ Route::is('customer.order') ? 'active' : '' }}">
+				                <a class="nav-link" href="{{ route('customer.order') }}">
+				                    <i class="material-icons">content_paste</i>
+				                    <p>My Orders</p>
+				                </a>
+				            </li>
+				            <li class="nav-item {{ Route::is('customer.password.change') ? 'active' : '' }}">
+				                <a class="nav-link" href="{{ route('customer.password.change') }}">
+				                    <i class="material-icons">lock</i>
+				                    <p>change passowrd</p>
+				                </a>
+				            </li>
+				            <li class="nav-item ">
+				                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+				                    <i class="material-icons">directions_run</i>
+				                    <p>Logout</p>
+				                </a>
+				            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+				        </ul>
+					</div>
+				</div>
 				<div class="main-area">
 					<div class="row">
 						<div class="col-12 px-2">
@@ -60,11 +100,11 @@
 							    							<p class="mb-0">
 							    								<span class="info">Order Pending</span>
 							    							    <span class="date">
-                                                                    @if($orders->updated_at)
-                                                                        {{ $orders->updated_at->format('d M Y h:i A') }}
+                                                                    @if($orders->pending_date)
+                                                                        {{ $orders->pending_date->format('d M Y') }}
                                                                     @else
-                                                                        {{ $orders->created_at->format('d M Y h:i A') }}
-                                                                    @endif
+                                                                        {{ $orders->created_at->format('d M Y') }}
+																	@endif
                                                                 </span>
 							    							</p>
 							    						</li>
@@ -75,10 +115,8 @@
 							    							<p class="mb-0">
 								    							<span class="info">Order Confirmed</span>
 							    							    <span class="date">
-                                                                    @if($orders->updated_at)
-                                                                        {{ $orders->updated_at->format('d M Y h:i A') }}
-                                                                    @else
-                                                                        {{ $orders->created_at->format('d M Y h:i A') }}
+                                                                    @if($orders->confirmed_date)
+																		{{ \Carbon\Carbon::parse($orders->confirmed_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
@@ -90,10 +128,8 @@
 							    							<p class="mb-0">
 								    							<span class="info">Order Processing</span>
 							    							    <span class="date">
-                                                                    @if($orders->updated_at)
-                                                                        {{ $orders->updated_at->format('d M Y h:i A') }}
-                                                                    @else
-                                                                        {{ $orders->created_at->format('d M Y h:i A') }}
+                                                                    @if($orders->processing_date)
+																		{{ \Carbon\Carbon::parse($orders->processing_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
@@ -105,10 +141,8 @@
 							    							<p class="mb-0">
 								    							<span class="info">Order Delivered</span>
 							    							    <span class="date">
-                                                                    @if($orders->updated_at)
-                                                                        {{ $orders->updated_at->format('d M Y h:i A') }}
-                                                                    @else
-                                                                        {{ $orders->created_at->format('d M Y h:i A') }}
+                                                                    @if($orders->delivered_date)
+																		{{ \Carbon\Carbon::parse($orders->delivered_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
@@ -120,10 +154,8 @@
 							    							<p class="mb-0">
 								    							<span class="info">Order Successed</span>
 							    							    <span class="date">
-                                                                    @if($orders->updated_at)
-                                                                        {{ $orders->updated_at->format('d M Y h:i A') }}
-                                                                    @else
-                                                                        {{ $orders->created_at->format('d M Y h:i A') }}
+                                                                    @if($orders->successed_date)
+																		{{ \Carbon\Carbon::parse($orders->successed_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>

@@ -24,6 +24,12 @@ class Order extends Model
         'shippingto',
         'status',
         'order_status',
+        'pending_date',
+        'confirmed_date',
+        'processing_date',
+        'delivered_date',
+        'successed_date',
+        'canceled_date',
         'order_type',
     ];
 }

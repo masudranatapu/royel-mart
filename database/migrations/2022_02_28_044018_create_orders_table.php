@@ -30,6 +30,12 @@ class CreateOrdersTable extends Migration
             $table->string('shippingto')->nullable();
             $table->string('status')->default('Pending');
             $table->string('order_status')->default('Pending');
+            $table->date('pending_date')->nullable();
+            $table->date('confirmed_date')->nullable();
+            $table->date('processing_date')->nullable();
+            $table->date('delivered_date')->nullable();
+            $table->date('successed_date')->nullable();
+            $table->date('canceled_date')->nullable();
             $table->string('order_type')->default('General');
             $table->timestamps();
         });
