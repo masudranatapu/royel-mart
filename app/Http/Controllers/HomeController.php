@@ -14,6 +14,12 @@ use App\Models\Website;
 use App\Models\Contact;
 use Carbon\Carbon;
 use Brian2694\Toastr\Facades\Toastr;
+use App\Models\CategoryAds;
+use App\Models\CategoryBanner;
+use App\Models\ProductUnit;
+use App\Models\SubUnit;
+use App\Models\Brand;
+use App\Models\ProductSubUnit;
 
 class HomeController extends Controller
 {
@@ -76,6 +82,10 @@ class HomeController extends Controller
     {
         $title = "All Product";
         $products = Product::where('product_type', 'Features')->latest()->get();
-        return view('pages.allproduct', compact('title', 'products'));
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->limit(12)->get();
+        $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
+        $brands = Brand::where('status', 1)->latest()->get();
+        $latestcategoryads = CategoryAds::where('status', 1)->latest()->limit(3)->get();
+        return view('pages.allproduct', compact('title', 'categories', 'products', 'categorybanners', 'brands', 'latestcategoryads'));
     }
 }

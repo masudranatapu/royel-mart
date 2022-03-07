@@ -75,7 +75,7 @@ class ViewController extends Controller
         $latestcategoryads = CategoryAds::latest()->limit(3)->get();
         $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
         $brands = Brand::where('status', 1)->latest()->get();
-        $products = Product::whereBetween('sale_price', [$request->min_price, $request->max_price])->get();
+        $products = Product::whereBetween('sale_price', [$request->min_price, $request->max_price])->latest()->get();
         return view('pages.categoryproduct', compact('title', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
     }
     

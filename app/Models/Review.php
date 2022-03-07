@@ -16,6 +16,7 @@ class Review extends Model
         'rating',
         'email',
         'phone',
+        'image',
     ];
     
     public function reviewuser()

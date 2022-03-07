@@ -80,13 +80,13 @@
 					</div>
 				</div>
 				<div class="main-area">
-					<div class="row">
-						<div class="col-md-4 px-2 single-profile">
+					<div class="row mb-3">
+						<div class="col-md-6 px-2 single-profile">
 							<div class="card">
 							    <div class="card-header">
-							    	<button class="edit-btn" type="button">
+							    	<a href="{{ route('customer.profile.updateview') }}" class="edit-btn" type="button">
                                         <i class="bi bi-pencil-square"></i>
-                                    </button>
+                                    </a>
 							    	<div class="wrapper">
 								        <h4 class="card-title">Personal Information</h4>
 								        <p class="card-category">edit profile Information</p>
@@ -102,33 +102,9 @@
 							    </div>
 							</div>
 						</div>
-						<div class="col-md-4 px-2 single-profile">
+						<div class="col-md-6 px-2 single-profile">
 							<div class="card">
 							    <div class="card-header card-header-primary">
-							    	<button class="edit-btn" type="button">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-							    	<div class="wrapper">
-								        <h4 class="card-title">Shipping Address</h4>
-								        <p class="card-category">edit Shipping address</p>
-							    	</div>
-							    </div>
-							    <div class="card-body">
-							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
-							    	</div>
-							    </div>
-							</div>
-						</div>
-						<div class="col-md-4 px-2 single-profile">
-							<div class="card">
-							    <div class="card-header card-header-primary">
-							    	<button class="edit-btn" type="button">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
 							    	<div class="wrapper">
 								        <h4 class="card-title">billing Address</h4>
 								        <p class="card-category">edit billing address</p>
@@ -145,6 +121,37 @@
 							</div>
 						</div>
 					</div>
+					@if($shippingaddresses->count() > 0)
+						<div class="row mt-4">
+							<div class="col-md-12 px-2 single-profile">
+								<div class="card">
+									<div class="card-header card-header-primary">
+										<div class="wrapper">
+											<h4 class="card-title">Shipping Address</h4>
+											<p class="card-category">edit Shipping address</p>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="row">
+											@foreach($shippingaddresses as $shippingaddres)
+												<div class="col-md-6">
+													<div class="wrapper">
+														<p><label for="">name : </label><span>{{$shippingaddres->shipping_name}}</span></p>
+														<p><label for="">Phone : </label><span>{{$shippingaddres->shipping_name}}</span></p>
+														<p><label for="">Mail : </label><span>{{$shippingaddres->shipping_email}}</span></p>
+														<p><label for="">Address : </label><span>{{$shippingaddres->shipping_address}}</span></p>
+													</div>
+													<a href="{{ route('customer.deleteshipping.address', $shippingaddres->id) }}" class="btn btn-danger">
+														Delete
+													</a>
+												</div>
+											@endforeach
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					@endif
 				</div>
 			</div>
 		</div>

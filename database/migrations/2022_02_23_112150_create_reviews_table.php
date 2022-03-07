@@ -22,6 +22,7 @@ class CreateReviewsTable extends Migration
             $table->string('phone')->nullable();
             $table->text('opinion')->nullable();
             $table->string('rating')->nullable();
+            $table->text('image')->nullable();
             $table->timestamps();
         });
     }

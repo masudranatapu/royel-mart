@@ -188,6 +188,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
 // customer routes 
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('/information', [InformationController::class, 'index'])->name('information');
+    Route::get('profile-update-view', [InformationController::class, 'profileUpdateView'])->name('profile.updateview');
+    Route::post('profile/{id}', [InformationController::class, 'profileUpdate'])->name('profile.update');
     Route::get('password-change', [InformationController::class, 'passChangeView'])->name('password.change');
     Route::post('pass-updated/{id}', [InformationController::class, 'updatePass'])->name('password.update');
     Route::resource('checkout', CheckoutController::class);
@@ -212,4 +214,5 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer'], function () {
     Route::get('guest-otp-confirm', [RegisterController::class, 'customerGuestOtpConfirm'])->name('guestotp.send');
     Route::post('guest-otp-resend', [RegisterController::class, 'customerGuestOtpResend'])->name('guestotp.resend');
     Route::post('guest-checkout-product', [RegisterController::class, 'customerGuestOtpCheck'])->name('guestotp.check');
+    Route::post('review', [WishlistController::class, 'review'])->name('review');
 });

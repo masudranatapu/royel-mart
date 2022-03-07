@@ -38,7 +38,7 @@
                                                 <ul>
                                                     @foreach($parentcategories as $parentcategory)
                                                         <li>
-                                                            <a href="{{ route('category', $parentcategory->slug) }}">
+                                                            <a style="font-size: 14px;" href="{{ route('category', $parentcategory->slug) }}">
                                                                 {{ $parentcategory->name }}
                                                             </a>
                                                             @php
@@ -48,7 +48,7 @@
                                                                 <ul>
                                                                     @foreach($childcategories as $childcategory)
                                                                         <li>
-                                                                            <a href="{{ route('category', $childcategory->slug) }}">
+                                                                            <a style="font-size: 14px;" href="{{ route('category', $childcategory->slug) }}">
                                                                                 {{ $childcategory->name }}
                                                                             </a>
                                                                         </li>
@@ -68,7 +68,9 @@
                             <div class="main-slider owl-carousel">
                                 @foreach($sliders as $slider)
                                     <div class="single-slide">
-                                        <img src="{{ asset($slider->image) }}" alt="">
+                                        <a href="{{ $slider->link }}">
+                                            <img src="{{ asset($slider->image) }}" alt="">
+                                        </a>
                                     </div>
                                 @endforeach
                             </div>
@@ -106,7 +108,7 @@
                         @foreach($banners as $banner)
                             <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
                                 <div class="single-banner">
-                                    <a href="#">
+                                    <a href="{{ $banner->link }}">
                                         <img src="{{asset($banner->image)}}" alt="">
                                     </a>
                                 </div>
