@@ -70,27 +70,27 @@
                                     <ul class="list-group">
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Name
-                                            <span class="text-right">sdfaf</span>
+                                            <span class="text-right">{{ $billinginfo->billing_name }}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Email
                                             <span class="text-right">
-                                                <a href="mailto:">
-                                                    sdfasd
+                                                <a href="mailto:{{ $billinginfo->billing_email }}">
+                                                    {{ $billinginfo->billing_email }}
                                                 </a>
                                             </span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Phone
                                             <span class="text-right">
-                                                <a href="tel:">
-                                                    sdfas
+                                                <a href="tel:{{ $billinginfo->billing_phone }}">
+                                                    {{ $billinginfo->billing_phone }}
                                                 </a>
                                             </span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Address
-                                            <span class="text-right">asdfas</span>
+                                            <span class="text-right">{{ $billinginfo->billing_address }}</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -99,27 +99,47 @@
                                     <ul class="list-group">
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Name
-                                            <span class="text-right">asdfasd</span>
+                                            <span class="text-right">
+                                                @if($orders->shipping_name)
+                                                    {{ $orders->shipping_name }}
+                                                @else
+                                                    {{ $shippinginfo->shipping_name }}
+                                                @endif
+                                            </span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Email
                                             <span class="text-right">
-                                                <a href="mailto:">
-                                                    sdfasd
+                                                <a href="mailto:@if($orders->shipping_email) { $orders->shipping_email }} @else {{ $shippinginfo->shipping_email }} @endif">
+                                                    @if($orders->shipping_email)
+                                                        {{ $orders->shipping_email }}
+                                                    @else
+                                                        {{ $shippinginfo->shipping_email }}
+                                                    @endif
                                                 </a>
                                             </span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Phone
                                             <span class="text-right">
-                                                <a href="tel:">
-                                                    adfas
+                                                <a href="tel:@if($orders->shipping_phone) { $orders->shipping_phone }} @else {{ $shippinginfo->shipping_phone }} @endif">
+                                                    @if($orders->shipping_phone)
+                                                        {{ $orders->shipping_phone }}
+                                                    @else
+                                                        {{ $shippinginfo->shipping_phone }}
+                                                    @endif
                                                 </a>
                                             </span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             Address
-                                            <span class="text-right">Hial</span>
+                                            <span class="text-right">
+                                                @if($orders->shipping_address)
+                                                    {{ $orders->shipping_address }}
+                                                @else
+                                                    {{ $shippinginfo->shipping_address }}
+                                                @endif
+                                            </span>
                                         </li>
                                     </ul>
                                 </div>

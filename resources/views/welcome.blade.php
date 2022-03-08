@@ -20,7 +20,7 @@
                     <div class="inner-category-slider">
 						<div class="category-area checknav">
                             @php
-                                $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'DESC')->latest()->limit(18)->get();
+                                $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'asc')->limit(18)->get();
                             @endphp
 							<ul class="category-list">
                                 @foreach($categories as $category)
@@ -32,7 +32,7 @@
                                                 <span>{{ $category->name }}</span>
                                             </a>
                                             @php
-                                                $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->latest()->get();
+                                                $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('serial_number', 'asc')->get();
                                             @endphp
                                             @if($parentcategories->count() > 0)
                                                 <ul>
@@ -42,7 +42,7 @@
                                                                 {{ $parentcategory->name }}
                                                             </a>
                                                             @php
-                                                                $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
+                                                                $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('serial_number', 'asc')->get();
                                                             @endphp
                                                             @if($childcategories->count() > 0)
                                                                 <ul>
@@ -118,6 +118,7 @@
         </div>
     </section>
     <!-- End Send List Banners -->
+    {{-- 
     <section class="flash-sale-section pt-20">
         <div class="container-fluid">
             <div class="heading-area flash-sale-heading-area">
@@ -375,13 +376,14 @@
             <!-- End Product Area -->
         </div>
     </section>
+    --}}
     <!-- End Flash Sale -->
     <section class="category-section pt-2">
         <div class="container-fluid">
             <div class="heading-area">
                 <h1 class="heading">Category</h1>
                 <div class="button-area">
-                    <a href="#">See More</a>
+                    <a href="">See More</a>
                 </div>
             </div>
             <!-- End Heading Area -->

@@ -37,6 +37,12 @@ class CreateOrdersTable extends Migration
             $table->date('successed_date')->nullable();
             $table->date('canceled_date')->nullable();
             $table->string('order_type')->default('General');
+            $table->string('shipping_name')->nullable();
+            $table->string('shipping_email')->nullable();
+            $table->string('shipping_division_id')->nullable();
+            $table->string('shipping_district_id')->nullable();
+            $table->string('shipping_phone')->nullable();
+            $table->text('shipping_address')->nullable();
             $table->timestamps();
         });
     }

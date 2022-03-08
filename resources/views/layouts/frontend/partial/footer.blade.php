@@ -73,7 +73,7 @@
                     <ul class="footer-links">
                         <li><a href="{{ route('about') }}">about us</a></li>
                         @foreach($policies as $policy)
-                            <li><a href="{{ route('policy', $policy->slug) }}">{{ $policy->name }}</a></li>
+                            <li><a href="{{ route('policy.details', $policy->slug) }}">{{ $policy->name }}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -183,21 +183,21 @@
             <div class="divider"></div>
             <div class="links">
                 <ul>
-                    <li><a href="#">privacy policy</a></li>
+                    @foreach($policies as $policy)
+                        <li><a href="{{ route('policy.details', $policy->slug) }}">privacy policy</a></li>
+                    @endforeach
                     <li><a href="{{ route('track.my.order') }}">track order</a></li>
-                    <li><a href="#">return</a></li>
-                    <li><a href="#">FAQ</a></li>
                 </ul>
             </div>
         </div>
         <div class="bottom-area">
             <div class="divider"></div>
             <div class="download-area">
-                <button class="download-app-btn">
+                <a href="javascript:;" class="download-app-btn">
                     <span>download app</span>
                     <i class="android ri-android-fill"></i>
                     <i class="ios bi bi-apple"></i>
-                </button>
+                </a>
             </div>
             <div class="divider"></div>
             <div class="social-area">
@@ -232,7 +232,6 @@
             </div>
             <div class="title-area">
                 <h3 class="title">categories</h3>
-                <a href="">see all</a>
             </div>
         </div>
         @php

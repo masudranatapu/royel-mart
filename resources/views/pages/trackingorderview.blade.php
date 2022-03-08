@@ -372,10 +372,10 @@
 													<div class="card">
 														<div class="card-body">
 															<h4 class="card-title">Shipping Address:</h4>
-															<p><label for="">name : </label><span>Forhad Hossain</span></p>
-															<p><label for="">Phone : </label><span>09877676543</span></p>
-															<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-															<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+															<p><label for="">name : </label><span>{{ $shippinginfo->shipping_name }}</span></p>
+															<p><label for="">Phone : </label><span>{{ $shippinginfo->shipping_phone }}</span></p>
+															<p><label for="">Mail : </label><span>{{ $shippinginfo->shipping_email }}</span></p>
+															<p><label for="">Address : </label><span>{{ $shippinginfo->shipping_address }}</span></p>
 														</div>
 													</div>
 												</div>
@@ -383,10 +383,10 @@
 													<div class="card">
 														<div class="card-body">
 															<h4 class="card-title">Billing Address:</h4>
-															<p><label for="">name : </label><span>Forhad Hossain</span></p>
-															<p><label for="">Phone : </label><span>09877676543</span></p>
-															<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-															<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+															<p><label for="">name : </label><span>{{ $billinginfo->billing_name }}</span></p>
+															<p><label for="">Phone : </label><span>{{ $billinginfo->billing_phone }}</span></p>
+															<p><label for="">Mail : </label><span>{{ $billinginfo->billing_email }}</span></p>
+															<p><label for="">Address : </label><span>{{ $billinginfo->billing_address }}</span></p>
 														</div>
 													</div>
 												</div>

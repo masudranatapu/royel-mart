@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use App\Models\Review;
+use App\Models\BillingAddress;
 use App\Models\ShippingAddress;
 use App\Models\Order;
 use Auth;
@@ -45,6 +46,7 @@ class WishlistController extends Controller
     {
         $title = "Order View";
         $orders = Order::where('id', $id)->latest()->first();
-        return view('customer.orderview', compact('title', 'orders'));
+        $billinginfo = BillingAddress::where('order_id', $id)->latest()->first();
+        return view('customer.orderview', compact('title', 'orders', 'billinginfo'));
     }
 }

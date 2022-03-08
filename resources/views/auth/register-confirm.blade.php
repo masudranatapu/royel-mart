@@ -22,7 +22,7 @@
 					<h4 class="dropdown-title">categories<i class="bi bi-chevron-down"></i></h4>
 					<div class="category-area checknav">
 						@php
-                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'DESC')->limit(18)->get();
+                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'asc')->limit(18)->get();
                         @endphp
                         <ul class="category-list">
                             @foreach($categories as $category)
@@ -34,7 +34,7 @@
 											<span>{{ $category->name }}</span>
 										</a>
 										@php
-											$parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('serial_number', 'DESC')->get();
+											$parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('serial_number', 'asc')->get();
 										@endphp
 										@if($parentcategories->count() > 0 )
 											<ul>
@@ -44,7 +44,7 @@
 															{{ $parentcategory->name }}
 														</a>
 														@php
-															$childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('serial_number', 'DESC')->get();
+															$childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('serial_number', 'asc')->get();
 														@endphp
 														@if($childcategories->count() > 0)
 															<ul>

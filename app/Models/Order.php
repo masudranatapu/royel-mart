@@ -31,5 +31,11 @@ class Order extends Model
         'successed_date',
         'canceled_date',
         'order_type',
+        'shipping_name',
+        'shipping_email',
+        'shipping_division_id',
+        'shipping_district_id',
+        'shipping_phone',
+        'shipping_address',
     ];
 }

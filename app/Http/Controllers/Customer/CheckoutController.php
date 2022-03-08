@@ -10,6 +10,7 @@ use Auth;
 use App\Models\Division;
 use App\Models\District;
 use App\Models\ShippingAddress;
+use App\Models\BillingAddress;
 use App\Models\Order;
 
 class CheckoutController extends Controller
@@ -50,10 +51,6 @@ class CheckoutController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            // order table
-            'shippingto' => 'required',
-            'payment_method' => 'required',
-            // shipping table
             'shipping_name' => 'required',
             'shipping_email' => 'required',
             'shipping_phone' => 'required',
@@ -112,8 +109,36 @@ class CheckoutController extends Controller
             'payment_mobile_number' => $request->payment_mobile_number,
             'payment_transaction_id' => $request->payment_transaction_id,
             'payment_transaction_id' => $request->payment_transaction_id,
+
+            // order shipping
+
+            'shipping_name' => $request->shipping_name,
+            'shipping_email' => $request->shipping_email,
+            'shipping_division_id' => $request->shipping_division_id,
+            'shipping_district_id' => $request->shipping_district_id,
+            'shipping_phone' => $request->shipping_phone,
+            'shipping_address' => $request->shipping_address,
+
             'created_at' => Carbon::now(),
         ]);
+
+        // for save billing info to find this user
+
+        $user = Auth::user();
+
+        // for billing information
+
+        BillingAddress::insert([
+            'order_id' => $order_id,
+            'billing_name' => $user->name,
+            'billing_email' => $user->email,
+            'billing_division_id' => $request->shipping_division_id,
+            'billing_district_id' => $request->shipping_district_id,
+            'billing_phone' => $user->phone,
+            'billing_address' => $user->address,
+            'created_at' => Carbon::now(),
+        ]);
+        
         // for ShippingAddress info
         ShippingAddress::insert([
             'user_id' => Auth::user()->id,

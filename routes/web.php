@@ -56,11 +56,11 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Auth::routes();
 
 Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
-Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy');
 Route::get('contact-us', [HomeController::class, 'contact'])->name('contact');
 Route::post('contact-us', [HomeController::class, 'contactStore'])->name('contact.store');
 Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('arrival');
 Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
+Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy.details');
 // category & brand product
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
 Route::get('brand/{slug}', [ViewController::class, 'brandProduct'])->name('brand');

@@ -105,7 +105,7 @@
                                 <tr>
                                     <td>Shipping </td>
                                     <input type="hidden" name="shipping_amount" id="shipping_amount" value="">
-                                    <td> <span id="delivery_amount"> </span> TK</td>
+                                    <td> <span id="delivery_amount"> 0 </span> TK</td>
                                 </tr>
                                 <tr>
                                     <td>Payable Total</td>
