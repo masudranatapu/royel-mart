@@ -3,23 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Slider;
-use App\Models\Banner;
 use App\Models\MissionVision;
 use App\Models\Category;
+use App\Models\CategoryAds;
+use App\Models\CategoryBanner;
+use App\Models\Brand;
 use App\Models\Product;
+use App\Models\ProductUnit;
+use App\Models\ProductSubUnit;
+use App\Models\Slider;
+use App\Models\Banner;
 use App\Models\About;
 use App\Models\Policy;
 use App\Models\Website;
 use App\Models\Contact;
-use Carbon\Carbon;
-use Brian2694\Toastr\Facades\Toastr;
-use App\Models\CategoryAds;
-use App\Models\CategoryBanner;
-use App\Models\ProductUnit;
+use App\Models\Unit;
 use App\Models\SubUnit;
-use App\Models\Brand;
-use App\Models\ProductSubUnit;
+use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -78,14 +79,17 @@ class HomeController extends Controller
         $newArrivals = Product::where('product_type', 'New Arrival')->latest()->get();
         return view('pages.newarrival', compact('title', 'newArrivals'));
     }
+
     public function allProduct()
     {
         $title = "All Product";
-        $products = Product::where('product_type', 'Features')->latest()->get();
+        $products = Product::latest()->get();
         $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->limit(12)->get();
         $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
         $brands = Brand::where('status', 1)->latest()->get();
         $latestcategoryads = CategoryAds::where('status', 1)->latest()->limit(3)->get();
-        return view('pages.allproduct', compact('title', 'categories', 'products', 'categorybanners', 'brands', 'latestcategoryads'));
+        $units = Unit::where('status', 1)->latest()->get();
+        $subunits = SubUnit::where('status', 1)->latest()->get();
+        return view('pages.allproduct', compact('title', 'units', 'subunits', 'categories', 'products', 'categorybanners', 'brands', 'latestcategoryads'));
     }
 }

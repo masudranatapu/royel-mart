@@ -17,6 +17,7 @@ class CreateSubUnitsTable extends Migration
             $table->id();
             $table->string('unit_id');
             $table->string('name');
+            $table->string('slug');
             $table->string('status');
             $table->timestamps();
         });

@@ -23,7 +23,7 @@
 					<div class="greeting-icon">
 						<img src="{{asset('frontend/images/icons/bags.png')}}" alt="">
 					</div>
-					<h2 class="greeting-title">Success!</h2>
+					<h2 class="greeting-title">Success ! </h2>
 					<p class="greeting-desc">
                         Your Product successfully checkouted. Please check your sms for order code.
                     </p>

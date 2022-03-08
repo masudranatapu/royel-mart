@@ -57,7 +57,7 @@
                                                     {{$product->regular_price}} TK
                                                 </td>
                                                 <td>
-                                                    {{$product->discount}} TK
+                                                    {{$product->discount}} %
                                                 </td>
                                                 <td>{{$product['category']['name']}}</td>
                                                 <td>{{$product->product_type}}</td>

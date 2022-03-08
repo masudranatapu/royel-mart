@@ -55,7 +55,13 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
+#quickSelect .modal-dialog {
+    transition: transform .3s ease-out;
+    transform: translate(0,0) scale(.5);
+}
+#quickSelect.show .modal-dialog {
+    transform: translate(0,0) scale(1);
+}
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
@@ -1378,7 +1384,7 @@ header {}
     flex-wrap: wrap;
     align-items: center;
     column-gap: 10px;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
     border-radius: 3px;
     padding: 4px 8px;
@@ -2933,28 +2939,27 @@ display: flex;
 }
 .product-info-area .size label {}
 .product-info-area .size select {
-    width: auto;
+    width: 80px;
     padding: 3px 10px;
     font-size: 14px;
     color: var(--dark-color);
     background-color: var(--border-color);
     border: none;
     cursor: pointer;
-    min-width: 90px;
 }
 .product-info-area .size a {
     font-size: 14px;
     text-transform: capitalize;
     color: var(--theme-color);
 }
-.product-info-area .colors {}
-.product-info-area .colors label {}
-.product-info-area .colors .colors-wrapper {
+.colors {}
+.colors label {}
+.colors .colors-wrapper {
     display: flex;
     column-gap: 8px;
     margin-top: 6px;
 }
-.product-info-area .colors .colors-wrapper li {
+.colors .colors-wrapper li {
     flex: 0 0 auto;
     width: 35px;
     height: 35px;
@@ -2962,7 +2967,7 @@ display: flex;
     position: relative;
     cursor: pointer;
 }
-.product-info-area .colors .colors-wrapper li::after {
+.colors .colors-wrapper li::after {
     content: '';
     position: absolute;
     left: -3px;
@@ -2975,7 +2980,7 @@ display: flex;
     opacity: 0;
     transition: all 0.3s ease;
 }
-.product-info-area .colors .colors-wrapper li.active::after {
+.colors .colors-wrapper li.active::after {
     visibility: visible;
     opacity: 1;
 }
@@ -3000,6 +3005,11 @@ display: flex;
     width: 30px;
     height: 30px;
     font-size: 15px;
+}
+.product-info-area .quantity .quantity-wrapper .qty i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .product-info-area .quantity .quantity-wrapper .input-wrapper {
     padding: 0 3px;
@@ -5308,7 +5318,157 @@ a.jsmartable-collapse {
 }
 /*============= Logged in Checkout Page Step One Css End =============*/
 
+/*============= Wishlist Page Css Start =============*/
+table.wishlist {
+    vertical-align: middle;
+    color: #555;
+}
+table.wishlist tbody .product-image {
+    margin-bottom: 0;
+}
+table.wishlist>:not(:last-child)>:last-child>*,
+table.wishlist>:not(caption)>*>* {
+    border-bottom-color: var(--border-color);
+}
+table.wishlist>:not(caption)>*:last-child>* {
+    border-bottom-color: transparent;
+}
+table.wishlist tbody tr td:nth-child(2) ~ td,
+table.wishlist thead tr th:nth-child(2) ~ th {
+    text-align: center;
+}
+table.wishlist thead tr th {
+    white-space: nowrap;
+}
+table.wishlist tbody .remove {
+    border: none;
+    background-color: transparent;
+    font-size: 25px;
+    color: var(--lite-dark-color);
+    transition: all 0.3s ease;
+}
+table.wishlist tbody .badge {
+    border-radius: 0;
+}
+table.wishlist tbody .product-image img {
+    width: 80px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+table.wishlist tbody .product-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--lite-dark-color);
+}
+table.wishlist tbody .product-rating .rating {
+    display: flex;
+}
+table.wishlist tbody .product-rating {
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+    text-transform: capitalize;
+    color: #a3a3a3;
+    font-weight: 500;
+}
+table.wishlist tbody .product-rating .rating span {
+    width: 20px;
+    font-size: 12px;
+}
+table.wishlist tbody .product-rating .rating span i {
+    color: #ddd;
+}
+table.wishlist tbody .product-rating .rating span i + i {
+    color: #d56b1f;
+}
+table.wishlist tbody .price {
+    white-space: nowrap;
+}
+table.wishlist .btn-theme {
+    border: 1px solid var(--theme-color);
+    color: var(--white-color);
+    background-color: var(--theme-color);
+    padding: 2px 8px;
+    font-size: 12px;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+/*============= Wishlist Page Css End =============*/
 
+/*============= Change Password Page Css Start =============*/
+.change-pass-form {}
+.change-pass-form .single-input {
+    margin-bottom: 20px;
+}
+.change-pass-form .single-input label {
+    text-transform: capitalize;
+    margin-bottom: 5px;
+    letter-spacing: .5px;
+    cursor: pointer;
+}
+.change-pass-form .single-input input {
+    font-size: 13px;
+    padding: 8px 12px;
+}
+/*============= Change Password Page Css End =============*/
+
+
+.modal label {
+    padding-right: 5px;
+    color: var(--dark-color);
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.modal .quantity .quantity-wrapper {
+    display: flex;
+    align-items: center;
+}
+.modal .quantity .quantity-wrapper .qty {
+    border: none;
+    background-color: var(--border-color);
+    color: var(--theme-color);
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+}
+.modal .quantity .quantity-wrapper .qty i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal .quantity .quantity-wrapper .input-wrapper {
+    padding: 0 3px;
+    margin: 0 10px;
+    border-left: 1px solid var(--theme-color);
+    border-right: 1px solid var(--theme-color);
+}
+.modal .quantity .quantity-wrapper input {
+    border: none;
+    width: 30px;
+    font-size: 16px;
+    text-align: center;
+    padding: 2px 5px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+.modal .product-btn {
+    border: none;
+    padding: 6px 20px;
+    display: inline-flex;
+    align-items: center;
+    column-gap: 5px;
+    color: var(--white-color);
+    font-weight: 400;
+    border-radius: 25px;
+    font-size: 16px;
+    background-color: #F15A29;
+}
 
 
 

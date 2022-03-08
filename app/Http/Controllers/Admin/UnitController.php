@@ -47,6 +47,7 @@ class UnitController extends Controller
         ]);
         Unit::insert([
             'name' => $request->name,
+            'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'status' => "1",
         ]);
         Toastr::success('Unit successfully save :-)','Success');
@@ -98,6 +99,7 @@ class UnitController extends Controller
         ]);
         Unit::findOrFaiL($id)->update([
             'name' => $request->name,
+            'slug' => strtolower(str_replace(' ', '-', $request->name)),
         ]);
         Toastr::info('Unit successfully updated :-)','Success');
         return redirect()->back();

@@ -25,17 +25,14 @@ class TrackingOrderController extends Controller
 
         $title = $request->order_code;
 
-        $orders = Order::where('order_code', $request->order_code)->latest()->first();
-        
-        $billinginfo = BillingAddress::where('order_id', $orders->id)->latest()->first();
-        $shippinginfo = ShippingAddress::where('order_id', $orders->id)->latest()->first();
-
-        if(!$orders){
-            Toastr::warning('Your order not found form order table :-)','Success');
-            return redirect()->back();
-        }
-        if($orders){
+        $orders = Order::where('order_code', $request->order_code)->first();
+        if($orders) {
+            $billinginfo = BillingAddress::where('order_id', $orders->id)->latest()->first();
+            $shippinginfo = ShippingAddress::where('order_id', $orders->id)->latest()->first();
             return view('pages.trackingorderview', compact('title', 'orders', 'billinginfo', 'shippinginfo'));
+        }else {
+            Toastr::error('Your product order code was not defind :-)','info');
+            return redirect()->back();
         }
     }
 }
