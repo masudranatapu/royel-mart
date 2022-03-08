@@ -9,7 +9,12 @@ class CategoryBanner extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'category_id',
         'image',
         'status',
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
 }

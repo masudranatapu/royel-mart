@@ -395,7 +395,7 @@
     clickElement.click(function(){
         $(this).closest("li").find("> ul").slideToggle("100");
         $(this).closest("li").toggleClass("active");
-        // return false;
+        return false;
     });
     $(".mobile-nav-trigger").click(function(){
         $(".mobile-nav").addClass("show");

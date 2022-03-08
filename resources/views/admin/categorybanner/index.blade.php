@@ -38,6 +38,17 @@
                                                     <form action="{{ route('admin.category-banner.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
+                                                            <label class="col-md-3 text-right">Category</label>
+                                                            <div class="col-md-9">
+                                                                <select name="category_id" id="" class="form-control">
+                                                                    <option value="">Select One</option>
+                                                                    @foreach($categories as $category)
+                                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
                                                             <label class="col-md-3 text-right">Image ( 1583 * 300 )</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
@@ -69,6 +80,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">SL No</th>
+                                            <th class="text-center">Category Name</th>
                                             <th class="text-center">Image</th>
                                             <th class="text-center">Status</th>
                                             <th class="text-center">Action</th>
@@ -78,6 +90,7 @@
                                         @foreach($categorybanners as $key => $categorybanner)
                                             <tr>
                                                 <td class="text-center">{{  $key + 1 }}</td>
+                                                <td class="text-center">{{  $categorybanner['category']['name'] }}</td>
                                                 <td class="text-center">
                                                     <img wodth="60" height="60" src="{{ asset($categorybanner->image) }}">
                                                 </td>
@@ -117,6 +130,17 @@
                                                                 <form action="{{ route('admin.category-banner.update', $categorybanner->id) }}" method="POST" enctype="multipart/form-data">
                                                                     @csrf
                                                                     @method('PUT')
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-3 text-right">Category</label>
+                                                                        <div class="col-md-9">
+                                                                            <select name="category_id" id="" class="form-control">
+                                                                                <option value="">Select One</option>
+                                                                                @foreach($categories as $category)
+                                                                                    <option @if($category->id == $categorybanner->category_id) selected @endif value="{{ $category->id }}">{{ $category->name }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right">Image ( 1583 * 300 ) </label>
                                                                         <div class="col-md-9">

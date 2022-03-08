@@ -30,7 +30,7 @@
                                     <label for="">Shipping to</label>
                                     <div class="type-wrapper">
                                         <span class="single-type">
-                                            <input type="radio" id="home" name="shippingto" value="home">
+                                            <input type="radio" id="home" name="shippingto" value="home" checked>
                                             <label for="home">home</label>
                                         </span>
                                         <span class="single-type">
@@ -57,7 +57,7 @@
                                             <div class="col-6 px-3 ps-0">
                                                 <label for="phone">City</label>
                                                 <select name="shipping_division_id" id="billing_div_id" class="form-control" required>
-                                                    <option  disabled selected>Select One</option>
+                                                    <option  disabled value="" selected>Select One</option>
                                                     @foreach($divisions as $division)
                                                         <option value="{{ $division->id }}">{{ $division->name }}</option>
                                                     @endforeach
@@ -66,14 +66,14 @@
                                             <div class="col-6 px-3 pe-0">
                                                 <label for="phone">Area</label>
                                                 <select name="shipping_district_id" id="billing_dis_id" class="form-control" required>
-                                                    <option disabled selected>First select division</option>
+                                                    <option disabled value="" selected>First select division</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="single-input">
                                         <label for="phone">Address</label>
-                                        <textarea class="form-control" name="shipping_address" placeholder="Your Address" cols="30" rows="3"></textarea>
+                                        <textarea class="form-control" required name="shipping_address" placeholder="Your Address" cols="30" rows="3"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                             <div class="payment-types">
                                 <div class="single-type">
                                     <div class="inner-type">
-                                        <input id="cash" type="radio" name="payment_method" value="Cash">
+                                        <input id="cash" type="radio" name="payment_method" value="Cash" checked>
                                         <label for="cash">Cash on Delivery</label>
                                     </div>
                                 </div>
@@ -152,36 +152,6 @@
                                                 <li><img src="{{asset('frontend/images/payments/2.jpg')}}" alt=""></li>
                                                 <li><img src="{{asset('frontend/images/payments/3.jpg')}}" alt=""></li>
                                                 <li><img src="{{asset('frontend/images/payments/4.jpg')}}" alt=""></li>
-                                            </ul>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="single-type">
-                                    <div class="inner-type">
-                                        <input id="bkash" type="radio" name="payment_method" value="Bkash">
-                                        <label for="bkash">
-                                            <ul>
-                                                <li><img src="{{asset('frontend/images/payments/bkash.png')}}" alt=""></li>
-                                            </ul>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="single-type">
-                                    <div class="inner-type">
-                                        <input id="nagad" type="radio" name="payment_method" value="Nagad">
-                                        <label for="nagad">
-                                            <ul>
-                                                <li><img src="{{asset('frontend/images/payments/nagad.png')}}" alt=""></li>
-                                            </ul>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="single-type">
-                                    <div class="inner-type">
-                                        <input id="rocket" type="radio" name="payment_method" value="Rocket">
-                                        <label for="rocket">
-                                            <ul>
-                                                <li><img src="{{asset('frontend/images/payments/rocket.png')}}" alt=""></li>
                                             </ul>
                                         </label>
                                     </div>

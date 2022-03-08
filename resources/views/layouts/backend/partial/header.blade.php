@@ -76,6 +76,11 @@
                     </ul>
                 </div>
             </li>
+            <li class="header-notification">
+                <a target="blank" href="{{ route('home') }}">
+                    <i class="fa fa-soccer-ball-o"></i>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

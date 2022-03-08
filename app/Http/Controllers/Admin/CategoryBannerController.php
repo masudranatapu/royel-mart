@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CategoryBanner;
+use App\Models\Category;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
@@ -20,7 +21,8 @@ class CategoryBannerController extends Controller
         //
         $title = "Category Banner";
         $categorybanners = CategoryBanner::latest()->get();
-        return view('admin.categorybanner.index', compact('title', 'categorybanners'));
+        $categories = Category::where('status', 1)->latest()->get();
+        return view('admin.categorybanner.index', compact('title', 'categorybanners', 'categories'));
     }
 
     /**
@@ -43,6 +45,7 @@ class CategoryBannerController extends Controller
     {
         //
         $this->validate($request, [
+            'category_id' => 'required',
             'image' => 'required',
         ]);
         
@@ -55,6 +58,7 @@ class CategoryBannerController extends Controller
         $image_url = $upload_path.$categorybanner_image_name;
         
         CategoryBanner::insert([
+            'category_id' => $request->category_id,
             'image' => $image_url,
             'status' => "1",
             'created_at' => Carbon::now(),
@@ -100,8 +104,11 @@ class CategoryBannerController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $this->validate($request, [
+            'category_id' => 'required',
+        ]);
+        
         $categorybanner_image = $request->file('image');
-
         $slug = 'categorybanner';
         if(isset($categorybanner_image)) {
             $categorybanner_image_name = $slug.'-'.uniqid().'.'.$categorybanner_image->getClientOriginalExtension();
@@ -112,19 +119,21 @@ class CategoryBannerController extends Controller
             if($old_categorybanner_image->image){
                 unlink($old_categorybanner_image->image);
             }
-
             $image_url = $upload_path.$categorybanner_image_name;
 
             CategoryBanner::findOrFail($id)->update([
+                'category_id' => $request->category_id,
                 'image' => $image_url,
                 'updated_at' => Carbon::now(),
             ]);
-
             Toastr::success('Category banner successfully save :-)','Success');
             return redirect()->back();
-
         }else {
-            Toastr::error('Select your category banner image :-)','Success');
+            CategoryBanner::findOrFail($id)->update([
+                'category_id' => $request->category_id,
+                'updated_at' => Carbon::now(),
+            ]);
+            Toastr::success('Category banner successfully save without image :-)','Success');
             return redirect()->back();
         }
     }

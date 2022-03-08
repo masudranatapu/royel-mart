@@ -18,14 +18,15 @@
 
     <section class="phone-verification-section">
 		<div class="container">
-			<div class="title-area">
-				<h2 class="title">Enter your phone number</h2>
-			</div>
 			<div class="verification-body">
+				<h2 class="title mb-4">Enter your phone number and get OTP</h2>
 				<form method="POST" action="{{ route('customer.guestregister.send') }}">
                     @csrf
 					<input class="form-control" placeholder="Enter Your Phone Number" type="number" name="phone">
 					<button class="verify-btn">SEND PIN</button>
+					<br>
+					<br>
+					Already have an account <a class="text-success" href="{{ route('login') }}">Log In</a>
 				</form>
 			</div>
 		</div>

@@ -52,6 +52,7 @@ class SubUnitController extends Controller
         SubUnit::insert([
             'unit_id' => $request->unit_id,
             'name' => $request->name,
+            'slug' => strtolower(str_replace(' ', '-', $request->name)),
             'status' => "1",
         ]);
 
@@ -104,6 +105,7 @@ class SubUnitController extends Controller
         SubUnit::findOrFaiL($id)->update([
             'unit_id' => $request->unit_id,
             'name' => $request->name,
+            'slug' => strtolower(str_replace(' ', '-', $request->name)),
         ]);
         Toastr::info('Sub unit successfully updated :-)','Success');
         return redirect()->back();

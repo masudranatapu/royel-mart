@@ -138,7 +138,7 @@
                                         <label>Shipping to </label>
                                         <div class="type-wrapper">
                                             <span class="single-type">
-                                                <input type="radio" id="home" name="shippingto" value="home">
+                                                <input type="radio" id="home" name="shippingto" value="home" checked>
                                                 <label for="home">home</label>
                                             </span>
                                             <span class="single-type">
@@ -248,7 +248,7 @@
                             <div class="payment-types">
                                 <div class="single-type">
                                     <div class="inner-type">
-                                        <input id="cash" type="radio" name="payment_method" value="Cash">
+                                        <input id="cash" type="radio" name="payment_method" value="Cash" checked>
                                         <label for="cash">Cash on Delivery</label>
                                     </div>
                                 </div>
@@ -261,36 +261,6 @@
                                                 <li><img src="{{asset('frontend/images/payments/2.jpg')}}" alt=""></li>
                                                 <li><img src="{{asset('frontend/images/payments/3.jpg')}}" alt=""></li>
                                                 <li><img src="{{asset('frontend/images/payments/4.jpg')}}" alt=""></li>
-                                            </ul>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="single-type">
-                                    <div class="inner-type">
-                                        <input id="bkash" type="radio" name="payment_method" value="Bkash">
-                                        <label for="bkash">
-                                            <ul>
-                                                <li><img src="{{asset('frontend/images/payments/bkash.png')}}" alt=""></li>
-                                            </ul>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="single-type">
-                                    <div class="inner-type">
-                                        <input id="nagad" type="radio" name="payment_method" value="Nagad">
-                                        <label for="nagad">
-                                            <ul>
-                                                <li><img src="{{asset('frontend/images/payments/nagad.png')}}" alt=""></li>
-                                            </ul>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="single-type">
-                                    <div class="inner-type">
-                                        <input id="rocket" type="radio" name="payment_method" value="Rocket">
-                                        <label for="rocket">
-                                            <ul>
-                                                <li><img src="{{asset('frontend/images/payments/rocket.png')}}" alt=""></li>
                                             </ul>
                                         </label>
                                     </div>

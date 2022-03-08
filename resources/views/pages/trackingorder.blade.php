@@ -16,10 +16,8 @@
     @include('layouts.frontend.partial.breadcrumbcategory')
 	<section class="phone-verification-section">
 		<div class="container">
-			<div class="title-area">
-				<h2 class="title">Tracking your order now</h2>
-			</div>
 			<div class="verification-body">
+				<h2 class="title mb-4">Tracking your order now</h2>
 				<form action="{{ route('trackingorder.view') }}" method="get">
                     @csrf
 					<input class="form-control" placeholder="Your Order Code like 00001" name="order_code" type="text">

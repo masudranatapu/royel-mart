@@ -62,9 +62,12 @@ Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('
 Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
 Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy.details');
 // category & brand product
+Route::get('all-category', [ViewController::class, 'allCategory'])->name('all.category');
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
 Route::get('brand/{slug}', [ViewController::class, 'brandProduct'])->name('brand');
 Route::get('product-price', [ViewController::class, 'priceProduct'])->name('price');
+Route::get('color-product/{slug}', [ViewController::class, 'colorProduct'])->name('color.product');
+Route::get('size-product/{slug}', [ViewController::class, 'sizeProduct'])->name('size.product');
 // searching
 Route::get('searching-product', [SearchController::class, 'searching'])->name('searching');
 // cart area routes

@@ -12,6 +12,7 @@ class SubUnit extends Model
     protected $fillable = [
         'unit_id',
         'name',
+        'slug',
         'status',
     ];
 
