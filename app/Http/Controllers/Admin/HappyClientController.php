@@ -43,9 +43,7 @@ class HappyClientController extends Controller
     {
         //
         $this->validate($request, [
-            'name' => 'required',
             'image' => 'required',
-            'link' => 'required',
         ]);
         $client_image = $request->file('image');
         $slug = 'client';
@@ -108,10 +106,6 @@ class HappyClientController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
         $client_image = $request->file('image');
         $slug = 'client';
         if(isset($client_image)) {

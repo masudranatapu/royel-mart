@@ -33,7 +33,8 @@
                         <div class="single-featured-category">
                             <figure>
                                 <a href="{{ $category->link }}">
-                                    <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt=""></a>
+                                    <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
+								</a>
                             </figure>
                             <h3 class="title">
                                 <a href="{{ $category->link }}">
@@ -96,6 +97,39 @@
 					<aside class="sidebar">
 						<div class="inner-sidebar">
 							<div class="single-widget">
+								<h3 class="widget-title">brand</h3>
+								<div class="filter-list-wrapper exerp-menu">
+									<ul class="filter-list">
+										@foreach($brands as $brand)
+											@if($brand->id == 1)
+
+											@else
+												<li class="{{ route('brand', $brand->slug) }}">
+													<a href="{{ route('brand', $brand->slug) }}">{{ $brand->name }}</a>
+												</li>
+											@endif
+										@endforeach
+									</ul>
+								</div>
+							</div>
+							<div class="single-widget">
+								<h3 class="widget-title">color family</h3>
+								<div class="color-filter exerp-menu">
+									<ul class="colors">
+										<li class="active"><a class="black" style="background-color: #020202;" href="#"></a></li>
+										<li><a class="grey" style="background-color: #95A9B2;" href="#"></a></li>
+										<li><a class="red" style="background-color: #B82222;" href="#"></a></li>
+										<li><a class="brown" style="background-color: #E2BB8D;" href="#"></a></li>
+										<li><a class="grey" style="background-color: #95A9B2;" href="#"></a></li>
+										<li><a class="red" style="background-color: #B82222;" href="#"></a></li>
+										<li><a class="brown" style="background-color: #E2BB8D;" href="#"></a></li>
+									</ul>
+									<div class="text-end pe-2">
+										<a class="viewmore-btn" href="#">view more<i class="bi bi-chevron-right"></i></a>
+									</div>
+								</div>
+							</div>
+							<div class="single-widget">
 								<h3 class="widget-title">filters</h3>
 								<div class="price-filter">
 									<span class="label">price</span>
@@ -133,51 +167,6 @@
 											</a>
 										</div>
 									</div>
-								</div>
-							</div>
-							<div class="single-widget">
-								<h3 class="widget-title">color family</h3>
-								<div class="color-filter exerp-menu">
-									<ul class="colors">
-										<li class="active"><a class="black" style="background-color: #020202;" href="#"></a></li>
-										<li><a class="grey" style="background-color: #95A9B2;" href="#"></a></li>
-										<li><a class="red" style="background-color: #B82222;" href="#"></a></li>
-										<li><a class="brown" style="background-color: #E2BB8D;" href="#"></a></li>
-										<li><a class="grey" style="background-color: #95A9B2;" href="#"></a></li>
-										<li><a class="red" style="background-color: #B82222;" href="#"></a></li>
-										<li><a class="brown" style="background-color: #E2BB8D;" href="#"></a></li>
-									</ul>
-									<div class="text-end pe-2">
-										<a class="viewmore-btn" href="#">view more<i class="bi bi-chevron-right"></i></a>
-									</div>
-								</div>
-							</div>
-							<div class="single-widget">
-								<h3 class="widget-title">brand</h3>
-								<div class="filter-list-wrapper exerp-menu">
-									<ul class="filter-list">
-										@foreach($brands as $brand)
-											<li class="">
-												<a href="{{ route('brand', $brand->slug) }}">{{ $brand->name }}</a>
-											</li>
-										@endforeach
-									</ul>
-								</div>
-							</div>
-							<div class="single-widget">
-								<h3 class="widget-title">Services</h3>
-								<div class="filter-list-wrapper exerp-menu">
-									<ul class="filter-list">
-										<li class="active"><a href="#">Instalment</a></li>
-										<li><a href="#">Cash on Delivery</a></li>
-										<li><a href="#">Fulfiled by Royelmart</a></li>
-										<li><a href="#">Freeshipping</a></li>
-										<li><a href="#">Royalmall</a></li>
-										<li><a href="#">Cash on Delivery</a></li>
-										<li><a href="#">Fulfiled by Royelmart</a></li>
-										<li><a href="#">Freeshipping</a></li>
-										<li><a href="#">Royalmall</a></li>
-									</ul>
 								</div>
 							</div>
 							<div class="single-widget">
@@ -291,20 +280,6 @@
                                 </div>
                             </div>
                         @endforeach
-					</div>
-					<div class="row">
-						<div class="col-12 px-2">
-							<div class="pagination-wrapper mt-40">
-								<ul class="pagination">
-									<li><a href="#"><i class="bi bi-arrow-left-short"></i></a></li>
-									<li class="active"><a href="#"><span>1</span></a></li>
-									<li><a href="#"><span>2</span></a></li>
-									<li><a href="#"><span>3</span></a></li>
-									<li><a href="#"><span>4</span></a></li>
-									<li><a href="#"><i class="bi bi-arrow-right-short"></i></a></li>
-								</ul>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>

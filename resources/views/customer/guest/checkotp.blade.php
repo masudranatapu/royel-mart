@@ -15,7 +15,6 @@
 @section('content')
 
     @include('layouts.frontend.partial.breadcrumbcategory')
-    
     <section class="phone-verification-section">
         <div class="container">
             <div class="title-area">
@@ -45,7 +44,6 @@
             </div>
         </div>
     </section>
-    <!-- End Phone Verification Section -->
 @endsection
 
 @push('js')

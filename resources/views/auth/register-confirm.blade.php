@@ -40,7 +40,7 @@
 											<ul>
 												@foreach($parentcategories as $parentcategory)
 													<li>
-														<a href="{{ route('category', $parentcategory->slug) }}">
+														<a style="font-size: 14px;" href="{{ route('category', $parentcategory->slug) }}">
 															{{ $parentcategory->name }}
 														</a>
 														@php
@@ -50,7 +50,7 @@
 															<ul>
 																@foreach($childcategories as $childcategory)
 																	<li>
-																		<a href="{{ route('category', $childcategory->slug) }}">
+																		<a style="font-size: 14px;" href="{{ route('category', $childcategory->slug) }}">
 																			{{ $childcategory->name }}
 																		</a>
 																	</li>

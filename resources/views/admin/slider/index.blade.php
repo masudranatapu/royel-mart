@@ -44,7 +44,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Imge</label>
+                                                            <label class="col-md-3 text-right">Image ( 1054 * 420 )</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
@@ -132,7 +132,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Imge</label>
+                                                                        <label class="col-md-3 text-right">Image ( 1054 * 420 )</label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>

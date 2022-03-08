@@ -38,7 +38,7 @@
                                                     <form action="{{ route('admin.category-banner.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Image</label>
+                                                            <label class="col-md-3 text-right">Image ( 1583 * 300 )</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
@@ -118,7 +118,7 @@
                                                                     @csrf
                                                                     @method('PUT')
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Image</label>
+                                                                        <label class="col-md-3 text-right">Image ( 1583 * 300 ) </label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>

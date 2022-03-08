@@ -325,9 +325,12 @@
                             <i class="bi bi-pencil-fill"></i>
                             Write a review
                         </button>
-                        <form action="{{ route('customer.review') }}" method="POST">
+                        <form action="{{ route('customer.review') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 							<input type="hidden" value="{{ $products->id }}" name="product_id">
+							@auth
+								<input type="hidden" value="{{ Auth::user()->id }}" name="user_id">
+							@endauth
                             <div class="add-review-popup" id="add-review-popup">
                                 <div class="inner-popup">
                                     <button class="close-popup" type="button">
@@ -345,6 +348,13 @@
                                         </div>
                                     </div>
 									<input name="rating" class="form-control" id="review-val" type="hidden" placeholder="Your Name">
+                                    <div class="single-input">
+                                        <label>Product Review Image</label>
+                                        <input name="image[]" class="form-control" id="multi_tham" type="file" multiple="">
+                                    </div>
+                                    <div class="single-input">
+                                        <div class="row" id="preview_image"></div>
+									</div>
                                     <div class="single-input">
                                         <label>Your Name</label>
                                         <input name="name" class="form-control" type="text" placeholder="Your Name">
@@ -511,7 +521,6 @@
 															</div>
 														</div>
 													</div>
-
 												@elseif($review->rating == 1)
 													<div class="reviews">
 														<div class="reviews-inner">
@@ -544,6 +553,14 @@
 										<p>
 											{!! $review->opinion !!}
 										</p>
+                                        @if($review->image)
+                                            @php
+                                                $multimagesreviewer = explode("|", $review->image);
+                                            @endphp
+                                            @foreach($multimagesreviewer as $key=>$multimagesreview)
+												<img class="mr-2" width="80" height="80" src="{{ asset($multimagesreview) }}" alt="">
+                                            @endforeach
+										@endif
 									</div>
 									<div class="review-footer">
 										<button class="helpful-btn">Helpful
@@ -657,4 +674,29 @@
 			}
 		}
 	</script>
+    <script>
+        $(document).ready(function(){
+            $('#multi_tham').on('change', function(){ //on file input change
+                if (window.File && window.FileReader && window.FileList && window.Blob) //check File API supported browser
+                {
+                    var data = $(this)[0].files; //this file data
+                    $.each(data, function(index, file){ //loop though each file
+                        if(/(\.|\/)(gif|jpe?g|png)$/i.test(file.type)){ //check supported file type
+                            var fRead = new FileReader(); //new filereader
+                            fRead.onload = (function(file){ //trigger function on successful read
+                            return function(e) {
+                                var img = $('<img/>').addClass('thumb').attr('src', e.target.result).width(50)
+                            .height(50); //create image element 
+                                $('#preview_image').append(img); //append image to output element
+                            };
+                            })(file);
+                            fRead.readAsDataURL(file); //URL representing the file's data.
+                        }
+                    });
+                }else{
+                    alert("Your browser doesn't support File API!"); //if File API is absent
+                }
+            });
+        });
+    </script>
 @endpush

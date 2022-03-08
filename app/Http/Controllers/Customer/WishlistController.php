@@ -28,14 +28,38 @@ class WishlistController extends Controller
         $validateData = $request->validate([
             'rating'=>'required',
         ]);
+        // others photo
+        $multiThambnail = $request->file('image');
+        $slug2 = "image";
+        if (isset($multiThambnail)) {
+            foreach ($multiThambnail as $key => $multiThamb) {
+                // make unique name for image
+                $multiThamb_name = $slug2.'-'.uniqid().'.'.$multiThamb->getClientOriginalExtension();
+                $upload_path = 'media/review/';
+                $multiThamb_image_url = $upload_path.$multiThamb_name;
+                $multiThamb->move($upload_path, $multiThamb_name);
+                $img_arr[$key] = $multiThamb_image_url;
+            }
+            $multiThamb__photo = trim(implode('|', $img_arr), '|');
+        }else {
+            $multiThamb__photo = NULL;
+        }
+
+        if($request->user_id){
+            $userId = $request->user_id;
+        }else {
+            $userId = NULL;
+        }
+
         Review::insert([
-            'user_id' => $request->user_id,
+            'user_id' => $userId,
             'product_id' => $request->product_id,
             'name' => $request->name,
             'email' => $request->email,
             'opinion' => $request->opinion,
             'rating' => $request->rating,
             'phone' => $request->phone,
+            'image' => $multiThamb__photo,
             'created_at' => Carbon::now(),
         ]);
         Toastr::success('Your review successfully done :-)','success');
