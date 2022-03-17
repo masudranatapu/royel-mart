@@ -15,8 +15,10 @@ class CreateCategoryBannersTable extends Migration
     {
         Schema::create('category_banners', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
-            $table->string('status');
+            $table->integer('cat_id');
+            $table->text('link')->nullable();
+            $table->text('image');
+            $table->text('status');
             $table->timestamps();
         });
     }

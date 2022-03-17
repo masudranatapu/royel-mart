@@ -68,8 +68,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <label>Minimum Quantity</label>
-                                                <input type="number" name="minimum_quantity" class="form-control" value="5" placeholder="Minimum Quantity">
+                                                <label>Alert Quantity</label>
+                                                <input type="number" name="alert_quantity" class="form-control" value="5" placeholder="Alert Quantity">
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -77,7 +77,7 @@
                                                         <label>Cover Image <span class="text-danger">*</span></label>
                                                         <div class="input-group">
                                                             <div class="custom-file">
-                                                                <input type="file" onChange="mainTham(this)" name="thambnail" class="custom-file-input">
+                                                                <input type="file" onChange="mainTham(this)" name="thumbnail" class="custom-file-input">
                                                                 <label class="custom-file-label">Uploade</label>
                                                             </div>
                                                         </div>
@@ -86,7 +86,7 @@
                                                         <label>More Image</label>
                                                         <div class="input-group">
                                                             <div class="custom-file">
-                                                                <input type="file" name="multi_thambnail[]" multiple="" id="multi_tham" class="custom-file-input">
+                                                                <input type="file" name="more_image[]" multiple="" id="multi_tham" class="custom-file-input">
                                                                 <label class="custom-file-label">Uploade</label>
                                                             </div>
                                                         </div>
@@ -113,7 +113,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <label>Category <span class="text-danger"> * </span></label>
                                                         <select name="category_id" id="category" class="form-control">
                                                             <option value="">Select One</option>
@@ -126,37 +126,22 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label>Brand</label>
-                                                        <select name="brand_id" class="form-control">
-                                                            <option value="" disabled selected>Select One</option>
-                                                            @foreach($brands as $brand)
-                                                                @if($brand->id == 1)
-
-                                                                @else
-                                                                    <option value="{{$brand->id}}">{{$brand->name}}</option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
                                                 </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label>Parent Category</label>
+                                                <select name="parent_id" id="subcategory" class="form-control">
+
+                                                </select>
                                             </div>
                                             <div class="col-md-12">
-                                                <div class="row">
-                                                    <div class="col-md-6" id="sub_cate_display" style="display:none;">
-                                                        <label>Parent Category</label>
-                                                        <select name="parent_id" id="subcategory" class="form-control">
-                                                            
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6" id="sub_sub_cate_display" style="display: none;">
-                                                        <label>Child Category</label>
-                                                        <select name="child_id" id="subsubcategory" class="form-control">
-                                                            
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                <label>Child Category</label>
+                                                <select name="child_id" id="subsubcategory" class="form-control">
+
+                                                </select>
                                             </div>
+
                                             <div class="col-md-12">
                                                 <div class="row mt-2">
                                                     <div class="col-md-6">
@@ -178,13 +163,35 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <div class="row" id="showSelectedUnits">
-                                                    <div class="col-md-12">
+                                                <div class="row" id="">
+                                                    <div class="col-md-6">
+                                                        <label>Brand</label>
+                                                        <select name="brand_id" class="form-control">
+                                                            <option value="" disabled selected>Select One</option>
+                                                            @foreach($brands as $brand)
+                                                                <option value="{{$brand->id}}">{{$brand->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label>Units</label>
-                                                        <select id="getUnitId" class="form-control">
+                                                        <select id="" name="unit_id" class="form-control">
                                                             <option value="">Select One</option>
                                                             @foreach($units as $key=>$unit)
                                                                 <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <div class="row" id="showSelectedColor">
+                                                    <div class="col-md-12">
+                                                        <label>Color</label>
+                                                        <select id="getColorId" class="form-control select2">
+                                                            <option value="">Select One</option>
+                                                            @foreach($colors as $key=>$color)
+                                                                <option value="{{ $color->id }}">{{ $color->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -350,7 +357,7 @@
                             fRead.onload = (function(file){ //trigger function on successful read
                             return function(e) {
                                 var img = $('<img/>').addClass('thumb').attr('src', e.target.result).width(50)
-                            .height(50); //create image element 
+                            .height(50); //create image element
                                 $('#preview_image').append(img); //append image to output element
                             };
                             })(file);
@@ -364,21 +371,21 @@
         });
     </script>
     <script>
-        $("#getUnitId").on('change', function(){
+        $("#getColorId").on('change', function(){
             // alert('hell');
-            var getUnitId = $("#getUnitId").val();
-            // alert(getUnitId);
-            if($("#new_color_area_" + getUnitId).length == 0){
+            var getColorId = $("#getColorId").val();
+            // alert(getColorId);
+            if($("#new_color_area_" + getColorId).length == 0){
                 $.ajax({
                     type    : "POST",
-                    url     : "{{ route('admin.unitid.ajax') }}",
+                    url     : "{{ route('admin.color_id.ajax') }}",
                     data    : {
-                            getUnitId: getUnitId,
+                            getColorId: getColorId,
                             _token: '{{csrf_token()}}',
                         },
                     success : function(data) {
                         console.log(data);
-                        $(data).insertAfter('#showSelectedUnits');
+                        $(data).insertAfter('#showSelectedColor');
                     },
                 });
             }else {

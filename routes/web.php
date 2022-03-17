@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-// admin controller 
+// admin controller
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebsiteController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\SubSubCategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\SubUnitController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SliderController;
@@ -27,7 +29,7 @@ use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\CategoryAdsController;
 use App\Http\Controllers\Admin\OrderController;
 
-// customer controller 
+// customer controller
 use App\Http\Controllers\Customer\InformationController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\GuestCheckoutController;
@@ -99,7 +101,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::post('pass-updated/{id}', [DashboardController::class, 'updatePass'])->name('password.update');
     Route::get('contact-massage', [DashboardController::class, 'contactMassage'])->name('contact-massage');
     Route::get('contact-delete/{id}', [DashboardController::class, 'contactDelete'])->name('contact.delete');
-    
+
     // website seeting
     Route::resource('website', WebsiteController::class);
     Route::post('get-add-row-', [WebsiteController::class, 'addRemoveRow'])->name('row.addremove');
@@ -107,8 +109,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('category', CategoryController::class);
     Route::get('category-active/{id}', [CategoryController::class, 'categoryActive'])->name('category.active');
     Route::get('category-inactive/{id}', [CategoryController::class, 'categoryInactive'])->name('category.inactive');
-    Route::get('parent-category-view/{id}', [CategoryController::class, 'viewParentCategory'])->name('viewparentcategory');
-    Route::get('child-category-view/{id}', [CategoryController::class, 'viewChildCategory'])->name('viewchildcategory');
+    Route::get('parent-category-view/{slug}', [CategoryController::class, 'viewParentCategory'])->name('view-parent-category');
+    Route::get('child-category-view/{slug}', [CategoryController::class, 'viewChildCategory'])->name('viewchildcategory');
     // categoryBanner
     Route::resource('category-banner', CategoryBannerController::class);
     Route::get('category-banner-active/{id}', [CategoryBannerController::class, 'categoryBannerActive'])->name('categorybanner.active');
@@ -123,6 +125,14 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('unit', UnitController::class);
     Route::get('unit-active/{id}', [UnitController::class, 'unitActive'])->name('unit.active');
     Route::get('unit-inactive/{id}', [UnitController::class, 'unitInactive'])->name('unit.inactive');
+    // Color routes
+    Route::resource('color', ColorController::class);
+    Route::get('color-active/{id}', [ColorController::class, 'colorActive'])->name('color.active');
+    Route::get('color-inactive/{id}', [ColorController::class, 'colorInactive'])->name('color.inactive');
+    // Size routes
+    Route::resource('size', SizeController::class);
+    Route::get('size-active/{id}', [SizeController::class, 'sizeActive'])->name('size.active');
+    Route::get('size-inactive/{id}', [SizeController::class, 'sizeInactive'])->name('size.inactive');
     // sub unit
     Route::resource('sub-unit', SubUnitController::class);
     Route::get('sub-unit-active/{id}', [SubUnitController::class, 'subUnitActive'])->name('subunit.active');
@@ -130,6 +140,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     // product
     Route::resource('product', ProductController::class);
     Route::post('product-unit-ajax', [ProductController::class, 'unitIdAjax'])->name('unitid.ajax');
+    Route::post('product-color-ajax', [ProductController::class, 'colorIdAjax'])->name('color_id.ajax');
     Route::get('product-category/ajax/{category_id}', [ProductController::class, 'productCategory']);
     Route::get('product-subcategory/ajax/{subcategory_id}', [ProductController::class, 'productSubcategory']);
     // slider
@@ -172,7 +183,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('category-ads', CategoryAdsController::class);
     Route::get('category-ads-active/{id}', [CategoryAdsController::class, 'categoryAdsActive'])->name('category-ads.active');
     Route::get('category-ads-inactive/{id}', [CategoryAdsController::class, 'categoryAdsInactive'])->name('category-ads.inactive');
-    // Orders 
+    // Orders
     Route::resource('orders', OrderController::class);
     Route::get('orders-pending', [OrderController::class, 'ordersPending'])->name('orders.pending');
     Route::get('orders-confirmed', [OrderController::class, 'ordersConfirmed'])->name('orders.confirmed');
@@ -180,12 +191,12 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('orders-delivered', [OrderController::class, 'ordersDelivered'])->name('orders.delivered');
     Route::get('orders-successed', [OrderController::class, 'ordersSuccessed'])->name('orders.successed');
     Route::get('orders-canceled', [OrderController::class, 'ordersCanceled'])->name('orders.canceled');
-    // order status change 
+    // order status change
     Route::post('orders-status', [OrderController::class, 'ordersStatus'])->name('orders.status');
 
 });
 
-// customer routes 
+// customer routes
 Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['auth', 'customer']], function () {
     Route::get('/information', [InformationController::class, 'index'])->name('information');
     Route::get('password-change', [InformationController::class, 'passChangeView'])->name('password.change');

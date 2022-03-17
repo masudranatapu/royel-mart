@@ -53,7 +53,7 @@
 				<div class="title-area w-100">
 					<h3 class="category-title">Related Categories - Royelmart.com</h3>
 				</div>
-				<div class="categories">
+				<div class="categories w-100">
 					<ul class="row">
                         @foreach($relatedcategory as $category)
                             <li class="col-md-3">
@@ -204,7 +204,7 @@
                                             <li>
                                                 <figure>
                                                     <a href="{{ route('productdetails', $product->slug) }}">
-                                                        <img src="{{asset($product->thambnail)}}" alt="">
+                                                        <img src="{{asset($product->thumbnail)}}" alt="">
                                                     </a>
                                                 </figure>
                                                 <div class="content">
@@ -249,7 +249,7 @@
                                 <div class="single-product">
                                     <div class="inner-product">
                                         <figure>
-                                            <img src="{{ asset($product->thambnail) }}" alt="">
+                                            <img src="{{ asset($product->thumbnail) }}" alt="">
                                         </figure>
                                         <div class="product-bottom">
                                             <div class="reviews">
@@ -279,13 +279,13 @@
                                                     <div class="old-price-discount">
                                                         <del class="old-price">৳ {{$product->buying_price}} </del>
                                                         <span class="discount">৳ {{ $product->discount }}</span>
-                                                    </div>										
+                                                    </div>
                                                 </div>
                                                 <a class="cart-btn" href="{{ route('add_to_cart', $product->id) }}">
 													<i class="bi bi-cart-plus"></i>
 													cart
 												</a>
-                                            </div>						
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

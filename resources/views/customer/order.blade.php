@@ -119,7 +119,7 @@
                                                                 <div class="single-item">
                                                                     <figure class="item-img">
                                                                         <a href="#">
-                                                                            <img src="{{ asset($products->thambnail) }}" alt="">
+                                                                            <img src="{{ asset($products->thumbnail) }}" alt="">
                                                                         </a>
                                                                     </figure>
                                                                     <div class="item-name">
@@ -149,7 +149,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            @php 
+                                                            @php
                                                                 $i++;
                                                             @endphp
                                                         @endforeach
@@ -164,7 +164,7 @@
                                                                     <label for="">delivery status : </label>
                                                                     <span class="delivered">delivered</span>
                                                                 @else
-                                                                
+
                                                                 @endif
                                                             @endif
                                                         </div>

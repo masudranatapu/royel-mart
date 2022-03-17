@@ -14,6 +14,10 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('backend/bower_components/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/pages/data-table/css/buttons.dataTables.min.css')}}">
 <link rel="stylesheet" type="text/css"href="{{ asset('backend/bower_components/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('backend/bower_components/jquery-minicolors/jquery.minicolors.css')}}" />
+<link rel="stylesheet" href="{{ asset('backend/bower_components/select2/dist/css/select2.min.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('backend/bower_components/spectrum/spectrum.css')}}" />
 <!-- Style.css -->
 <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/jquery.mCustomScrollbar.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/jquery.mCustomScrollbar.css')}}">

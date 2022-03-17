@@ -15,20 +15,20 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            $table->integer('user_id');
             $table->string('product_code');
             $table->string('category_id');
             $table->string('brand_id')->nullable();
             $table->string('name');
             $table->string('name_en')->nullable();
             $table->string('slug');
-            $table->string('thambnail')->nullable();
-            $table->text('multi_thambnail')->nullable();
+            $table->string('thumbnail')->nullable();
+            $table->text('more_image')->nullable();
             $table->double('regular_price');
             $table->double('sale_price');
-            $table->integer('discount')->default(0);
-            $table->integer('discount_tk')->default(0);
-            $table->string('minimum_quantity');
+            $table->double('discount', 14,2)->default(0);
+            $table->double('discount_tk', 14,2)->default(0);
+            $table->integer('alert_quantity')->default(0);
             $table->longText('description')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();
@@ -39,7 +39,7 @@ class CreateProductsTable extends Migration
             $table->text('warranty_policy')->nullable();
             $table->string('schema')->nullable();
             $table->string('product_type')->nullable();
-            $table->string('status');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

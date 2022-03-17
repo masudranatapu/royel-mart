@@ -17,9 +17,10 @@ class BrandDeletedSeeder extends Seeder
     {
         //
         Brand::insert([
-            'name' => 'Unbranded',
-            'slug' => 'un-branded',
+            'name' => 'Non-Branded',
+            'slug' => 'non-branded',
             'image' => NULL,
+            'is_default' => '1',
             'status' => '1',
             'created_at' => Carbon::now(),
         ]);

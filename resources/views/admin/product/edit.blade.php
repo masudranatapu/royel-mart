@@ -69,8 +69,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <label>Minimum Quantity</label>
-                                                <input type="number" name="minimum_quantity" class="form-control" value="{{ $products->minimum_quantity }}" placeholder="Minimum Quantity">
+                                                <label>Alert Quantity</label>
+                                                <input type="number" name="alert_quantity" class="form-control" value="{{ $products->alert_quantity }}" placeholder="Alert Quantity">
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -78,7 +78,7 @@
                                                         <label>Cover Image <span class="text-danger">*</span></label>
                                                         <div class="input-group">
                                                             <div class="custom-file">
-                                                                <input type="file" onChange="mainTham(this)" name="thambnail" class="custom-file-input">
+                                                                <input type="file" onChange="mainTham(this)" name="thumbnail" class="custom-file-input">
                                                                 <label class="custom-file-label">Uploade</label>
                                                             </div>
                                                         </div>
@@ -87,7 +87,7 @@
                                                         <label>More Image</label>
                                                         <div class="input-group">
                                                             <div class="custom-file">
-                                                                <input type="file" name="multi_thambnail[]" multiple="" id="multi_tham" class="custom-file-input">
+                                                                <input type="file" name="more_image[]" multiple="" id="multi_tham" class="custom-file-input">
                                                                 <label class="custom-file-label">Uploade</label>
                                                             </div>
                                                         </div>
@@ -97,16 +97,16 @@
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <img width="50" height="50" src="{{ asset($products->thambnail) }}" id="showTham">
+                                                        <img width="50" height="50" src="{{ asset($products->thumbnail) }}" id="showTham">
                                                     </div>
                                                     <div class="col-md-6" id="newmultiproduct_display" style="display: none;">
                                                         <div class="row" id="preview_image"></div>
                                                     </div>
                                                     <div class="col-md-6" id="oldmultiproduct_display">
                                                         <div class="row">
-                                                            @if($products->multi_thambnail)
+                                                            @if($products->more_image)
                                                                 @php
-                                                                    $multiproduct = explode('|', $products->multi_thambnail)
+                                                                    $multiproduct = explode('|', $products->more_image)
                                                                 @endphp
                                                                 @foreach($multiproduct as $key => $mulipro)
                                                                     <img src="{{ asset($mulipro) }}" width="50" height="50">
@@ -125,26 +125,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label>Category <span class="text-danger"> * </span></label>
-                                                        <select name="category_id" id="category" class="form-control">
-                                                            <option value="">Select One</option>
-                                                            @foreach($categories as $category)
-                                                                <option @if($category->id == $products->category_id) selected @endif value="{{$category->id}}" value="{{$category->id}}">{{$category->name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label>Brand</label>
-                                                        <select name="brand_id" class="form-control">
-                                                            <option value="" disabled selected>Select One</option>
-                                                            @foreach($brands as $brand)
-                                                                <option @if($brand->id == $products->brand_id) selected @endif value="{{$brand->id}}" value="{{$brand->id}}">{{$brand->name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                <label>Category <span class="text-danger"> * </span></label>
+                                                <select name="category_id" id="category" class="form-control">
+                                                    <option value="">Select One</option>
+                                                    @foreach($categories as $category)
+                                                        <option @if($category->id == $main_cat) selected @endif value="{{$category->id}}" value="{{$category->id}}">{{$category->name}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="row">
@@ -153,7 +140,7 @@
                                                         <select name="parent_id" id="subcategory" class="form-control">
                                                             <option value="">Select One</option>
                                                             @foreach($subcategory as $subcate)
-                                                                <option @if($subcate->id == $products->subcategory_id) selected @endif value="{{ $subcate->name }}">{{ $subcate->name}}</option>
+                                                                <option @if($subcate->id == $parent_cat) selected @endif value="{{ $subcate->id }}">{{ $subcate->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -162,7 +149,7 @@
                                                         <select name="child_id" id="subsubcategory" class="form-control">
                                                             <option value="" selected >Select One</option>
                                                             @foreach($subsubcategory as $subsubcate)
-                                                                <option @if($subsubcate->id == $products->subsubcategory_id) selected @endif value="{{ $subsubcate->id }}">{{ $subsubcate->name }}</option>
+                                                                <option @if($subsubcate->id == $child_cat) selected @endif value="{{ $subsubcate->id }}">{{ $subsubcate->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -189,10 +176,19 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <div class="row" id="showSelectedUnits">
-                                                    <div class="col-md-12">
+                                                <div class="row" id="">
+                                                    <div class="col-md-6">
+                                                        <label>Brand</label>
+                                                        <select name="brand_id" class="form-control">
+                                                            <option value="" disabled selected>Select One</option>
+                                                            @foreach($brands as $brand)
+                                                                <option @if($brand->id == $products->brand_id) selected @endif value="{{$brand->id}}" value="{{$brand->id}}">{{$brand->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
                                                         <label>Units</label>
-                                                        <select id="getUnitId" class="form-control">
+                                                        <select id="" name="unit_id" class="form-control">
                                                             <option value="">Select One</option>
                                                             @foreach($units as $key=>$unit)
                                                                 <option value="{{ $unit->id }}">{{ $unit->name }}</option>
@@ -200,31 +196,54 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                @foreach($productUnits as $productUnit)
-                                                    <div class="row mt-3" id="new_color_area_{{$productUnit->unit_id}}">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <div class="row" id="showSelectedColor">
+                                                    <div class="col-md-12">
+                                                        <label>Color</label>
+                                                        <select id="getColorId" class="form-control select2">
+                                                            <option value="">Select One</option>
+                                                            @foreach($colors as $key=>$color)
+                                                                <option value="{{ $color->id }}">{{ $color->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                @foreach($productColors as $productColor)
+                                                    @php
+                                                        $sizes = App\Models\Size::where('color_id', $productColor->color_id)->get();
+                                                        $productSizes = App\Models\ProductSize::where('product_id', $products->id)->where('color_id', $productColor->color_id)->latest()->get();
+                                                    @endphp
+                                                    <div class="row mt-3" id="new_color_area_{{$productColor->color_id}}">
                                                         <div class="col-md-3">
                                                             @php
-                                                                $units = App\Models\Unit::where('id', $productUnit->unit_id)->first();
+                                                                $color = App\Models\Color::where('id', $productColor->color_id)->first();
                                                             @endphp
-                                                            <input type="hidden" class="form-control" name="unit_id[]" value="{{$productUnit->unit_id}}">
-                                                            <label>Unit Name</label>
-                                                            <input type="text" class="form-control" readonly value="{{ $units->name }}">
+                                                            <input type="hidden" class="form-control" name="color_id[]" value="{{$productColor->color_id}}">
+                                                            <label>Color Name</label>
+                                                            <input type="text" class="form-control" readonly value="{{ $color->name }}">
                                                         </div>
                                                         <div class="col-md-3">
                                                             <label>Image</label>
-                                                            <input type="file" class="form-control" name="image_{{$productUnit->unit_id}}" id="image_{{ $productUnit->unit_id }}">
+                                                            <input type="file" class="form-control" name="image_{{$productColor->color_id}}" id="image_{{ $productColor->color_id }}">
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label>Sub Unit</label>
-                                                            <select name="subunit_id_{{ $productUnit->unit_id }}[]" class="form-control select2" multiple="multiple" data-placeholder="Select Sub Unit">
-                                                                @foreach($productsubunits as $productsubunit)
-                                                                    <option value="{{ $productsubunit->subunit_id }}">{{ $productsubunit->id }}</option>
+                                                            <label>Size</label>
+                                                            <select name="size_id_{{ $productColor->color_id }}[]" class="form-control" multiple="multiple" data-placeholder="Select Sub Unit">
+                                                                @foreach($sizes as $size)
+                                                                    <option value="{{ $size->id }}"
+                                                                        @foreach ($productSizes as $key=>$productSize)
+                                                                            @if ($size->id == $productSize->size_id)
+                                                                                selected
+                                                                            @endif
+                                                                        @endforeach
+                                                                    >{{ $size->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label>Action</label><br>
-                                                            <button type="button" class="btn btn-danger" id="{{ $productUnit->unit_id }}" onclick="removeNewColorAre(this)">
+                                                            <button type="button" class="btn btn-danger" id="{{ $productColor->color_id }}" onclick="removeNewColorAre(this)">
                                                                 <i class="ml-1 fa fa-times"></i>
                                                             </button>
                                                         </div>
@@ -391,10 +410,10 @@
                             fRead.onload = (function(file){ //trigger function on successful read
                             return function(e) {
 
-                                $('#newmultiproduct_display').show(); // only show whene the multiproduct will be change then 
+                                $('#newmultiproduct_display').show(); // only show whene the multiproduct will be change then
                                 $('#oldmultiproduct_display').hide(); //if product selected then old multi product willbe hide
 
-                                var img = $('<img/>').addClass('thumb').attr('src', e.target.result).width(50).height(50); //create image element 
+                                var img = $('<img/>').addClass('thumb').attr('src', e.target.result).width(50).height(50); //create image element
                                 $('#preview_image').append(img); //append image to output element
                             };
                             })(file);
@@ -408,21 +427,21 @@
         });
     </script>
     <script>
-        $("#getUnitId").on('change', function(){
+        $("#getColorId").on('change', function(){
             // alert('hell');
-            var getUnitId = $("#getUnitId").val();
-            // alert(getUnitId);
-            if($("#new_color_area_" + getUnitId).length == 0){
+            var getColorId = $("#getColorId").val();
+            // alert(getColorId);
+            if($("#new_color_area_" + getColorId).length == 0){
                 $.ajax({
                     type    : "POST",
-                    url     : "{{ route('admin.unitid.ajax') }}",
+                    url     : "{{ route('admin.color_id.ajax') }}",
                     data    : {
-                            getUnitId: getUnitId,
+                            getColorId: getColorId,
                             _token: '{{csrf_token()}}',
                         },
                     success : function(data) {
                         console.log(data);
-                        $(data).insertAfter('#showSelectedUnits');
+                        $(data).insertAfter('#showSelectedColor');
                     },
                 });
             }else {

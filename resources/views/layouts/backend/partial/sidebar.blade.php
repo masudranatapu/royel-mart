@@ -41,12 +41,12 @@
                 <span class="pcoded-mtext">Brand</span>
             </a>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/unit') || Request::is('admin/sub-unit') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/unit') || Request::is('admin/color*') || Request::is('admin/size') || Request::is('admin/sub-unit') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-layers"></i>
                 </span>
-                <span class="pcoded-mtext">Unit</span>
+                <span class="pcoded-mtext">Units</span>
             </a>
             <ul class="pcoded-submenu">
                 <li class="{{ Request::is('admin/unit') ? 'active' : '' }}">
@@ -54,9 +54,19 @@
                         <span class="pcoded-mtext">Unit</span>
                     </a>
                 </li>
-                <li class="{{ Request::is('admin/sub-unit') ? 'active' : '' }}">
+                {{-- <li class="{{ Request::is('admin/sub-unit') ? 'active' : '' }}">
                     <a href="{{ route('admin.sub-unit.index') }}">
                         <span class="pcoded-mtext">Sub Unit</span>
+                    </a>
+                </li> --}}
+                <li class="{{ Request::is('admin/color*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.color.index') }}">
+                        <span class="pcoded-mtext">Color</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/size') ? 'active' : '' }}">
+                    <a href="{{ route('admin.size.index') }}">
+                        <span class="pcoded-mtext">Size</span>
                     </a>
                 </li>
             </ul>

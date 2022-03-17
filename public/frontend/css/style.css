@@ -148,22 +148,22 @@ input[type=number] {
 }
 .inner-footer-bar ul li .shop {
 }
-.inner-footer-bar ul li .shop .img {    
-    position: absolute;    
-    left: 50%;    
-    top: -50px;    
-    transform: translateX(-50%);    
-    padding: 5px;    
-    background-color: var(--theme-color);    
-    flex: 0 0 auto;    
-    height: 50px;    
-    width: 50px;    
-    object-fit: contain;    
-    border-radius: 50%;    
-    display: flex;    
-    align-items: center;    
-    justify-content: center;    
-    border: 3px solid var(--white-color);    
+.inner-footer-bar ul li .shop .img {
+    position: absolute;
+    left: 50%;
+    top: -50px;
+    transform: translateX(-50%);
+    padding: 5px;
+    background-color: var(--theme-color);
+    flex: 0 0 auto;
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--white-color);
     box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 }
 .inner-footer-bar ul li a i {
@@ -1298,7 +1298,7 @@ header {}
     transition: all 0.3s ease;
 }
 .category-area .scroll-btn .prev {
-    
+
 }
 .category-area .scroll-btn .next {
     top: inherit;
@@ -1319,10 +1319,10 @@ header {}
 .category-area .category-list::-webkit-scrollbar-track {
     background-color: var(--border-color);
 }
- 
+
 /* Handle */
 .category-area .category-list::-webkit-scrollbar-thumb {
-  background: transparent; 
+  background: transparent;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -1332,7 +1332,7 @@ header {}
 
 /* Handle on hover */
 .category-area .category-list::-webkit-scrollbar-thumb:hover {
-  background: #f15a29; 
+  background: #f15a29;
 }
 .category-area .category-list li {
     display: block;
@@ -1493,13 +1493,13 @@ header {}
     justify-content: space-around;
 }
 .sendlist-area .sendlist .upload-field .img-group i {
-    
+
 font-size: 18px;
-    
+
 color: var(--white-color);
-    
+
 line-height: 1;
-    
+
 display: flex;
 }
 .sendlist-area .sendlist .upload-field::before {
@@ -2139,7 +2139,9 @@ display: flex;
 
 
 /*============= Category Page Css Start =============*/
-.breadcrumb-section {}
+.breadcrumb-section {
+    background: #e8efff;
+}
 .breadcrumb-section .category-breadcrumb {
     display: flex;
     align-items: center;
@@ -2820,6 +2822,7 @@ display: flex;
 }
 .product-media-area .product-zoom-photo {
     max-width: 500px;
+    border: solid 1px #f15a29;
 }
 .product-media-area .product-zoom-photo .zoom-wrapper {
     overflow: hidden;

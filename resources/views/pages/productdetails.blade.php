@@ -24,8 +24,8 @@
 							<div class="product-media-area">
 								<div class="product-zoom-photo">
 									<div class="zoom-wrapper">
-										<a class="popup-image" id="zoom-trigger" href="{{asset($products->thambnail)}}">
-                                            <img width="466" height="466" id="zoomImg" src="{{asset($products->thambnail)}}" alt="">
+										<a class="popup-image" id="zoom-trigger" href="{{asset($products->thumbnail)}}">
+                                            <img width="466" height="466" id="zoomImg" src="{{asset($products->thumbnail)}}" alt="">
                                         </a>
 									</div>
 								</div>
@@ -35,13 +35,13 @@
                                     </button>
 									<ul class="swiper-wrapper">
 										<li class="swiper-slide">
-                                            <a class="active" data-image="{{asset($products->thambnail)}}" href="javascript:;">
-                                                <img src="{{asset($products->thambnail)}}" alt="">
+                                            <a class="active" data-image="{{asset($products->thumbnail)}}" href="javascript:;">
+                                                <img src="{{asset($products->thumbnail)}}" alt="">
                                             </a>
                                         </li>
-                                        @if($products->multi_thambnail)
+                                        @if($products->multi_thumbnail)
                                             @php
-                                                $multimages = explode("|", $products->multi_thambnail);
+                                                $multimages = explode("|", $products->multi_thumbnail);
                                             @endphp
                                             @foreach($multimages as $key=>$multimage)
                                                 <li class="swiper-slide">
@@ -380,7 +380,7 @@
                                     <li>
                                         <figure>
                                             <a href="{{ route('productdetails', $product->slug) }}">
-                                                <img src="{{asset($product->thambnail)}}" alt="">
+                                                <img src="{{asset($product->thumbnail)}}" alt="">
                                             </a>
                                         </figure>
                                         <div class="content">
@@ -574,7 +574,7 @@
                             <div class="single-product">
                                 <div class="inner-product">
                                     <figure>
-                                        <img src="{{asset($product->thambnail)}}" alt="">
+                                        <img src="{{asset($product->thumbnail)}}" alt="">
                                     </figure>
                                     <div class="product-bottom">
                                         <div class="reviews">
@@ -606,7 +606,7 @@
                                                     <span class="discount">{{ $product->discount }} % </span>
                                                 </div>
                                             </div>
-                                        </div>							
+                                        </div>
                                     </div>
                                 </div>
                             </div>

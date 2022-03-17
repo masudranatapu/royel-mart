@@ -15,16 +15,19 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('parent_id')->nullable();
-            $table->string('child_id')->nullable();
+            $table->integer('parent_id')->nullable();
+            $table->integer('child_id')->nullable();
             $table->string('name');
             $table->string('slug');
             $table->string('image')->nullable();
-            $table->string('menu');
-            $table->string('feature');
-            $table->string('serial_number')->nullable();
-            $table->string('show_hide')->nullable();
-            $table->string('status');
+            $table->integer('menu')->default(0);
+            $table->integer('feature')->default(0);
+            $table->integer('serial_number')->default(0);
+            $table->integer('parent_serial')->default(0);
+            $table->integer('child_serial')->default(0);
+            $table->integer('show_hide')->default(1);
+            $table->integer('is_default')->default(0);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

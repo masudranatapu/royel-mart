@@ -76,6 +76,11 @@
                     </ul>
                 </div>
             </li>
+            <li class="" style="padding-left: 0px;">
+                <a href="{{ route('home') }}" target="_blank">
+                    <i class="feather icon-globe"></i>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

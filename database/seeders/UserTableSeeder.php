@@ -17,26 +17,26 @@ class UserTableSeeder extends Seeder
         //
         User::insert([
             'role_id'=> '1',
+            'name' => 'Projanmo IT',
+            'email' => 'admin@projanmoit.com',
+            'is_developer' => '1',
+            'password' => bcrypt('Proit@2021.com'),
+        ]);
+
+        User::insert([
+            'role_id'=> '1',
             'name' => 'Super Admin',
             'email' => 'superadmin@gmail.com',
-            'is_developer' => '1',
-            'password' => bcrypt('password'),
+            'is_developer' => '0',
+            'password' => bcrypt('123456'),
         ]);
-        
+
         User::insert([
             'role_id'=> '1',
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'is_developer' => '0',
-            'password' => bcrypt('password'),
-        ]);
-        
-        User::insert([
-            'role_id'=> '1',
-            'name' => 'Projanmo IT',
-            'email' => 'admin@projanmoit.com',
-            'is_developer' => '1',
-            'password' => bcrypt('Proit@2021.com'),
+            'password' => bcrypt('123456'),
         ]);
     }
 }

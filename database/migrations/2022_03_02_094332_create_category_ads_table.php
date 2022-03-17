@@ -15,10 +15,11 @@ class CreateCategoryAdsTable extends Migration
     {
         Schema::create('category_ads', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('link')->nullable();
-            $table->string('image')->nullable();
-            $table->string('status');
+            $table->integer('cat_id');
+            $table->text('name');
+            $table->text('link')->nullable();
+            $table->text('image')->nullable();
+            $table->integer('status')->default();
             $table->timestamps();
         });
     }

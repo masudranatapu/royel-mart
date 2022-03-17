@@ -20,7 +20,7 @@ class BrandController extends Controller
     {
         //
         $title = "Brand";
-        $brands = Brand::latest()->get();
+        $brands = Brand::where('is_default', 0)->latest()->get();
         return view('admin.brand.index', compact('title', 'brands'));
     }
 
@@ -45,24 +45,26 @@ class BrandController extends Controller
         //
         $this->validate($request, [
             'name' => 'required',
-            'image' => 'required',
         ]);
 
         $brand_image = $request->file('image');
         $slug = 'brand';
-        $brand_image_name = $slug.'-'.uniqid().'.'.$brand_image->getClientOriginalExtension();
-        $upload_path = 'media/brand/';
-        $brand_image->move($upload_path, $brand_image_name);
+        if($brand_image){
+            $brand_image_name = $slug.'-'.uniqid().'.'.$brand_image->getClientOriginalExtension();
+            $upload_path = 'media/brand/';
+            $brand_image->move($upload_path, $brand_image_name);
 
-        $image_url = $upload_path.$brand_image_name;
-        
-        Brand::insert([
-            'name' => $request->name,
-            'slug'=> strtolower(str_replace(' ', '-', $request->name)),
-            'image' => $image_url,
-            'status' => "1",
-            'created_at' => Carbon::now(),
-        ]);
+            $image_url = $upload_path.$brand_image_name;
+        }else{
+            $image_url = NULL;
+        }
+
+        $brand = new Brand();
+        $brand->name = $request->name;
+        $brand->slug = strtolower(str_replace(' ', '-', $request->name));
+        $brand->image = $image_url;
+        $brand->save();
+
         Toastr::success('Category successfully save :-)','Success');
         return redirect()->back();
     }
@@ -76,7 +78,7 @@ class BrandController extends Controller
     public function brandActive($id)
     {
         //
-        
+
         Brand::findOrFail($id)->update(['status' => '1']);
         Toastr::info('Brand Successfully Active :-)','Success');
         return redirect()->back();
@@ -110,36 +112,27 @@ class BrandController extends Controller
             'name' => 'required',
         ]);
 
+        $brand = new Brand();
+
         $brand_image = $request->file('image');
         $slug = 'brand';
-        if(isset($brand_image)) {
+        if($brand_image){
+            if(file_exists($brand->image)){
+                unlink($brand->image);
+            }
             $brand_image_name = $slug.'-'.uniqid().'.'.$brand_image->getClientOriginalExtension();
             $upload_path = 'media/brand/';
             $brand_image->move($upload_path, $brand_image_name);
 
-            $brandimage = Brand::findOrFail($id);
-            if ($brandimage->image) {
-                unlink($brandimage->image);
-            }
-
             $image_url = $upload_path.$brand_image_name;
-            
-            Brand::findOrFail($id)->update([
-                'name'=> $request->name,
-                'slug'=> strtolower(str_replace(' ', '-', $request->name)),
-                'image' => $image_url,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::info('Brand Successfully Save :-)','Success');
-            return redirect()->back();
-        }else {
-            Brand::findOrFail($id)->update([
-                'name'=> $request->name,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::info('Brand Successfully Save without image:-)','Success');
-            return redirect()->back();
+            $brand->image = $image_url;
         }
+
+        $brand->name = $request->name;
+        $brand->save();
+
+        Toastr::success('Category successfully updated :-)','Success');
+        return redirect()->back();
     }
 
     /**
@@ -151,18 +144,18 @@ class BrandController extends Controller
     public function destroy($id)
     {
         //
-        $brands =Brand::findOrFail($id);
-        $deleteImage = $brands->image;
+        $brand =Brand::findOrFail($id);
 
-        if(file_exists($deleteImage)) {
-            unlink($deleteImage);
+        if(file_exists($brand->image)) {
+            unlink($brand->image);
         }
-        // if exsist brnad id on product then update brand id
+
+        $check_default_brand = Brand::where('is_default', 1)->first();
         Product::where('brand_id', $id)->update([
-            'brand_id' => '1',
+            'brand_id' => $check_default_brand->id,
         ]);
 
-        $brands->delete();
+        $brand->delete();
         Toastr::warning('Brand successfully delete :-)','Success');
         return redirect()->back();
     }

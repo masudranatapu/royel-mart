@@ -11,11 +11,15 @@ use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\SubUnit;
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
+use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
-use Auth;
 use Carbon\Carbon;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -26,7 +30,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
         $title = "Product";
         $products = Product::latest()->get();
         return view('admin.product.index', compact('title', 'products'));
@@ -39,15 +42,15 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
         $title = "Create Product";
-        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->latest()->get();
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number', 'asc')->get();
         $units = Unit::where('status', 1)->latest()->get();
+        $colors = Color::latest()->get();
         $subunits = SubUnit::where('status', 1)->latest()->get();
-        $brands = Brand::where('status', 1)->latest()->get();
-        return view('admin.product.create', compact('title', 'categories', 'units', 'subunits', 'brands',));
+        $brands = Brand::where('status', 1)->where('is_default', 0)->latest()->get();
+        return view('admin.product.create', compact('title', 'categories', 'units', 'subunits', 'brands', 'colors'));
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -59,53 +62,53 @@ class ProductController extends Controller
         //
         $this->validate($request, [
             'name' => 'required',
-            'thambnail' => 'required',
+            'thumbnail' => 'required',
             'sale_price' => 'required',
             'product_type' => 'required',
             'status' => 'required',
             'category_id' => 'required',
         ]);
-        $product_thambnail = $request->file('thambnail');
+        $product_thumbnail = $request->file('thumbnail');
         $slug1 = "product";
-        if (isset($product_thambnail)) {
+        if (isset($product_thumbnail)) {
             //make unique name for cover_photo
-            $thambnail_name = $slug1.'-'.uniqid().'.'.$product_thambnail->getClientOriginalExtension();
+            $thumbnail_name = $slug1 . '-' . uniqid() . '.' . $product_thumbnail->getClientOriginalExtension();
 
             $upload_path = 'media/product/';
-            $image_url = $upload_path.$thambnail_name;
-            $product_thambnail->move($upload_path, $thambnail_name);
-            $thambnail_name = $image_url;
+            $image_url = $upload_path . $thumbnail_name;
+            $product_thumbnail->move($upload_path, $thumbnail_name);
+            $thumbnail_name = $image_url;
         } else {
-            $thambnail_name = NULL;
+            $thumbnail_name = NULL;
         }
         // others photo
-        $multiThambnail = $request->file('multi_thambnail');
-        $slug2 = "multiproduct";
-        if (isset($multiThambnail)) {
-            foreach ($multiThambnail as $key => $multiThamb) {
+        $more_images = $request->file('more_image');
+        $slug2 = "multi-product";
+        if (isset($more_images)) {
+            foreach ($more_images as $key => $more_image) {
                 // make unique name for image
-                $multiThamb_name = $slug2.'-'.uniqid().'.'.$multiThamb->getClientOriginalExtension();
-                $upload_path = 'media/multiproduct/';
-                $multiThamb_image_url = $upload_path.$multiThamb_name;
-                $multiThamb->move($upload_path, $multiThamb_name);
-                $img_arr[$key] = $multiThamb_image_url;
+                $more_image_name = $slug2 . '-' . uniqid() . '.' . $more_image->getClientOriginalExtension();
+                $upload_path = 'media/multi-product/';
+                $more_image_image_url = $upload_path . $more_image_name;
+                $more_image->move($upload_path, $more_image_name);
+                $img_arr[$key] = $more_image_image_url;
             }
-            $multiThamb__photo = trim(implode('|', $img_arr), '|');
-        }else {
-            $multiThamb__photo = NULL;
+            $more_image_photo = trim(implode('|', $img_arr), '|');
+        } else {
+            $more_image_photo = NULL;
         }
-        // uniq product code setup 
+        // uniq product code setup
         $product_last = Product::select('id')->latest()->first();
         if (isset($product_last)) {
-            $product_code = 'PP'.sprintf('%03d', $product_last->id + 1);
+            $product_code = 'P' . sprintf('%03d', $product_last->id + 1);
         } else {
-            $product_code = 'PP'.sprintf('%03d', 1);
+            $product_code = 'P' . sprintf('%03d', 1);
         }
-        if(isset($request->subsubcategory_id)) {
-           $category_id = $request->subsubcategory_id; 
-        }elseif (isset($request->subcategory_id)) {
+        if (isset($request->subsubcategory_id)) {
+            $category_id = $request->subsubcategory_id;
+        } elseif (isset($request->subcategory_id)) {
             $category_id = $request->subcategory_id;
-        }else {
+        } else {
             $category_id = $request->category_id;
         }
         $product_id = Product::insertGetId([
@@ -116,13 +119,13 @@ class ProductController extends Controller
             'name' => $request->name,
             'name_en' => $request->name_en,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'thambnail' => $thambnail_name,
-            'multi_thambnail' => $multiThamb__photo,
+            'thumbnail' => $thumbnail_name,
+            'more_image' => $more_image_photo,
             'regular_price' => $request->regular_price,
             'sale_price' => $request->sale_price,
             'discount' => $request->discount,
             'discount_tk' => $request->discount_tk,
-            'minimum_quantity' => $request->minimum_quantity,
+            'alert_quantity' => $request->alert_quantity,
             'description' => $request->description,
             'meta_description' => $request->meta_description,
             'meta_keyword' => $request->meta_keyword,
@@ -136,39 +139,50 @@ class ProductController extends Controller
             'status' => $request->status,
             'created_at' => Carbon::now(),
         ]);
-        if(is_array($request->unit_id) || is_object($request->unit_id)){
-            foreach($request->unit_id as $key=>$unit_id){
+
+        if ($request->unit_id != '') {
+            ProductUnit::insert([
+                'product_id' => $product_id,
+                'unit_id' => $request->unit_id,
+                'created_at' => Carbon::now(),
+            ]);
+        }
+
+        if (is_array($request->color_id) || is_object($request->color_id)) {
+            foreach ($request->color_id as $key => $color_id) {
                 // unit Image photo
-                $unitImageGet = 'image_'.$unit_id;
-                $getUnitImage = $request->file($unitImageGet);
-                $slug3 = "unitimage";
-                if (isset($getUnitImage)) {
-                    $unitImage_name = $slug3.'-'.uniqid().'.'.$getUnitImage->getClientOriginalExtension();
-                    $upload_path = 'media/unitimage/';
-                    $unitImage_image_url = $upload_path.$unitImage_name;
-                    $getUnitImage->move($upload_path, $unitImage_name);
-                    $product_unitImage = $unitImage_image_url;
-                }else {
-                    $product_unitImage = NULL;
+                $colorImageGet = 'image_' . $color_id;
+                $getUnitImage = $request->file($colorImageGet);
+                $slug3 = "color-image";
+                if (isset($getcolorImage)) {
+                    $colorImage_name = $slug3 . '-' . uniqid() . '.' . $getcolorImage->getClientOriginalExtension();
+                    $upload_path = 'media/color-image/';
+                    $colorImage_image_url = $upload_path . $colorImage_name;
+                    $getcolorImage->move($upload_path, $colorImage_name);
+                    $product_colorImage = $colorImage_image_url;
+                } else {
+                    $product_colorImage = NULL;
                 }
-                ProductUnit::insert([
+                ProductColor::insert([
                     'product_id' => $product_id,
-                    'unit_id' => $unit_id,
-                    'image' => $product_unitImage,
+                    'color_id' => $color_id,
+                    'image' => $product_colorImage,
                     'created_at' => Carbon::now(),
                 ]);
-                $req_subunit_id = 'subunit_id_'.$unit_id;
-                foreach($request->$req_subunit_id as $key=>$subunit_id){
-                    ProductSubUnit::insert([
-                        'product_id' => $product_id,
-                        'unit_id' => $unit_id,
-                        'subunit_id' => $subunit_id,
-                        'created_at' => Carbon::now(),
-                    ]);
+                $req_size_id = 'size_id_' . $color_id;
+                if ($request->$req_size_id) {
+                    foreach ($request->$req_size_id as $key => $size_id) {
+                        ProductSize::insert([
+                            'product_id' => $product_id,
+                            'color_id' => $color_id,
+                            'size_id' => $size_id,
+                            'created_at' => Carbon::now(),
+                        ]);
+                    }
                 }
             }
         }
-        Toastr::success('Product Successfully Save :-)','Success');
+        Toastr::success('Product Successfully Save :-)', 'Success');
         return redirect()->back();
     }
 
@@ -192,17 +206,39 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
-        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->latest()->get();
+        $product = Product::find($id);
+        $check_cat = Category::find($product->category_id);
+
+        if($check_cat->parent_id != NULL && $check_cat->child_id != NULL){
+            $main_cat = $check_cat->parent_id;
+            $parent_cat = $check_cat->child_id;
+            $child_cat = $check_cat->id;
+        }elseif($check_cat->parent_id != NULL && $check_cat->child_id == NULL){
+            $main_cat = $check_cat->parent_id;
+            $parent_cat = $check_cat->id;
+            $child_cat = NULL;
+        }elseif($check_cat->parent_id == NULL && $check_cat->child_id == NULL){
+            $main_cat = $check_cat->id;
+            $parent_cat = NULL;
+            $child_cat = NULL;
+        }else{
+            $main_cat = NULL;
+            $parent_cat = NULL;
+            $child_cat = NULL;
+        }
+
+
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number', 'asc')->get();
         $subcategory = Category::where('parent_id', '!=', NULL)->where('child_id', NULL)->latest()->get();
         $subsubcategory = Category::where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->latest()->get();
         $title = "Edit Product";
-        $brands = Brand::where('status', 1)->latest()->get();
+        $brands = Brand::where('status', 1)->where('is_default', '0')->latest()->get();
+        $colors = Color::latest()->get();
         $units = Unit::where('status', 1)->latest()->get();
         $products = Product::where('id', $id)->first();
         $productUnits = ProductUnit::where('product_id', $id)->latest()->get();
-        $productsubunits = ProductSubUnit::where('product_id', $id)->latest()->get();
-        return view('admin.product.edit', compact('title', 'brands', 'units', 'categories', 'subcategory', 'subsubcategory', 'products', 'productUnits', 'productsubunits'));
-
+        $productColors = ProductColor::where('product_id', $id)->latest()->get();
+        return view('admin.product.edit', compact('title', 'brands', 'units', 'categories', 'subcategory', 'main_cat', 'parent_cat', 'child_cat', 'subsubcategory', 'products', 'productUnits', 'colors', 'productColors'));
     }
 
     /**
@@ -214,7 +250,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
         $this->validate($request, [
             'name' => 'required',
             'sale_price' => 'required',
@@ -222,126 +258,147 @@ class ProductController extends Controller
             'status' => 'required',
             'category_id' => 'required',
         ]);
-        $product_thambnail = $request->file('thambnail');
+
+        $product = Product::findOrFail($id);
+
+        $product_thumbnail = $request->file('thumbnail');
         $slug1 = "product";
-        if (isset($product_thambnail)) {
-            //make unique name for cover_photo
-            $thambnail_name = $slug1.'-'.uniqid().'.'.$product_thambnail->getClientOriginalExtension();
-
-            $upload_path = 'media/product/';
-            $image_url = $upload_path.$thambnail_name;
-            $product_thambnail->move($upload_path, $thambnail_name);
-            $thambnail_name = $image_url;
-
-            // thambnail shhould be deleted if selected another thambnail 
+        if (isset($product_thumbnail)) {
             $old_product_thamb = Product::findOrFail($id);
-            $delete_thamb = $old_product_thamb->thambnail;
-            if(file_exists($delete_thamb)) {
+            $delete_thamb = $old_product_thamb->thumbnail;
+            if (file_exists($delete_thamb)) {
                 unlink($delete_thamb);
             }
 
-        } else {
-            $old_product_thamb = Product::findOrFail($id);
-            $thambnail_name = $old_product_thamb->thambnail;
-        }
-        // others photo
-        $multiThambnail = $request->file('multi_thambnail');
-        $slug2 = "multiproduct";
-        if (isset($multiThambnail)) {
+            //make unique name for cover_photo
+            $thumbnail_name = $slug1 . '-' . uniqid() . '.' . $product_thumbnail->getClientOriginalExtension();
 
-            // if multi_thambnails selected then old multi thambnaills will be deleted 
+            $upload_path = 'media/product/';
+            $image_url = $upload_path . $thumbnail_name;
+            $product_thumbnail->move($upload_path, $thumbnail_name);
+            $product->thumbnail = $image_url;
+        }
+
+        // others photo
+        $more_images = $request->file('more_image');
+        $slug2 = "multi-product";
+        if (isset($more_images)) {
+
             $old_multi_thamb = Product::findOrFail($id);
-            $del_multi_thamb = explode('|', $old_multi_thamb->multi_thambnail) ;
-            foreach($del_multi_thamb as $key => $multi_thamb_del) {
-                if(file_exists($multi_thamb_del)) {
+            $del_multi_thamb = explode('|', $old_multi_thamb->more_image);
+            foreach ($del_multi_thamb as $key => $multi_thamb_del) {
+                if (file_exists($multi_thamb_del)) {
                     unlink($multi_thamb_del);
                 }
             }
 
-            foreach ($multiThambnail as $key => $multiThamb) {
+            foreach ($more_images as $key => $more_image) {
                 // make unique name for image
-                $multiThamb_name = $slug2.'-'.uniqid().'.'.$multiThamb->getClientOriginalExtension();
-                $upload_path = 'media/multiproduct/';
-                $multiThamb_image_url = $upload_path.$multiThamb_name;
-                $multiThamb->move($upload_path, $multiThamb_name);
-                $img_arr[$key] = $multiThamb_image_url;
+                $more_image_name = $slug2 . '-' . uniqid() . '.' . $more_image->getClientOriginalExtension();
+                $upload_path = 'media/multi-product/';
+                $more_image_url = $upload_path . $more_image_name;
+                $more_image->move($upload_path, $more_image_name);
+                $img_arr[$key] = $more_image_url;
             }
-            $multiThamb__photo = trim(implode('|', $img_arr), '|');
-        } else {
-            $old_multi_thamb = Product::findOrFail($id);
-            $multiThamb__photo = $old_multi_thamb->multi_thambnail;
+            $more_image_photo = trim(implode('|', $img_arr), '|');
+            $product->more_image = $more_image_photo;
         }
-        // uniq product code setup 
-        $product_last = Product::select('id')->latest()->first();
-        if (isset($product_last)) {
-            $product_code = 'PP'.sprintf('%03d', $product_last->id + 1);
+
+        if (isset($request->child_id)) {
+            $category_id = $request->child_id;
+        } elseif (isset($request->parent_id)) {
+            $category_id = $request->parent_id;
         } else {
-            $product_code = 'PP'.sprintf('%03d', 1);
-        }
-        if(isset($request->subsubcategory_id)) {
-           $category_id = $request->subsubcategory_id; 
-        }elseif (isset($request->subcategory_id)) {
-            $category_id = $request->subcategory_id;
-        }else {
             $category_id = $request->category_id;
         }
-        Product::findOrFail($id)->update([
-            'user_id' => Auth::user()->id,
-            'product_code' => $product_code,
-            'category_id' => $category_id,
-            'brand_id' => $request->brand_id,
-            'name' => $request->name,
-            'name_en' => $request->name_en,
-            'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'thambnail' => $thambnail_name,
-            'multi_thambnail' => $multiThamb__photo,
-            'regular_price' => $request->regular_price,
-            'sale_price' => $request->sale_price,
-            'discount' => $request->discount,
-            'discount_tk' => $request->discount_tk,
-            'minimum_quantity' => $request->minimum_quantity,
-            'description' => $request->description,
-            'meta_description' => $request->meta_description,
-            'meta_keyword' => $request->meta_keyword,
-            'outside_delivery' => $request->outside_delivery,
-            'return_status' => $request->return_status,
-            'cash_delivery' => $request->cash_delivery,
-            'inside_delivery' => $request->inside_delivery,
-            'warranty_policy' => $request->warranty_policy,
-            'schema' => $request->schema,
-            'product_type' => $request->product_type,
-            'status' => $request->status,
-            'created_at' => Carbon::now(),
-        ]);
-        foreach($request->unit_id as $key=>$unit_id){
-            // unit Image photo
-            $unitImageGet = 'image_'.$unit_id;
-            $getUnitImage = $request->file($unitImageGet);
-            $slug3 = "unitimage";
-            if (isset($getUnitImage)) {
-                $unitImage_name = $slug3.'-'.uniqid().'.'.$getUnitImage->getClientOriginalExtension();
-                $upload_path = 'media/unitimage/';
-                $unitImage_image_url = $upload_path.$unitImage_name;
-                $getUnitImage->move($upload_path, $unitImage_name);
-                $product_unitImage = $unitImage_image_url;
-            }else {
-                $product_unitImage = NULL;
-            }
-            ProductUnit::where('product_id', $id)->update([
-                'unit_id' => $unit_id,
-                'image' => $product_unitImage,
-                'updated_at' => Carbon::now(),
+
+        $product->category_id = $category_id;
+        $product->brand_id = $request->brand_id;
+        $product->name = $request->name;
+        $product->name_en = $request->name_en;
+        $product->slug = strtolower(str_replace(' ', '-', $request->name));
+        $product->regular_price = $request->regular_price;
+        $product->sale_price = $request->sale_price;
+        $product->discount = $request->discount;
+        $product->discount_tk = $request->discount_tk;
+        $product->alert_quantity = $request->alert_quantity;
+        $product->description = $request->description;
+        $product->meta_description = $request->meta_description;
+        $product->meta_keyword = $request->meta_keyword;
+        $product->outside_delivery = $request->outside_delivery;
+        $product->return_status = $request->return_status;
+        $product->cash_delivery = $request->cash_delivery;
+        $product->inside_delivery = $request->inside_delivery;
+        $product->warranty_policy = $request->warranty_policy;
+        $product->schema = $request->schema;
+        $product->product_type = $request->product_type;
+        $product->status = $request->status;
+        $product->save();
+
+        if ($request->unit_id != '') {
+            ProductUnit::insert([
+                'product_id' => $id,
+                'unit_id' => $request->unit_id,
+                'created_at' => Carbon::now(),
             ]);
-            $req_subunit_id = 'subunit_id_'.$unit_id;
-            foreach($request->$req_subunit_id as $key=>$subunit_id){
-                ProductSubUnit::where('unit_id', $unit_id)->update([
-                    'unit_id' => $unit_id,
-                    'subunit_id' => $subunit_id,
-                    'updated_at' => Carbon::now(),
-                ]);
+        }
+
+        // return $request->color_id;
+
+        if ($request->color_id) {
+            foreach ($request->color_id as $key => $color_id) {
+                // unit Image photo
+                $unitImageGet = 'image_' . $color_id;
+                $getUnitImage = $request->file($unitImageGet);
+                $slug3 = "color-mage";
+                if (isset($getUnitImage)) {
+                    $unitImage_name = $slug3 . '-' . uniqid() . '.' . $getUnitImage->getClientOriginalExtension();
+                    $upload_path = 'media/color-image/';
+                    $unitImage_image_url = $upload_path . $unitImage_name;
+                    $getUnitImage->move($upload_path, $unitImage_name);
+                    $product_colorImage = $unitImage_image_url;
+                } else {
+                    $product_colorImage = NULL;
+                }
+                $check_color = ProductColor::where('product_id', $id)->where('color_id', $color_id)->first();
+                if ($check_color) {
+                    $pro_color = ProductColor::find($check_color->id);
+                    $pro_color->color_id = $color_id;
+                    $pro_color->image = $product_colorImage;
+                    $pro_color->save();
+                } else {
+                    $pro_color = new ProductColor();
+                    $pro_color->product_id = $id;
+                    $pro_color->color_id = $color_id;
+                    $pro_color->image = $product_colorImage;
+                    $pro_color->save();
+                }
+                $req_size_id = 'size_id_' . $color_id;
+
+                // return $request->$req_size_id;
+
+                if ($request->$req_size_id) {
+                    foreach ($request->$req_size_id as $key => $size_id) {
+                        $check_size = ProductSize::where('product_id', $id)->where('color_id', $color_id)->where('size_id', $size_id)->first();
+                        if ($check_size) {
+                            $pro_size = ProductSize::find($check_size->id);
+                            $pro_size->color_id = $color_id;
+                            $pro_size->size_id = $size_id;
+                            $pro_size->save();
+                        } else {
+                            $pro_size = new ProductSize();
+                            $pro_size->product_id = $id;
+                            $pro_size->color_id = $color_id;
+                            $pro_size->size_id = $size_id;
+                            $pro_size->save();
+                        }
+                    }
+                }
             }
         }
-        Toastr::success('Product Successfully update :-)','Success');
+
+
+        Toastr::success('Product Successfully update :-)', 'Success');
         return redirect()->back();
     }
 
@@ -356,35 +413,34 @@ class ProductController extends Controller
         //
         $destroy = Product::findOrFail($id);
         // unit delete
-        $productUnitImages = ProductUnit::where('product_id',$id)->get();
+        $productUnitImages = ProductUnit::where('product_id', $id)->get();
 
-     	foreach ($productUnitImages as $productUnitImage) {
-            if(file_exists($productUnitImage->image)) {
+        foreach ($productUnitImages as $productUnitImage) {
+            if (file_exists($productUnitImage->image)) {
                 unlink($productUnitImage->image);
             }
-     		ProductUnit::where('product_id',$id)->delete();
-     	}
-         // subunit delete
-        $productsubunits = ProductSubUnit::where('product_id',$id)->get();
-     	foreach ($productsubunits as $productsubunit) {
-            ProductSubUnit::where('product_id',$id)->delete();
-     	}
+            ProductUnit::where('product_id', $id)->delete();
+        }
+        // subunit delete
+        $productsubunits = ProductSubUnit::where('product_id', $id)->get();
+        foreach ($productsubunits as $productsubunit) {
+            ProductSubUnit::where('product_id', $id)->delete();
+        }
 
-        $delete_thamb = $destroy->thambnail;
-        if(file_exists($delete_thamb)) {
+        $delete_thamb = $destroy->thumbnail;
+        if (file_exists($delete_thamb)) {
             unlink($delete_thamb);
         }
 
-        $del_multi_thamb = explode('|', $destroy->multi_thambnail) ;
-        foreach($del_multi_thamb as $multi_thamb_del) {
-            if(file_exists($multi_thamb_del)) {
+        $del_multi_thamb = explode('|', $destroy->multi_thumbnail);
+        foreach ($del_multi_thamb as $multi_thamb_del) {
+            if (file_exists($multi_thamb_del)) {
                 unlink($multi_thamb_del);
             }
         }
         $destroy->delete();
         Toastr::warning('Product Successfully Delete :)', 'Warning');
         return redirect()->back();
-
     }
 
     // this is ajax
@@ -403,19 +459,55 @@ class ProductController extends Controller
                     </div>
                     <div class="col-md-3">
                         <label>Image</label>
-                        <input type="file" class="form-control" name="image_'.$unitId->id.'" id="image_' . $unitId->id . '">
+                        <input type="file" class="form-control" name="image_' . $unitId->id . '" id="image_' . $unitId->id . '">
                     </div>
                     <div class="col-md-4">
                         <label>Sub Unit</label>
-                        <select name="subunit_id_'.$unitId->id.'[]" class="form-control select2" multiple="multiple" data-placeholder="Select Sub Unit">';
-                            foreach($subunits as $subunit){
-                                $data .= '<option value="'.$subunit->id.'">'. $subunit->name .'</option>';
-                            }
+                        <select name="subunit_id_' . $unitId->id . '[]" class="form-control select2" multiple="multiple" data-placeholder="Select Sub Unit">';
+        foreach ($subunits as $subunit) {
+            $data .= '<option value="' . $subunit->id . '">' . $subunit->name . '</option>';
+        }
         $data .=        '</select>
                     </div>
                     <div class="col-md-2">
                         <label>Action</label><br>
                         <button type="button" class="btn btn-danger" id="' . $unitId->id . '" onclick="removeNewColorAre(this)">
+                            <i class="ml-1 fa fa-times"></i>
+                        </button>
+                    </div>
+                </div> ';
+        return $data;
+    }
+
+    // this is ajax
+    public function colorIdAjax(Request $request)
+    {
+        // return $request->getUnitId;
+        $getId = $request->getColorId;
+        $colorId = Color::findOrFail($getId);
+        $sizes = Size::where('color_id', $colorId->id)->latest()->get();
+        $data = NULL;
+        $data .= '<div class="row mt-3" id="new_color_area_' . $colorId->id . '">
+                    <div class="col-md-3">
+                        <input type="hidden" class="form-control" name="color_id[]" value="' . $colorId->id . '">
+                        <label>Unit Name</label>
+                        <input type="text" class="form-control" readonly value="' . $colorId->name . '">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Image</label>
+                        <input type="file" class="form-control" name="image_' . $colorId->id . '" id="image_' . $colorId->id . '">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Sub Unit</label>
+                        <select name="size_id_' . $colorId->id . '[]" class="form-control select2 multiple" multiple data-placeholder="Select Sub Unit">';
+        foreach ($sizes as $size) {
+            $data .= '<option value="' . $size->id . '">' . $size->name . '</option>';
+        }
+        $data .=        '</select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Action</label><br>
+                        <button type="button" class="btn btn-danger" id="' . $colorId->id . '" onclick="removeNewColorAre(this)">
                             <i class="ml-1 fa fa-times"></i>
                         </button>
                     </div>

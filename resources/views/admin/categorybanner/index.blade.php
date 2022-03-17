@@ -38,19 +38,62 @@
                                                     <form action="{{ route('admin.category-banner.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right">Image</label>
+                                                            <label class="col-md-3">
+                                                                <label>Category <span class="text-danger"> * </span></label>
+                                                            </label>
+                                                            <div class="col-md-9">
+                                                                <select name="category_id" id="category" class="form-control">
+                                                                    <option value="">Select One</option>
+                                                                    @foreach($categories as $category)
+                                                                        @if($category->id == 1)
+
+                                                                        @else
+                                                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" id="sub_cate_display" style="display:none;">
+                                                            <label class="col-md-3">
+                                                                <label>Parent Category</label>
+                                                            </label>
+                                                            <div class="col-md-9">
+                                                                <select name="parent_id" id="subcategory" class="form-control">
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" id="sub_sub_cate_display" style="display:none;">
+                                                            <label class="col-md-3">
+                                                                <label>Child Category</label>
+                                                            </label>
+                                                            <div class="col-md-9">
+                                                                <select name="child_id" id="subsubcategory" class="form-control">
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-3 text-right">Link</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" name="link" value="#" placeholder="link">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-3">Image</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right"></label>
+                                                            <label class="col-md-3"></label>
                                                             <div class="col-md-9 text-left">
                                                                 <img width="100" height="100" src="{{ asset('demomedia/demo.png') }}" id="showTham">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3 text-right"></label>
+                                                            <label class="col-md-3"></label>
                                                             <div class="col-md-9 text-left">
                                                                 <input type="submit" class="btn btn-success" value="Create Category Banner">
                                                             </div>
@@ -68,10 +111,12 @@
                                 <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
-                                            <th class="text-center">Image</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Action</th>
+                                            <th width="5%" class="text-center">SL No</th>
+                                            <th width="15%" class="text-center">Image</th>
+                                            <th class="">Category</th>
+                                            <th class="">Link</th>
+                                            <th width="15%" class="text-center">Status</th>
+                                            <th width="8%" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -80,6 +125,12 @@
                                                 <td class="text-center">{{  $key + 1 }}</td>
                                                 <td class="text-center">
                                                     <img wodth="60" height="60" src="{{ asset($categorybanner->image) }}">
+                                                </td>
+                                                <td class="">
+                                                    {{ $categorybanner->category->name }}
+                                                </td>
+                                                <td class="">
+                                                    {{ $categorybanner->link }}
                                                 </td>
                                                 <td class="text-center">
                                                     @if($categorybanner->status == 1)
@@ -117,6 +168,18 @@
                                                                 <form action="{{ route('admin.category-banner.update', $categorybanner->id) }}" method="POST" enctype="multipart/form-data">
                                                                     @csrf
                                                                     @method('PUT')
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-3 text-right">Category</label>
+                                                                        <div class="col-md-9">
+                                                                            <input type="text" class="form-control" readonly value="{{ $categorybanner->category->name }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-md-3 text-right">Link</label>
+                                                                        <div class="col-md-9">
+                                                                            <input type="text" class="form-control" name="link" value="{{ $categorybanner->link }}" placeholder="link">
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right">Image</label>
                                                                         <div class="col-md-9">
@@ -206,5 +269,52 @@
                 }
             })
         }
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#category').on('change', function(){
+                var category_id = $(this).val();
+                // alert(category_id);
+                if(category_id) {
+                    $.ajax({
+                        url: "{{  url('/admin/product-category/ajax') }}/"+category_id,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data) {
+                            $('#subsubcategory').html('');
+                            $('#sub_cate_display').show();
+                            var d =$('#subcategory').empty();
+                            $('#subcategory').append('<option value="" disabled selected> Select One </option>');
+                            $.each(data, function(key, value){
+                                $('#subcategory').append('<option value="'+ value.id +'">' + value.name + '</option>');
+                            });
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+            $('#subcategory').on('change', function(){
+                var subcategory_id = $(this).val();
+                // alert(subcategory_id);
+                if(subcategory_id) {
+                    $.ajax({
+                        url: "{{  url('/admin/product-subcategory/ajax') }}/"+subcategory_id,
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data) {
+                        var d =$('#subsubcategory').empty();
+                            $('#sub_sub_cate_display').show();
+                            $('#subsubcategory').append('<option value="" disabled selected> Select One </option>');
+                            $.each(data, function(key, value){
+                                $('#subsubcategory').append('<option value="'+ value.id +'">' + value.name + '</option>');
+                            });
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+        });
     </script>
 @endpush

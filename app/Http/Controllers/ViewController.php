@@ -48,10 +48,19 @@ class ViewController extends Controller
     {
         $category = Category::where('slug', $slug)->first();
         $title = $category->name;
-        $relatedcategory = Category::latest()->limit(12)->get();
+
+        if($category->parent_id != NULL && $category->child_id != NULL){
+            $relatedcategory = Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->where('is_default', '0')->orderBy('serial_number', 'ASC')->limit(12)->get();
+        }elseif($category->parent_id != NULL && $category->child_id == NULL){
+            $relatedcategory = Category::where('child_id', $category->id)->where('is_default', '0')->orderBy('child_serial', 'ASC')->limit(12)->get();
+        }elseif($category->parent_id == NULL && $category->child_id == NULL){
+            $relatedcategory = Category::where('parent_id', $category->id)->where('child_id', NULL)->where('is_default', '0')->orderBy('parent_serial', 'ASC')->limit(12)->get();
+        }else{
+            $relatedcategory = Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->where('is_default', '0')->orderBy('serial_number', 'ASC')->limit(12)->get();
+        }
         $products = Product::where('category_id', $category->id)->latest()->get();
-        $latestcategoryads = CategoryAds::latest()->limit(3)->get();
-        $categorybanners = CategoryBanner::where('status', 1)->latest()->get();
+        $latestcategoryads = CategoryAds::where('cat_id', $category->id)->latest()->limit(3)->get();
+        $categorybanners = CategoryBanner::where('cat_id', $category->id)->where('status', 1)->latest()->get();
         $brands = Brand::where('status', 1)->latest()->get();
         return view('pages.categoryproduct', compact('title', 'category', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
     }
@@ -67,7 +76,7 @@ class ViewController extends Controller
         $brands = Brand::where('status', 1)->latest()->get();
         return view('pages.categoryproduct', compact('title', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
     }
-    
+
     public function priceProduct(Request $request)
     {
         $title = $request->min_price. ' price ' . ' to '. $request->max_price. ' price product';
@@ -78,5 +87,5 @@ class ViewController extends Controller
         $products = Product::whereBetween('sale_price', [$request->min_price, $request->max_price])->get();
         return view('pages.categoryproduct', compact('title', 'products', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands'));
     }
-    
+
 }

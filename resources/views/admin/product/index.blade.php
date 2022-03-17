@@ -49,7 +49,7 @@
                                             <tr>
                                                 <td>{{$product->product_code}}</td>
                                                 <td>
-                                                    <img width="50" height="50" src="{{ asset($product->thambnail) }}">
+                                                    <img width="50" height="50" src="{{ asset($product->thumbnail) }}">
                                                 </td>
                                                 <td>{{$product->name}}</td>
                                                 <td>{{$product->sale_price}} TK</td>

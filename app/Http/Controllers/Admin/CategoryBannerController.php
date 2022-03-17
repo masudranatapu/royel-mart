@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\CategoryBanner;
 use Brian2694\Toastr\Facades\Toastr;
@@ -19,8 +20,9 @@ class CategoryBannerController extends Controller
     {
         //
         $title = "Category Banner";
-        $categorybanners = CategoryBanner::latest()->get();
-        return view('admin.categorybanner.index', compact('title', 'categorybanners'));
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number','asc')->latest()->get();
+        $categorybanners = CategoryBanner::with('category')->latest()->get();
+        return view('admin.categorybanner.index', compact('title', 'categorybanners', 'categories'));
     }
 
     /**
@@ -41,11 +43,11 @@ class CategoryBannerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
         $this->validate($request, [
             'image' => 'required',
         ]);
-        
+
         $categorybanner_image = $request->file('image');
         $slug = 'categorybanner';
         $categorybanner_image_name = $slug.'-'.uniqid().'.'.$categorybanner_image->getClientOriginalExtension();
@@ -53,12 +55,20 @@ class CategoryBannerController extends Controller
         $categorybanner_image->move($upload_path, $categorybanner_image_name);
 
         $image_url = $upload_path.$categorybanner_image_name;
-        
-        CategoryBanner::insert([
-            'image' => $image_url,
-            'status' => "1",
-            'created_at' => Carbon::now(),
-        ]);
+
+        $cat_banner = new CategoryBanner();
+        if($request->parent_id == '' && $request->child_id == ''){
+            $cat_banner->cat_id = $request->category_id;
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $cat_banner->cat_id = $request->parent_id;
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $cat_banner->cat_id = $request->child_id;
+        }
+        $cat_banner->link = $request->link;
+        $cat_banner->image = $image_url;
+        $cat_banner->status = 1;
+        $cat_banner->save();
+
         Toastr::success('Category banner successfully save :-)','Success');
         return redirect()->back();
     }
@@ -99,34 +109,28 @@ class CategoryBannerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cat_banner = CategoryBanner::find($id);
+
         $categorybanner_image = $request->file('image');
 
         $slug = 'categorybanner';
-        if(isset($categorybanner_image)) {
+        if($categorybanner_image){
+            if(file_exists($cat_banner->image)){
+                unlink($cat_banner->image);
+            }
             $categorybanner_image_name = $slug.'-'.uniqid().'.'.$categorybanner_image->getClientOriginalExtension();
             $upload_path = 'media/categorybanner/';
             $categorybanner_image->move($upload_path, $categorybanner_image_name);
-            
-            $old_categorybanner_image = CategoryBanner::findOrFail($id);
-            if($old_categorybanner_image->image){
-                unlink($old_categorybanner_image->image);
-            }
 
             $image_url = $upload_path.$categorybanner_image_name;
-
-            CategoryBanner::findOrFail($id)->update([
-                'image' => $image_url,
-                'updated_at' => Carbon::now(),
-            ]);
-
-            Toastr::success('Category banner successfully save :-)','Success');
-            return redirect()->back();
-
-        }else {
-            Toastr::error('Select your category banner image :-)','Success');
-            return redirect()->back();
+            $cat_banner->image = $image_url;
         }
+
+        $cat_banner->link = $request->link;
+        $cat_banner->save();
+
+        Toastr::success('Category banner successfully save :-)','Success');
+        return redirect()->back();
     }
 
     /**
@@ -139,10 +143,9 @@ class CategoryBannerController extends Controller
     {
         //
         $categorybanner = CategoryBanner::findOrFail($id);
-        $delteImage = $categorybanner->image;
 
-        if(file_exists($delteImage)) {
-            unlink($delteImage);
+        if(file_exists($categorybanner->image)) {
+            unlink($categorybanner->image);
         }
 
         $categorybanner->delete();

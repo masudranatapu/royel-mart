@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\CategoryAds;
 use Brian2694\Toastr\Facades\Toastr;
@@ -19,8 +20,9 @@ class CategoryAdsController extends Controller
     {
         //
         $title = "Category Ads";
-        $categoryads = CategoryAds::latest()->get();
-        return view('admin.categoryads.index', compact('title', 'categoryads'));
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number','asc')->latest()->get();
+        $categoryads = CategoryAds::with('category')->latest()->get();
+        return view('admin.categoryads.index', compact('title', 'categoryads', 'categories'));
     }
 
     /**
@@ -47,23 +49,31 @@ class CategoryAdsController extends Controller
         ]);
 
         $category_image = $request->file('image');
-        $slug = 'categoryads';
+        $slug = 'category-ads';
         if(isset($category_image)) {
             $category_image_name = $slug.'-'.uniqid().'.'.$category_image->getClientOriginalExtension();
-            $upload_path = 'media/categoryads/';
+            $upload_path = 'media/category-ads/';
             $category_image->move($upload_path, $category_image_name);
-    
+
             $image_url = $upload_path.$category_image_name;
         }else {
             $image_url = NULL;
         }
-        CategoryAds::insert([
-            'name' => $request->name,
-            'link' => $request->link,
-            'image' => $image_url,
-            'status' => "1",
-            'created_at' => Carbon::now(),
-        ]);
+
+        $ads = new CategoryAds();
+        if($request->parent_id == '' && $request->child_id == ''){
+            $ads->cat_id = $request->category_id;
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $ads->cat_id = $request->parent_id;
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $ads->cat_id = $request->child_id;
+        }
+        $ads->name = $request->name;
+        $ads->link = $request->link;
+        $ads->image = $image_url;
+        $ads->status = 1;
+        $ads->save();
+
         Toastr::success('Category successfully save :-)','Success');
         return redirect()->back();
     }
@@ -89,7 +99,7 @@ class CategoryAdsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+
     public function categoryAdsInactive($id)
     {
         //
@@ -112,35 +122,34 @@ class CategoryAdsController extends Controller
             'name' => 'required',
         ]);
 
+        $ads = CategoryAds::find($id);
+
         $category_image = $request->file('image');
-        $slug = 'categoryads';
+        $slug = 'category-ads';
         if(isset($category_image)) {
+            if(file_exists($ads->image)){
+                unlink($ads->image);
+            }
             $category_image_name = $slug.'-'.uniqid().'.'.$category_image->getClientOriginalExtension();
-            $upload_path = 'media/categoryads/';
+            $upload_path = 'media/category-ads/';
             $category_image->move($upload_path, $category_image_name);
-            
+
             $category_old_image = CategoryAds::findOrFail($id);
             if ($category_old_image->image) {
                 unlink($category_old_image->image);
             }
             $image_url = $upload_path.$category_image_name;
-            CategoryAds::findOrFail($id)->update([
-                'name' => $request->name,
-                'link' => $request->link,
-                'image' => $image_url,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::info('Category ads successfully updated :-)','Success');
-            return redirect()->back();
-        }else {
-            CategoryAds::findOrFail($id)->update([
-                'name' => $request->name,
-                'link' => $request->link,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::info('Category ads successfully updated :-)','Success');
-            return redirect()->back();
+            $ads->image = $image_url;
         }
+
+        $ads->name = $request->name;
+        $ads->link = $request->link;
+        $ads->save();
+
+        Toastr::info('Category ads successfully updated :-)','Success');
+        return redirect()->back();
+
+
     }
 
     /**
@@ -151,14 +160,13 @@ class CategoryAdsController extends Controller
      */
     public function destroy($id)
     {
-        //
-        $categoryads =CategoryAds::findOrFail($id);
-        $deleteImage = $categoryads->image;
+        $ads =CategoryAds::findOrFail($id);
 
-        if(file_exists($deleteImage)) {
-            unlink($deleteImage);
+        if(file_exists($ads->image)){
+            unlink($ads->image);
         }
-        $categoryads->delete();
+        $ads->delete();
+
         Toastr::warning('Category ads successfully delete :-)','Success');
         return redirect()->back();
     }

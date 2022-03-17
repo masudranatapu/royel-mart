@@ -25,9 +25,11 @@ class CategoryDeletedSeeder extends Seeder
             'status' => '1',
             'menu' => '1',
             'feature' => '1',
-            'serial_number' => '1',
+            'serial_number' => '0',
             'show_hide' => '0',
+            'is_default' => '1',
             'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
     }
 }

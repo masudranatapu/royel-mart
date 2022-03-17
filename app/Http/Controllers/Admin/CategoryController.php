@@ -20,8 +20,9 @@ class CategoryController extends Controller
     {
         //
         $title = "Category";
-        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->orderBy('serial_number','asc')->get();
-        return view('admin.category.index', compact('title', 'categories'));
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number','asc')->get();
+        $serial = Category::where('status', '1')->where('is_default', '0')->max('serial_number') + 1;
+        return view('admin.category.index', compact('title', 'categories', 'serial'));
     }
 
     /**
@@ -42,7 +43,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
         $this->validate($request, [
             'name' => 'required',
         ]);
@@ -71,24 +72,97 @@ class CategoryController extends Controller
             $category_image_name = $slug.'-'.uniqid().'.'.$category_image->getClientOriginalExtension();
             $upload_path = 'media/category/';
             $category_image->move($upload_path, $category_image_name);
-    
+
             $image_url = $upload_path.$category_image_name;
         }else {
             $image_url = NULL;
         }
-        Category::insert([
-            'parent_id' => $request->parent_id,
-            'child_id' => $request->child_id,
-            'name' => $request->name,
-            'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'image' => $image_url,
-            'menu' => $menuStatus,
-            'feature' => $featureStatus,
-            'serial_number' => $request->serial_number,
-            'show_hide' => $showHideStatus,
-            'status' => "1",
-            'created_at' => Carbon::now(),
-        ]);
+
+        if($request->parent_id == '' && $request->child_id == ''){
+            $pre_check_cats = Category::where('serial_number', '<', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_sl = 1;
+            if($pre_check_cats->count() > 0){
+                foreach($pre_check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->serial_number = $pre_sl;
+                    $cat->save();
+
+                    $pre_sl = $pre_sl + 1;
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $pre_check_cats = Category::where('parent_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_sl = 1;
+            if($pre_check_cats->count() > 0){
+                foreach($pre_check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->parent_serial = $pre_sl;
+                    $cat->save();
+
+                    $pre_sl = $pre_sl + 1;
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $pre_check_cats = Category::where('child_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_sl = 1;
+            if($pre_check_cats->count() > 0){
+                foreach($pre_check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->child_serial = $pre_sl;
+                    $cat->save();
+
+                    $pre_sl = $pre_sl + 1;
+                }
+            }
+        }
+
+        if($request->parent_id == '' && $request->child_id == ''){
+            $check_cats = Category::where('serial_number', '>=', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            if($check_cats->count() > 0){
+                foreach($check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->serial_number = $cat->serial_number + 1;
+                    $cat->save();
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $check_cats = Category::where('parent_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            if($check_cats->count() > 0){
+                foreach($check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->parent_serial = $cat->parent_serial + 1;
+                    $cat->save();
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $check_cats = Category::where('child_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            if($check_cats->count() > 0){
+                foreach($check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->child_serial = $cat->child_serial + 1;
+                    $cat->save();
+                }
+            }
+        }
+
+        $category = new Category();
+        $category->parent_id = $request->parent_id;
+        $category->child_id = $request->child_id;
+        $category->name = $request->name;
+        $category->slug = strtolower(str_replace(' ', '-', $request->name));
+        $category->image = $image_url;
+        $category->menu = $menuStatus;
+        $category->feature = $featureStatus;
+        if($request->parent_id == '' && $request->child_id == ''){
+            $category->serial_number = $request->serial_number;
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $category->parent_serial = $request->serial_number;
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $category->child_serial = $request->serial_number;
+        }
+        $category->show_hide = $showHideStatus;
+        $category->save();
+
         Toastr::success('Category successfully save :-)','Success');
         return redirect()->back();
     }
@@ -129,10 +203,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
         $this->validate($request, [
             'name' => 'required',
         ]);
+
+        $category = Category::find($id);
 
         if($request->menu) {
             $menuStatus = $request->menu;
@@ -152,47 +228,104 @@ class CategoryController extends Controller
             $showHideStatus = "0";
         }
 
+        if($request->parent_id == '' && $request->child_id == ''){
+            $pre_check_cats = Category::where('serial_number', '<', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_sl = 1;
+            if($pre_check_cats->count() > 0){
+                foreach($pre_check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->serial_number = $pre_sl;
+                    $cat->save();
+
+                    $pre_sl = $pre_sl + 1;
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $pre_check_cats = Category::where('parent_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_sl = 1;
+            if($pre_check_cats->count() > 0){
+                foreach($pre_check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->parent_serial = $pre_sl;
+                    $cat->save();
+
+                    $pre_sl = $pre_sl + 1;
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $pre_check_cats = Category::where('child_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_sl = 1;
+            if($pre_check_cats->count() > 0){
+                foreach($pre_check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->child_serial = $pre_sl;
+                    $cat->save();
+
+                    $pre_sl = $pre_sl + 1;
+                }
+            }
+        }
+
+        if($request->parent_id == '' && $request->child_id == ''){
+            $check_cats = Category::where('serial_number', '>=', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            if($check_cats->count() > 0){
+                foreach($check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->serial_number = $cat->serial_number + 1;
+                    $cat->save();
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $check_cats = Category::where('parent_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            if($check_cats->count() > 0){
+                foreach($check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->parent_serial = $cat->parent_serial + 1;
+                    $cat->save();
+                }
+            }
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $check_cats = Category::where('child_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            if($check_cats->count() > 0){
+                foreach($check_cats as $check_cat){
+                    $cat = Category::find($check_cat->id);
+                    $cat->child_serial = $cat->child_serial + 1;
+                    $cat->save();
+                }
+            }
+        }
+
         $category_image = $request->file('image');
         $slug = 'category';
         if(isset($category_image)) {
+            if (file_exists($category->image)) {
+                unlink($category->image);
+            }
             $category_image_name = $slug.'-'.uniqid().'.'.$category_image->getClientOriginalExtension();
             $upload_path = 'media/category/';
             $category_image->move($upload_path, $category_image_name);
-            
-            $category_old_image = Category::findOrFail($id);
-            if ($category_old_image->image) {
-                unlink($category_old_image->image);
-            }
-            $image_url = $upload_path.$category_image_name;
-            Category::findOrFail($id)->update([
-                'parent_id' => $request->parent_id,
-                'child_id' => $request->child_id,
-                'name' => $request->name,
-                'slug' => strtolower(str_replace(' ', '-', $request->name)),
-                'image' => $image_url,
-                'menu' => $menuStatus,
-                'feature' => $featureStatus,
-                'serial_number' => $request->serial_number,
-                'show_hide' => $showHideStatus,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::info('Category successfully updated :-)','Success');
-            return redirect()->back();
-        }else {
-            Category::findOrFail($id)->update([
-                'parent_id' => $request->parent_id,
-                'child_id' => $request->child_id,
-                'name' => $request->name,
-                'slug' => strtolower(str_replace(' ', '-', $request->name)),
-                'menu' => $menuStatus,
-                'feature' => $featureStatus,
-                'serial_number' => $request->serial_number,
-                'show_hide' => $showHideStatus,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::info('Category successfully updated :-)','Success');
-            return redirect()->back();
+            $category->image = $upload_path.$category_image_name;
         }
+
+        $category->parent_id = $request->parent_id;
+        $category->child_id = $request->child_id;
+        $category->name = $request->name;
+        $category->slug = strtolower(str_replace(' ', '-', $request->name));
+        $category->menu = $menuStatus;
+        $category->feature = $featureStatus;
+        if($request->parent_id == '' && $request->child_id == ''){
+            $category->serial_number = $request->serial_number;
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $category->parent_serial = $request->serial_number;
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $category->child_serial = $request->serial_number;
+        }
+        $category->show_hide = $showHideStatus;
+        $category->save();
+
+
+        Toastr::info('Category successfully updated :-)','Success');
+        return redirect()->back();
     }
 
     /**
@@ -204,34 +337,39 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
-        $categories =Category::findOrFail($id);
-        $deleteImage = $categories->image;
-        if(file_exists($deleteImage)) {
-            unlink($deleteImage);
+        $categories = Category::findOrFail($id);
+
+        if(file_exists($categories->image)) {
+            unlink($categories->image);
         }
+
+        $default_cat = Category::where('is_default', '1')->first();
         Product::where('category_id', $id)->update([
-            'category_id' => '1',
+            'category_id' => $default_cat->id,
         ]);
-        
+
         $categories->delete();
         Toastr::warning('Category Successfully delete :-)','Info');
         return redirect()->back();
     }
-    
-    public function viewParentCategory($id)
+
+    public function viewParentCategory($slug)
     {
         //
-        $parentcategory = Category::findOrFail($id);
+        $main_cat = Category::where('slug', $slug)->first();
         $title = "Parent Category";
-        $parentcategories = Category::where('parent_id', $id)->where('child_id', NULL)->orderBy('serial_number','asc')->get();
-        return view('admin.category.parentcategory', compact('title', 'parentcategory', 'parentcategories'));
+        $parentcategories = Category::where('parent_id', $main_cat->id)->where('child_id', NULL)->orderBy('parent_serial','asc')->get();
+        $serial = Category::where('status', '1')->where('is_default', '0')->max('parent_serial') + 1;
+        return view('admin.category.parentcategory', compact('title', 'main_cat', 'parentcategories', 'serial'));
     }
-    public function viewChildCategory($id)
+    public function viewChildCategory($slug)
     {
         //
-        $childcategory = Category::findOrFail($id);
+        $childcategory = Category::where('slug', $slug)->first();
+        $main_cat = Category::find($childcategory->parent_id);
         $title = "Child Category";
-        $childcategories = Category::where('child_id', $id)->orderBy('serial_number','asc')->get();
-        return view('admin.category.childcategory', compact('title', 'childcategory', 'childcategories'));
+        $childcategories = Category::where('child_id', $childcategory->id)->orderBy('child_serial','asc')->get();
+        $serial = Category::where('status', '1')->where('is_default', '0')->max('child_serial') + 1;
+        return view('admin.category.childcategory', compact('title', 'childcategory', 'childcategories', 'main_cat', 'serial'));
     }
 }

@@ -23,7 +23,9 @@
                             <div class="single-product">
                                 <div class="inner-product">
                                     <figure>
-                                        <img src="{{asset($product->thambnail)}}" alt="">
+                                        <a href="{{ route('productdetails', $product->slug) }}">
+                                                <img src="{{asset($product->thumbnail)}}" alt="">
+                                            </a>
                                     </figure>
                                     <div class="product-bottom">
                                         <div class="reviews">
@@ -59,7 +61,7 @@
                                                 <i class="bi bi-cart-plus"></i>
                                                 cart
                                             </a>
-                                        </div>							
+                                        </div>
                                     </div>
                                 </div>
                             </div>

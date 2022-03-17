@@ -24,9 +24,23 @@
 <script type="text/javascript" src="{{asset('backend/bower_components/i18next-xhr-backend/i18nextXHRBackend.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('backend/bower_components/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('backend/bower_components/jquery-i18next/jquery-i18next.min.js')}}"></script>
+<!-- Select 2 js -->
+<script type="text/javascript" src="{{asset('backend/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
 <!-- Custom js -->
 <script src="{{asset('backend/assets/pages/data-table/js/data-table-custom.j')}}s"></script>
 <script src="{{asset('backend/assets/js/pcoded.min.js')}}"></script>
 <script src="{{asset('backend/assets/js/vartical-layout.min.js')}}"></script>
 <script src="{{asset('backend/assets/js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('backend/assets/js/script.js')}}"></script>
+
+<!-- Color picker js -->
+<script type="text/javascript" src="{{asset('backend/bower_components/spectrum/spectrum.js')}}"></script>
+<script type="text/javascript" src="{{asset('backend/bower_components/jscolor/jscolor.js')}}"></script>
+<!-- Mini-color js -->
+<script type="text/javascript" src="{{asset('backend/bower_components/jquery-minicolors/jquery.minicolors.min.js')}}"></script>
+
+<script type="text/javascript" src="{{asset('backend/assets/pages/advance-elements/custom-picker.js')}}"></script>
+
+<script>
+    $('.js-example-basic-single').slect2();
+</script>

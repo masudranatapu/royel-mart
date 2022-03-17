@@ -28,7 +28,10 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2>Child Category <small class="badge bg-success text-white">{{ $childcategories->count() }}</small></h2>
+                                    <h2>
+                                        Child Category <small class="badge bg-success text-white">{{ $childcategories->count() }}</small>
+                                        <a href="{{ route('admin.view-parent-category', $main_cat->slug) }}" class="btn btn-sm btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+                                    </h2>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
@@ -71,7 +74,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right mt-1">SL No</label>
                                                             <div class="col-md-9">
-                                                                <input type="number" class="form-control" name="serial_number" placeholder="Serial Number">
+                                                                <input type="number" class="form-control" name="serial_number" value="{{ $serial }}" min="1" placeholder="Serial Number">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -83,7 +86,7 @@
                                                                 <input type="checkbox" name="feature" value="1" id="featureChecked">
                                                                 <label for="featureChecked">Feature</label>
                                                                 <br>
-                                                                <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
+                                                                <input type="checkbox" name="show_hide" value="1" checked id="showHideChecked">
                                                                 <label for="showHideChecked" id="showHide">Show</label>
                                                             </div>
                                                         </div>
@@ -107,7 +110,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">SL No</th>
-                                            <th class="text-center">Name</th>
+                                            <th>Name</th>
                                             <th class="text-center">Image</th>
                                             <th class="text-center">Menu</th>
                                             <th class="text-center">Feature</th>
@@ -120,8 +123,8 @@
                                     <tbody>
                                         @foreach($childcategories as $key => $category)
                                             <tr>
-                                                <td class="text-center">{{ $category->serial_number }}</td>
-                                                <td class="text-center">{{ $category->name }}</td>
+                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                <td>{{ $category->name }}</td>
                                                 <td class="text-center">
                                                     <img width="60" height="60" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                                 </td>
@@ -147,7 +150,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    
+                                                    <a href="{{ route('category', $category->slug) }}" target="_blank">{{ route('category', $category->slug) }}</a>
                                                 </td>
                                                 <td class="text-center">
                                                     @if($category->status == 1)
@@ -208,7 +211,7 @@
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right mt-1">SL No</label>
                                                                         <div class="col-md-9">
-                                                                            <input type="number" class="form-control" name="serial_number" value="{{ $category->serial_number }}">
+                                                                            <input type="number" class="form-control" name="serial_number" value="{{ $category->parent_serial }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -271,18 +274,18 @@
         $("#showHideChecked").on('click', function() {
              // access properties using this keyword
             if($(this).prop("checked") == true){
-                $("#showHide").text("Hide");
+                $("#showHide").text("Show");
             }
             else if($(this).prop("checked") == false){
-                $("#showHide").text("Show");
+                $("#showHide").text("Hide");
             }
         });
         $(".editShowHide").click(function(){
             if($(this).prop("checked") == true){
-                $(".showHide").text("Hide");
+                $(".showHide").text("Show");
             }
             else if($(this).prop("checked") == false){
-                $(".showHide").text("Show");
+                $(".showHide").text("Hide");
             }
         });
     </script>

@@ -20,7 +20,7 @@
                     <div class="inner-category-slider">
 						<div class="category-area checknav">
                             @php
-                                $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'DESC')->latest()->limit(18)->get();
+                                $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'ASC')->limit(18)->get();
                             @endphp
 							<ul class="category-list">
                                 @foreach($categories as $category)
@@ -32,7 +32,7 @@
                                                 <span>{{ $category->name }}</span>
                                             </a>
                                             @php
-                                                $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->latest()->get();
+                                                $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('parent_serial', 'ASC')->get();
                                             @endphp
                                             @if($parentcategories->count() > 0)
                                                 <ul>
@@ -42,7 +42,7 @@
                                                                 {{ $parentcategory->name }}
                                                             </a>
                                                             @php
-                                                                $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
+                                                                $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('child_serial', 'ASC')->get();
                                                             @endphp
                                                             @if($childcategories->count() > 0)
                                                                 <ul>
@@ -134,7 +134,7 @@
             <!-- End Heading Area -->
             <div class="product-area">
                 <div class="row">
-                    
+
                     <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
                         <div class="single-product">
                             <div class="inner-product">
@@ -143,7 +143,7 @@
                                 </figure>
                                 <div class="product-bottom">
                                     <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
+                                        <a href="#">Fashion Sports shoes</a>
                                     </h3>
                                     <div class="reviews">
                                         <div class="reviews-inner">
@@ -169,7 +169,7 @@
                                             <del class="old-price">৳534,33</del>
                                             <span class="discount">24% Off</span>
                                         </div>
-                                    </div>							
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
                                 </figure>
                                 <div class="product-bottom">
                                     <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
+                                        <a href="#">Fashion Sports shoes</a>
                                     </h3>
                                     <div class="reviews">
                                         <div class="reviews-inner">
@@ -208,7 +208,7 @@
                                             <del class="old-price">৳534,33</del>
                                             <span class="discount">24% Off</span>
                                         </div>
-                                    </div>							
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -221,7 +221,7 @@
                                 </figure>
                                 <div class="product-bottom">
                                     <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
+                                        <a href="#">Fashion Sports shoes</a>
                                     </h3>
                                     <div class="reviews">
                                         <div class="reviews-inner">
@@ -247,7 +247,7 @@
                                             <del class="old-price">৳534,33</del>
                                             <span class="discount">24% Off</span>
                                         </div>
-                                    </div>							
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -260,7 +260,7 @@
                                 </figure>
                                 <div class="product-bottom">
                                     <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
+                                        <a href="#">Fashion Sports shoes</a>
                                     </h3>
                                     <div class="reviews">
                                         <div class="reviews-inner">
@@ -286,7 +286,7 @@
                                             <del class="old-price">৳534,33</del>
                                             <span class="discount">24% Off</span>
                                         </div>
-                                    </div>							
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -299,7 +299,7 @@
                                 </figure>
                                 <div class="product-bottom">
                                     <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
+                                        <a href="#">Fashion Sports shoes</a>
                                     </h3>
                                     <div class="reviews">
                                         <div class="reviews-inner">
@@ -325,7 +325,7 @@
                                             <del class="old-price">৳534,33</del>
                                             <span class="discount">24% Off</span>
                                         </div>
-                                    </div>							
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -338,7 +338,7 @@
                                 </figure>
                                 <div class="product-bottom">
                                     <h3 class="product-name">
-                                        <a href="single-product.html">Fashion Sports shoes</a>
+                                        <a href="#">Fashion Sports shoes</a>
                                     </h3>
                                     <div class="reviews">
                                         <div class="reviews-inner">
@@ -364,7 +364,7 @@
                                             <del class="old-price">৳534,33</del>
                                             <span class="discount">24% Off</span>
                                         </div>
-                                    </div>							
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -407,7 +407,7 @@
                     @endforeach
                 </div>
             </div>
-            <!-- End Product Area -->			
+            <!-- End Product Area -->
         </div>
     </section>
     <!-- End Categories -->
@@ -428,7 +428,9 @@
                                 <div class="single-product">
                                     <div class="inner-product">
                                         <figure>
-                                            <img src="{{asset($product->thambnail)}}" alt="">
+                                            <a href="{{ route('productdetails', $product->slug) }}">
+                                                <img src="{{asset($product->thumbnail)}}" alt="">
+                                            </a>
                                         </figure>
                                         <div class="product-bottom">
                                             <div class="reviews">
@@ -464,7 +466,7 @@
                                                     <i class="bi bi-cart-plus"></i>
                                                     cart
                                                 </a>
-                                            </div>							
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -472,7 +474,7 @@
                         @endforeach
                     </div>
                 </div>
-                <!-- End Product Area -->			
+                <!-- End Product Area -->
             </div>
         </section>
     @endif
@@ -495,7 +497,9 @@
                                 <div class="single-product">
                                     <div class="inner-product">
                                         <figure>
-                                            <img src="{{asset($product->thambnail)}}" alt="">
+                                            <a href="{{ route('productdetails', $product->slug) }}">
+                                                <img src="{{asset($product->thumbnail)}}" alt="">
+                                            </a>
                                         </figure>
                                         <div class="product-bottom">
                                             <div class="reviews">
@@ -531,7 +535,7 @@
                                                     <i class="bi bi-cart-plus"></i>
                                                     cart
                                                 </a>
-                                            </div>							
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -564,7 +568,7 @@
                         </div>
                     @endforeach
                 </div>
-            </div> 
+            </div>
         </div>
     </section>
     <!-- End Mission Vision -->

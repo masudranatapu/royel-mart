@@ -219,7 +219,7 @@
 														<tr>
 															<td>
 																<figure class="product-image">
-																	<img src="{{ asset($products->thambnail) }}" alt="">
+																	<img src="{{ asset($products->thumbnail) }}" alt="">
 																</figure>
 															</td>
 															<td>
@@ -244,7 +244,7 @@
 																<span>
 															</td>
 														</tr>
-														@php 
+														@php
 															$i++;
 														@endphp
 													@endforeach
@@ -419,7 +419,7 @@
 														<tr>
 															<td>
 																<figure class="product-image">
-																	<img src="{{ asset($products->thambnail) }}" alt="">
+																	<img src="{{ asset($products->thumbnail) }}" alt="">
 																</figure>
 															</td>
 															<td>
@@ -444,7 +444,7 @@
 																<span>
 															</td>
 														</tr>
-														@php 
+														@php
 															$i++;
 														@endphp
 													@endforeach

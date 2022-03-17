@@ -28,7 +28,10 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h2>Parent Category <small class="badge bg-success text-white">{{ $parentcategories->count() }}</small></h2>
+                                    <h2>
+                                        Parent Category <small class="badge bg-success text-white">{{ $parentcategories->count() }}</small>
+                                        <a href="{{ route('admin.category.index') }}" class="btn btn-sm btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+                                    </h2>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#large-Modal">
@@ -48,7 +51,7 @@
                                                 <div class="modal-body">
                                                     <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
-                                                        <input type="hidden" value="{{ $parentcategory->id }}" name="parent_id">
+                                                        <input type="hidden" value="{{ $main_cat->id }}" name="parent_id">
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right">Name</label>
                                                             <div class="col-md-9">
@@ -70,7 +73,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-md-3 text-right mt-1">SL No</label>
                                                             <div class="col-md-9">
-                                                                <input type="number" class="form-control" name="serial_number" placeholder="Serial Number">
+                                                                <input type="number" class="form-control" name="serial_number" value="{{ $serial }}" min="1" placeholder="Serial Number">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -82,8 +85,8 @@
                                                                 <input type="checkbox" name="feature" value="1" id="featureChecked">
                                                                 <label for="featureChecked">Feature</label>
                                                                 <br>
-                                                                <input type="checkbox" name="show_hide" value="1" id="showHideChecked">
-                                                                <label for="showHideChecked" id="showHide">Hide</label>
+                                                                <input type="checkbox" name="show_hide" value="1" checked id="showHideChecked">
+                                                                <label for="showHideChecked" id="showHide">Show</label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -106,7 +109,7 @@
                                     <thead>
                                         <tr>
                                             <th class="text-center">SL No</th>
-                                            <th class="text-center">Name</th>
+                                            <th>Name</th>
                                             <th class="text-center">Image</th>
                                             <th class="text-center">Menu</th>
                                             <th class="text-center">Feature</th>
@@ -120,8 +123,8 @@
                                     <tbody>
                                         @foreach($parentcategories as $key => $category)
                                             <tr>
-                                                <td class="text-center">{{ $category->serial_number }}</td>
-                                                <td class="text-center">{{ $category->name }}</td>
+                                                <td class="text-center">{{ $key+1 }}</td>
+                                                <td>{{ $category->name }}</td>
                                                 <td class="text-center">
                                                     <img width="60" height="60" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                                 </td>
@@ -147,10 +150,10 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    
+                                                    <a href="{{ route('category', $category->slug) }}" target="_blank">{{ route('category', $category->slug) }}</a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a title="View Parent Cateogory" href="{{ route('admin.viewchildcategory', $category->id) }}" class="btn btn-success">
+                                                    <a title="View Parent Cateogory" href="{{ route('admin.viewchildcategory', $category->slug) }}" class="btn btn-success">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 </td>
@@ -212,7 +215,7 @@
                                                                     <div class="form-group row">
                                                                         <label class="col-md-3 text-right mt-1">SL No</label>
                                                                         <div class="col-md-9">
-                                                                            <input type="number" class="form-control" name="serial_number" value="{{ $category->serial_number }}">
+                                                                            <input type="number" class="form-control" name="serial_number" value="{{ $category->parent_serial }}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -281,13 +284,13 @@
                 $("#showHide").text("Hide");
             }
         });
-        
+
         $(".editShowHide").click(function(){
             if($(this).prop("checked") == true){
-                $(".showHide").text("Hide");
+                $(".showHide").text("Show");
             }
             else if($(this).prop("checked") == false){
-                $(".showHide").text("Show");
+                $(".showHide").text("Hide");
             }
         });
     </script>
