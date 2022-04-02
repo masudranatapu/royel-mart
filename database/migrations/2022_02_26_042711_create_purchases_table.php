@@ -14,14 +14,11 @@ class CreatePurchasesTable extends Migration
     public function up()
     {
         Schema::create('purchases', function (Blueprint $table) {
-            $table->id();
-            $table->string('product_id');
-            $table->string('product_code');
-            $table->string('unit_id');
-            $table->string('name');
-            $table->string('buying_price');
-            $table->string('sale_price');
-            $table->string('quantity');
+            $table->increments('id');
+            $table->text('purchase_code');
+            $table->double('total', 14,2)->default(0);
+            $table->double('paid', 14,2)->default(0);
+            $table->double('due', 14,2)->default(0);
             $table->timestamps();
         });
     }

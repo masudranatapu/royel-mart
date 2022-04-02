@@ -81,7 +81,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-md-3">Image</label>
+                                                            <label class="col-md-3">Image (1900x300)</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
                                                             </div>
@@ -107,8 +107,8 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th width="5%" class="text-center">SL No</th>
@@ -181,7 +181,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Image</label>
+                                                                        <label class="col-md-3 text-right">Image (1900x300)</label>
                                                                         <div class="col-md-9">
                                                                             <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
                                                                         </div>

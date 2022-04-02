@@ -51,8 +51,8 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-center">SL No</th>
@@ -97,7 +97,7 @@
                                                                 </button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -131,7 +131,7 @@
                         },
                     success : function(data) {
                         console.log(data);
-                        // show all hide row 
+                        // show all hide row
                         $("#product_code_show").show();
                         $("#name_show").show();
                         // show val on input field

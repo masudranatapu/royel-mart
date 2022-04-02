@@ -53,18 +53,19 @@ class HappyClientController extends Controller
             $client_image_name = $slug.'-'.uniqid().'.'.$client_image->getClientOriginalExtension();
             $upload_path = 'media/client/';
             $client_image->move($upload_path, $client_image_name);
-    
+
             $image_url = $upload_path.$client_image_name;
         }else {
             $image_url = NULL;
         }
-        Client::insert([
-            'name' => $request->name,
-            'link' => $request->link,
-            'image' => $image_url,
-            'status'=> '1',
-            'created_at' => Carbon::now(),
-        ]);
+
+        $client = new Client();
+        $client->name = $request->name;
+        $client->link = $request->link;
+        $client->image = $image_url;
+        $client->status = 1;
+        $client->save();
+
         Toastr::success('Happy clients Successfully Save :-)','Success');
         return redirect()->back();
     }
@@ -112,37 +113,29 @@ class HappyClientController extends Controller
             'name' => 'required',
         ]);
 
+        $client = Client::find($id);
+
         $client_image = $request->file('image');
         $slug = 'client';
         if(isset($client_image)) {
+            if(file_exists($client->image)) {
+                unlink($client->image);
+            }
             $client_image_name = $slug.'-'.uniqid().'.'.$client_image->getClientOriginalExtension();
             $upload_path = 'media/client/';
             $client_image->move($upload_path, $client_image_name);
-            
-            $old_client_image = Client::findOrFail($id);
-            if($old_client_image->image){
-                unlink($old_client_image->image);
-            }
 
             $image_url = $upload_path.$client_image_name;
-        
-            Client::findOrFail($id)->update([
-                'name' => $request->name,
-                'link' => $request->link,
-                'image' => $image_url,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::success('Happy Client Successfully Save :-)','Success');
-            return redirect()->back();
-        }else {
-            Client::findOrFail($id)->update([
-                'name' => $request->name,
-                'link' => $request->link,
-                'updated_at' => Carbon::now(),
-            ]);
-            Toastr::success('Happy Client Successfully Save Without Iamge :-)','Success');
-            return redirect()->back();
+            $client->image = $image_url;
         }
+
+        $client->name = $request->name;
+        $client->link = $request->link;
+        $client->status = 1;
+        $client->save();
+
+        Toastr::success('Happy Client Successfully Save :-)','Success');
+            return redirect()->back();
     }
 
     /**
@@ -155,12 +148,11 @@ class HappyClientController extends Controller
     {
         //
         $clients = Client::findOrFail($id);
-        $delteImage = $clients->image;
 
-        if(file_exists($delteImage)) {
-            unlink($delteImage);
+        if(file_exists($clients->image)) {
+            unlink($clients->image);
         }
-        
+
         $clients->delete();
         Toastr::info('Client Successfully delete :-)','Success');
         return redirect()->back();

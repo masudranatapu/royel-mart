@@ -17,63 +17,95 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h2>Products  <small class="badge bg-success text-white">{{ $products->count() }}</small></h2>
-                                </div>
-                                <div class="col-md-4">
-                                    <form action="{{ route('admin.sold-product-report.search') }}" method="GET">
-                                        <div class="row">
-                                            <div class="col-md-3"></div>
-                                            <div class="col-md-7">
-                                                <label for="">Product Code</label>
-                                                <select name="product_code" id="" class="form-control">
-                                                    <option value="" >Select Product Code</option>
-                                                    @foreach($myproducts as $myproduct)
-                                                        <option value="{{ $myproduct->product_code }}">{{ $myproduct->name }} - {{ $myproduct->product_code }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <br>
-                                                <button type="submit" class="btn btn-success mt-2">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                    <h2>{{ $title }}</h2>
                                 </div>
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
-                                            <th class="text-center">Product code</th>
-                                            <th class="text-center">Title</th>
-                                            <th class="text-center">In Stock</th>
+                                            <th width="7%" class="text-center">Product code</th>
+                                            <th width="20%">Title</th>
+                                            <th width="20%" class="text-right">Purchase Qty</th>
+                                            <th width="20%" class="text-right">Sale Qty</th>
+                                            <th width="20%" class="text-right">Stock Qty</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($products as $key => $product)
-                                            @php
-                                                $purchases = App\Models\Purchases::where('product_id', $product->id)->sum('quantity');
-                                                $sold = App\Models\Sold::where('product_id', $product->id)->sum('quantity');
-                                                $stock =  $purchases - $sold;
-                                            @endphp
-                                            <tr>
-                                                <td class="text-center">{{ $key + 1 }}</td>
-                                                <td class="text-center">{{ $product->product_code }}</td>
-                                                <td class="text-center">{{ $product->name }}</td>
-                                                <td class="text-center">
-                                                    @if($stock <= 0)
-                                                        <span class="bg-success text-white">No Product In Stock</span>
-                                                    @else
-                                                        {{ $stock }} Pices
-                                                    @endif
-                                                </td>
-                                            </tr>
+                                            @if ($product->purchases->sum('quantity') > 0)
+                                                @php
+
+                                                @endphp
+                                                <tr>
+                                                    <td class="text-center">
+                                                        {{ $product->product_code }}
+                                                    </td>
+                                                    <td>{{ $product->name }}</td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-8">
+                                                            </div>
+                                                            <div class="col-4 text-right">
+                                                                {{ $product->purchases->sum('quantity') }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-8"></div>
+                                                            <div class="col-4 text-right">
+                                                                {{ $product->sales->sum('quantity') }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-8"></div>
+                                                            <div class="col-4 text-right">
+                                                                {{ $product->stocks->sum('quantity') }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         @endforeach
+                                    </tbody>
+                                </table>
+                                <table id="" class="table table-striped table-bordered nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="7%" class="text-center"></th>
+                                            <th width="20%"></th>
+                                            <th width="20%" class="text-right">Total Purchase</th>
+                                            <th width="20%" class="text-right">Total Sale</th>
+                                            <th width="20%" class="text-right">Total Stock</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $t_purchase = 0;
+                                            $t_sale = 0;
+                                            $t_stock = 0;
+                                        @endphp
+                                        @foreach($products as $key => $product)
+                                            @if ($product->purchases->sum('quantity') > 0)
+                                                @php
+                                                    $t_purchase += $product->purchases->sum('quantity');
+                                                    $t_sale += $product->sales->sum('quantity');
+                                                    $t_stock += $product->stocks->sum('quantity');
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        <tr>
+                                            <td class="text-center"></td>
+                                            <td></td>
+                                            <td class="text-right">{{ $t_purchase }}</td>
+                                            <td class="text-right">{{ $t_sale }}</td>
+                                            <td class="text-right">{{ $t_stock }}</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -101,7 +133,7 @@
                         },
                     success : function(data) {
                         console.log(data);
-                        // show all hide row 
+                        // show all hide row
                         $("#product_code_show").show();
                         $("#name_show").show();
                         // show val on input field

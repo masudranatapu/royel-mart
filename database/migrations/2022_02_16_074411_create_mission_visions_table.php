@@ -14,7 +14,7 @@ class CreateMissionVisionsTable extends Migration
     public function up()
     {
         Schema::create('mission_visions', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('name');
             $table->string('image');
             $table->text('details');

@@ -13,16 +13,18 @@ class SearchController extends Controller
     {
         // return $request;
         $title = $request->search_product;
+        $p_cat_id = '';
+        $lan = $request->session()->get('lan');
         $searching = $request->search_product;
         $create_url = "search_product=".$searching;
         if(isset($searching)) {
-            $searchProducts = Product::where('name', 'LIKE', '%'.$searching.'%')->orWhere('name_en', 'LIKE', '%'.$searching.'%')->orWhere('slug', 'LIKE', '%'.$searching.'%')->latest()->get();
+            $products = Product::where('name', 'LIKE', '%'.$searching.'%')->orWhere('name_en', 'LIKE', '%'.$searching.'%')->orWhere('slug', 'LIKE', '%'.$searching.'%')->latest()->paginate(24);
         }else {
-            $searchProducts = "";
+            $products = "";
             Toastr::warning('You have no name for search product:-)','warning');
             return redirect()->back();
         }
 		Toastr::success('Your searching products is !', 'success');
-        return view('pages.searchproduct', compact('title', 'searchProducts'));
+        return view('pages.searchproduct', compact('title', 'p_cat_id', 'lan', 'products'));
     }
 }

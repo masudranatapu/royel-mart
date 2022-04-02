@@ -14,7 +14,7 @@ class CreateProductSubUnitsTable extends Migration
     public function up()
     {
         Schema::create('product_sub_units', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('product_id')->nullable();
             $table->string('unit_id')->nullable();
             $table->string('subunit_id')->nullable();

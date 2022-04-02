@@ -110,7 +110,7 @@ class WebsiteController extends Controller
             $upload_path = 'media/logo/';
             $logo_image_url = $upload_path.$logo_image;
             $website = Website::findOrFail($id);
-            if ($website->logo) {
+            if (file_exists($website->logo)) {
                 unlink($website->logo);
             }
             $logo->move($upload_path, $logo_image);
@@ -119,7 +119,7 @@ class WebsiteController extends Controller
             $logo_image_url = $website->logo;
         }
 
-        // for favcion 
+        // for favcion
         $favicon = $request->file('favicon');
         $slug_2 = 'favicon';
         if (isset($favicon)) {
@@ -128,7 +128,7 @@ class WebsiteController extends Controller
             $upload_path = 'media/logo/';
             $fav_icon_url = $upload_path.$fav_icon;
             $website = Website::findOrFail($id);
-            if ($website->favicon) {
+            if (file_exists($website->favicon)) {
                 unlink($website->favicon);
             }
             $favicon->move($upload_path, $fav_icon);
@@ -145,7 +145,7 @@ class WebsiteController extends Controller
             $upload_path = 'media/logo/';
             $foot_log_url = $upload_path.$foot_log;
             $website = Website::findOrFail($id);
-            if($website->footer_logo) {
+            if(file_exists($website->footer_logo)) {
                 unlink($website->footer_logo);
             }
             $footerLogo -> move($upload_path, $foot_log);
@@ -189,7 +189,7 @@ class WebsiteController extends Controller
             'link' => $link,
             'updated_at' => Carbon::now(),
         ]);
-        
+
         Toastr::success('Website updated successfully :-)','Success');
         return redirect()->back();
 

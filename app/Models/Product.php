@@ -35,7 +35,7 @@ class Product extends Model
         'product_type',
         'status',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -55,5 +55,21 @@ class Product extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id', 'id');
+    }
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_id', 'id');
+    }
+    public function purchases()
+    {
+        return $this->hasMany(PurchaseStock::class, 'product_id', 'id');
+    }
+    public function sales()
+    {
+        return $this->hasMany(SaleStock::class, 'product_id', 'id');
+    }
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class, 'product_id', 'id');
     }
 }

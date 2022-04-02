@@ -14,14 +14,14 @@ class CreateShippingAddressesTable extends Migration
     public function up()
     {
         Schema::create('shipping_addresses', function (Blueprint $table) {
-            $table->id();
-            $table->string('user_id')->nullable();
-            $table->string('order_id');
+            $table->increments('id');
+            $table->integer('user_id');
+            $table->string('shipping_to');
             $table->string('shipping_name');
+            $table->string('shipping_phone');
             $table->string('shipping_email');
             $table->string('shipping_division_id');
             $table->string('shipping_district_id')->nullable();
-            $table->string('shipping_phone');
             $table->string('shipping_address');
             $table->timestamps();
         });

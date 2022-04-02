@@ -12,6 +12,12 @@ use App\Models\Division;
 use App\Models\District;
 use App\Models\ShippingAddress;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\ProductOrderColor;
+use App\Models\ProductOrderColorSize;
+use App\Models\User;
+use App\Models\Voucher;
+use Illuminate\Support\Facades\Hash;
 
 class GuestCheckoutController extends Controller
 {
@@ -20,17 +26,19 @@ class GuestCheckoutController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         $title = "Guest Checkout";
-        return view('customer.guest.index', compact('title'));
+        $lan = $request->session()->get('lan');
+        $p_cat_id = '';
+        return view('customer.guest.index', compact('title', 'lan', 'p_cat_id'));
     }
 
     // for getDivDis informaiton
-    public function getDivDis($div_id)
+    public function getDivDis(Request $request)
     {
-        // return $div_id;
+        $div_id = $request->billing_div_id;
         $districts = District::where('division_id', $div_id)->latest()->get();
         // return $districts;
 
@@ -42,15 +50,16 @@ class GuestCheckoutController extends Controller
     }
 
     // for getDivDis informaiton
-    public function getDisDiv($dis_id)
+    public function getDisDiv(Request $request)
     {
+        $dis_id = $request->billing_dis_id;;
         $district = District::findOrFail($dis_id);
-        
+
         $disCharge = $district->charge;
 
         return $data = [$disCharge];
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -62,6 +71,59 @@ class GuestCheckoutController extends Controller
         //
     }
 
+    public function voucher_check_with_guest(Request $request)
+    {
+        $shipping_phone = $request->shipping_phone;
+        $code = $request->voucher_code;
+        $discount_amount = $request->discount_amount;
+        $total = $request->total;
+
+        $user = User::where('phone', $shipping_phone)->first();
+        $voucher = Voucher::where('code', $code)->first();
+
+        $use_time = 0;
+        $real_code = 0;
+        $code_applicable = 0;
+        $min_p_amount = 0;
+        if($voucher){
+            $use_time = $voucher->useable_time;
+            $real_code = 1;
+            $min_p_amount = $voucher->purchase_amount;
+
+            if($voucher->purchase_amount <= $total){
+                $code_applicable = 1;
+            }
+        }
+
+        if($user){
+            $user_id = $user->id;
+
+            $used_voucher = Order::where('user_id', $user_id)->where('voucher', $code)->count();
+            if($used_voucher < $use_time){
+                if($voucher->discount_type == 'Solid'){
+                    $discount_amount += $voucher->discount;
+                    $total -= $voucher->discount;
+                }else{
+                    $voucher_dis = floor(($total*$voucher->discount)/100);
+                    $discount_amount += $voucher_dis;
+                    $total -= $voucher_dis;
+                }
+            }
+        }else{
+            if($voucher->discount_type == 'Solid'){
+                $discount_amount += $voucher->discount;
+                $total -= $voucher->discount;
+            }else{
+                $voucher_dis = floor(($total*$voucher->discount)/100);
+                $discount_amount += $voucher_dis;
+                $total -= $voucher_dis;
+            }
+        }
+
+
+        return ['code_applicable'=>$code_applicable, 'min_p_amount'=>$min_p_amount, 'real_code'=>$real_code, 'use_time'=>$use_time, 'discount_amount'=>$discount_amount, 'total'=>$total];
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -70,84 +132,102 @@ class GuestCheckoutController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $this->validate($request, [
             // order table
-            'shippingto' => 'required',
+            'shipping_to' => 'required',
             'payment_method' => 'required',
             // shipping table
             'shipping_name' => 'required',
             'shipping_email' => 'required',
             'shipping_phone' => 'required',
-            'shipping_division_id' => 'required',
-            'shipping_district_id' => 'required',
             'shipping_address' => 'required',
 
         ]);
-        
-        // for product id
-        if($request->product_id){
-            $product_id = trim(implode(',', $request->product_id), ',');
-        }else {
-            $product_id = NULL;
+
+        $check_user = User::where('phone', $request->shipping_phone)->first();
+        if($check_user){
+            $user_id = $check_user->id;
+        }else{
+            $user = new User();
+            $user->name = $request->shipping_name;
+            $user->email  = $request->shipping_email;
+            $user->phone  = $request->shipping_phone;
+            $user->address = $request->shipping_address;
+            $user->password = Hash::make($request->shipping_phone);
+            $user->save();
+
+            $new_user = User::where('phone', $request->shipping_phone)->first();
+            $user_id = $new_user->id;
         }
-        // for product quantity
-        if($request->quantity) {
-            $quantity = trim(implode(',', $request->quantity), ',');
-        }else {
-            $quantity = NULL;
-        }
-        // for product size
-        if($request->size_id) {
-            $size_id = trim(implode(',', $request->size_id), ',');
-        }else {
-            $size_id = NULL;
-        }
-        // for product color
-        if($request->color_id) {
-            $color_id = trim(implode(',', $request->color_id), ',');
-        }else {
-            $color_id = NULL;
-        }
+
+        // return $user_id;
+
+        $shipping_address = new ShippingAddress();
+        $shipping_address->user_id = $user_id;
+        $shipping_address->shipping_to = $request->shipping_to;
+        $shipping_address->shipping_name = $request->shipping_name;
+        $shipping_address->shipping_phone = $request->shipping_phone;
+        $shipping_address->shipping_email = $request->shipping_email;
+        $shipping_address->shipping_division_id = $request->shipping_division_id;
+        $shipping_address->shipping_district_id = $request->shipping_district_id;
+        $shipping_address->shipping_address = $request->shipping_address;
+        $shipping_address->save();
+
         // create order code
-        $latest_id = Order::select('id')->latest()->first();
 
-        if(isset($latest_id)) {
-            $order_code = "O-".sprintf('%04d', $latest_id->id + 1);
-        }else {
-            $order_code = "O-".sprintf('%04d', 1);
+        $order_code = 'R'.mt_rand(111111,999999);
+
+        $order = new Order();
+        $order->user_id = $user_id;
+        $order->order_code = $order_code;
+        $order->sub_total = $request->sub_total;
+        $order->shipping_amount = $request->shipping_amount;
+        $order->discount = $request->discount;
+        $order->total = $request->total;
+        $order->due = $request->total;
+        $order->payment_method = $request->payment_method;
+        $order->payment_transaction_id = $request->payment_transaction_id;
+        $order->shipping_to = $request->shipping_to;
+        $order->shipping_name = $request->shipping_name;
+        $order->shipping_phone = $request->shipping_phone;
+        $order->shipping_address = $request->shipping_address;
+        $order->voucher = $request->voucher_code;
+        $order->note = $request->note;
+        $order->pending_date = Carbon::now()->format('Y-m-d');
+        $order->save();
+
+        foreach($request->product_id as $key=>$product_id){
+            $order_product = new OrderProduct();
+            $order_product->order_code = $order_code;
+            $order_product->product_id = $product_id;
+            $order_product->sale_price = $request->sale_price[$key];
+            $order_product->quantity = $request->quantity[$key];
+            $order_product->save();
+
+            if($request->color_id[$key]){
+                $order_product_color = new ProductOrderColor();
+                $order_product_color->order_code = $order_code;
+                $order_product_color->product_id = $product_id;
+                $order_product_color->color_id = $request->color_id[$key];
+                $order_product_color->quantity = $request->quantity[$key];
+                $order_product_color->save();
+
+                if($request->size_id[$key]){
+                    $order_product_color_size = new ProductOrderColorSize();
+                    $order_product_color_size->order_code = $order_code;
+                    $order_product_color_size->product_id = $product_id;
+                    $order_product_color_size->color_id = $request->color_id[$key];
+                    $order_product_color_size->size_id = $request->size_id[$key];
+                    $order_product_color_size->quantity = $request->quantity[$key];
+                    $order_product_color_size->save();
+                }
+            }
         }
-
-        $total = $request->sub_total + $request->shipping_amount ;
-        
-        $order_id = Order::insertGetId([
-            'order_code' => $order_code,
-            'product_id' => $product_id,
-            'quantity' => $quantity,
-            'size_id' => $size_id,
-            'color_id' => $color_id,
-            'shipping_amount' => $request->shipping_amount,
-            'sub_total' => $request->sub_total,
-            'payment_method' => $request->payment_method,
-            'shippingto' => $request->shippingto,
-            'total' => $total,
-            'payment_mobile_number' => $request->payment_mobile_number,
-            'payment_transaction_id' => $request->payment_transaction_id,
-            'payment_transaction_id' => $request->payment_transaction_id,
-            'created_at' => Carbon::now(),
-        ]);
-        // for ShippingAddress info
-        ShippingAddress::insert([
-            'order_id' => $order_id,
-            'shipping_name' => $request->shipping_name,
-            'shipping_email' => $request->shipping_email,
-            'shipping_division_id' => $request->shipping_division_id,
-            'shipping_district_id' => $request->shipping_district_id,
-            'shipping_phone' => $request->shipping_phone,
-            'shipping_address' => $request->shipping_address,
-            'created_at' => Carbon::now(),
-        ]);
 
         $title = "Success Checkout";
+        $lan = $request->session()->get('lan');
+        $p_cat_id = '';
 
         $otp = $request->shipping_name. " your Royalmart-bd.com order code is ". $order_code . " .Keep this order code for your product delivery";
         $phoneNumber = $request->shipping_phone;
@@ -156,31 +236,27 @@ class GuestCheckoutController extends Controller
         $sentMessages = $messages->sent;
 
         // check message
-        if($allmessages != $sentMessages + 1){
-            $smsUrl = "http://66.45.237.70/api.php";
-            $data = [
-                'username'=>"proit24",
-                'password'=>"MHYRNTF5",
-                'number'=> "$phoneNumber",
-                'message'=> "$otp",
-            ];
+        $smsUrl = "http://66.45.237.70/api.php";
+        $data = [
+            'username'=>"proit24",
+            'password'=>"MHYRNTF5",
+            'number'=> "$phoneNumber",
+            'message'=> "$otp",
+        ];
 
-            $ch = curl_init(); // Initialize cURL
-            curl_setopt($ch, CURLOPT_URL, $smsUrl);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $smsresult = curl_exec($ch);
-            $p = explode('|', $smsresult);
-            $sendstatus = $p[0];
-            Message::where('id', $messages->id)->update([
-                'sent' => $sentMessages + 1,
-            ]);
-            session()->forget('cart');
-            Toastr::success('Order successfully done :-)','Success');
-            return view('customer.guest.successcheckout', compact('title'));
-        }else {
-            return redirect()->back();
-        }
+        $ch = curl_init(); // Initialize cURL
+        curl_setopt($ch, CURLOPT_URL, $smsUrl);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $smsresult = curl_exec($ch);
+        $p = explode('|', $smsresult);
+        $sendstatus = $p[0];
+        Message::where('id', $messages->id)->update([
+            'sent' => $sentMessages + 1,
+        ]);
+        session()->forget('cart');
+        Toastr::success('Order successfully done :-)','Success');
+        return view('customer.guest.successcheckout', compact('title', 'lan', 'p_cat_id'));
     }
     /**
      * Display the specified resource.

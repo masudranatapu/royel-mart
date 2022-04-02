@@ -70,8 +70,8 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th width="5%" class="text-center">SL No</th>
@@ -85,10 +85,10 @@
                                         @foreach($brands as $key => $brand)
                                             <tr>
                                                 <td class="text-center">{{ $key + 1 }}</td>
-                                                <td class="text-center">{{ $brand->name }}</td>
                                                 <td class="text-center">
                                                     <img width="60" height="60" src="{{ asset($brand->image) }}" alt="">
                                                 </td>
+                                                <td>{{ $brand->name }}</td>
                                                 <td class="text-center">
                                                     @if($brand->status == 1)
                                                         <a title="Inactive Now" href="{{ route('admin.brand.inactive', $brand->id) }}" class="btn btn-success">

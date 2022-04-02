@@ -14,7 +14,7 @@ class CreateCategoryAdsTable extends Migration
     public function up()
     {
         Schema::create('category_ads', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->integer('cat_id');
             $table->text('name');
             $table->text('link')->nullable();

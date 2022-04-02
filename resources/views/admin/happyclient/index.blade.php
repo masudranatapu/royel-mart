@@ -49,6 +49,18 @@
                                                     <form action="{{ route('admin.happy-client.store') }}" method="POST" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="form-group row">
+                                                            <label class="col-md-3 text-right">Client Name</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" name="name" placeholder="Name" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-3 text-right">Link</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" name="link" placeholder="Link" value="#" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
                                                             <label class="col-md-3 text-right">Image</label>
                                                             <div class="col-md-9">
                                                                 <input type="file" onChange="mainTham(this)" name="image" class="form-control">
@@ -75,28 +87,28 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Image</th>
-                                            <th class="text-center">Link</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Action</th>
+                                            <th width="5%" class="text-center">SL No</th>
+                                            <th>Name</th>
+                                            <th width="15%" class="text-center">Image</th>
+                                            <th>Link</th>
+                                            <th width="10%">Status</th>
+                                            <th width="8%" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($clients as $key => $client)
                                             <tr>
                                                 <td class="text-center">{{  $key + 1 }}</td>
-                                                <td class="text-center">{{$client->link}}</td>
+                                                <td>{{$client->name}}</td>
                                                 <td class="text-center">
                                                     <img wodth="60" height="60" src="{{ asset($client->image) }}">
-                                                </td class="text-center">
-                                                <td class="text-center">{{ $client->link }}</td>
-                                                <td class="text-center">
+                                                </td>
+                                                <td>{{ $client->link }}</td>
+                                                <td>
                                                     @if($client->status == 1)
                                                         <a title="Inactive Now" href="{{ route('admin.client.inactive', $client->id) }}" class="btn btn-success">
                                                             Active

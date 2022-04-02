@@ -22,18 +22,23 @@
                     <h3 class="area-title">Shopping Cart</h3>
                     <div class="cart-products">
                         @php
+                            $sub_total = 0;
                             $total = 0;
+                            $discount = 0;
+                            $shipping_charge = 0;
                             $i = 1;
                         @endphp
                         @if(session('cart'))
                             @foreach(session('cart') as $key => $cartdetails)
                                 @php
-                                    $total += $cartdetails['price'] * $cartdetails['quantity'] ;
+                                    $sub_total += ($cartdetails['price'] * $cartdetails['quantity']);
+                                    $shipping_charge += $cartdetails['shipping_charge'];
+                                    $discount += $cartdetails['discount'];
                                 @endphp
                                 <div class="single-item">
                                     <figure>
                                         <a href="#">
-                                            <img src="{{ asset($cartdetails['image']) }}">
+                                            <img loading="eager|lazy" src=" @if(file_exists($cartdetails['image'])) {{asset($cartdetails['image'])}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $cartdetails['name'] }}">
                                         </a>
                                     </figure>
                                     <div class="contents">
@@ -43,7 +48,7 @@
                                         <div class="product-info">
                                             @if($cartdetails['color_id'])
                                                 @php
-                                                    $color = App\Models\Unit::findOrFail($cartdetails['color_id']);
+                                                    $color = App\Models\Color::findOrFail($cartdetails['color_id']);
                                                 @endphp
                                                 <div class="single-info">
                                                     <label for="">Color:</label>
@@ -52,7 +57,7 @@
                                             @endif
                                             @if($cartdetails['size_id'])
                                                 @php
-                                                    $size = App\Models\SubUnit::findOrFail($cartdetails['size_id']);
+                                                    $size = App\Models\Size::findOrFail($cartdetails['size_id']);
                                                 @endphp
                                                 <div class="single-info">
                                                     <label for="">Size:</label>
@@ -75,56 +80,69 @@
                                                 <button class="qty btn-number button_plus_minus btn-plus-qty_{{ $key }} update-cart" data-id="{{ $key }}" data-type="plus" data-field="quant_{{ $key }}[1]">
                                                     <i class="bi bi-plus"></i>
                                                 </button>
-                                            </div>								
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="product-price">
                                         <span class="price">{{ $cartdetails['price'] }} ৳</span>
                                     </div>
                                     <button class="option-btn" title="Product remove form cart" onclick="removeFormCart({{ $key }})">
-                                        <i class="bi bi-trash"></i>
+                                        <i class="bi bi-x-square"></i>
                                     </button>
                                     <form id="delete-form-{{ $key }}" action="{{ route('cart.remove', $key) }}" method="get" style="display: none;">
                                         @csrf
                                     </form>
                                 </div>
                             @endforeach
+                            @php
+                                $total = ($sub_total + $shipping_charge);
+                            @endphp
                         @endif
-                    </div>				
+                    </div>
                 </div>
                 <div class="summary-area">
                     <h3 class="area-title">Checkout Summary</h3>
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td>Subtotal</td>
+                                <td>Subtotal </td>
+                                <input type="hidden" name="sub_total" id="sub_total" value="{{ $sub_total }}">
                                 <td>{{ $total }} ৳</td>
                             </tr>
                             <tr>
-                                <td>Total amount</td>
-                                <td>{{ $total }} ৳</td>
+                                <td>Shipping </td>
+                                <input type="hidden" name="shipping_amount" id="shipping_amount" value="{{ $shipping_charge }}">
+                                <td> <span id="delivery_amount">{{ $shipping_charge }}</span> ৳</td>
+                            </tr>
+                            <tr>
+                                <td>Discount </td>
+                                <input type="hidden" name="discount" id="discount" value="{{ $discount }}">
+                                <td> <span id="discount_amount">{{ $discount }}</span> ৳</td>
                             </tr>
                             <tr>
                                 <td>Payable Total</td>
-                                <td>{{ $total }} ৳</td>
+                                <input type="hidden" name="total" id="total" value="{{ $total }}">
+                                <td><span id="grand_total">{{ $total }} </span> ৳</td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="accordion" id="promo">
-                        <div class="accordion-item">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Add Promo code or Gift voucher
-                            </button>
-                            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#promo">
-                                <div class="accordion-body">
-                                    <form action="">
-                                        <input class="form-control" type="text">
-                                        <button class="promo-btn" type="submit">apply</button>
-                                    </form>
+                    @if ($discount <= 0)
+                        <div class="accordion" id="promo">
+                            <div class="accordion-item">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Add Promo code or Gift voucher
+                                </button>
+                                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#promo">
+                                    <div class="accordion-body">
+                                        <form action="">
+                                            <input class="form-control" type="text">
+                                            <button class="promo-btn" type="submit">apply</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
             <div class="text-center mt-40">

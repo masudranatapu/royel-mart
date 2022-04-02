@@ -14,7 +14,7 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->integer('user_id');
             $table->string('product_code');
             $table->string('category_id');
@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
             $table->double('sale_price');
             $table->double('discount', 14,2)->default(0);
             $table->double('discount_tk', 14,2)->default(0);
+            $table->double('shipping_charge', 14,2)->default(0);
             $table->integer('alert_quantity')->default(0);
             $table->longText('description')->nullable();
             $table->text('meta_description')->nullable();

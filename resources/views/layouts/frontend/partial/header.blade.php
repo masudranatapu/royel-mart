@@ -1,5 +1,6 @@
 @php
     $website = App\Models\Website::latest()->first();
+    $lan = session()->get('lan');
 @endphp
 <header>
     <div class="header-top">
@@ -7,14 +8,14 @@
             <div class="inner-header-top">
                 <div class="left-area">
                     <ul class="list">
-                        <li><a href="#">EN</a></li>
-                        <li><a href="#">BN</a></li>
-                        <li><a href="tel: (+88) {{ $website->phone }}"><span class="material-icons-outlined">call</span>(+88) {{ $website->phone }}</a></li>
+                        <li><a href="{{ route('language-change',['lan'=>'en']) }}">EN</a></li>
+                        <li><a href="{{ route('language-change',['lan'=>'bn']) }}">BN </a></li>
+                        <li><a href="tel: (+88) {{ $website->phone }}"><span class="material-icons-outlined">call</span>(+88) {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($website->phone, $lan, 'en') }}</a></li>
                     </ul>
                 </div>
                 <div class="right-area">
                     <ul class="list">
-                        <li><a href="#">privacy policy</a></li>
+                        <li><a href="#">{{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Privacy Policy', $lan, 'en') }}</a></li>
                         <li><a href="#">find a store</a></li>
                         <li><a href="{{ route('track.my.order') }}">track my order</a></li>
                         <li><a href="{{ route('contact') }}">contact us</a></li>
@@ -51,7 +52,7 @@
                     <button class="privacy-trigger"><span class="material-icons">reorder</span></button>
                     <div class="logo">
                         <a href="{{ route('home') }}">
-                            <img src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt="">
+                            <img loading="eager|lazy" src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt="">
                         </a>
                     </div>
                 </div>
@@ -127,7 +128,7 @@
                                                 <div class="single-item">
                                                     <figure>
                                                         <a href="javascript:;">
-                                                            <img src="{{ asset($cartdetails['image']) }}" alt="">
+                                                            <img loading="eager|lazy" src="{{ asset($cartdetails['image']) }}" alt="">
                                                         </a>
                                                     </figure>
                                                     <div class="contents">

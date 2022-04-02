@@ -5,7 +5,7 @@
 @stop
 
 @push('css')
-
+    <link rel="stylesheet" href="{{asset('backend/select2/css/select2.css')}}">
 @endpush
 
 @section('content')
@@ -22,62 +22,72 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable" class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
+                                            <th width="5%" class="text-center">SL No</th>
                                             <th class="text-center">Order Code</th>
                                             <th class="text-center">Order Date</th>
+                                            <th>Customer</th>
                                             <th class="text-center">Total</th>
                                             <th class="text-center">Payment Method</th>
                                             <th class="text-center">Payment Status</th>
                                             <th class="text-center">Order Status</th>
-                                            <th class="text-center" width="10%">Action</th>
+                                            <th class="text-center" width="8%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($orders as $key => $order)
-                                            <tr class="@if($order->order_status == 'Canceled') text-danger @endif">
+                                            <tr class="@if($order->status == 'Canceled') text-danger @endif">
                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                 <td class="text-center">{{ $order->order_code }}</td>
                                                 <td class="text-center">{{ $order->created_at->format('d M Y h:i A') }}</td>
+                                                <td>
+                                                    {{ $order->customer->name }} <br>
+                                                    {{ $order->customer->phone }}
+                                                </td>
                                                 <td class="text-center">{{ $order->total }} TK</td>
                                                 <td class="text-center">{{ $order->payment_method }}</td>
-                                                <td class="text-center">{{ $order->status }}</td>
                                                 <td class="text-center">
-                                                    @if($order->order_status == 'Canceled')
+                                                    @if ($order->due > 0)
+                                                        Due ({{ number_format($order->due) }} ৳)
+                                                    @else
+                                                        Paid
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">
+                                                    @if($order->status == 'Canceled')
                                                         <span class="badge bg-danger text-white">Canceled</span>
                                                     @else
-                                                        @if($order->order_status == 'Successed')
-                                                        <span class="badge bg-success text-white">Successed</span>
+                                                        @if($order->status == 'Successed')
+                                                            <span class="badge bg-success text-white">Successed</span>
                                                         @else
-                                                            <form action="{{ route('admin.orders.status') }}" method="POST">
+                                                            <form action="{{ route('admin.order-status-change') }}" method="POST">
                                                                 @csrf
                                                                 <input type="hidden" name="order_id" value="{{ $order->id }}">
-                                                                <select name="order_status" id="" class="form-control" onchange="this.form.submit()">
+                                                                <select name="status" id="" class="form-control select2" onchange="this.form.submit()">
                                                                     <option value="">Select One</option>
-                                                                    <option @if($order->order_status == 'Pending') selected @endif value="Pending">Pending</option>
-                                                                    <option @if($order->order_status == 'Confirmed') selected @endif value="Confirmed">Confirmed</option>
-                                                                    <option @if($order->order_status == 'Processing') selected @endif value="Processing">Processing</option>
-                                                                    <option @if($order->order_status == 'Delivered') selected @endif value="Delivered">Delivered</option>
-                                                                    <option @if($order->order_status == 'Successed') selected @endif value="Successed">Successed</option>
-                                                                    <option @if($order->order_status == 'Canceled') selected @endif value="Canceled">Canceled</option>
+                                                                    <option @if($order->status == 'Pending') selected @endif disabled value="Pending">Pending</option>
+                                                                    <option @if($order->status == 'Confirmed') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif  value="Confirmed">Confirmed</option>
+                                                                    <option @if($order->status == 'Processing') selected @endif @if($order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Processing">Processing</option>
+                                                                    <option @if($order->status == 'Delivered') selected @endif @if($order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered">Delivered</option>
+                                                                    <option @if($order->status == 'Successed') selected @endif @if($order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered" value="Successed">Successed</option>
+                                                                    <option @if($order->status == 'Canceled') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Canceled">Canceled</option>
                                                                 </select>
                                                             </form>
                                                         @endif
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
-                                                    @if($order->order_status == 'Canceled')
-                                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-danger" title="View Order Details">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    @else
-                                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-success" title="View Order Details">
-                                                            <i class="fa fa-eye"></i>
+                                                    @if($order->status != 'Canceled')
+                                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-info" title="View Order Details">
+                                                            <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endif
+                                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm @if($order->status == 'Canceled') btn-danger @else btn-success @endif" title="View Order Details">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -93,5 +103,8 @@
 @endsection
 
 @push('js')
-
+    <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
+    <script>
+        $('.select2').select2();
+    </script>
 @endpush

@@ -15,7 +15,7 @@
 @section('content')
 
     @include('layouts.frontend.partial.breadcrumbcategory')
-    
+
     <section class="phone-verification-section">
         <div class="container">
             <div class="title-area">
@@ -24,7 +24,7 @@
             <div class="verification-body">
                 <form method="POST" action="{{ route('customer.guestotp.resend') }}">
                     @csrf
-                    <input class="form-control" placeholder="Enter Your Phone Number" value="{{ $getPhone }}" type="number" name="phone">
+                    <input class="form-control" placeholder="Enter Your Phone Number" value="{{ $getPhone }}" readonly type="number" name="phone">
                     <button class="verify-btn">Resend PIN</button>
                 </form>
                 <form method="POST" action="{{ route('customer.guestotp.check') }}" class="send-pin">
@@ -34,7 +34,7 @@
                         <button class="close-toast" type="button"><i class="bi bi-x"></i></button>
                     </div>
                     <div class="verify-codes">
-						<input type="text" name="code_one" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+						<input type="text" name="code_one" maxlength="1" size="1" min="0" max="9" autofocus pattern="[0-9]{1}">
 						<input type="text" name="code_tow" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
 						<input type="text" name="code_three" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
 						<input type="text" name="code_four" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">

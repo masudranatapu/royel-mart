@@ -28,46 +28,67 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
-                                            <th class="text-center">Product Code</th>
-                                            <th class="text-center">Product Image</th>
-                                            <th class="text-center">Product Name</th>
-                                            <th class="text-center">Quantity</th>
-                                            <th class="text-center">Stock Status</th>
-                                            <th class="text-center">date in Stock</th>
-                                            <th class="text-center">Action</th>
+                                            <th width="5%" class="text-center">SL No</th>
+                                            <th width="6%">P. Code</th>
+                                            <th>Product</th>
+                                            <th width="8%">Quantity</th>
+                                            <th width="5%">Buying Price</th>
+                                            <th width="5%">Sale Price</th>
+                                            <th width="7%">Date</th>
+                                            <th width="7%" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($purchases as $key => $purchase)
                                             <tr>
                                                 <td class="text-center">{{ $key + 1 }}</td>
-                                                <td class="text-center">{{$purchase->product_code}}</td>
-                                                <td class="text-center">
-                                                    <img width="50" height="50" src="{{ asset($purchase['product']['thambnail']) }}" alt="">
+                                                <td>{{$purchase->purchase_code}}</td>
+                                                <td>
+                                                    @foreach ($purchase->products as $key=>$pur_product)
+                                                        <div class="row pb-2 mb-2" style="border-bottom: solid 1px rgb(228, 225, 225)">
+                                                            <div class="col-2">
+                                                                <img width="50" height="50" src="{{ URL::to($pur_product->product->thumbnail) }}" alt="">
+                                                            </div>
+                                                            <div class="col-9">
+                                                                {{ $pur_product->product->name }} <br>
+                                                                @if ($pur_product->color_id != NULL)
+                                                                    Color: {{ App\Models\Color::find($pur_product->color_id)->name }}
+                                                                @endif
+                                                                @if ($pur_product->size_id != NULL)
+                                                                    <i class="fa fa-arrow-right"></i> Size: {{ App\Models\Size::find($pur_product->size_id)->name }}
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-1">
+                                                                {{ $pur_product->quantity }}
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
                                                 </td>
-                                                <td class="text-center">{{$purchase->name}}</td>
-                                                <td class="text-center">{{$purchase->quantity}}</td>
-                                                <td class="text-center">
-                                                    @if($purchase->quantity > 0 )
-                                                        <span class="badge bg-success text-white">Stock Available</span>
-                                                    @else
-                                                        <span class="badge bg-danger text-white">Out of Stock</span>
-                                                    @endif
+                                                <td>{{$purchase->products->sum('quantity')}}</td>
+                                                <td>
+                                                    @foreach ($purchase->products as $key=>$pur_product)
+                                                        <div class="pb-2 mb-2" style="border-bottom: solid 1px rgb(228, 225, 225)">
+                                                            {{ $pur_product->buying_price }}
+                                                        </div>
+                                                    @endforeach
                                                 </td>
-                                                <td class="text-center">
-                                                    @if($purchase->updated_at)
-                                                        {{ $purchase->updated_at->format('d M Y h:i A') }}
-                                                    @else
-                                                        {{ $purchase->created_at->format('d M Y h:i A') }}
-                                                    @endif
+                                                <td>
+                                                    @foreach ($purchase->products as $key=>$pur_product)
+                                                        <div class="pb-2 mb-2" style="border-bottom: solid 1px rgb(228, 225, 225)">
+                                                            {{ $pur_product->sale_price }}
+                                                        </div>
+                                                    @endforeach
                                                 </td>
-                                                <td class="text-center">
-                                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $purchase->id }})">
+                                                <td>
+                                                    {{ $purchase->created_at->format('d M Y h:i A') }}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('admin.purchase.edit', $purchase->id) }}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                    <button class="btn btn-sm btn-danger waves-effect" type="button" onclick="deleteData({{ $purchase->id }})">
                                                         <i class="ml-1 fa fa-trash"></i>
                                                     </button>
                                                     <form id="delete-form-{{ $purchase->id }}" action="{{ route('admin.purchase.destroy', $purchase->id) }}" method="POST" style="display: none;">
@@ -104,7 +125,7 @@
                         },
                     success : function(data) {
                         console.log(data);
-                        // show all hide row 
+                        // show all hide row
                         $("#product_code_show").show();
                         $("#name_show").show();
                         // show val on input field

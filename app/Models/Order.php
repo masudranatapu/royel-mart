@@ -32,4 +32,14 @@ class Order extends Model
         'canceled_date',
         'order_type',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(OrderProduct::class, 'order_code', 'order_code');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

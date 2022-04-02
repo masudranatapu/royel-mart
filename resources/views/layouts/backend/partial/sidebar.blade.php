@@ -71,7 +71,8 @@
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/division') || Request::is('admin/district') ? 'pcoded-trigger' : '' }}">
+
+        {{-- <li class="pcoded-hasmenu {{ Request::is('admin/division') || Request::is('admin/district') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-bookmark"></i>
@@ -90,6 +91,31 @@
                     </a>
                 </li>
             </ul>
+        </li> --}}
+
+        <li class="pcoded-hasmenu {{ Request::is('admin/quick-sale*') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-bookmark"></i>
+                </span>
+                <span class="pcoded-mtext">Quick Sale Manage</span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/quick-sale') ? 'active' : '' }}">
+                    <a href="{{ route('admin.quick-sale.index') }}">
+                        <span class="pcoded-mtext">Quick Sale</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="{{ Request::is('admin/voucher') ? 'active' : '' }}">
+            <a href="{{ route('admin.voucher.index') }}">
+                <span class="pcoded-micon">
+                    <i class="fa fa-viadeo"></i>
+                </span>
+                <span class="pcoded-mtext">Voucher</span>
+            </a>
         </li>
     </ul>
     <ul class="pcoded-item pcoded-left-item">
@@ -113,15 +139,37 @@
                 </li>
             </ul>
         </li>
+        <li class="pcoded-hasmenu {{ Request::is('admin/purchase/create') || Request::is('admin/purchase') ? 'pcoded-trigger' : '' }}"">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-check-circle"></i>
+                </span>
+                <span class="pcoded-mtext">
+                    Purchase Management
+                </span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/purchase/create') ? 'active' : '' }}">
+                    <a href="{{ route('admin.purchase.create') }}">
+                        <span class="pcoded-mtext">New Purchase</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/purchase') ? 'active' : '' }}">
+                    <a href="{{ route('admin.purchase.index') }}">
+                        <span class="pcoded-mtext">Purchase List</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         @php
-            $pendingOrders = App\Models\Order::where('order_status', 'Pending')->latest()->get();
-            $confirmedOrders = App\Models\Order::where('order_status', 'Confirmed')->latest()->get();
-            $processingOrders = App\Models\Order::where('order_status', 'Processing')->latest()->get();
-            $deliveredOrders = App\Models\Order::where('order_status', 'Delivered')->latest()->get();
-            $successedOrders = App\Models\Order::where('order_status', 'Successed')->latest()->get();
-            $canceledOrders = App\Models\Order::where('order_status', 'Canceled')->latest()->get();
+            $pendingOrders = App\Models\Order::where('status', 'Pending')->latest()->get();
+            $confirmedOrders = App\Models\Order::where('status', 'Confirmed')->latest()->get();
+            $processingOrders = App\Models\Order::where('status', 'Processing')->latest()->get();
+            $deliveredOrders = App\Models\Order::where('status', 'Delivered')->latest()->get();
+            $successedOrders = App\Models\Order::where('status', 'Successed')->latest()->get();
+            $canceledOrders = App\Models\Order::where('status', 'Canceled')->latest()->get();
         @endphp
-        <li class="pcoded-hasmenu {{ Request::is('admin/orders') || Request::is('admin/orders-pending') || Request::is('admin/orders-confirmed') || Request::is('admin/orders-processing') ||Request::is('admin/orders-delivered') || Request::is('admin/orders-successed') || Request::is('admin/orders-canceled') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/orders') || Request::is('admin/orders-pending') || Request::is('admin/orders-confirmed') || Request::is('admin/orders-processing') ||Request::is('admin/orders-delivered') || Request::is('admin/orders-successed') || Request::is('admin/orders-canceled') || Request::is('admin/custom-order') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-gitlab"></i>
@@ -198,41 +246,33 @@
                         </span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/custom-order') ? 'active' : '' }}">
+                    <a href="{{ route('admin.custom-order') }}">
+                        <span class="pcoded-mtext">
+                            Custom Orders
+                        </span>
+                    </a>
+                </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/purchase/create') || Request::is('admin/purchase') || Request::is('admin/sold-product') || Request::is('admin/sold-product-report') ? 'pcoded-trigger' : '' }}"">
+        <li class="pcoded-hasmenu {{ Request::is('admin/stock-report') ? 'pcoded-trigger' : '' }}"">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-check-circle"></i>
                 </span>
                 <span class="pcoded-mtext">
-                    Stock Management
+                    Report
                 </span>
             </a>
             <ul class="pcoded-submenu">
-                <li class="{{ Request::is('admin/purchase/create') ? 'active' : '' }}">
-                    <a href="{{ route('admin.purchase.create') }}">
-                        <span class="pcoded-mtext">Add Purchase Product</span>
-                    </a>
-                </li>
-                <li class="{{ Request::is('admin/purchase') ? 'active' : '' }}">
-                    <a href="{{ route('admin.purchase.index') }}">
-                        <span class="pcoded-mtext">Purchase Product List</span>
-                    </a>
-                </li>
-                <li class="{{ Request::is('admin/sold-product') ? 'active' : '' }}">
-                    <a href="{{ route('admin.sold-product.index') }}">
-                        <span class="pcoded-mtext">Sold Product</span>
-                    </a>
-                </li>
-                <li class="{{ Request::is('admin/sold-product-report') ? 'active' : '' }}">
-                    <a href="{{ route('admin.sold-product.report') }}">
+                <li class="{{ Request::is('admin/stock-report') ? 'active' : '' }}">
+                    <a href="{{ route('admin.stock-report') }}">
                         <span class="pcoded-mtext">Stock Report</span>
                     </a>
                 </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/system-setting') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -278,6 +318,11 @@
                 <li class="{{ Request::is('admin/contact-massage')? 'active' : '' }}">
                     <a href="{{ route('admin.contact-massage') }}">
                         <span class="pcoded-mtext">Contact Massage</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/system-setting') ? 'active' : '' }}">
+                    <a href="{{ route('admin.system-setting.index') }}">
+                        <span class="pcoded-mtext">System Setting</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/website') ? 'active' : '' }}">

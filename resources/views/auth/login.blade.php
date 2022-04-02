@@ -22,43 +22,40 @@
 					<h4 class="dropdown-title">categories<i class="bi bi-chevron-down"></i></h4>
 					<div class="category-area checknav">
                         @php
-                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'DESC')->limit(18)->get();
+                            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->where('is_default', 0)->orderBy('serial_number', 'DESC')->limit(18)->get();
                         @endphp
                         <ul class="category-list">
                             @foreach($categories as $category)
-								@if($category->id == 1)
-								@else
-									<li>
-										<a href="{{ route('category', $category->slug) }}">
-											<img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
-											<span>{{ $category->name }}</span>
-										</a>
-										@php
-											$parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('serial_number', 'DESC')->get();
-										@endphp
-										<ul>
-											@foreach($parentcategories as $parentcategory)
-												<li>
-													<a href="{{ route('category', $parentcategory->slug) }}">
-														{{ $parentcategory->name }}
-													</a>
-													@php
-														$childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('serial_number', 'DESC')->get();
-													@endphp
-													<ul>
-														@foreach($childcategories as $childcategory)
-															<li>
-																<a href="{{ route('category', $childcategory->slug) }}">
-																	{{ $childcategory->name }}
-																</a>
-															</li>
-														@endforeach
-													</ul>
-												</li>
-											@endforeach
-										</ul>
-									</li>
-								@endif
+                                <li>
+                                    <a href="{{ route('category', $category->slug) }}">
+                                        <img src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
+                                        <span>{{ $category->name }}</span>
+                                    </a>
+                                    @php
+                                        $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('serial_number', 'DESC')->get();
+                                    @endphp
+                                    <ul>
+                                        @foreach($parentcategories as $parentcategory)
+                                            <li>
+                                                <a href="{{ route('category', $parentcategory->slug) }}">
+                                                    {{ $parentcategory->name }}
+                                                </a>
+                                                @php
+                                                    $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('serial_number', 'DESC')->get();
+                                                @endphp
+                                                <ul>
+                                                    @foreach($childcategories as $childcategory)
+                                                        <li>
+                                                            <a href="{{ route('category', $childcategory->slug) }}">
+                                                                {{ $childcategory->name }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </li>
                             @endforeach
                         </ul>
 					</div>
@@ -87,7 +84,7 @@
 							<div class="icon"><span class="material-icons">account_circle</span></div>
 						</div>
 						<div class="single-input">
-							<input class="form-control" type="text" name="email" placeholder="Enter email">
+							<input class="form-control" type="text" name="phone" placeholder="Phone/Email">
 						</div>
 						<div class="single-input">
 							<input class="form-control" type="password" name="password" placeholder="Enter password">
@@ -117,7 +114,7 @@
 							</div>
 						</div>
 						<div class="signup-option">
-							<label for="">Need an account? <a href="{{ route('customer.register') }}">SignUp</a></label>							
+							<label for="">Need an account? <a href="{{ route('customer.register') }}">SignUp</a></label>
 						</div>
 					</form>
 				</div>

@@ -9,17 +9,14 @@ class Purchases extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'product_id',
-        'product_code',
-        'unit_id',
-        'name',
-        'buying_price',
-        'sale_price',
-        'quantity',
+        'purchase_code',
+        'total',
+        'paid',
+        'due'
     ];
 
-    public function product()
+    public function products()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->hasMany(PurchaseStock::class, 'purchase_code', 'purchase_code');
     }
 }

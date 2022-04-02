@@ -14,7 +14,7 @@ class CreateBillingAddressesTable extends Migration
     public function up()
     {
         Schema::create('billing_addresses', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('user_id')->nullable();
             $table->string('order_id');
             $table->string('billing_name');

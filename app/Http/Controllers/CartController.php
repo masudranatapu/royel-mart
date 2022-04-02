@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     //
-    public function cart()
+    public function cart(Request $request)
     {
         $title = "Cart";
-        return view('customer.cart', compact('title'));
+        $lan = $request->session()->get('lan');
+        // return $request->session()->get('cart');
+        $p_cat_id = '';
+        return view('customer.cart', compact('title', 'lan', 'p_cat_id'));
     }
-    // add to cart with product id 
+    // add to cart with product id
     public function addToCart($product_id)
     {
         $product = Product::findOrFail($product_id);
@@ -22,9 +26,9 @@ class CartController extends Controller
         if(!$product) {
             abort(404);
         }
-        // create a session for cart 
+        // create a session for cart
         $cart = session()->get('cart');
-        // if cart empty then this is the first product 
+        // if cart empty then this is the first product
         if(!$cart) {
             $cart = [
                 $product_id => [
@@ -63,14 +67,14 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    // add to cart with quantity in product id 
+    // add to cart with quantity in product id
     public function addToCartWithQuantity(Request $request)
     {
         //
         $this->validate($request, [
             'quantity' => 'required',
         ]);
-        
+
         $product_id = $request->product_id;
 
         $product = Product::findOrFail($product_id);
@@ -78,9 +82,9 @@ class CartController extends Controller
         if(!$product) {
             abort(404);
         }
-        // create a session for cart 
+        // create a session for cart
         $cart = session()->get('cart');
-        // if cart empty then this is the first product 
+        // if cart empty then this is the first product
         if(!$cart) {
             $cart = [
                 $product_id => [
@@ -108,7 +112,7 @@ class CartController extends Controller
             Toastr::info('Product already on cart :-)','info');
             return redirect()->back();
         }
-        // another product will be add to cart if cart is empty and quantity will be requested 
+        // another product will be add to cart if cart is empty and quantity will be requested
         $cart[$product_id] = [
             'name' => $product->name,
             'quantity' => $request->quantity,
@@ -122,13 +126,13 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    // product add on cart with  size color and quantity 
+    // product add on cart with  size color and quantity
     public function addToCartWithSizeColorQuantity(Request $request)
     {
         $this->validate($request, [
             'quantity' => 'required',
         ]);
-        
+
         if($request->size_id){
             $sizeId = $request->size_id;
         }else {
@@ -142,15 +146,17 @@ class CartController extends Controller
         }
 
         $product_id = $request->product_id;
+        $sale_price = $request->sale_price;
+        $discount = $request->discount;
 
         $product = Product::findOrFail($product_id);
         // check for if product exist
         if(!$product) {
             abort(404);
         }
-        // create a session for cart 
+        // create a session for cart
         $cart = session()->get('cart');
-        // if cart empty then this is the first product with size and color and quantity by request 
+        // if cart empty then this is the first product with size and color and quantity by request
         if(!$cart) {
             $cart = [
                 $product_id => [
@@ -158,52 +164,84 @@ class CartController extends Controller
                     'quantity' => $request->quantity,
                     'size_id' => $sizeId,
                     'color_id' => $colorId,
-                    'price' => $product->sale_price,
-                    'image' => $product->thambnail,
+                    'price' => $sale_price,
+                    'discount' => $discount,
+                    'shipping_charge' => $product->shipping_charge,
+                    'image' => $product->thumbnail,
                 ]
             ];
             session()->put('cart', $cart);
-            Toastr::success('Product add on cart successfully :-)','Success');
-            return redirect()->back();
+
+            if($request->cart_type == 'Add to cart'){
+                Toastr::success('Product add on cart successfully :-)','Success');
+                return redirect()->back();
+            }elseif($request->cart_type == 'Buy now'){
+                Toastr::success('Product add on cart successfully :-)','Success');
+                if (Auth::check()){
+                    return redirect()->route('customer.checkout.index');
+                }else{
+                    return redirect()->route('customer.guest-checkout.index');
+                }
+            }
         }
-        // never add to cart if this product allready have in cart 
+
         if(isset($cart[$product_id])) {
+            $cart[$product_id]['quantity'] + $request->quantity;
+            session()->put('cart', $cart);
 
-            // $cart[$product_id]['quantity']++;
-
-            // session()->put('cart', $cart);
-
-            Toastr::info('Product already on cart :-)','info');
-            return redirect()->back();
+            if($request->cart_type == 'Add to cart'){
+                Toastr::success('Product add on cart successfully :-)','Success');
+                return redirect()->back();
+            }elseif($request->cart_type == 'Buy now'){
+                Toastr::success('Product add on cart successfully :-)','Success');
+                if (Auth::check()){
+                    return redirect()->route('customer.checkout.index');
+                }else{
+                    return redirect()->route('customer.guest-checkout.index');
+                }
+            }
         }
-        // if cart is empty then it will be add to cart wtih quantity 1
+
         $cart[$product_id] = [
             'name' => $product->name,
             'quantity' => $request->quantity,
             'size_id' => $sizeId,
             'color_id' => $colorId,
-            'price' => $product->sale_price,
-            'image' => $product->thambnail,
+            'price' => $sale_price,
+            'discount' => $discount,
+            'shipping_charge' => $product->shipping_charge,
+            'image' => $product->thumbnail,
         ];
         session()->put('cart', $cart);
-        Toastr::success('Product add on cart successfully :-)','Success');
-        return redirect()->back();
+
+        if($request->cart_type == 'Add to cart'){
+            Toastr::success('Product add on cart successfully :-)','Success');
+            return redirect()->back();
+        }elseif($request->cart_type == 'Buy now'){
+            Toastr::success('Product add on cart successfully :-)','Success');
+            if (Auth::check()){
+                return redirect()->route('customer.checkout.index');
+            }else{
+                return redirect()->route('customer.guest-checkout.index');
+            }
+        }
+
     }
 
-    // buy now with quantity in product id 
+    // buy now with quantity in product id
     public function buyNowWithQuantity(Request $request)
     {
         //
         $product_id = $request->product_id;
-        
+
         $product = Product::findOrFail($product_id);
         // check for if product exist
         if(!$product) {
             abort(404);
         }
-        // create a session for cart 
+        // create a session for cart
         $cart = session()->get('cart');
-        // if buy now  cart empty then this is the first product 
+        // if buy now  cart empty then this is the first product
         if(!$cart) {
             $cart = [
                 $product_id => [
@@ -231,7 +269,7 @@ class CartController extends Controller
             Toastr::info('Product already on cart :-)','info');
             return redirect()->route('customer.checkout.index');
         }
-        // another product will be add to buy now cart if cart is empty and quantity will be requested 
+        // another product will be add to buy now cart if cart is empty and quantity will be requested
         $cart[$product_id] = [
             'name' => $product->name,
             'quantity' => 1,
@@ -244,7 +282,7 @@ class CartController extends Controller
         Toastr::success('Product add on cart successfully :-)','Success');
         return redirect()->route('customer.checkout.index');
     }
-    
+
     public function buyNowWithSizeColorQuantity(Request $request)
     {
         $this->validate($request, [
@@ -258,9 +296,9 @@ class CartController extends Controller
         if(!$product) {
             abort(404);
         }
-        // create a session for cart 
+        // create a session for cart
         $cart = session()->get('cart');
-        // if cart empty then this is the first product with size and color and quantity by request 
+        // if cart empty then this is the first product with size and color and quantity by request
         if(!$cart) {
             $cart = [
                 $product_id => [
@@ -276,7 +314,7 @@ class CartController extends Controller
             Toastr::success('Product add on cart successfully :-)','Success');
             return redirect()->back();
         }
-        // never add to cart if this product allready have in cart 
+        // never add to cart if this product allready have in cart
         if(isset($cart[$product_id])) {
 
             // $cart[$product_id]['quantity']++;
@@ -299,7 +337,7 @@ class CartController extends Controller
         Toastr::success('Product add on cart successfully :-)','Success');
         return redirect()->back();
     }
-    
+
 	public function cartUpdate(Request $request)
     {
         if($request->id and $request->quantity)

@@ -24,7 +24,7 @@
                                 <div class="inner-product">
                                     <figure>
                                         <a href="{{ route('productdetails', $product->slug) }}">
-                                                <img src="{{asset($product->thumbnail)}}" alt="">
+                                                <img loading="eager|lazy" src=" @if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
                                             </a>
                                     </figure>
                                     <div class="product-bottom">
@@ -52,14 +52,15 @@
                                         <div class="price-cart">
                                             <div class="product-price">
                                                 <span class="current-price">৳ {{$product->sale_price}}</span>
-                                                <div class="old-price-discount">
-                                                    <del class="old-price">৳ {{$product->regular_price}} </del>
-                                                    <span class="discount">{{ $product->discount }} % </span>
-                                                </div>
+                                                @if ($product->discount > 0)
+                                                    <div class="old-price-discount">
+                                                        <del class="old-price">৳ {{$product->regular_price}} </del>
+                                                    </div>
+                                                @endif
                                             </div>
-                                            <a class="cart-btn" href="{{ route('add_to_cart', $product->id) }}">
+                                            <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
                                                 <i class="bi bi-cart-plus"></i>
-                                                cart
+                                                Shop Now
                                             </a>
                                         </div>
                                     </div>
@@ -68,6 +69,7 @@
                         </div>
                     @endforeach
                 </div>
+                @include('pages.partials.product-paginate', ['paginator' => $products])
             </div>
         </div>
     </section>

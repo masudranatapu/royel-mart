@@ -19,6 +19,12 @@ class CategoryController extends Controller
     public function index()
     {
         //
+        // $cats = Category::all();
+        // foreach($cats as $cat){
+        //     $catt = Category::find($cat->id);
+        //     $catt->serial_number = 0;
+        //     $catt->save();
+        // }
         $title = "Category";
         $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number','asc')->get();
         $serial = Category::where('status', '1')->where('is_default', '0')->max('serial_number') + 1;

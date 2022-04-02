@@ -14,22 +14,24 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('user_id')->nullable();
+            $table->increments('id');
+            $table->string('user_id');
             $table->string('order_code');
-            $table->string('product_id');
-            $table->string('size_id')->nullable();
-            $table->string('color_id')->nullable();
-            $table->string('quantity');
-            $table->string('shipping_amount');
-            $table->string('sub_total');
-            $table->string('total');
+            $table->double('shipping_amount', 14,2)->default(0);
+            $table->double('sub_total', 14,2)->default(0);
+            $table->double('discount', 14,2)->default(0);
+            $table->double('total', 14,2)->default(0);
+            $table->double('paid', 14,2)->default(0);
+            $table->double('due', 14,2)->default(0);
             $table->string('payment_method');
             $table->string('payment_mobile_number')->nullable();
             $table->string('payment_transaction_id')->nullable();
-            $table->string('shippingto')->nullable();
+            $table->string('shipping_to')->nullable();
+            $table->string('shipping_name')->nullable();
+            $table->string('shipping_phone')->nullable();
+            $table->string('shipping_address')->nullable();
+            $table->string('voucher')->nullable();
             $table->string('status')->default('Pending');
-            $table->string('order_status')->default('Pending');
             $table->date('pending_date')->nullable();
             $table->date('confirmed_date')->nullable();
             $table->date('processing_date')->nullable();
@@ -37,6 +39,7 @@ class CreateOrdersTable extends Migration
             $table->date('successed_date')->nullable();
             $table->date('canceled_date')->nullable();
             $table->string('order_type')->default('General');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

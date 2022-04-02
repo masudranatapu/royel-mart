@@ -9,18 +9,21 @@ use Carbon\Carbon;
 use App\Models\Review;
 use App\Models\ShippingAddress;
 use App\Models\Order;
-use Auth;
+use App\Models\OrderProduct;
+use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
     //
-    public function orderIndex()
+    public function orderIndex(Request $request)
     {
         $title = "Order View";
-        $orders = Order::where('user_id', Auth::user()->id)->latest()->get();
-        return view('customer.order', compact('title', 'orders'));
+        $lan = $request->session()->get('lan');
+        $p_cat_id = '';
+        $orders = Order::with('products')->where('user_id', Auth::user()->id)->latest()->get();
+        return view('customer.order', compact('title', 'lan', 'p_cat_id', 'orders'));
     }
-    
+
     public function review(Request $request)
     {
         //
@@ -41,10 +44,13 @@ class WishlistController extends Controller
         return redirect()->back();
     }
 
-    public function orderView($id)
+    public function orderView(Request $request, $id)
     {
         $title = "Order View";
-        $orders = Order::where('id', $id)->latest()->first();
-        return view('customer.orderview', compact('title', 'orders'));
+        $lan = $request->session()->get('lan');
+        $p_cat_id = '';
+        $orders = Order::find($id);
+        $products = OrderProduct::where('order_code', $orders->order_code)->get();
+        return view('customer.orderview', compact('title', 'lan', 'p_cat_id', 'orders', 'products'));
     }
 }

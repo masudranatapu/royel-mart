@@ -15,13 +15,13 @@
 @section('content')
     @include('layouts.frontend.partial.breadcrumbcategory')
 
-    @if($searchProducts->count() > 0)
+    @if($products->count() > 0)
         <section class="all-products-section pt-2">
             <div class="container-fluid">
                 <!-- End Heading Area -->
                 <div class="product-area">
                     <div class="row">
-                        @foreach($searchProducts as $product)
+                        @foreach($products as $product)
                             <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
                                 <div class="single-product">
                                     <div class="inner-product">
@@ -71,9 +71,19 @@
                             </div>
                         @endforeach
                     </div>
+                    @include('pages.partials.product-paginate', ['paginator' => $products])
                 </div>
             </div>
         </section>
+    @else
+        <section class="all-products-section pt-2">
+            <div class="container-fluid">
+                <div class="sidebar-products-area d-flex justify-content-center">
+                    <img loading="eager|lazy" src="{{ asset('media/general-image/empty.webp') }}" alt="Product Not Found">
+                </div>
+            </div>
+        </section>
+
     @endif
 @endsection
 

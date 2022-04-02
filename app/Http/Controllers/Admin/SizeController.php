@@ -18,9 +18,8 @@ class SizeController extends Controller
     public function index()
     {
         $title = "Size";
-        $colors = Color::oldest()->get();
-        $sizes = Size::with('color')->orderBy('color_id', 'ASC')->get();
-        return view('admin.unit.size', compact('title', 'colors', 'sizes'));
+        $sizes = Size::all();
+        return view('admin.unit.size', compact('title', 'sizes'));
     }
 
     /**
@@ -43,11 +42,9 @@ class SizeController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'color_id' => 'required',
         ]);
         $size = new Size();
         $size->name = $request->name;
-        $size->color_id = $request->color_id;
         $size->save();
 
         Toastr::success('Size successfully save :-)','Success');

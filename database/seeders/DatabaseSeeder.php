@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
          $this->call(CategoryDeletedSeeder::class);
          $this->call(BrandDeletedSeeder::class);
          $this->call(MessageTableSeeder::class);
+         $this->call(SystemSettingSeeder::class);
     }
 }

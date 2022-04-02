@@ -14,12 +14,16 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\ProductColor;
 use App\Models\ProductSize;
+use App\Models\QuickSale;
+use App\Models\QuickSaleProduct;
 use App\Models\Size;
 use App\Models\SubCategory;
 use App\Models\SubSubCategory;
+use App\Models\SystemSetting;
 use Carbon\Carbon;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class ProductController extends Controller
 {
@@ -48,7 +52,8 @@ class ProductController extends Controller
         $colors = Color::latest()->get();
         $subunits = SubUnit::where('status', 1)->latest()->get();
         $brands = Brand::where('status', 1)->where('is_default', 0)->latest()->get();
-        return view('admin.product.create', compact('title', 'categories', 'units', 'subunits', 'brands', 'colors'));
+        $setting = SystemSetting::latest()->first();
+        return view('admin.product.create', compact('title', 'categories', 'units', 'subunits', 'brands', 'colors', 'setting'));
     }
 
     /**
@@ -104,10 +109,10 @@ class ProductController extends Controller
         } else {
             $product_code = 'P' . sprintf('%03d', 1);
         }
-        if (isset($request->subsubcategory_id)) {
-            $category_id = $request->subsubcategory_id;
-        } elseif (isset($request->subcategory_id)) {
-            $category_id = $request->subcategory_id;
+        if (isset($request->child_id)) {
+            $category_id = $request->child_id;
+        } elseif (isset($request->parent_id)) {
+            $category_id = $request->parent_id;
         } else {
             $category_id = $request->category_id;
         }
@@ -116,6 +121,7 @@ class ProductController extends Controller
             'product_code' => $product_code,
             'category_id' => $category_id,
             'brand_id' => $request->brand_id,
+            'unit_id' => $request->unit_id,
             'name' => $request->name,
             'name_en' => $request->name_en,
             'slug' => strtolower(str_replace(' ', '-', $request->name)),
@@ -125,6 +131,7 @@ class ProductController extends Controller
             'sale_price' => $request->sale_price,
             'discount' => $request->discount,
             'discount_tk' => $request->discount_tk,
+            'shipping_charge' => $request->shipping_charge,
             'alert_quantity' => $request->alert_quantity,
             'description' => $request->description,
             'meta_description' => $request->meta_description,
@@ -139,14 +146,6 @@ class ProductController extends Controller
             'status' => $request->status,
             'created_at' => Carbon::now(),
         ]);
-
-        if ($request->unit_id != '') {
-            ProductUnit::insert([
-                'product_id' => $product_id,
-                'unit_id' => $request->unit_id,
-                'created_at' => Carbon::now(),
-            ]);
-        }
 
         if (is_array($request->color_id) || is_object($request->color_id)) {
             foreach ($request->color_id as $key => $color_id) {
@@ -234,11 +233,12 @@ class ProductController extends Controller
         $title = "Edit Product";
         $brands = Brand::where('status', 1)->where('is_default', '0')->latest()->get();
         $colors = Color::latest()->get();
+        $sizes = Size::latest()->get();
         $units = Unit::where('status', 1)->latest()->get();
         $products = Product::where('id', $id)->first();
         $productUnits = ProductUnit::where('product_id', $id)->latest()->get();
         $productColors = ProductColor::where('product_id', $id)->latest()->get();
-        return view('admin.product.edit', compact('title', 'brands', 'units', 'categories', 'subcategory', 'main_cat', 'parent_cat', 'child_cat', 'subsubcategory', 'products', 'productUnits', 'colors', 'productColors'));
+        return view('admin.product.edit', compact('title', 'brands', 'units', 'categories', 'subcategory', 'main_cat', 'parent_cat', 'child_cat', 'subsubcategory', 'products', 'productUnits', 'colors', 'sizes', 'productColors'));
     }
 
     /**
@@ -314,6 +314,7 @@ class ProductController extends Controller
 
         $product->category_id = $category_id;
         $product->brand_id = $request->brand_id;
+        $product->unit_id = $request->unit_id;
         $product->name = $request->name;
         $product->name_en = $request->name_en;
         $product->slug = strtolower(str_replace(' ', '-', $request->name));
@@ -321,6 +322,7 @@ class ProductController extends Controller
         $product->sale_price = $request->sale_price;
         $product->discount = $request->discount;
         $product->discount_tk = $request->discount_tk;
+        $product->shipping_charge = $request->shipping_charge;
         $product->alert_quantity = $request->alert_quantity;
         $product->description = $request->description;
         $product->meta_description = $request->meta_description;
@@ -334,14 +336,6 @@ class ProductController extends Controller
         $product->product_type = $request->product_type;
         $product->status = $request->status;
         $product->save();
-
-        if ($request->unit_id != '') {
-            ProductUnit::insert([
-                'product_id' => $id,
-                'unit_id' => $request->unit_id,
-                'created_at' => Carbon::now(),
-            ]);
-        }
 
         // return $request->color_id;
 
@@ -485,7 +479,7 @@ class ProductController extends Controller
         // return $request->getUnitId;
         $getId = $request->getColorId;
         $colorId = Color::findOrFail($getId);
-        $sizes = Size::where('color_id', $colorId->id)->latest()->get();
+        $sizes = Size::latest()->get();
         $data = NULL;
         $data .= '<div class="row mt-3" id="new_color_area_' . $colorId->id . '">
                     <div class="col-md-3">
@@ -520,9 +514,142 @@ class ProductController extends Controller
         $subcategory = Category::where('parent_id', $parent_id)->where('child_id', NULL)->get();
         return json_encode($subcategory);
     }
+
     public function productSubcategory($subcategory_id)
     {
         $subsubcategory = Category::where('child_id', $subcategory_id)->get();
         return json_encode($subsubcategory);
     }
+
+    public function parent_category_for_product(Request $request)
+    {
+        $parent_id = $request->category_id;
+        $subcategorys = Category::where('parent_id', $parent_id)->where('child_id', NULL)->get();
+        $cat = '';
+        if($subcategorys->count() > 0){
+            $cat .= '<option value=""> Select One </option>';
+            foreach($subcategorys as $category){
+                $cat .= '<option value="'.$category->id.'"> '.$category->name.' </option>';
+            }
+        }
+
+        $s_product = '';
+        $products = Product::where('category_id', $parent_id)->get();
+        if($products->count() > 0){
+            $s_product .= '<option value=""> Select One </option>';
+            foreach($products as $product){
+                $s_product .= '<option value="'.$product->id.'"> '.$product->name.' </option>';
+            }
+        }
+
+        return ['cat'=>$cat, 'product'=>$s_product];
+
+    }
+
+    public function child_category_for_product(Request $request)
+    {
+        $subcategory_id = $request->subcategory_id;
+        $categories = Category::where('child_id', $subcategory_id)->get();
+        $cat = '';
+        if($categories->count() > 0){
+            $cat .= '<option value=""> Select One </option>';
+            foreach($categories as $category){
+                $cat .= '<option value="'.$category->id.'"> '.$category->name.' </option>';
+            }
+        }
+
+        $s_product = '';
+        $products = Product::where('category_id', $subcategory_id)->get();
+        if($products->count() > 0){
+            $s_product .= '<option value=""> Select One </option>';
+            foreach($products as $product){
+                $s_product .= '<option value="'.$product->id.'"> '.$product->name.' </option>';
+            }
+        }
+
+        return ['cat'=>$cat, 'product'=>$s_product];
+
+    }
+
+    public function get_category_product_for_qs(Request $request)
+    {
+        $subsubcategory_id = $request->subsubcategory_id;
+        $s_product = '';
+        $products = Product::where('category_id', $subsubcategory_id)->get();
+        if($products->count() > 0){
+            $s_product .= '<option value=""> Select One </option>';
+            foreach($products as $product){
+                $s_product .= '<option value="'.$product->id.'"> '.$product->name.' </option>';
+            }
+        }
+
+        return ['product'=>$s_product];
+
+    }
+
+    public function add_product_to_qs_list(Request $request)
+    {
+        $product_id = $request->product_id;
+        $quick_sale_id = $request->quick_sale_id;
+        $product = '';
+
+        $sale = QuickSale::find($quick_sale_id);
+        $check_qs_product = QuickSaleProduct::where('product_id', $product_id)->where('quick_sale_id', $quick_sale_id)->first();
+        if(!$check_qs_product){
+            $chk_product = Product::find($product_id);
+            $product .= '
+                <tr id="product_tr_'.$chk_product->id.'">
+                    <td>
+                        <img src="';
+
+                        if(file_exists($chk_product->thumbnail)){
+                            $product .= ''.URL::to($chk_product->thumbnail).'';
+                        }else {
+                            $product .= 'asset("media\general-image\no-photo.jpg")';
+                        }
+            $product .= ' " width="100%" height="100px" alt="banner image">
+                    </td>
+                    <td>
+                        <input type="hidden" class="form-control" name="product_id[]" value="'.$chk_product->id.'">
+                        <a href="'.route('productdetails', $chk_product->slug).'" target="_blank">'.$chk_product->name.'</a>
+                    </td>
+                    <td>';
+                        if($sale->discount > 0){
+                            $product .= '<input type="text" class="form-control" name="discount[]" readonly value="'.$sale->discount.'">';
+                        }else{
+                            $product .= '<input type="text" class="form-control" name="discount[]" value="'.$chk_product->discount.'">';
+                        }
+
+
+            $product .= '  </td>
+                    <td>
+                        <select class="form-control" name="discount_type[]" required id="discount_type">
+                            <option value="Solid"';
+
+                            if($chk_product->discount_type == 'Solid'){
+                                $product .= ' selected ';
+                            }
+                            $product .= ' >Solid (৳)</option>
+                            <option value="Percentage" ';
+
+                            if($chk_product->discount_type == 'Percentage'){
+                                $product .= ' selected ';
+                            }
+                            $product .= ' >Percentage (%)</option>
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData('.$chk_product->id.')">
+                            <i class="ml-1 fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            ';
+        }
+
+        return $product;
+
+    }
+
+
 }

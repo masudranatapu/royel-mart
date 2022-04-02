@@ -67,13 +67,12 @@ class StockController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function showReport()
+    public function stock_report()
     {
         //
-        $title = "Sold Product Report";
-        $products = Product::latest()->get();
-        $myproducts = Product::latest()->get();
-        return view('admin.report.index', compact('title', 'products', 'myproducts'));
+        $title = "Stock Report";
+        $products = Product::with('purchases','sales','stocks')->latest()->get();
+        return view('admin.report.index', compact('title', 'products'));
     }
 
     /**

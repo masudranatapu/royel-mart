@@ -18,7 +18,6 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
         $title = "Brand";
         $brands = Brand::where('is_default', 0)->latest()->get();
         return view('admin.brand.index', compact('title', 'brands'));
@@ -31,7 +30,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -42,7 +41,6 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->validate($request, [
             'name' => 'required',
         ]);
@@ -77,7 +75,6 @@ class BrandController extends Controller
      */
     public function brandActive($id)
     {
-        //
 
         Brand::findOrFail($id)->update(['status' => '1']);
         Toastr::info('Brand Successfully Active :-)','Success');
@@ -92,7 +89,6 @@ class BrandController extends Controller
      */
     public function brandInactive($id)
     {
-        //
         Brand::findOrFail($id)->update(['status' => '0']);
         Toastr::info('Brand Successfully Inactive :-)','Success');
         return redirect()->back();
@@ -107,12 +103,11 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $this->validate($request, [
             'name' => 'required',
         ]);
 
-        $brand = new Brand();
+        $brand = Brand::find($id);
 
         $brand_image = $request->file('image');
         $slug = 'brand';
@@ -129,6 +124,7 @@ class BrandController extends Controller
         }
 
         $brand->name = $request->name;
+        $brand->slug = strtolower(str_replace(' ', '-', $request->name));
         $brand->save();
 
         Toastr::success('Category successfully updated :-)','Success');
@@ -143,7 +139,6 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        //
         $brand =Brand::findOrFail($id);
 
         if(file_exists($brand->image)) {
@@ -151,9 +146,13 @@ class BrandController extends Controller
         }
 
         $check_default_brand = Brand::where('is_default', 1)->first();
-        Product::where('brand_id', $id)->update([
-            'brand_id' => $check_default_brand->id,
-        ]);
+        $check_products = Product::where('brand_id', $id)->get();
+        if($check_products->count() > 0){
+            foreach($check_products as $check_product){
+                $check_product = Product::first($check_product->id);
+                $check_product->brand_id = $check_default_brand->id;
+            }
+        }
 
         $brand->delete();
         Toastr::warning('Brand successfully delete :-)','Success');

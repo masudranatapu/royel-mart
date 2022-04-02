@@ -81,7 +81,7 @@
 							    <div class="card-header">
 							    	<div class="wrapper">
 								        <h4 class="card-title">Order  {{ $orders->order_code }}</h4>
-								        <p class="card-category">{{ $orders->created_at->format('d M Y h:i A') }}</p>
+								        <p class="card-category">{{ \Carbon\Carbon::parse($orders->created_at)->format('d M Y') }}</p>
 							    	</div>
 							    </div>
 							    <div class="card-body">
@@ -101,9 +101,9 @@
 							    								<span class="info">Order Pending</span>
 							    							    <span class="date">
                                                                     @if($orders->pending_date)
-                                                                        {{ $orders->pending_date->format('d M Y') }}
+                                                                        {{ \Carbon\Carbon::parse($orders->pending_date)->format('d M Y')}}
                                                                     @else
-                                                                        {{ $orders->created_at->format('d M Y') }}
+                                                                        {{ \Carbon\Carbon::parse($orders->created_at)->format('d M Y')}}
 																	@endif
                                                                 </span>
 							    							</p>
@@ -169,10 +169,10 @@
 							    				<div class="card">
 							    					<div class="card-body">
 							    						<h4 class="card-title">Shipping Address:</h4>
-							    						<p><label for="">name : </label><span>Forhad Hossain</span></p>
-							    						<p><label for="">Phone : </label><span>09877676543</span></p>
-							    						<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-							    						<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+							    						<p><label for="">name : </label><span>{{ $orders->shipping_name }}</span></p>
+							    						<p><label for="">Phone : </label><span>{{ $orders->shipping_phone }}</span></p>
+							    						<p><label for="">Mail : </label><span></span></p>
+							    						<p><label for="">Address : </label><span>{{ $orders->shipping_address }}</span></p>
 							    					</div>
 							    				</div>
 							    			</div>
@@ -180,17 +180,16 @@
 							    				<div class="card">
 							    					<div class="card-body">
 							    						<h4 class="card-title">Billing Address:</h4>
-							    						<p><label for="">name : </label><span>Forhad Hossain</span></p>
-							    						<p><label for="">Phone : </label><span>09877676543</span></p>
-							    						<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-							    						<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+							    						<p><label for="">name : </label><span>{{ Auth::user()->name }}</span></p>
+							    						<p><label for="">Phone : </label><span>{{ Auth::user()->phone }}</span></p>
+							    						<p><label for="">Mail : </label><span>{{ Auth::user()->email }}</span></p>
+							    						<p><label for="">Address : </label><span>{{ Auth::user()->address }}</span></p>
 							    					</div>
 							    				</div>
 							    			</div>
 							    		</div>
 							    		<div class="payment-info mb-3">
 							    			<p><label for="">Payment Method : </label><span>{{ $orders->payment_method }}</span></p>
-							    			<p><label for="">Payment Status : </label><span>{{ $orders->status }}</span></p>
 							    		</div>
 								    	<table class="table order-view-table">
 								    		<thead>
@@ -203,25 +202,37 @@
 								    		</thead>
 								    		<tbody>
                                                 @php
-                                                    $product_id = explode(',', $orders->product_id);
-                                                    $size_id = explode(',', $orders->size_id);
-                                                    $color_id = explode(',', $orders->color_id);
-                                                    $quantity = explode(',', $orders->quantity);
                                                     $i = 1;
                                                 @endphp
-                                                @foreach($product_id as $key => $product_id)
+                                                @foreach($products as $key => $o_product)
                                                     @php
-                                                        $products = App\Models\Product::findOrFail($product_id);
+                                                        $product = App\Models\Product::findOrFail($o_product->product_id);
+                                                        $p_color = App\Models\ProductOrderColor::where('order_code', $orders->order_code)->where('product_id', $o_product->product_id)->first();
                                                     @endphp
                                                     <tr>
                                                         <td>
                                                             <figure class="product-image">
-                                                                <img src="{{ asset($products->thumbnail) }}" alt="">
+                                                                <img src="{{ asset($product->thumbnail) }}" alt="">
                                                             </figure>
                                                         </td>
                                                         <td>
                                                             <span class="product-name">
-                                                                {{ $products->name }}
+                                                                {{ $product->name }}
+                                                            </span>
+                                                            <span>
+                                                                @if ($p_color)
+                                                                    @php
+                                                                        $color = App\Models\Color::findOrFail($p_color->color_id);
+                                                                        $p_size = App\Models\ProductOrderColorSize::where('order_code', $orders->order_code)->where('product_id', $o_product->product_id)->where('color_id', $color->id)->first();
+                                                                    @endphp
+                                                                    Color: {{ $color->name }}
+                                                                    @if ($p_size)
+                                                                        @php
+                                                                            $size = App\Models\Size::findOrFail($p_size->size_id);
+                                                                        @endphp
+                                                                        ,Size: {{ $size->name }}
+                                                                    @endif
+                                                                @endif
                                                             </span>
                                                         </td>
                                                         <td>
@@ -229,7 +240,7 @@
                                                                 <strong class="d-sm-none d-inline">
                                                                     qty :
                                                                 </strong>
-                                                                {{ $quantity[$key] }}
+                                                                {{ $o_product->quantity }}
                                                             </span>
                                                         </td>
                                                         <td>
@@ -237,7 +248,7 @@
                                                                 <strong class="d-sm-none d-inline">
                                                                     price :
                                                                 </strong>
-                                                                {{ $products->sale_price }} ৳
+                                                                {{ $o_product->sale_price * $o_product->quantity }} ৳
                                                             <span>
                                                         </td>
                                                     </tr>

@@ -14,7 +14,7 @@ class CreateSubUnitsTable extends Migration
     public function up()
     {
         Schema::create('sub_units', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('unit_id');
             $table->string('name');
             $table->string('status');

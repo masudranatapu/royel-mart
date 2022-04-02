@@ -3,11 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Color;
 use Illuminate\Http\Request;
 use App\Models\Purchases;
 use App\Models\Product;
+use App\Models\ProductColor;
+use App\Models\ProductSize;
 use App\Models\Unit;
 use App\Models\ProductUnit;
+use App\Models\PurchaseStock;
+use App\Models\Size;
+use App\Models\Stock;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 
@@ -20,15 +27,11 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
         $title = "Purchase Product";
-        
-        $check_stock_product = Purchases::pluck('product_id')->toArray();
-        $purchases = Purchases::latest()->get();
-        $products = Product::whereNotIn('id', $check_stock_product)->latest()->get();
 
-        $editproducts = Product::latest()->get();
-        return view('admin.stock.index', compact('title', 'purchases', 'products', 'editproducts'));
+        $purchases = Purchases::with('products.product','products.color','products.size')->latest()->get();
+
+        return view('admin.stock.index', compact('title', 'purchases'));
     }
 
     /**
@@ -41,7 +44,8 @@ class PurchaseController extends Controller
         //
         $title = "Product Purchase";
         $products = Product::where('status', 1)->latest()->get();
-        return view('admin.stock.purchase', compact('title', 'products'));
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number', 'asc')->get();
+        return view('admin.stock.purchase', compact('title', 'products', 'categories'));
     }
 
     /**
@@ -52,18 +56,93 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $this->validate($request, [
             'product_id' => 'required',
-            'quantity' => 'required',
         ]);
-        Purchases::insert([
-            'product_id' => $request->product_id,
-            'product_code' => $request->product_code,
-            'name' => $request->name,
-            'quantity' => $request->quantity,
-            'created_at' => Carbon::now(),
-        ]);
+
+        // return $request;
+
+        $code = mt_rand(111111, 999999);
+
+        $purchase = new Purchases();
+        $purchase->purchase_code = $code;
+        $purchase->save();
+
+        foreach($request->product_id as $key=>$product_id){
+            $product = Product::find($product_id);
+
+            if($request->product_color_id[$key] != '' && $request->product_size_id[$key] != ''){
+
+                $rqs_size_bp = 'buying_price_'.$product_id.'_'.$request->product_color_id[$key].'_'.$request->product_size_id[$key];
+                $rqs_size_sp = 'sale_price_'.$product_id.'_'.$request->product_color_id[$key].'_'.$request->product_size_id[$key];
+                $rqs_size_qty = 'quantity_'.$product_id.'_'.$request->product_color_id[$key].'_'.$request->product_size_id[$key];
+
+                $p_stock = new PurchaseStock();
+                $p_stock->purchase_code = $code;
+                $p_stock->product_id = $product_id;
+                $p_stock->color_id = $request->product_color_id[$key];
+                $p_stock->size_id = $request->product_size_id[$key];
+                $p_stock->buying_price = $request->$rqs_size_bp;
+                $p_stock->sale_price = $request->$rqs_size_sp;
+                $p_stock->quantity = $request->$rqs_size_qty;
+                $p_stock->save();
+
+                $stock = new Stock();
+                $stock->purchase_code = $code;
+                $stock->product_id = $product_id;
+                $stock->color_id = $request->product_color_id[$key];
+                $stock->size_id = $request->product_size_id[$key];
+                $stock->buying_price = $request->$rqs_size_bp;
+                $stock->sale_price = $request->$rqs_size_sp;
+                $stock->quantity = $request->$rqs_size_qty;
+                $stock->save();
+            }elseif($request->product_color_id[$key] != '' && $request->product_size_id[$key] == ''){
+
+                $rqs_size_bp = 'buying_price_'.$product_id.'_'.$request->product_color_id[$key];
+                $rqs_size_sp = 'sale_price_'.$product_id.'_'.$request->product_color_id[$key];
+                $rqs_size_qty = 'quantity_'.$product_id.'_'.$request->product_color_id[$key];
+
+                $p_stock = new PurchaseStock();
+                $p_stock->purchase_code = $code;
+                $p_stock->product_id = $product_id;
+                $p_stock->color_id = $request->product_color_id[$key];
+                $p_stock->buying_price = $request->$rqs_size_bp;
+                $p_stock->sale_price = $request->$rqs_size_sp;
+                $p_stock->quantity = $request->$rqs_size_qty;
+                $p_stock->save();
+
+                $stock = new Stock();
+                $stock->purchase_code = $code;
+                $stock->product_id = $product_id;
+                $stock->color_id = $request->product_color_id[$key];
+                $stock->buying_price = $request->$rqs_size_bp;
+                $stock->sale_price = $request->$rqs_size_sp;
+                $stock->quantity = $request->$rqs_size_qty;
+                $stock->save();
+            }else{
+
+                $rqs_size_bp = 'buying_price_'.$product_id;
+                $rqs_size_sp = 'sale_price_'.$product_id;
+                $rqs_size_qty = 'quantity_'.$product_id;
+
+                $p_stock = new PurchaseStock();
+                $p_stock->purchase_code = $code;
+                $p_stock->product_id = $product_id;
+                $p_stock->buying_price = $request->$rqs_size_bp;
+                $p_stock->sale_price = $request->$rqs_size_sp;
+                $p_stock->quantity = $request->$rqs_size_qty;
+                $p_stock->save();
+
+                $stock = new Stock();
+                $stock->purchase_code = $code;
+                $stock->product_id = $product_id;
+                $stock->buying_price = $request->$rqs_size_bp;
+                $stock->sale_price = $request->$rqs_size_sp;
+                $stock->quantity = $request->$rqs_size_qty;
+                $stock->save();
+            }
+        }
+
         Toastr::success('Purchase product save :-)','Success');
         return redirect()->back();
     }
@@ -87,7 +166,11 @@ class PurchaseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = "Product Purchase Update";
+        $purchase = Purchases::find($id);
+        $products = PurchaseStock::with('product','color','size')->where('purchase_code', $purchase->purchase_code)->latest()->get();
+        $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number', 'asc')->get();
+        return view('admin.stock.purchase-update', compact('title', 'purchase', 'products', 'categories'));
     }
 
     /**
@@ -97,21 +180,137 @@ class PurchaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $code)
     {
-        //
+        // return $request;
         $this->validate($request, [
             'product_id' => 'required',
-            'quantity' => 'required',
         ]);
-        Purchases::findOrFail($id)->update([
-            'product_id' => $request->product_id,
-            'product_code' => $request->product_code,
-            'name' => $request->name,
-            'quantity' => $request->quantity,
-            'updated_at' => Carbon::now(),
-        ]);
-        Toastr::info('Purchase product update :-)','Info');
+
+        foreach($request->product_id as $key=>$product_id){
+            $product = Product::find($product_id);
+
+            if($request->product_color_id[$key] != '' && $request->product_size_id[$key] != ''){
+
+                $rqs_size_bp = 'buying_price_'.$product_id.'_'.$request->product_color_id[$key].'_'.$request->product_size_id[$key];
+                $rqs_size_sp = 'sale_price_'.$product_id.'_'.$request->product_color_id[$key].'_'.$request->product_size_id[$key];
+                $rqs_size_qty = 'quantity_'.$product_id.'_'.$request->product_color_id[$key].'_'.$request->product_size_id[$key];
+
+                $ps_check = PurchaseStock::where('purchase_code', $code)->where('product_id', $product_id)->where('color_id', $request->product_color_id[$key])->where('size_id', $request->product_size_id[$key])->first();
+                if($ps_check){
+                    $p_stock = PurchaseStock::find($ps_check->id);
+                    $p_stock->buying_price = $request->$rqs_size_bp;
+                    $p_stock->sale_price = $request->$rqs_size_sp;
+                    $p_stock->quantity = $request->$rqs_size_qty;
+                }else{
+                    $p_stock = new PurchaseStock();
+                    $p_stock->purchase_code = $code;
+                    $p_stock->product_id = $product_id;
+                    $p_stock->color_id = $request->product_color_id[$key];
+                    $p_stock->size_id = $request->product_size_id[$key];
+                    $p_stock->buying_price = $request->$rqs_size_bp;
+                    $p_stock->sale_price = $request->$rqs_size_sp;
+                    $p_stock->quantity = $request->$rqs_size_qty;
+                }
+                $p_stock->save();
+
+                $ps_check = Stock::where('purchase_code', $code)->where('product_id', $product_id)->where('color_id', $request->product_color_id[$key])->where('size_id', $request->product_size_id[$key])->first();
+                if($ps_check){
+                    $stock = Stock::find($ps_check->id);
+                    $stock->buying_price = $request->$rqs_size_bp;
+                    $stock->sale_price = $request->$rqs_size_sp;
+                    $stock->quantity = $request->$rqs_size_qty;
+                }else{
+                    $stock = new Stock();
+                    $stock->purchase_code = $code;
+                    $stock->product_id = $product_id;
+                    $stock->color_id = $request->product_color_id[$key];
+                    $stock->size_id = $request->product_size_id[$key];
+                    $stock->buying_price = $request->$rqs_size_bp;
+                    $stock->sale_price = $request->$rqs_size_sp;
+                    $stock->quantity = $request->$rqs_size_qty;
+                }
+                $stock->save();
+            }elseif($request->product_color_id[$key] != '' && $request->product_size_id[$key] == ''){
+
+                $rqs_size_bp = 'buying_price_'.$product_id.'_'.$request->product_color_id[$key];
+                $rqs_size_sp = 'sale_price_'.$product_id.'_'.$request->product_color_id[$key];
+                $rqs_size_qty = 'quantity_'.$product_id.'_'.$request->product_color_id[$key];
+
+                $ps_check = PurchaseStock::where('purchase_code', $code)->where('product_id', $product_id)->where('color_id', $request->product_color_id[$key])->first();
+                if($ps_check){
+                    $p_stock = PurchaseStock::find($ps_check->id);
+                    $p_stock->buying_price = $request->$rqs_size_bp;
+                    $p_stock->sale_price = $request->$rqs_size_sp;
+                    $p_stock->quantity = $request->$rqs_size_qty;
+                }else{
+                    $p_stock = new PurchaseStock();
+                    $p_stock->purchase_code = $code;
+                    $p_stock->product_id = $product_id;
+                    $p_stock->color_id = $request->product_color_id[$key];
+                    $p_stock->buying_price = $request->$rqs_size_bp;
+                    $p_stock->sale_price = $request->$rqs_size_sp;
+                    $p_stock->quantity = $request->$rqs_size_qty;
+                }
+                $p_stock->save();
+
+                $ps_check = Stock::where('purchase_code', $code)->where('product_id', $product_id)->where('color_id', $request->product_color_id[$key])->first();
+                if($ps_check){
+                    $stock = Stock::find($ps_check->id);
+                    $stock->buying_price = $request->$rqs_size_bp;
+                    $stock->sale_price = $request->$rqs_size_sp;
+                    $stock->quantity = $request->$rqs_size_qty;
+                }else{
+                    $stock = new Stock();
+                    $stock->purchase_code = $code;
+                    $stock->product_id = $product_id;
+                    $stock->color_id = $request->product_color_id[$key];
+                    $stock->buying_price = $request->$rqs_size_bp;
+                    $stock->sale_price = $request->$rqs_size_sp;
+                    $stock->quantity = $request->$rqs_size_qty;
+                }
+                $stock->save();
+            }else{
+
+                $rqs_size_bp = 'buying_price_'.$product_id;
+                $rqs_size_sp = 'sale_price_'.$product_id;
+                $rqs_size_qty = 'quantity_'.$product_id;
+
+                $ps_check = PurchaseStock::where('purchase_code', $code)->where('product_id', $product_id)->first();
+                if($ps_check){
+                    $p_stock = PurchaseStock::find($ps_check->id);
+                    $p_stock->buying_price = $request->$rqs_size_bp;
+                    $p_stock->sale_price = $request->$rqs_size_sp;
+                    $p_stock->quantity = $request->$rqs_size_qty;
+                }else{
+                    $p_stock = new PurchaseStock();
+                    $p_stock->purchase_code = $code;
+                    $p_stock->product_id = $product_id;
+                    $p_stock->buying_price = $request->$rqs_size_bp;
+                    $p_stock->sale_price = $request->$rqs_size_sp;
+                    $p_stock->quantity = $request->$rqs_size_qty;
+                }
+                $p_stock->save();
+
+                $ps_check = Stock::where('purchase_code', $code)->where('product_id', $product_id)->first();
+                if($ps_check){
+                    $stock = Stock::find($ps_check->id);
+                    $stock->buying_price = $request->$rqs_size_bp;
+                    $stock->sale_price = $request->$rqs_size_sp;
+                    $stock->quantity = $request->$rqs_size_qty;
+                }else{
+                    $stock = new Stock();
+                    $stock->purchase_code = $code;
+                    $stock->product_id = $product_id;
+                    $stock->buying_price = $request->$rqs_size_bp;
+                    $stock->sale_price = $request->$rqs_size_sp;
+                    $stock->quantity = $request->$rqs_size_qty;
+                }
+                $stock->save();
+            }
+        }
+
+        Toastr::success('Purchase product updated :-)','Success');
         return redirect()->back();
     }
 
@@ -125,12 +324,13 @@ class PurchaseController extends Controller
     {
         //
     }
-    
-    // ajax for proudct parchase 
+
+    // ajax for proudct parchase
 
     public function stockPurchase(Request $request)
     {
         $product_id = $request->product_id;
+
         // return $product_id;
         $product = Product::where('id', $product_id)->latest()->first();
         // return $product;
@@ -138,95 +338,72 @@ class PurchaseController extends Controller
         $product_name = $product->name;
         return $data = [$product_code, $product_name];
     }
-    public function productpurchaseAjax(Request $request)
+
+    public function add_product_for_purchase(Request $request)
     {
-        $product = Product::findOrFail($request->id);
-        $result = null;
-        if ($product) {
-            $result .= '<tr class="purchase-product-table" id="remove_tr_'.$product->id.'">';
-                $result .=   '<td>
-                                    <input type="hidden" name="product_id[]" value="' . $product->id . '" class="form-control">
-                                    ' . $product->title . '
-                                </td>';
+        $product_id = $request->product_id;
+        $product = Product::find($product_id);
+        $html = '';
 
-                $check_colors = ProductUnit::where('product_id', $product->id)->get();
-                if ($check_colors->count() > 0) {
-                    $result .=   '<td>';
-                    foreach ($check_colors as $check_color) {
-                        $color = Unit::find($check_color->color_id);
-                        $result .=   '
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <div class="input-group mb-5">
-                                                <span class="input-group-addon">' . $color->name . '</span>
-                                                <input type="hidden" name="product_color_id_'.$product->id.'[]" value="' . $color->id . '" class="form-control">
-                                                <input type="hidden" id="product_color_qty_for_check_'.$color->id.'_'.$product->id.'" value="0" readonly class="form-control">
-                                                <input type="text" name="product_color_qty_'.$color->id.'_'.$product->id.'" id="product_color_qty_'.$color->id.'_'.$product->id.'" value="0" onpaste="productColorQtyPstChange('.$color->id.','.$product->id.')" onkeyup="productColorQtyChange('.$color->id.','.$product->id.')" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                ';
-                    }
-                    $result .=   '</td>';
-                } else {
-                    $result .=   '<td>N/A</td>';
+        $product_sizes = ProductSize::where('product_id', $product_id)->get();
+        if($product_sizes->count() > 0){
+            foreach($product_sizes as $s_key=>$p_size){
+                $color = Color::find($p_size->color_id);
+                $size = Size::find($p_size->size_id);
+                $html .= '
+                    <tr class="tr_exist_'.$product_id.'" id="product_tr_size_'.$product_id.'_'.$p_size->color_id.'_'.$p_size->size_id.'">
+                        <td>
+                            <input type="hidden" name="product_id[]" value="'.$product_id.'">
+                            <input type="hidden" name="product_color_id[]" value="'.$p_size->color_id.'">
+                            <input type="hidden" name="product_size_id[]" value="'.$p_size->size_id.'">
+                            '.$product->name.'<br> Color: '.$color->name.', Size: '.$size->name.'
+                        </td>
+                        <td><input type="text" class="form-control" name="quantity_'.$product_id.'_'.$p_size->color_id.'_'.$p_size->size_id.'" value="0" min="0"></td>
+                        <td><input type="text" class="form-control" name="buying_price_'.$product_id.'_'.$p_size->color_id.'_'.$p_size->size_id.'" value="'.$product->regular_price.'" min="0"></td>
+                        <td><input type="text" class="form-control" name="sale_price_'.$product_id.'_'.$p_size->color_id.'_'.$p_size->size_id.'" value="'.$product->sale_price.'" min="0"></td>
+                        <td><button type="button" class="btn btn-sm btn-danger" onclick="removeSizeProduct('.$product_id.','.$p_size->color_id.','.$p_size->size_id.')"><i class="fa fa-trash"></i></button></td>
+                    </tr>
+                ';
+            }
+        }else{
+            $product_colors = ProductColor::where('product_id', $product_id)->get();
+            if($product_colors->count() > 0){
+                foreach($product_colors as $s_key=>$p_color){
+                    $color = Color::find($p_color->color_id);
+                    $html .= '
+                        <tr class="tr_exist_'.$product_id.'" id="product_tr_color_'.$product_id.'_'.$p_color->color_id.'">
+                            <td>
+                                <input type="hidden" name="product_id[]" value="'.$product_id.'">
+                                <input type="hidden" name="product_color_id[]" value="'.$p_color->color_id.'">
+                                <input type="hidden" name="product_size_id[]" value="">
+                                '.$product->name.'<br> Color: '.$color->name.'
+                            </td>
+                            <td><input type="text" class="form-control" name="quantity_'.$product_id.'_'.$p_color->color_id.'" value="0" min="0"></td>
+                            <td><input type="text" class="form-control" name="buying_price_'.$product_id.'_'.$p_color->color_id.'" value="'.$product->regular_price.'" min="0"></td>
+                            <td><input type="text" class="form-control" name="sale_price_'.$product_id.'_'.$p_color->color_id.'" value="'.$product->sale_price.'" min="0"></td>
+                            <td><button type="button" class="btn btn-sm btn-danger" onclick="removeColorProduct('.$product_id.','.$p_color->color_id.')"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                    ';
                 }
-
-                if($check_colors->count() > 0){
-                    $result .=   '<td><input type="number" id="product_total_qty_'.$product->id.'" name="product_qty[]" readonly value="0" class="form-control"></td>';
-                }else{
-                    $result .=   '<td><input type="number" id="product_total_qty_'.$product->id.'" name="product_qty[]" onpaste="productQtyPstChange('.$product->id.')" onkeyup="productQtyChange('.$product->id.')" value="0" class="form-control"></td>';
-                }
-
-                if ($check_colors->count() > 0) {
-                    $result .=   '<td>';
-                        foreach ($check_colors as $check_color) {
-                            $color = Unit::find($check_color->color_id);
-                            $result .=   '
-                                        <input type="number" id="product_purchase_warehouse_qty_'.$color->id.'_'.$product->id.'" readonly name="product_purchase_color_warehouse_qty_'.$color->id.'_'.$product->id.'" value="0" class="form-control">
-                                    ';
-                        }
-                    $result .=   '</td>';
-                } else {
-                    $result .=  '<td>
-                                    <input type="number" id="product_purchase_warehouse_qty_'.$product->id.'" readonly name="product_purchase_warehouse_qty_'.$product->id.'" value="0" class="form-control">
-                                </td>';
-                }
-
-                if ($check_colors->count() > 0) {
-                    $result .=   '<td>';
-                            foreach ($check_colors as $check_color) {
-                                $color = Unit::find($check_color->color_id);
-                                $result .=   '<input type="number" id="product_purchase_showroom_qty_'.$color->id.'_'.$product->id.'" name="product_purchase_color_showroom_qty_'.$color->id.'_'.$product->id.'" onpaste="productPurchaseColorShowroomPstQtyChange('.$color->id.','.$product->id.')" onkeyup="productPurchaseColorShowroomQtyChange('.$color->id.','.$product->id.')" value="0" class="form-control">';
-                            }
-                    $result .=   '</td>';
-                } else {
-                    $result .=  '<td>
-                                    <input type="number" id="product_purchase_showroom_qty_'.$product->id.'" name="product_purchase_showroom_qty_'.$product->id.'" onpaste="productPurchaseShowroomPstQtyChange('.$product->id.')" onkeyup="productPurchaseShowroomQtyChange('.$product->id.')" value="0" class="form-control">
-                                </td>';
-                }
-
-                $result .=  '<td>
-                                <input type="hidden" id="product_purchase_cost_for_check_'.$product->id.'" value="0" class="form-control">
-                                <input type="number" id="product_purchase_cost_'.$product->id.'" name="product_purchase_cost[]" onpaste="productPurchaseCostPstChange('.$product->id.')" onkeyup="productPurchaseCostChange('.$product->id.')" value="'.$product->buying_price.'" class="form-control">
-                            </td>';
-                $result .=  '<td><input type="number" id="product_margin_profit_'.$product->id.'" name="product_margin_profit[]" onpaste"productProfitMarginPstChange('.$product->id.')" onkeyup="productProfitMarginChange('.$product->id.')" value="0" class="form-control"></td>';
-                $result .=  '<td><input type="number" id="product_sale_price_'.$product->id.'" name="product_sale_price[]" onpaste"productSalePricePstChange('.$product->id.')" onkeyup="productSalePriceChange('.$product->id.')" value="0" class="form-control"></td>';
-                $result .=  '<td>
-                                <input type="number" id="product_total_cost_'.$product->id.'" name="product_total_cost[]" readonly value="0" class="form-control">
-                            </td>';
-                $result .=  '<td>
-                                <button type="button" onclick="removeProductFromTable(this)" id="'.$product->id.'" class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>';
-
-            $result .= '</tr>';
-
-            return $result;
-        } else {
-            return $result;
+            }else{
+                $html .= '
+                        <tr class="tr_exist_'.$product_id.'" id="product_tr_'.$product_id.'">
+                            <td>
+                                <input type="hidden" name="product_id[]" value="'.$product_id.'">
+                                <input type="hidden" name="product_color_id[]" value="">
+                                <input type="hidden" name="product_size_id[]" value="">
+                                '.$product->name.'
+                            </td>
+                            <td><input type="text" class="form-control" name="quantity_'.$product_id.'" value="0" min="0"></td>
+                            <td><input type="text" class="form-control" name="buying_price_'.$product_id.'" value="'.$product->regular_price.'" min="0"></td>
+                            <td><input type="text" class="form-control" name="sale_price_'.$product_id.'" value="'.$product->sale_price.'" min="0"></td>
+                            <td><button type="button" class="btn btn-sm btn-danger" onclick="removeProduct('.$product_id.')"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                    ';
+            }
         }
-        
+
+        return $html;
+
     }
 }

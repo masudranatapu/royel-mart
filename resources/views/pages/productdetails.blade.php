@@ -24,8 +24,8 @@
 							<div class="product-media-area">
 								<div class="product-zoom-photo">
 									<div class="zoom-wrapper">
-										<a class="popup-image" id="zoom-trigger" href="{{asset($products->thumbnail)}}">
-                                            <img width="466" height="466" id="zoomImg" src="{{asset($products->thumbnail)}}" alt="">
+										<a class="popup-image" id="zoom-trigger" href="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif">
+                                            <img width="466" height="466" id="zoomImg" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
                                         </a>
 									</div>
 								</div>
@@ -35,18 +35,18 @@
                                     </button>
 									<ul class="swiper-wrapper">
 										<li class="swiper-slide">
-                                            <a class="active" data-image="{{asset($products->thumbnail)}}" href="javascript:;">
-                                                <img src="{{asset($products->thumbnail)}}" alt="">
+                                            <a class="active" data-image="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" href="javascript:;">
+                                                <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
                                             </a>
                                         </li>
-                                        @if($products->multi_thumbnail)
+                                        @if($products->more_image)
                                             @php
-                                                $multimages = explode("|", $products->multi_thumbnail);
+                                                $multimages = explode("|", $products->more_image);
                                             @endphp
                                             @foreach($multimages as $key=>$multimage)
                                                 <li class="swiper-slide">
                                                     <a data-image="{{asset($multimage)}}" href="javascript:;">
-                                                        <img src="{{asset($multimage)}}" alt="">
+                                                        <img loading="eager|lazy" src="{{asset($multimage)}}" alt="">
                                                     </a>
                                                 </li>
                                             @endforeach
@@ -59,9 +59,9 @@
 							</div>
 						</div>
 						<div class="col-lg-6 mb-2">
-							<form action="{{ route('addtocart.withSizeColorQuantity') }}" method="POST">
+							<form action="{{ route('addtocart.withSizeColorQuantity') }}" method="POST" id="cart_form">
                         		@csrf
-                        		<input type="hidden" name="product_id" value="{{ $products->id }}">
+                        		<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
 								<div class="product-info-area">
 									<h4 class="product-name">{{ $products->name }}</h4>
 									<div class="reviews">
@@ -93,51 +93,56 @@
 											</div>
 										@endif
 										<div class="category">
-											<label for="">category:</label><a href="javascript:;">{{ $products['category']['name'] }}</a>
+											<label for="">category:</label><a href="{{ route('category', $products['category']['slug']) }}">{{ $products['category']['name'] }}</a>
 										</div>
+                                        @if($products->unit_id != NULL )
+                                            <div class="category">
+                                                <label for="">Unit:</label><a href="javascript:;">{{ $products->unit->name }}</a>
+                                            </div>
+                                        @endif
+                                        <div class="category">
+                                            <label for="">Shipping Charge:</label><a href="javascript:;">৳ {{ $products->shipping_charge }}</a>
+                                        </div>
 									</div>
 									<div class="price">
 										<span class="product-price">৳ {{ $products->sale_price }}</span>
-										<div class="old-price-discount">
-											<del class="old-price">৳ {{ $products->regular_price }}</del>
-											<span class="discount">{{ $products->discount_tk }} ৳ Off</span>
-										</div>
+                                        <input type="hidden" name="sale_price" value="{{ $products->sale_price }}">
+                                        @if ($products->discount > 0 )
+                                            <div class="old-price-discount">
+                                                <del class="old-price">৳ {{ $products->regular_price }}</del>
+                                                <span class="discount">৳ {{ $products->discount_tk }} Off</span>
+                                            </div>
+                                        @endif
+                                        <input type="hidden" name="discount" value="{{ $products->discount_tk }}">
 									</div>
-									@php
-										$colors = App\Models\ProductUnit::where('product_id', $products->id)->get();
-									@endphp
 									@if($colors->count() > 0 )
 										<div class="divider"></div>
 										<div class="colors">
 											<label for="">colors:</label>
 											<ul class="colors-wrapper">
-													@foreach($colors as $key => $color)
-														@php
-															$colorname = App\Models\Unit::where('id', $color->unit_id)->first();
-														@endphp
-														<li class="" onclick="getColorId({{$colorname->id}})" style="background-color: {{ $colorname->name }}"></li>
-													@endforeach
+                                                @foreach($colors as $key => $color)
+                                                    <li class="" onclick="getColorId({{$color->Color->id}})" style="background-color: {{ $color->Color->code }}"></li>
+                                                @endforeach
 											</ul>
+                                            <input type="hidden" value="1" id="coloe_exist">
 											<input type="hidden" name="color_id" value="" id="viewValue">
-											<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
 										</div>
-										<div class="divider" id="showDivider" style="display:none;"></div>
-										<div class="size" id="showSize" style="display:none;">
-											<label for="">Size </label>
-											<select name="size_id" class="form-select" id="sizeShow" required>
+                                    @else
+                                        <input type="hidden" value="0" id="coloe_exist">
+                                    @endif
+                                    <div class="divider" id="showDivider" style="display:none;"></div>
+                                    <div class="size" id="showSize" style="display:none;">
+                                        {{-- <a id="size-chart" href="#">Size Chart</a>
+                                        <div id="chart-popup" class="chart-popup">
+                                            <div class="inner-popup">
+                                                <a href="javascript:;" class="close-chart">
+                                                    <i class="bi bi-x"></i>
+                                                </a>
+                                                <img loading="eager|lazy" src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
+                                            </div>
+                                        </div> --}}
+                                    </div>
 
-											</select>
-											<a id="size-chart" href="#">Size Chart</a>
-											<div id="chart-popup" class="chart-popup">
-												<div class="inner-popup">
-													<a href="javascript:;" class="close-chart">
-														<i class="bi bi-x"></i>
-													</a>
-													<img src="{{asset('frontend/images/info/chart.jpg')}}" alt="">
-												</div>
-											</div>
-										</div>
-									@endif
 									<div class="divider"></div>
 									<div class="quantity">
 										<label for="">quantity:</label>
@@ -153,22 +158,18 @@
 											</button>
 										</div>
 									</div>
+                                    <input type="hidden" name="cart_type" id="cart_type" value="Add to cart">
 									<div class="action-buttons">
-										<button type="submit" class="product-btn cart-btn">
+										<button type="button" class="product-btn cart-btn" onclick="addToCartBtn()">
 											<i class="bi bi-cart2"></i>
 											add to cart
 										</button>
-										<a href="javascript:;" class="product-btn buy-btn" onclick="buynow_product_submit({{$products->id}})">
+										<button type="button" class="product-btn buy-btn" onclick="buyBtn()">
 											<i class="bi bi-heart"></i>
 											buy now
-										</a>
+										</button>
 									</div>
 								</div>
-							</form>
-							<form action="{{ route('buynow') }}" method="POST" id="buynow_product_submit_form_{{ $products->id }}">
-								@csrf
-								<!-- this form only for buynow  -->
-								<input type="hidden" name="product_id" value="{{ $products->id }}">
 							</form>
 						</div>
 					</div>
@@ -182,17 +183,23 @@
 								</div>
 								<div class="delivery-options">
 									<div class="single-option">
-										<span class="icon"><img src="{{asset('frontend/images/icons/door-to-door.pn')}}g" alt=""></span>
+										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/door-to-door.png')}}" alt=""></span>
                                         {{ $products->inside_delivery }}
 									</div>
 									<div class="single-option">
-										<span class="icon"><img src="{{asset('frontend/images/icons/door-to-door.png')}}" alt=""></span>
+										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/door-to-door.png')}}" alt=""></span>
                                         {{ $products->outside_delivery }}
 									</div>
+								</div>
+								<div class="divider"></div>
+								<div class="title-area">
+									<label for=""><i class="bi bi-credit-card-fill"></i>Payment Method</label>
+								</div>
+								<div class="delivery-options">
 									<div class="single-option">
-										<span class="icon"><img src="{{asset('frontend/images/icons/cash-on-delivery.png')}}" alt=""></span>
+										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/cash-on-delivery.png')}}" alt=""></span>
                                         <span>
-                                            {{ $products->cash_delivery }}
+                                            {!! $products->cash_delivery !!}
                                         </span>
 									</div>
 								</div>
@@ -202,7 +209,7 @@
 								</div>
 								<div class="return-warranty">
 									<div class="single-policy">
-										<span class="icon"><img src="{{asset('frontend/images/icons/time-check.png')}}" alt=""></span>
+										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/time-check.png')}}" alt=""></span>
 										<div class="wrapper">
                                             <span>
                                                 {{ $products->return_status }}
@@ -210,10 +217,10 @@
 										</div>
 									</div>
 									<div class="single-policy">
-										<span class="icon"><img src="{{asset('frontend/images/icons/warranty.png')}}" alt=""></span>
+										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/warranty.png')}}" alt=""></span>
 										<div class="wrapper">
                                             <span>
-                                                {{ $products->warranty_policy }}
+                                                {!! $products->warranty_policy !!}
                                             </span>
 										</div>
 									</div>
@@ -224,7 +231,6 @@
 								</div>
 								<div class="share-area">
 									<ul class="social">
-                                        <!-- Go to www.addthis.com/dashboard to customize your tools -->
                                         <div class="addthis_inline_share_toolbox_9zg8"></div>
 									 </ul>
 								</div>
@@ -369,9 +375,6 @@
                         </form>
 						<!-- End Review Popup -->
 					</div>
-                    @php
-                        $latestproducts = App\Models\Product::where('id', '!=', $products->id)->latest()->limit(8)->get();
-                    @endphp
 					<div class="single-widget">
 						<h3 class="widget-title">Latest Products</h3>
 						<div class="latest-products">
@@ -380,7 +383,7 @@
                                     <li>
                                         <figure>
                                             <a href="{{ route('productdetails', $product->slug) }}">
-                                                <img src="{{asset($product->thumbnail)}}" alt="">
+                                                <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
                                             </a>
                                         </figure>
                                         <div class="content">
@@ -427,7 +430,7 @@
 									<div class="review-head">
 										<div class="user-area">
 											<div class="user-photo">
-												<img src="@if($review->user_id) {{ asset($review['reviewuser']['image']) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
+												<img loading="eager|lazy" src="@if($review->user_id) {{ asset($review['reviewuser']['image']) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
 											</div>
 											<div class="user-meta">
 												@if($review->name == NULL)
@@ -559,9 +562,6 @@
 		</div>
 	</section>
 	<!-- End Reviews Section -->
-    @php
-        $relatedProducts = App\Models\Product::where('category_id', $products->category_id)->where('id', '!=', $products->id)->limit(12)->get();
-    @endphp
     @if($relatedProducts->count() > 0)
         <section class="related-products-section pt-60 pb-60">
             <div class="container">
@@ -574,7 +574,7 @@
                             <div class="single-product">
                                 <div class="inner-product">
                                     <figure>
-                                        <img src="{{asset($product->thumbnail)}}" alt="">
+                                        <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
                                     </figure>
                                     <div class="product-bottom">
                                         <div class="reviews">
@@ -620,12 +620,6 @@
 @endsection
 
 @push('js')
-	<!-- buy now product  -->
-	<script>
-		function buynow_product_submit(id) {
-		    document.getElementById('buynow_product_submit_form_'+id).submit();
-		}
-	</script>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-61385eedbd8b385d"></script>
 	<script>
 		 function reviewVal(val){
@@ -646,15 +640,62 @@
 					},
 					success:function(data) {
 						console.log(data);
-						$("#showDivider").show();
-						$("#showSize").show();
-                        $("#sizeShow").empty();
-						$('#sizeShow').html(data);
+                        if(data != ''){
+                            $("#showDivider").show();
+                            $("#showSize").show();
+                            $('#showSize').html(data);
+                        }else{
+                            $("#showDivider").hide();
+                            $("#showSize").hide();
+                            $("#showSize").empty();
+                        }
 					},
 				});
 			}else {
 				alert("Please select your color");
 			}
 		}
+
+        function addToCartBtn(){
+            var coloe_exist = $('#coloe_exist').val();
+            var coloe_id = $('#viewValue').val();
+            if(coloe_exist == 1 && coloe_id == ''){
+                alert('Please select color first');
+            }else{
+                if ($('#size_id').length){
+                    var size_id = $('#size_id').val();
+                    if(size_id == ''){
+                        alert('Please select size first');
+                    }else{
+                        $('#cart_type').val('Add to cart');
+                        $('#cart_form').submit();
+                    }
+                }else{
+                    $('#cart_type').val('Add to cart');
+                    $('#cart_form').submit();
+                }
+            }
+        }
+
+        function buyBtn(){
+            var coloe_exist = $('#coloe_exist').val();
+            var coloe_id = $('#viewValue').val();
+            if(coloe_exist == 1 && coloe_id == ''){
+                alert('Please select color first');
+            }else{
+                if ($('#size_id').length){
+                    var size_id = $('#size_id').val();
+                    if(size_id == ''){
+                        alert('Please select size first');
+                    }else{
+                        $('#cart_type').val('Buy now');
+                        $('#cart_form').submit();
+                    }
+                }else{
+                    $('#cart_type').val('Buy now');
+                    $('#cart_form').submit();
+                }
+            }
+        }
 	</script>
 @endpush

@@ -58,21 +58,21 @@
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="table-responsive dt-responsive">
-                                <table id="row-callback"class="table table-striped table-bordered nowrap" style="width:100%">
+                            <div class="dt-responsive">
+                                <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Active Status</th>
-                                            <th class="text-center">Action</th>
+                                            <th width="5%" class="text-center">SL No</th>
+                                            <th>Name</th>
+                                            <th width="10%" class="text-center">Active Status</th>
+                                            <th width="8%" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($units as $key => $unit)
                                             <tr>
                                                 <td class="text-center">{{ $key + 1 }}</td>
-                                                <td class="text-center">{{ $unit->name }}</td>
+                                                <td>{{ $unit->name }}</td>
                                                 <td class="text-center">
                                                     @if($unit->status == 1)
                                                         <a title="Inactive Now" href="{{ route('admin.unit.inactive', $unit->id) }}" class="btn btn-success">

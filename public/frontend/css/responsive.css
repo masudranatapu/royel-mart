@@ -475,6 +475,38 @@ section.pb-60 {
 .main-area .single-profile {
     margin-bottom: 30px;
 }
+table.wishlist>:not(:last-child)>:last-child>*, 
+table.wishlist>:not(caption)>*>* {
+    display: block;
+    border-bottom-color: transparent;
+    text-align: center;
+}
+table.wishlist tbody .remove {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+table.wishlist tbody tr td:last-child {
+    padding: 5px;
+}
+table.wishlist thead {
+    display: none;
+}
+table.wishlist tbody .product-rating {
+    justify-content: center;
+}
+table.wishlist tbody tr {
+    margin-bottom: 10px;
+    display: block;
+    background-color: var(--white-color);
+    position: relative;
+}
+table.wishlist tbody .product-image img {
+    width: 130px;
+}
+table.wishlist {
+    background-color: transparent !important;
+}
 }
 /*========= 767px Media Query End =========*/
 

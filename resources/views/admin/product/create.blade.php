@@ -47,7 +47,7 @@
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <label>Discount</label>
-                                                                <div class="input-group mt-2">
+                                                                <div class="input-group">
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text" id="basic-addon2">৳</span>
                                                                     </div>
@@ -55,8 +55,8 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label></label>
-                                                                <div class="input-group mt-3">
+                                                                <label>Discount Per</label>
+                                                                <div class="input-group">
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text" id="basic-addon2">%</span>
                                                                     </div>
@@ -67,9 +67,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <label>Shipping Charge</label>
+                                                <input type="number" name="shipping_charge" class="form-control" value="{{ $setting->shipping_charge }}" min="0" placeholder="Shipping Charge">
+                                            </div>
+                                            <div class="col-md-6">
                                                 <label>Alert Quantity</label>
-                                                <input type="number" name="alert_quantity" class="form-control" value="5" placeholder="Alert Quantity">
+                                                <input type="number" name="alert_quantity" class="form-control" value="5" min="0" placeholder="Alert Quantity">
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -115,29 +119,25 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <label>Category <span class="text-danger"> * </span></label>
-                                                        <select name="category_id" id="category" class="form-control">
+                                                        <select name="category_id" id="category" class="form-control select2">
                                                             <option value="">Select One</option>
                                                             @foreach($categories as $category)
-                                                                @if($category->id == 1)
-
-                                                                @else
-                                                                    <option value="{{$category->id}}">{{$category->name}}</option>
-                                                                @endif
+                                                                <option value="{{$category->id}}">{{$category->name}}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <label>Parent Category</label>
-                                                <select name="parent_id" id="subcategory" class="form-control">
+                                                <select name="parent_id" id="subcategory" class="form-control select2">
 
                                                 </select>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <label>Child Category</label>
-                                                <select name="child_id" id="subsubcategory" class="form-control">
+                                                <select name="child_id" id="subsubcategory" class="form-control select2">
 
                                                 </select>
                                             </div>
@@ -146,7 +146,7 @@
                                                 <div class="row mt-2">
                                                     <div class="col-md-6">
                                                         <label>Product Type <span class="text-danger"> *</span></label>
-                                                        <select name="product_type" class="form-control">
+                                                        <select name="product_type" class="form-control select2">
                                                             <option value="" disabled>Select One</option>
                                                             <option value="New Arrival" selected>New Arrival</option>
                                                             <option value="Features">Features</option>
@@ -154,7 +154,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Status<span class="text-danger"> *</span></label>
-                                                        <select name="status" id="" class="form-control">
+                                                        <select name="status" id="" class="form-control select2">
                                                             <option value="" disabled >Select One</option>
                                                             <option value="1" selected>Active</option>
                                                             <option class="0">Inactive</option>
@@ -166,7 +166,7 @@
                                                 <div class="row" id="">
                                                     <div class="col-md-6">
                                                         <label>Brand</label>
-                                                        <select name="brand_id" class="form-control">
+                                                        <select name="brand_id" class="form-control select2">
                                                             <option value="" disabled selected>Select One</option>
                                                             @foreach($brands as $brand)
                                                                 <option value="{{$brand->id}}">{{$brand->name}}</option>
@@ -175,7 +175,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label>Units</label>
-                                                        <select id="" name="unit_id" class="form-control">
+                                                        <select id="" name="unit_id" class="form-control select2">
                                                             <option value="">Select One</option>
                                                             @foreach($units as $key=>$unit)
                                                                 <option value="{{ $unit->id }}">{{ $unit->name }}</option>
@@ -227,19 +227,15 @@
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <label>Inside Delivery </label>
-                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 80 ৳">
+                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery inside Dhaka 4 - 6 day(s) 80 ৳">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Return Status </label>
-                                                <input type="text" name="return_status" class="form-control" value="7 Days Return Change Of Mind Available">
-                                            </div>
-                                            <div class="col-md-12 mt-2">
-                                                <label>Cash on Delivery</label>
-                                                <input type="text" name="cash_delivery" class="form-control" value="Cash on Delivery Available">
+                                                <label>Payment Method</label>
+                                                <textarea name="cash_delivery" id="cash_delivery" cols="30" rows="3" class="form-control summernote" placeholder="Cash on Delivery Available"></textarea>
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <label>Warranty Policy</label>
-                                                <input type="text" name="warranty_policy" class="form-control" value="Warranty Not Available">
+                                                <textarea name="warranty_policy" id="warranty_policy" cols="30" rows="3" class="form-control summernote"></textarea>
                                             </div>
                                         </div>
                                     </div>

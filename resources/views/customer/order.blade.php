@@ -106,49 +106,61 @@
                                                     </div>
                                                     <div class="order-body">
                                                         @php
-                                                            $product_id = explode(',', $order->product_id);
-                                                            $size_id = explode(',', $order->size_id);
-                                                            $color_id = explode(',', $order->color_id);
-                                                            $quantity = explode(',', $order->quantity);
                                                             $i = 1;
                                                         @endphp
-                                                        @foreach($product_id as $key => $product_id)
+                                                        @foreach($order->products as $key => $o_product)
                                                             @php
-                                                                $products = App\Models\Product::findOrFail($product_id);
+                                                                $product = App\Models\Product::findOrFail($o_product->product_id);
+                                                                $p_color = App\Models\ProductOrderColor::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->first();
                                                             @endphp
-                                                                <div class="single-item">
-                                                                    <figure class="item-img">
-                                                                        <a href="#">
-                                                                            <img src="{{ asset($products->thumbnail) }}" alt="">
-                                                                        </a>
-                                                                    </figure>
+                                                            <div class="single-item">
+                                                                <figure class="item-img">
+                                                                    <a href="#">
+                                                                        <img src="{{ asset($product->thumbnail) }}" alt="">
+                                                                    </a>
+                                                                </figure>
+                                                                <div class="item-name">
+                                                                    <h5 class="title">
+                                                                        {{ $product->name }}
+                                                                    </h5>
+                                                                    <span>
+                                                                        @if ($p_color)
+                                                                            @php
+                                                                                $color = App\Models\Color::findOrFail($p_color->color_id);
+                                                                                $p_size = App\Models\ProductOrderColorSize::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->where('color_id', $color->id)->first();
+                                                                            @endphp
+                                                                            Color: {{ $color->name }}
+                                                                            @if ($p_size)
+                                                                                @php
+                                                                                    $size = App\Models\Size::findOrFail($p_size->size_id);
+                                                                                @endphp
+                                                                                ,Size: {{ $size->name }}
+                                                                            @endif
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                                <div class="item-qty">
+                                                                    <label for="">Qty:</label>
+                                                                    <strong>{{ $o_product->quantity }}</strong>
+                                                                </div>
+                                                                <div class="item-price">
+                                                                    <span class="price">{{ $o_product->sale_price }} TK</span>
+                                                                </div>
+                                                                <div class="item-responsive">
                                                                     <div class="item-name">
                                                                         <h5 class="title">
-                                                                            {{ $products->name }}
+                                                                            {{ $product->name }}
                                                                         </h5>
                                                                     </div>
                                                                     <div class="item-qty">
                                                                         <label for="">Qty:</label>
-                                                                        <strong>{{ $quantity[$key] }}</strong>
+                                                                        <strong>{{ $o_product->quantity }}</strong>
                                                                     </div>
                                                                     <div class="item-price">
-                                                                        <span class="price">{{ $products->sale_price }} TK</span>
-                                                                    </div>
-                                                                    <div class="item-responsive">
-                                                                        <div class="item-name">
-                                                                            <h5 class="title">
-                                                                                {{ $products->name }}
-                                                                            </h5>
-                                                                        </div>
-                                                                        <div class="item-qty">
-                                                                            <label for="">Qty:</label>
-                                                                            <strong>{{ $quantity[$key] }}</strong>
-                                                                        </div>
-                                                                        <div class="item-price">
-                                                                            <span class="price">{{ $products->sale_price }} TK</span>
-                                                                        </div>
+                                                                        <span class="price">{{ $o_product->sale_price * $o_product->quantity }} TK</span>
                                                                     </div>
                                                                 </div>
+                                                            </div>
                                                             @php
                                                                 $i++;
                                                             @endphp
@@ -177,7 +189,7 @@
                                                         <div class="left-area blank"></div>
                                                         <div class="right-area">
                                                             <div class="single">
-                                                                <label for="">delivery-charge :</label>
+                                                                <label for="">delivery charge :</label>
                                                                 <span>{{$order->shipping_amount}} TK</span>
                                                             </div>
                                                         </div>

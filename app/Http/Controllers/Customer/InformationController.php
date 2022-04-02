@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class InformationController extends Controller
 {
@@ -17,16 +17,20 @@ class InformationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         $title = "Customer Profile";
-        return view('customer.index', compact('title'));
+        $lan = $request->session()->get('lan');
+        $p_cat_id = '';
+        return view('customer.index', compact('title', 'lan', 'p_cat_id'));
     }
-    public function passChangeView()
+    public function passChangeView(Request $request)
     {
         $title = "Change Password";
-        return view('customer.password', compact('title'));
+        $lan = $request->session()->get('lan');
+        $p_cat_id = '';
+        return view('customer.password', compact('title', 'lan', 'p_cat_id'));
     }
     public function updatePass(Request $request, $id)
     {
@@ -42,10 +46,10 @@ class InformationController extends Controller
             $userData->password = Hash::make($request->password);
             $userData->save();
             Auth::logout();
-            
+
             Toastr::success('Your Password update successfully :-)','Success');
             return redirect()->route('login');
-            
+
         }else {
             Toastr::warning('Something is worng. Please try agian :-)','warning');
             return redirect()->back();
