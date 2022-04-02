@@ -81,7 +81,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     @if($order->status != 'Canceled')
-                                                        <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-info" title="View Order Details">
+                                                        <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-sm btn-info" title="View Order Details">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     @endif

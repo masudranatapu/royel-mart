@@ -36,6 +36,15 @@ class OrderController extends Controller
         $website = Website::latest()->first();
         $order = Order::with('products')->where('id', $id)->latest()->first();
         $customer = User::find($order->user_id);
+        return view('admin.order.edit-order', compact('title', 'website', 'order', 'customer'));
+    }
+
+    public function edit($id)
+    {
+        $title = "Order View";
+        $website = Website::latest()->first();
+        $order = Order::with('products')->where('id', $id)->latest()->first();
+        $customer = User::find($order->user_id);
         return view('admin.order.orderdetails', compact('title', 'website', 'order', 'customer'));
     }
 
