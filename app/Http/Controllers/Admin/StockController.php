@@ -74,6 +74,13 @@ class StockController extends Controller
         $products = Product::with('purchases','sales','stocks')->latest()->get();
         return view('admin.report.index', compact('title', 'products'));
     }
+    public function inventory()
+    {
+        //
+        $title = "Inventory Report";
+        $products = Product::with('purchases','sales','stocks')->latest()->get();
+        return view('admin.report.inventory', compact('title', 'products'));
+    }
 
     /**
      * Display the specified resource.

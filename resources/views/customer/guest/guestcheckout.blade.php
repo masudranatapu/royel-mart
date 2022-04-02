@@ -85,12 +85,14 @@
                             $total = 0;
                             $discount = 0;
                             $shipping_charge = 0;
+                            $temp_checkout[] = '';
                         @endphp
                         @if(session('cart'))
                             @foreach(session('cart') as $key => $checkoutDetails)
                                 @php
                                     $sub_total += ($checkoutDetails['price'] * $checkoutDetails['quantity']);
-                                    $shipping_charge += $checkoutDetails['shipping_charge'];
+                                    // $shipping_charge += $checkoutDetails['shipping_charge'];
+                                    $temp_checkout[] = $checkoutDetails['shipping_charge'];
                                     $discount += $checkoutDetails['discount'];
                                 @endphp
                                 <input type="hidden" name="product_id[]" value="{{ $key }}">
@@ -100,7 +102,7 @@
                                 <input type="hidden" name="color_id[]" value="{{ $checkoutDetails['color_id'] }}">
                             @endforeach
                             @php
-                                $total = ($sub_total + $shipping_charge);
+                                // $total = ($sub_total + $shipping_charge);
                             @endphp
                         @endif
                         <h3 class="area-title">Checkout Summary</h3>
@@ -109,9 +111,13 @@
                                 <tr>
                                     <td>Subtotal </td>
                                     <input type="hidden" name="sub_total" id="sub_total" value="{{ $sub_total }}">
-                                    <td>{{ $total }} ৳</td>
+                                    <td>{{ $sub_total }} ৳</td>
                                 </tr>
                                 <tr>
+                                    @php
+                                        $shipping_charge = max($temp_checkout);
+                                        $total = ($sub_total + $shipping_charge) - $discount;
+                                    @endphp
                                     <td>Shipping </td>
                                     <input type="hidden" name="shipping_amount" id="shipping_amount" value="{{ $shipping_charge }}">
                                     <td> <span id="delivery_amount">{{ $shipping_charge }}</span> ৳</td>

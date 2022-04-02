@@ -194,7 +194,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
 
     // report---------------------
     Route::get('stock-report', [StockController::class, 'stock_report'])->name('stock-report');
-    Route::get('sold-product-report-search', [StockController::class, 'showReportSearch'])->name('sold-product-report.search');
+    Route::get('inventory', [StockController::class, 'inventory'])->name('inventory');
 
     Route::post('add-product-for-purchase', [PurchaseController::class, 'add_product_for_purchase'])->name('add-product-for-purchase');
     Route::post('store-product-for-purchase', [PurchaseController::class, 'store'])->name('store-product-for-purchase');

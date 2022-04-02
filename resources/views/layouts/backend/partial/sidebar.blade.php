@@ -270,6 +270,11 @@
                         <span class="pcoded-mtext">Stock Report</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/inventory') ? 'active' : '' }}">
+                    <a href="{{ route('admin.inventory') }}">
+                        <span class="pcoded-mtext">Inventory</span>
+                    </a>
+                </li>
             </ul>
         </li>
         <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/system-setting') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
