@@ -46,7 +46,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($products as $key => $product)
-                                            <tr>
+                                            <tr id="remove_tr_{{ $product->id }}">
                                                 <td>{{$product->product_code}}</td>
                                                 <td>
                                                     <img width="50" height="50" src="{{ asset($product->thumbnail) }}">
@@ -75,10 +75,10 @@
                                                     <button class="btn btn-danger waves-effect btn-xs" type="button" onclick="deleteData({{ $product->id }})">
                                                         <i class="fa fa-trash mr-1"></i>
                                                     </button>
-                                                    <form id="delete-form-{{ $product->id }}" action="{{ route('admin.product.destroy', $product->id) }}" method="POST" style="display: none;">
+                                                    {{-- <form id="delete-form-{{ $product->id }}" action="{{ route('admin.product.destroy', $product->id) }}" method="POST" style="display: none;">
                                                         @csrf
                                                         @method('DELETE')
-                                                    </form>
+                                                    </form> --}}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -113,7 +113,24 @@
             }).then((result) => {
                 if (result.value) {
                     // event.preventDefault();
-                    document.getElementById('delete-form-'+id).submit();
+                    // document.getElementById('delete-form-'+id).submit();
+
+                    $.ajax({
+                        url: "{{ route('admin.product-delete') }}",
+                        type:"POST",
+                        data:{
+                            _token: '{{csrf_token()}}',
+                            id: id,
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            if(data == 'Success'){
+                                $('#remove_tr_'+id).remove();
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            }
+                        },
+                    });
+
                 } else if (
                     // Read more about handling dismissals
                     result.dismiss === swal.DismissReason.cancel

@@ -383,7 +383,7 @@
                                     <li>
                                         <figure>
                                             <a href="{{ route('productdetails', $product->slug) }}">
-                                                <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
+                                                <img loading="eager|lazy" src="@if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
                                             </a>
                                         </figure>
                                         <div class="content">
@@ -570,16 +570,18 @@
                 </div>
                 <div class="row responsive">
                     @foreach($relatedProducts as $product)
-                        <div class="col-xl-2 col-md-3 col-4 px-2 mb-3">
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
                             <div class="single-product">
                                 <div class="inner-product">
                                     <figure>
-                                        <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
+                                        <a href="{{ route('productdetails', $product->slug) }}">
+                                            <img loading="eager|lazy" src=" @if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
+                                        </a>
                                     </figure>
                                     <div class="product-bottom">
                                         <div class="reviews">
                                             <div class="reviews-inner">
-                                                <div class="reviewed" style="width: 80%">
+                                                <div class="reviewed" style="width: 60%">
                                                     <i class="bi bi-star-fill"></i>
                                                     <i class="bi bi-star-fill"></i>
                                                     <i class="bi bi-star-fill"></i>
@@ -596,16 +598,23 @@
                                             </div>
                                         </div>
                                         <h3 class="product-name">
-                                            <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
+                                            <a href="{{ route('productdetails', $product->slug) }}">
+                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($product->name, $lan, 'en') }}
+                                            </a>
                                         </h3>
                                         <div class="price-cart">
                                             <div class="product-price">
                                                 <span class="current-price">৳ {{$product->sale_price}}</span>
-                                                <div class="old-price-discount">
-                                                    <del class="old-price">৳ {{$product->regular_price}} </del>
-                                                    <span class="discount">{{ $product->discount }} % </span>
-                                                </div>
+                                                @if ($product->discount > 0)
+                                                    <div class="old-price-discount">
+                                                        <del class="old-price">৳ {{$product->regular_price}} </del>
+                                                    </div>
+                                                @endif
                                             </div>
+                                            <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
+                                                <i class="bi bi-cart-plus"></i>
+                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop Now', $lan, 'en') }}
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

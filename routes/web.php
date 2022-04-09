@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 // admin controller
 use App\Http\Controllers\Admin\DashboardController;
@@ -61,6 +62,8 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('language-change', [HomeController::class, 'language_change'])->name('language-change');
 
 Auth::routes();
+Route::get('/auth/redirect/{provider}', [AuthController::class, 'redirect']);
+Route::get('/callback/{provider}', [AuthController::class, 'callback']);
 
 Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
 Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy');
@@ -160,6 +163,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('sub-unit-inactive/{id}', [SubUnitController::class, 'subUnitInactive'])->name('subunit.inactive');
     // product
     Route::resource('product', ProductController::class);
+    Route::post('product-delete', [ProductController::class, 'product_delete'])->name('product-delete');
     Route::post('product-unit-ajax', [ProductController::class, 'unitIdAjax'])->name('unitid.ajax');
     Route::post('product-color-ajax', [ProductController::class, 'colorIdAjax'])->name('color_id.ajax');
     Route::get('product-category/ajax/{category_id}', [ProductController::class, 'productCategory']);

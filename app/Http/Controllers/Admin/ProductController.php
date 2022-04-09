@@ -436,6 +436,42 @@ class ProductController extends Controller
         Toastr::warning('Product Successfully Delete :)', 'Warning');
         return redirect()->back();
     }
+    public function product_delete(Request $request)
+    {
+        $id = $request->id;
+        $destroy = Product::findOrFail($id);
+        // unit delete
+        $productUnitImages = ProductUnit::where('product_id', $id)->get();
+
+        foreach ($productUnitImages as $productUnitImage) {
+            if (file_exists($productUnitImage->image)) {
+                unlink($productUnitImage->image);
+            }
+            ProductUnit::where('product_id', $id)->delete();
+        }
+        // subunit delete
+        $productsubunits = ProductSubUnit::where('product_id', $id)->get();
+        foreach ($productsubunits as $productsubunit) {
+            ProductSubUnit::where('product_id', $id)->delete();
+        }
+
+        $delete_thamb = $destroy->thumbnail;
+        if (file_exists($delete_thamb)) {
+            unlink($delete_thamb);
+        }
+
+        $del_multi_thamb = explode('|', $destroy->multi_thumbnail);
+        foreach ($del_multi_thamb as $multi_thamb_del) {
+            if (file_exists($multi_thamb_del)) {
+                unlink($multi_thamb_del);
+            }
+        }
+        $destroy->delete();
+
+        return 'Success';
+        // Toastr::warning('Product Successfully Delete :)', 'Warning');
+        // return redirect()->back();
+    }
 
     // this is ajax
     public function unitIdAjax(Request $request)

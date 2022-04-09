@@ -214,7 +214,7 @@ p {
 .card .card-header {
     background-color: transparent;
     border-bottom: none;
-    padding: 10px 20px
+    padding: 25px 20px
 }
 
 .card .card-header .card-header-left {
@@ -256,7 +256,7 @@ p {
     color: #919aa3;
     display: block;
     font-size: 13px;
-    /* margin-top: 5px */
+    margin-top: 5px
 }
 
 .card .card-header+.card-block,
@@ -14302,13 +14302,12 @@ body.menu-bottom #collapse-menu {
 
 .select2-container--default .select2-selection--single {
     color: #fff;
-    height: auto;
-    margin-top: 0px !important;
+    height: auto
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-    background-color: #ffffff;
-    color: #212529;
+    background-color: #01a9ac;
+    color: #fff;
     padding: 8px 30px 8px 20px
 }
 
