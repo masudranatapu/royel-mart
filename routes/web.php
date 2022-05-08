@@ -32,6 +32,10 @@ use App\Http\Controllers\Admin\CategoryAdsController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\QuickSaleController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ReviewController;
+use App\Http\Controllers\Admin\ExpenseCategoryController;
+use App\Http\Controllers\Admin\ExpenseController;
 
 // customer controller
 use App\Http\Controllers\Customer\InformationController;
@@ -46,6 +50,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\TrackingOrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CustomOrderController;
+use App\Http\Controllers\ProductReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,10 +77,14 @@ Route::post('contact-us', [HomeController::class, 'contactStore'])->name('contac
 Route::get('new-arrival-product', [HomeController::class, 'newArrival'])->name('arrival');
 Route::get('all-product', [HomeController::class, 'allProduct'])->name('allproduct');
 Route::post('load-more-product', [HomeController::class, 'load_more_product'])->name('load-more-product');
+Route::post('load-more-all-product', [HomeController::class, 'load_more_all_product'])->name('load-more-all-product');
+Route::post('load-more-newarrival-product', [HomeController::class, 'load_more_newarrival_product'])->name('load-more-newarrival-product');
 Route::get('all-category', [HomeController::class, 'all_category'])->name('all-category');
 Route::get('policy-details/{slug}', [HomeController::class, 'policy'])->name('policy.details');
 // category & brand product
+Route::get('more-category/{slug}', [HomeController::class, 'more_category'])->name('more-category');
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
+Route::post('load-more-category-product', [ViewController::class, 'load_more_category_product'])->name('load-more-category-product');
 Route::get('brand', [ViewController::class, 'brandProduct'])->name('brand');
 Route::get('product-price', [ViewController::class, 'priceProduct'])->name('price');
 Route::get('unit-product', [ViewController::class, 'unit_product'])->name('unit-product');
@@ -109,6 +118,10 @@ Route::post('customer-info-save', [RegisterController::class, 'customerInfoSave'
 // order track my order
 Route::get('tracking-order', [TrackingOrderController::class, 'trackingOrder'])->name('track.my.order');
 Route::get('tracking-order-view', [TrackingOrderController::class, 'trackingorderView'])->name('trackingorder.view');
+
+// product review--------------
+Route::post('product-review', [ProductReviewController::class, 'review']);
+Route::post('replay-review/{id}', [ProductReviewController::class, 'replay_review']);
 
 // custom order route-------------
 Route::post('custom-order-submit', [CustomOrderController::class, 'store'])->name('custom-order-submit');
@@ -227,8 +240,13 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('quick-sale-product/{id}', [QuickSaleController::class, 'quick_sale_product'])->name('quick-sale-product');
     Route::post('update-quick-sale-product', [QuickSaleController::class, 'update_quick_sale_product'])->name('update-quick-sale-product');
 
+    // Expense category routes
+    Route::resource('expense-category', ExpenseCategoryController::class);
+    Route::resource('expense', ExpenseController::class);
+
     // Orders
     Route::resource('orders', OrderController::class);
+    Route::get('invoice-print/{id}', [OrderController::class, 'invoice_print'])->name('invoice-print');
     Route::get('orders-pending', [OrderController::class, 'ordersPending'])->name('orders.pending');
     Route::get('orders-confirmed', [OrderController::class, 'ordersConfirmed'])->name('orders.confirmed');
     Route::get('orders-processing', [OrderController::class, 'ordersProcessing'])->name('orders.processing');
@@ -237,11 +255,24 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('orders-canceled', [OrderController::class, 'ordersCanceled'])->name('orders.canceled');
 
     Route::get('custom-order', [OrderController::class, 'custom_order'])->name('custom-order');
+    Route::get('new-custom-order', [OrderController::class, 'new_custom_order'])->name('new-custom-order');
+    Route::get('create-custom-order/{id}', [OrderController::class, 'create_custom_order'])->name('create-custom-order');
+    Route::post('custom-order-store', [OrderController::class, 'new_custom_order_store'])->name('custom-order-store');
+    Route::post('add-product-custom-order-list', [OrderController::class, 'add_product_custom_order_list'])->name('add-product-custom-order-list');
     Route::post('custom-order-status-change', [OrderController::class, 'custom_order_status_change'])->name('custom-order-status-change');
+    Route::post('custom-order-delete/{id}', [OrderController::class, 'custom_order_delete'])->name('custom-order-delete');
     // order status change
     Route::post('order-status-change', [OrderController::class, 'order_status_change'])->name('order-status-change');
     Route::post('order-due-payment/{id}', [OrderController::class, 'order_due_payment'])->name('order-due-payment');
     Route::post('adjust-order-shipping-charge/{id}', [OrderController::class, 'adjust_order_shipping_charge'])->name('adjust-order-shipping-charge');
+
+    // customer
+    Route::get('customer-list', [CustomerController::class, 'customer_list'])->name('customer');
+
+    // product-review
+    Route::get('review-list', [ReviewController::class, 'review_list'])->name('product_review');
+    Route::post('product-review-destroy/{id}', [ReviewController::class, 'destroy'])->name('product-review-destroy');
+    Route::post('product-review-replay/{id}', [ReviewController::class, 'replay'])->name('product-review-replay');
 
 });
 
@@ -250,6 +281,7 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['aut
     Route::get('/information', [InformationController::class, 'index'])->name('information');
     Route::get('password-change', [InformationController::class, 'passChangeView'])->name('password.change');
     Route::post('pass-updated/{id}', [InformationController::class, 'updatePass'])->name('password.update');
+    Route::post('update-personal-information', [InformationController::class, 'update_personal_information'])->name('update-personal-information');
     Route::resource('checkout', CheckoutController::class);
     Route::get('division-district/ajax/{div_id}', [CheckoutController::class, 'getDivDis']);
     Route::get('district-division/ajax/{dis_id}', [CheckoutController::class, 'getDisDiv']);
@@ -259,7 +291,6 @@ Route::group(['as' => 'customer.', 'prefix' => 'customer', 'middleware' => ['aut
     // my order view
     Route::get('my-order', [WishlistController::class, 'orderIndex'])->name('order');
     Route::get('my-order-view/{id}', [WishlistController::class, 'orderView'])->name('order.view');
-    Route::post('review', [WishlistController::class, 'review'])->name('review');
     // checkout
 });
 

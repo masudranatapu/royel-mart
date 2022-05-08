@@ -58,7 +58,7 @@
                         <ul class="row">
                             @foreach($relatedcategory as $category)
                                 <li class="col-md-3">
-                                    <a href="{{ route('category', $category->slug) }}">
+                                    <a href="{{ route('more-category', $category->slug) }}">
                                         <img loading="eager|lazy" src="@if($category->image) {{ asset($category->image) }} @else {{ asset('demomedia/category.png') }} @endif" alt="">
                                         <span>{{ $category->name }}</span>
                                     </a>
@@ -110,5 +110,39 @@
 @endsection
 
 @push('js')
+    <script>
+        function loadMoreProduct(){
+            $('#loadMoreBtn').hide();
+            $("#loadingImage").show();
+            setTimeout(function(){
+                loadProduct();
+            }, 1000);
+        }
 
+        function loadProduct() {
+            $("#loadingImage").hide();
+            var cat_id = $('#cat_id').val();
+            var last_id = $('#last_id').val();
+            $.ajax({
+                type    : "POST",
+                url     : "{{ route('load-more-category-product') }}",
+                data    : {
+                    cat_id : cat_id,
+                    last_id : last_id,
+                    _token  : '{{csrf_token()}}',
+                },
+                success:function(data) {
+                    if(data['html'] == ''){
+                        $('#loadMoreBtn').remove();
+                    }else{
+                        $('#loadMoreBtn').hide();
+                        $("#product-list" ).append( data['html'] );
+                        $("#last_id" ).val( data['last_id'] );
+                        $('#loadMoreBtn').show();
+                    }
+                },
+            });
+        };
+
+    </script>
 @endpush

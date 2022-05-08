@@ -6,6 +6,7 @@
 
 @push('css')
     <link rel="stylesheet" href="{{asset('backend/select2/css/select2.css')}}">
+    <link rel="stylesheet" href="{{asset('backend/invoice-print.css')}}">
 @endpush
 
 @section('content')
@@ -23,11 +24,11 @@
                                                 <tr>
                                                     <td>
                                                         <img src="{{ URL::to($website->logo) }}" width="260" class="m-b-10" alt="">
-                                                        <button class="btn btn-sm btn-success ml-4" onclick="printInvoice()"><i class="fa fa-print"></i> Print</button>
+                                                        <a href="{{ route('admin.invoice-print',$order->id) }}" target="_blank" class="btn btn-sm btn-success ml-4" ><i class="fa fa-print"></i> Print</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{{ $website->title }}</td>
+                                                    <td>{{ $website->name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>{{$website->address}}</td>
@@ -270,14 +271,5 @@
     <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
     <script>
         $('.select2').select2();
-
-        function printInvoice(){
-            // $("#invoce-area").printThis();
-            var divToPrint=document.getElementById("invoce-area");
-            newWin= window.open("#");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
-        }
     </script>
 @endpush

@@ -37,24 +37,9 @@
                                         </a>
                                     </figure>
                                     <div class="product-bottom">
-                                        <div class="reviews">
-                                            <div class="reviews-inner">
-                                                <div class="reviewed" style="width: 60%">
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                </div>
-                                                <div class="blanked">
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                        {{ product_review($product->id) }}
+
                                         <h3 class="product-name">
                                             <a href="{{ route('quick-sale-product-details', [$quick_sale->slug, $qs_product->product->slug]) }}">
                                                 {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($qs_product->product->name, $lan, 'en') }}
@@ -62,16 +47,57 @@
                                         </h3>
                                         <div class="price-cart">
                                             <div class="product-price">
-                                                <span class="current-price">৳ {{$qs_product->sale_price}}</span>
-                                                @if ($qs_product->product->discount > 0)
+                                                @if ($quick_sale->discount > 0)
+                                                    @php
+                                                        $regular_price = $qs_product->product->regular_price;
+                                                        if($quick_sale->discount_type == 'Solid'){
+                                                            $sale_price = $regular_price - $quick_sale->discount;
+                                                        }else{
+                                                            $dis_price = floor(($quick_sale->discount * $regular_price)/100);
+                                                            $sale_price = $regular_price - $dis_price;
+                                                        }
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                        $regular_price = $qs_product->product->regular_price;
+                                                        if($qs_product->discount_type == 'Solid'){
+                                                            $sale_price = $regular_price - $qs_product->discount;
+                                                        }else{
+                                                            $dis_price = floor(($qs_product->discount * $regular_price)/100);
+                                                            $sale_price = $regular_price - $dis_price;
+                                                        }
+                                                    @endphp
+                                                @endif
+                                                <span class="current-price">
+                                                    ৳ {{$sale_price}}
+                                                </span>
+                                                @if ($quick_sale->discount > 0)
                                                     <div class="old-price-discount">
                                                         <del class="old-price">৳ {{$qs_product->product->regular_price}} </del>
+                                                        <span class="discount">
+                                                            @if ($quick_sale->discount_type == 'Solid')
+                                                                ৳ {{ $quick_sale->discount }}
+                                                            @else
+                                                                {{ $quick_sale->discount }} %
+                                                            @endif
+                                                        </span>
+                                                    </div>
+                                                @elseif ($qs_product->discount > 0)
+                                                    <div class="old-price-discount">
+                                                        <del class="old-price">৳ {{$qs_product->product->regular_price}} </del>
+                                                        <span class="discount">
+                                                            @if ($qs_product->discount_type == 'Solid')
+                                                                ৳ {{ $qs_product->discount }}
+                                                            @else
+                                                                {{ $qs_product->discount }} %
+                                                            @endif
+                                                        </span>
                                                     </div>
                                                 @endif
                                             </div>
                                             <a class="cart-btn" href="{{ route('quick-sale-product-details', [$quick_sale->slug, $qs_product->product->slug]) }}">
                                                 <i class="bi bi-cart-plus"></i>
-                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop Now', $lan, 'en') }}
+                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
                                             </a>
                                         </div>
                                     </div>

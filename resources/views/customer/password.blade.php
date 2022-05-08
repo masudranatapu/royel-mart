@@ -81,42 +81,29 @@
 				</div>
 				<div class="main-area">
 					<div class="row">
-                        <div class="col-md-12">
-                            <form action="{{ route('customer.password.update', Auth::user()->id) }}" method="POST">
-                                @csrf
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <label>Old Password</label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <input type="password" class="form-control" name="oldpassword" placeholder="Old Password">
-                                    </div>
+                        <div class="col-md-8">
+                            <div class="contact-form-area mt-4" id="personal_info_area">
+                                <div class="form-wrapper">
+                                    <h2 class="form-title">Update Password</h2>
+                                    <form action="{{ route('customer.password.update', Auth::user()->id) }}" method="POST">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-sm-12 px-2 mb-3">
+                                                <input class="form-control" type="password" placeholder="Oldpassword:" name="oldpassword">
+                                            </div>
+                                            <div class="col-sm-12 px-2 mb-3">
+                                                <input class="form-control" type="password" placeholder="New Passwoed:" name="password">
+                                            </div>
+                                            <div class="col-sm-12 px-2 mb-3">
+                                                <input class="form-control" type="password" readonly placeholder="Confirm Password:" name="password_confirmation">
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="submit-contact">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <label>New Password</label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <input type="password" class="form-control" name="password" placeholder="New Password">
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <label>Confirm Password</label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password">
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <label></label>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <input type="submit" class="btn btn-success" value="Change Password">
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
 					</div>
 				</div>

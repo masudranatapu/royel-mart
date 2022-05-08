@@ -1,5 +1,6 @@
 @php
     $website = App\Models\Website::latest()->first();
+    $policies = App\Models\Policy::where('status', 1)->oldest()->limit(4)->get();
     $lan = session()->get('lan');
 @endphp
 <header>
@@ -15,12 +16,11 @@
                 </div>
                 <div class="right-area">
                     <ul class="list">
-                        <li><a href="#">{{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Privacy Policy', $lan, 'en') }}</a></li>
-                        <li><a href="#">find a store</a></li>
+                        @foreach($policies as $policy)
+                            <li><a href="{{ route('policy', $policy->slug) }}">{{ $policy->name }}</a></li>
+                        @endforeach
                         <li><a href="{{ route('track.my.order') }}">track my order</a></li>
                         <li><a href="{{ route('contact') }}">contact us</a></li>
-                        <li><a href="#">return</a></li>
-                        <li><a href="#">FAQ</a></li>
                     </ul>
                     <ul class="social-list">
                         @php

@@ -11,252 +11,82 @@
 @section('content')
     <div class="pcoded-inner-content">
         <div class="main-body">
-            <div class="page-wrapper" id="invoce-area">
+            <div class="page-wrapper">
                 <div class="page-body">
                     <div class="card">
-                        <div class="row invoice-contact">
-                            <div class="col-md-10">
-                                <div class="invoice-box row">
-                                    <div class="col-sm-12">
-                                        <table class="table table-responsive invoice-table table-borderless">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <img src="{{ URL::to($website->logo) }}" width="260" class="m-b-10" alt="">
-                                                        <button class="btn btn-sm btn-success ml-4" onclick="printInvoice()"><i class="fa fa-print"></i> Print</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ $website->title }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{$website->address}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="mailto:{{ $website->email }}" target="_top">{{ $website->email }}</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{ $website->phone }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2>{{ $title }} <small class="badge bg-success text-white">{{ $orders->count() }}</small></h2>
                                 </div>
-                            </div>
-                            <div class="col-md-2 pr-4">
-                                <form action="{{ route('admin.order-status-change') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="order_id" value="{{ $order->id }}">
-                                    <select name="status" id="" class="form-control select2" onchange="this.form.submit()">
-                                        <option value="">Select One</option>
-                                        <option @if($order->status == 'Pending') selected @endif disabled value="Pending">Pending</option>
-                                        <option @if($order->status == 'Confirmed') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif  value="Confirmed">Confirmed</option>
-                                        <option @if($order->status == 'Processing') selected @endif @if($order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Processing">Processing</option>
-                                        <option @if($order->status == 'Delivered') selected @endif @if($order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered">Delivered</option>
-                                        <option @if($order->status == 'Successed') selected @endif @if($order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered" value="Successed">Successed</option>
-                                        <option @if($order->status == 'Canceled') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Canceled">Canceled</option>
-                                    </select>
-                                </form>
                             </div>
                         </div>
                         <div class="card-block">
-                            <div class="row invoive-info">
-                                <div class="col-md-4   invoice-client-info">
-                                    <h6>Shipping Information:</h6>
-                                    <h6 class="m-0">{{ $order->shipping_name }}</h6>
-                                    <p class="m-0 m-t-10">{{ $order->shipping_address }}</p>
-                                    <p class="m-0">{{ $order->shipping_phone }}</p>
-                                    <p>{{ $order->shipping_email }}</p>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <h6>Order Information :</h6>
-                                    <table class="table table-responsive invoice-table invoice-order table-borderless">
-                                        <tbody>
-                                            <tr>
-                                                <th>Date :</th>
-                                                <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y')}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Status :</th>
+                            <div class="dt-responsive">
+                                <table id="simpletable" class="table table-striped table-bordered nowrap" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="5%" class="text-center">SL No</th>
+                                            <th>Customer Name</th>
+                                            <th>Email</th>
+                                            <th>phone</th>
+                                            <th>Address</th>
+                                            <th width="20%">Order File</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th class="text-center" width="8%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($orders as $key => $order)
+                                            <tr class="@if($order->status == 'Canceled') text-danger @endif">
+                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                <td>{{ $order->name }}</td>
+                                                <td>{{ $order->email }}</td>
+                                                <td>{{ $order->phone }}</td>
+                                                <td>{{ $order->address }}</td>
                                                 <td>
-                                                    <span class="label label-warning">{{ $order->status }}</span>
+                                                    <a href="{{ URL::to($order->image) }}" target="_blank">
+                                                        <img src="{{ URL::to($order->image) }}" width="100%" height="150px" alt="">
+                                                    </a>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Id :</th>
-                                                <td>
-                                                    #{{ $order->id }}
+                                                <td>{{ $order->created_at->format('d M Y h:i A') }}</td>
+                                                <td class="text-center">
+                                                    @if($order->status == 'Canceled')
+                                                        <span class="badge bg-danger text-white">Canceled</span>
+                                                    @elseif($order->status == 'Confirmed')
+                                                        <span class="badge bg-success text-white">Confirmed</span>
+                                                    @else
+                                                        <form action="{{ route('admin.custom-order-status-change') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                                            <select name="status" id="" class="form-control select2" onchange="this.form.submit()">
+                                                                <option value="">Select One</option>
+                                                                <option @if($order->status == 'Pending') selected @endif disabled value="Pending">Pending</option>
+                                                                <option @if($order->status == 'Confirmed') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Canceled') disabled @endif  value="Confirmed">Confirmed</option>
+                                                                <option @if($order->status == 'Canceled') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Canceled') disabled @endif value="Canceled">Canceled</option>
+                                                            </select>
+                                                        </form>
+                                                    @endif
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Adjust Shipping Charge : </th>
-                                                <td>
-                                                    <span class="ml-2"><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#adjust-shipping-charge">Adjust</button></span>
-                                                </td>
-                                                <div class="modal fade" id="adjust-shipping-charge" tabindex="-1" role="dialog">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Adjust Charge</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true"> &times; </span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{ route('admin.adjust-order-shipping-charge', $order->id) }}" method="POST" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-2"><strong>Shipping Charge</strong></label>
-                                                                        <div class="col-md-8">
-                                                                            <input type="number" class="form-control" name="shipping_amount" value="{{ $order->shipping_amount }}" required placeholder="Adjust Charge">
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            <input type="submit" class="btn btn-success" value="Submit">
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <h6 class="m-b-20">Invoice Number
-                                        <span>#{{ $order->order_code }}</span></h6>
-                                    <h6 class="text-uppercase">Payment Method :
-                                        <span>{{ $order->payment_method }}</span>
-                                    </h6>
-                                    <h6 class="text-uppercase text-success">Total Paid :
-                                        <span>
-                                            {{ number_format($order->paid) }} ৳
-                                        </span>
-                                    </h6>
-                                    <h6 class="text-uppercase text-danger">Total Due :
-                                        <span>
-                                            {{ number_format($order->due) }} ৳
-                                            @if($order->due <= 0) <span cllass="text-success">Paid</span> @endif
-                                            @if($order->due > 0 && $order->status != 'Pending') <span cllass=""><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#due-payment-modal">Pay</button></span> @endif
-                                        </span>
-                                    </h6>
-                                    <div class="modal fade" id="due-payment-modal" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Due Payment</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true"> &times; </span>
+                                                <td class="text-center">
+                                                    @if($order->status == 'Confirmed')
+                                                        <a href="{{ route('admin.create-custom-order', $order->id) }}" class="btn btn-sm btn-info" title="Edit Order">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    <button class="btn btn-danger btn-sm waves-effect" type="button" onclick="deleteData({{ $order->id }})">
+                                                        <i class="ml-1 fa fa-trash"></i>
                                                     </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('admin.order-due-payment', $order->id) }}" method="POST" enctype="multipart/form-data">
+                                                    <form id="delete-form-{{ $order->id }}" action="{{ route('admin.custom-order-delete', $order->id) }}" method="POST" style="display: none;">
                                                         @csrf
-                                                        <div class="form-group row">
-                                                            <label class="col-md-2"><strong>Due Amount</strong></label>
-                                                            <div class="col-md-8">
-                                                                <input type="number" class="form-control" name="paid" value="{{ $order->due }}" required placeholder="Due payment">
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input type="submit" class="btn btn-success" value="Paid">
-                                                            </div>
-                                                        </div>
                                                     </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="table-responsive">
-                                        <table class="table  invoice-detail-table">
-                                            <thead>
-                                                <tr class="thead-default">
-                                                    <th>Description</th>
-                                                    <th class="text-right">Quantity</th>
-                                                    <th class="text-right">Amount</th>
-                                                    <th class="text-right">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($order->products as $key => $o_product)
-                                                    @php
-                                                        $product = App\Models\Product::findOrFail($o_product->product_id);
-                                                        $p_color = App\Models\ProductOrderColor::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->first();
-                                                    @endphp
-                                                    <tr>
-                                                        <td class="d-flex">
-                                                            <span>
-                                                                <img width="100" height="100" src="{{ asset($product->thumbnail) }}" alt="">
-                                                            </span>
-                                                            <span class="ml-2">
-                                                                <h6>{{ $product->name }}</h6>
-                                                                <p>
-                                                                    @if ($p_color)
-                                                                        @php
-                                                                            $color = App\Models\Color::findOrFail($p_color->color_id);
-                                                                            $p_size = App\Models\ProductOrderColorSize::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->where('color_id', $color->id)->first();
-                                                                        @endphp
-                                                                        Color: {{ $color->name }}
-                                                                        @if ($p_size)
-                                                                            @php
-                                                                                $size = App\Models\Size::findOrFail($p_size->size_id);
-                                                                            @endphp
-                                                                            ,Size: {{ $size->name }}
-                                                                        @endif
-                                                                    @endif
-                                                                </p>
-                                                            </span>
-                                                        </td>
-                                                        <td class="text-right">{{ $o_product->quantity }}</td>
-                                                        <td class="text-right">{{ number_format($o_product->sale_price) }} ৳</td>
-                                                        <td class="text-right">{{ number_format($o_product->sale_price * $o_product->quantity) }} ৳</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-responsive invoice-table invoice-total">
-                                        <tbody>
-                                            <tr>
-                                                <th class="text-right">Sub Total :</th>
-                                                <td class="text-right">{{ number_format($order->sub_total) }} ৳</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Shipping :</th>
-                                                <td class="text-right">{{ number_format($order->shipping_amount) }} ৳</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Discount :</th>
-                                                <td class="text-right">{{ number_format($order->discount) }} ৳</td>
-                                            </tr>
-                                            <tr class="text-info">
-                                                <td class="text-right">
-                                                    <hr>
-                                                    <h5 class="text-primary">Total :</h5>
-                                                </td>
-                                                <td class="text-right">
-                                                    <hr>
-                                                    <h5 class="text-primary">{{ number_format($order->total) }} ৳</h5>
                                                 </td>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <h6>Terms And Condition :</h6>
-                                    <p></p>
-                                </div>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -268,16 +98,40 @@
 
 @push('js')
     <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
-    <script>
+    <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
+
+    <script type="text/javascript">
         $('.select2').select2();
 
-        function printInvoice(){
-            // $("#invoce-area").printThis();
-            var divToPrint=document.getElementById("invoce-area");
-            newWin= window.open("#");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
+        function deleteData(id) {
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    // event.preventDefault();
+                    document.getElementById('delete-form-'+id).submit();
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    swal(
+                        'Cancelled',
+                        'Your data is safe :)',
+                        'error'
+                    )
+                }
+            })
         }
     </script>
 @endpush

@@ -59,24 +59,22 @@
                                                 <td class="text-center">
                                                     @if($order->status == 'Canceled')
                                                         <span class="badge bg-danger text-white">Canceled</span>
+                                                    @elseif($order->status == 'Successed')
+                                                        <span class="badge bg-success text-white">Successed</span>
                                                     @else
-                                                        @if($order->status == 'Successed')
-                                                            <span class="badge bg-success text-white">Successed</span>
-                                                        @else
-                                                            <form action="{{ route('admin.order-status-change') }}" method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="order_id" value="{{ $order->id }}">
-                                                                <select name="status" id="" class="form-control select2" onchange="this.form.submit()">
-                                                                    <option value="">Select One</option>
-                                                                    <option @if($order->status == 'Pending') selected @endif disabled value="Pending">Pending</option>
-                                                                    <option @if($order->status == 'Confirmed') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif  value="Confirmed">Confirmed</option>
-                                                                    <option @if($order->status == 'Processing') selected @endif @if($order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Processing">Processing</option>
-                                                                    <option @if($order->status == 'Delivered') selected @endif @if($order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered">Delivered</option>
-                                                                    <option @if($order->status == 'Successed') selected @endif @if($order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered" value="Successed">Successed</option>
-                                                                    <option @if($order->status == 'Canceled') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Canceled">Canceled</option>
-                                                                </select>
-                                                            </form>
-                                                        @endif
+                                                        <form action="{{ route('admin.order-status-change') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                                            <select name="status" id="" class="form-control select2" onchange="this.form.submit()">
+                                                                <option value="">Select One</option>
+                                                                <option @if($order->status == 'Pending') selected @endif disabled value="Pending">Pending</option>
+                                                                <option @if($order->status == 'Confirmed') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif  value="Confirmed">Confirmed</option>
+                                                                <option @if($order->status == 'Processing') selected @endif @if($order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Processing">Processing</option>
+                                                                <option @if($order->status == 'Delivered') selected @endif @if($order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered">Delivered</option>
+                                                                <option @if($order->status == 'Successed') selected @endif @if($order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered" value="Successed">Successed</option>
+                                                                <option @if($order->status == 'Canceled') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Canceled">Canceled</option>
+                                                            </select>
+                                                        </form>
                                                     @endif
                                                 </td>
                                                 <td class="text-center">
@@ -88,6 +86,7 @@
                                                     <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm @if($order->status == 'Canceled') btn-danger @else btn-success @endif" title="View Order Details">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
+                                                    <a href="{{ route('admin.invoice-print',$order->id) }}" target="_blank" class="btn btn-sm btn-warning" ><i class="fa fa-print"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach

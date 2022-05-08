@@ -24,26 +24,6 @@ class WishlistController extends Controller
         return view('customer.order', compact('title', 'lan', 'p_cat_id', 'orders'));
     }
 
-    public function review(Request $request)
-    {
-        //
-        $validateData = $request->validate([
-            'rating'=>'required',
-        ]);
-        Review::insert([
-            'user_id' => $request->user_id,
-            'product_id' => $request->product_id,
-            'name' => $request->name,
-            'email' => $request->email,
-            'opinion' => $request->opinion,
-            'rating' => $request->rating,
-            'phone' => $request->phone,
-            'created_at' => Carbon::now(),
-        ]);
-        Toastr::success('Your review successfully done :-)','success');
-        return redirect()->back();
-    }
-
     public function orderView(Request $request, $id)
     {
         $title = "Order View";

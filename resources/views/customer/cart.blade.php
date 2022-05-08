@@ -31,7 +31,7 @@
                         @if(session('cart'))
                             @foreach(session('cart') as $key => $cartdetails)
                                 @php
-                                    $sub_total += ($cartdetails['price'] * $cartdetails['quantity']);
+                                    $sub_total += ($cartdetails['regular_price'] * $cartdetails['quantity']);
                                     $shipping_charge += $cartdetails['shipping_charge'];
                                     $discount += $cartdetails['discount'];
                                 @endphp
@@ -66,7 +66,7 @@
                                             @endif
                                             <div class="single-info mobile">
                                                 <label for="">Price: </label>
-                                                <span class="price">{{ $cartdetails['price'] }} ৳</span>
+                                                <span class="price">{{ $cartdetails['regular_price'] }} ৳</span>
                                             </div>
                                         </div>
                                         <div class="product-qty">
@@ -84,7 +84,7 @@
                                         </div>
                                     </div>
                                     <div class="product-price">
-                                        <span class="price">{{ $cartdetails['price'] }} ৳</span>
+                                        <span class="price">{{ $cartdetails['regular_price'] }} ৳</span>
                                     </div>
                                     <button class="option-btn" title="Product remove form cart" onclick="removeFormCart({{ $key }})">
                                         <i class="bi bi-x-square"></i>
@@ -95,7 +95,7 @@
                                 </div>
                             @endforeach
                             @php
-                                $total = ($sub_total + $shipping_charge);
+                                $total = ($sub_total + $shipping_charge) - $discount;
                             @endphp
                         @endif
                     </div>
@@ -107,7 +107,7 @@
                             <tr>
                                 <td>Subtotal </td>
                                 <input type="hidden" name="sub_total" id="sub_total" value="{{ $sub_total }}">
-                                <td>{{ $total }} ৳</td>
+                                <td>{{ $sub_total }} ৳</td>
                             </tr>
                             <tr>
                                 <td>Shipping </td>

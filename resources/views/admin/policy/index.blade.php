@@ -68,19 +68,17 @@
                                 <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">SL No</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Details</th>
-                                            <th class="text-center">Status</th>
-                                            <th class="text-center">Action</th>
+                                            <th width="5%" class="text-center">SL No</th>
+                                            <th>Name</th>
+                                            <th width="10%" class="text-center">Status</th>
+                                            <th width="10%" class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($policies as $key => $policy)
                                             <tr>
                                                 <td class="text-center">{{ $key + 1 }}</td>
-                                                <td class="text-center">{{ $policy->name }}</td>
-                                                <td class="text-center">{!! substr($policy->details, 0,  25) !!}</td>
+                                                <td>{{ $policy->name }}</td>
                                                 <td class="text-center">
                                                     @if($policy->status == 1)
                                                         <a title="Inactive Now" href="{{ route('admin.policy.inactive', $policy->id) }}" class="btn btn-success">

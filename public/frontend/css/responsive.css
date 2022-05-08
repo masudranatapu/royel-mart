@@ -368,6 +368,11 @@ button.privacy-trigger {
 
 /*========= 767px Media Query Start =========*/
 @media screen and (max-width: 767px) {
+.product-media-area .product-zoom-photo .zoom-wrapper img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    height: auto;
+}
 .container,
 .container-fluid {
     padding-left: 20px;
@@ -1416,7 +1421,7 @@ section.pb-60 {
     margin-bottom: 10px;
 }
 .single-product-section {
-    padding-top: 0 !important;
+    
 }
 .product-media-area .product-photos .button-next, .product-media-area .product-photos .button-prev {
     padding: 5px 5px;

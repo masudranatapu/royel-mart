@@ -19,6 +19,7 @@ use App\Models\QuickSale;
 use App\Models\QuickSaleProduct;
 use App\Models\Size;
 use App\Models\Unit;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 class ViewController extends Controller
 {
@@ -27,18 +28,18 @@ class ViewController extends Controller
     {
         $products = Product::with('user','brand','unit')->where('slug', $slug)->first();
         $colors = ProductColor::with('color')->where('product_id', $products->id)->get();
-        $relatedProducts = Product::where('category_id', $products->category_id)->where('id', '!=', $products->id)->limit(12)->get();
+        $relatedProducts = Product::where('category_id', $products->category_id)->where('id', '!=', $products->id)->inRandomOrder()->limit(12)->get();
         $latestproducts = Product::where('id', '!=', $products->id)->latest()->limit(5)->get();
         $title = $products->name;
         $p_cat_id = '';
         $lan = $request->session()->get('lan');
         $productsunits = ProductUnit::where('product_id', $products->id)->latest()->get();
-        $reviews = Review::where('product_id', $products->id)->latest()->get();
-        $fiveStarReviews = Review::where('product_id', $products->id)->where('rating', 5)->latest()->get();
-        $fourStarReviews = Review::where('product_id', $products->id)->where('rating', 4)->latest()->get();
-        $threeStarReviews = Review::where('product_id', $products->id)->where('rating', 3)->latest()->get();
-        $twoStarReviews = Review::where('product_id', $products->id)->where('rating', 2)->latest()->get();
-        $oneStarReviews = Review::where('product_id', $products->id)->where('rating', 1)->latest()->get();
+        $reviews = Review::where('product_id', $products->id)->where('replay', '0')->latest()->get();
+        $fiveStarReviews = Review::where('product_id', $products->id)->where('replay', '0')->where('rating', 5)->latest()->get();
+        $fourStarReviews = Review::where('product_id', $products->id)->where('replay', '0')->where('rating', 4)->latest()->get();
+        $threeStarReviews = Review::where('product_id', $products->id)->where('replay', '0')->where('rating', 3)->latest()->get();
+        $twoStarReviews = Review::where('product_id', $products->id)->where('replay', '0')->where('rating', 2)->latest()->get();
+        $oneStarReviews = Review::where('product_id', $products->id)->where('replay', '0')->where('rating', 1)->latest()->get();
         return view('pages.productdetails', compact('title', 'lan', 'p_cat_id', 'products', 'colors', 'relatedProducts', 'latestproducts', 'productsunits', 'reviews', 'fiveStarReviews', 'fourStarReviews', 'threeStarReviews', 'twoStarReviews', 'oneStarReviews'));
     }
 
@@ -47,10 +48,10 @@ class ViewController extends Controller
         $products = Product::with('user','brand','unit')->where('slug', $slug)->first();
 
         $quick_sale = QuickSale::where('slug', $qs_slug)->first();
-        $quick_sale_product = QuickSaleProduct::where('product_id', $products->id)->where('quick_sale_id', $quick_sale->id)->first();
+        $quick_sale_product = QuickSaleProduct::with('product')->where('product_id', $products->id)->where('quick_sale_id', $quick_sale->id)->first();
 
         $colors = ProductColor::with('color')->where('product_id', $products->id)->get();
-        $relatedProducts = Product::where('category_id', $products->category_id)->where('id', '!=', $products->id)->limit(12)->get();
+        $relatedProducts = Product::where('category_id', $products->category_id)->where('id', '!=', $products->id)->inRandomOrder()->limit(12)->get();
         $latestproducts = Product::where('id', '!=', $products->id)->latest()->limit(5)->get();
         $title = $products->name;
         $p_cat_id = '';
@@ -95,6 +96,7 @@ class ViewController extends Controller
     {
         $lan = $request->session()->get('lan');
         $category = Category::where('slug', $slug)->first();
+        $cat_id = $category->id;
         $p_cat_id = $category->id;
         $title = $category->name;
 
@@ -109,7 +111,8 @@ class ViewController extends Controller
         }
 
         $latestproducts = Product::latest()->limit(5)->get();
-        $products = Product::where('category_id', $category->id)->latest()->paginate(20);
+        $products = Product::where('category_id', $category->id)->latest()->limit(20)->get();
+        // $products = Product::where('category_id', $category->id)->latest()->paginate(20);
 
         $colors = Color::all();
         $color_id = '';
@@ -126,7 +129,81 @@ class ViewController extends Controller
 
         $latestcategoryads = CategoryAds::where('cat_id', $category->id)->latest()->limit(3)->get();
         $categorybanners = CategoryBanner::where('cat_id', $category->id)->where('status', 1)->latest()->get();
-        return view('pages.categoryproduct', compact('title', 'lan', 'category', 'p_cat_id', 'check_price', 'min_price', 'max_price', 'colors', 'color_id', 'sizes', 'size_id', 'units', 'unit_id', 'products', 'latestproducts', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands', 'brand_id'));
+        return view('pages.categoryproduct', compact('title', 'lan', 'category', 'cat_id', 'p_cat_id', 'check_price', 'min_price', 'max_price', 'colors', 'color_id', 'sizes', 'size_id', 'units', 'unit_id', 'products', 'latestproducts', 'relatedcategory', 'latestcategoryads', 'categorybanners', 'brands', 'brand_id'));
+    }
+
+    public function load_more_category_product(Request $request)
+    {
+        $lan = $request->session()->get('lan');
+        $last_id = $request->last_id;
+        $cat_id = $request->cat_id;
+        $products = Product::where('category_id', $cat_id)->where('id', '<', $last_id)->latest()->limit(20)->get();
+        $html = '';
+        if($products->count() > 0){
+            foreach($products as $product){
+                $html .= '
+                        <div class="col-lg-3 col-md-3 col-4 px-2 mb-3">
+                            <div class="single-product">
+                                <div class="inner-product">
+                                    <figure>
+                                        <a href="'.route('productdetails', $product->slug).'"> ';
+                                            if(file_exists($product->thumbnail)){
+                $html .= '                        <img loading="eager|lazy" src="'.asset($product->thumbnail).'" alt="'.$product->name.'">';
+                                            }else{
+                $html .= '                        <img loading="eager|lazy" src="media/general-image/no-photo.jpg" alt="'.$product->name.'">';
+                                            }
+                $html .= '
+                                        </a>
+                                    </figure>
+                                    <div class="product-bottom">
+                                        <div class="reviews">
+                                            <div class="reviews-inner">
+                                                <div class="reviewed" style="width: 60%">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <i class="bi bi-star-fill"></i>
+                                                </div>
+                                                <div class="blanked">
+                                                    <i class="bi bi-star"></i>
+                                                    <i class="bi bi-star"></i>
+                                                    <i class="bi bi-star"></i>
+                                                    <i class="bi bi-star"></i>
+                                                    <i class="bi bi-star"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h3 class="product-name">
+                                            <a href="'.route('productdetails', $product->slug).'">
+                                                '.GoogleTranslate::trans($product->name, $lan, 'en').'
+                                            </a>
+                                        </h3>
+                                        <div class="price-cart">
+                                            <div class="product-price">
+                                                <span class="current-price">৳ '.$product->sale_price.'</span>';
+                                                if ($product->discount > 0){
+                $html .= '                           <div class="old-price-discount">
+                                                        <del class="old-price">৳ '.$product->regular_price.' </del>
+                                                    </div>';
+                                                }
+                $html .= '                   </div>
+                                            <a class="cart-btn" href="'.route('productdetails', $product->slug).'">
+                                                <i class="bi bi-cart-plus"></i>
+                                                '.GoogleTranslate::trans('Shop', $lan, 'en').'
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                ';
+            }
+            $last_id = $product->id;
+        }
+
+        return ['html'=>$html, 'last_id'=>$last_id];
+
     }
 
 

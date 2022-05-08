@@ -96,7 +96,7 @@
 							<input class="form-control" type="number" name="phone" placeholder="Mobile Number">
 						</div>
 						<div class="single-input">
-							<input class="form-control" type="text" name="address" placeholder="Address">
+                            <textarea class="form-control" name="address" id="address" cols="30" rows="3" required placeholder="Address"></textarea>
 						</div>
 						<button type="submit" class="submit-btn">Next</button>
 						<label for="" class="alter">Or</label>
@@ -115,7 +115,7 @@
 							</div>
 						</div>
 						<div class="signup-option">
-							<label for="">Already have an account? <a href="{{ route('login') }}">Login</a></label>							
+							<label for="">Already have an account? <a href="{{ route('login') }}">Login</a></label>
 						</div>
 					</form>
 				</div>

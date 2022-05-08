@@ -169,7 +169,7 @@
             $successedOrders = App\Models\Order::where('status', 'Successed')->latest()->get();
             $canceledOrders = App\Models\Order::where('status', 'Canceled')->latest()->get();
         @endphp
-        <li class="pcoded-hasmenu {{ Request::is('admin/orders') || Request::is('admin/orders-pending') || Request::is('admin/orders-confirmed') || Request::is('admin/orders-processing') ||Request::is('admin/orders-delivered') || Request::is('admin/orders-successed') || Request::is('admin/orders-canceled') || Request::is('admin/custom-order') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/orders') || Request::is('admin/orders-pending') || Request::is('admin/orders-confirmed') || Request::is('admin/orders-processing') ||Request::is('admin/orders-delivered') || Request::is('admin/orders-successed') || Request::is('admin/orders-canceled') || Request::is('admin/custom-order') || Request::is('admin/new-custom-order') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-gitlab"></i>
@@ -253,9 +253,58 @@
                         </span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/new-custom-order') ? 'active' : '' }}">
+                    <a href="{{ route('admin.new-custom-order') }}">
+                        <span class="pcoded-mtext">
+                            New Custom Orders
+                        </span>
+                    </a>
+                </li>
             </ul>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/stock-report') ? 'pcoded-trigger' : '' }}"">
+
+        <li class="{{ Request::is('admin/customer') ? 'active' : '' }}">
+            <a href="{{ route('admin.customer') }}">
+                <span class="pcoded-micon">
+                    <i class="fa fa-users"></i>
+                </span>
+                <span class="pcoded-mtext">Customer</span>
+            </a>
+        </li>
+
+        <li class="{{ Request::is('admin/product_review') ? 'active' : '' }}">
+            <a href="{{ route('admin.product_review') }}">
+                <span class="pcoded-micon">
+                    <i class="fa fa-star"></i>
+                </span>
+                <span class="pcoded-mtext">Product Review</span>
+            </a>
+        </li>
+
+        <li class="pcoded-hasmenu {{ Request::is('admin/expense-category.index') || Request::is('admin/expense.index') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-check-circle"></i>
+                </span>
+                <span class="pcoded-mtext">
+                    Expense Manage
+                </span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/expense-category.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.expense-category.index') }}">
+                        <span class="pcoded-mtext">Category</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/expense.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.expense.index') }}">
+                        <span class="pcoded-mtext">Expense</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="pcoded-hasmenu {{ Request::is('admin/stock-report') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-check-circle"></i>
@@ -277,6 +326,7 @@
                 </li>
             </ul>
         </li>
+
         <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/system-setting') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">

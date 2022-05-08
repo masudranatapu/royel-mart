@@ -35,7 +35,7 @@ class ProductController extends Controller
     public function index()
     {
         $title = "Product";
-        $products = Product::latest()->get();
+        $products = Product::orderBy('id', 'DESC')->get();
         return view('admin.product.index', compact('title', 'products'));
     }
 
@@ -66,7 +66,7 @@ class ProductController extends Controller
     {
         //
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:products',
             'thumbnail' => 'required',
             'sale_price' => 'required',
             'product_type' => 'required',
@@ -116,38 +116,47 @@ class ProductController extends Controller
         } else {
             $category_id = $request->category_id;
         }
-        $product_id = Product::insertGetId([
-            'user_id' => Auth::user()->id,
-            'product_code' => $product_code,
-            'category_id' => $category_id,
-            'brand_id' => $request->brand_id,
-            'unit_id' => $request->unit_id,
-            'name' => $request->name,
-            'name_en' => $request->name_en,
-            'slug' => strtolower(str_replace(' ', '-', $request->name)),
-            'thumbnail' => $thumbnail_name,
-            'more_image' => $more_image_photo,
-            'regular_price' => $request->regular_price,
-            'sale_price' => $request->sale_price,
-            'discount' => $request->discount,
-            'discount_tk' => $request->discount_tk,
-            'shipping_charge' => $request->shipping_charge,
-            'alert_quantity' => $request->alert_quantity,
-            'description' => $request->description,
-            'meta_description' => $request->meta_description,
-            'meta_keyword' => $request->meta_keyword,
-            'outside_delivery' => $request->outside_delivery,
-            'return_status' => $request->return_status,
-            'cash_delivery' => $request->cash_delivery,
-            'inside_delivery' => $request->inside_delivery,
-            'warranty_policy' => $request->warranty_policy,
-            'schema' => $request->schema,
-            'product_type' => $request->product_type,
-            'status' => $request->status,
-            'created_at' => Carbon::now(),
-        ]);
+
+        $product = new Product();
+        $product->user_id = Auth::user()->id;
+        $product->product_code = $product_code;
+        $product->category_id = $category_id;
+        $product->brand_id = $request->brand_id;
+        $product->unit_id = $request->unit_id;
+        $product->name = $request->name;
+        $product->name_en = $request->name_en;
+        $product->slug = strtolower(str_replace(' ', '-', $request->name));
+        $product->thumbnail = $thumbnail_name;
+        $product->more_image = $more_image_photo;
+        $product->regular_price = $request->regular_price;
+        $product->sale_price = $request->sale_price;
+        $product->discount = $request->discount;
+        $product->discount_tk = $request->discount_tk;
+        $product->shipping_charge = $request->shipping_charge;
+        $product->alert_quantity = $request->alert_quantity;
+        $product->description = $request->description;
+        $product->meta_description = $request->meta_description;
+        $product->meta_keyword = $request->meta_keyword;
+        $product->outside_delivery = $request->outside_delivery;
+        $product->return_status = $request->return_status;
+        $product->inside_delivery = $request->inside_delivery;
+        $product->payment_method = trim(implode('|', $request->payment_method), '|');
+        $product->guarantee_policy = trim(implode('|', $request->guarantee_policy), '|');
+        $product->warranty_policy = trim(implode('|', $request->warranty_policy), '|');
+        $product->schema = $request->schema;
+        $product->product_type = $request->product_type;
+        $product->status = $request->status;
+
+        $check_existence = Product::where('name', $request->name)->first();
+        if($check_existence){
+            Toastr::success('Product Successfully Save :-)', 'Success');
+            return redirect()->back();
+        }else{
+            $product->save();
+        }
 
         if (is_array($request->color_id) || is_object($request->color_id)) {
+            $check_product = Product::where('product_code', $product_code)->where('name', $request->name)->first();
             foreach ($request->color_id as $key => $color_id) {
                 // unit Image photo
                 $colorImageGet = 'image_' . $color_id;
@@ -163,7 +172,7 @@ class ProductController extends Controller
                     $product_colorImage = NULL;
                 }
                 ProductColor::insert([
-                    'product_id' => $product_id,
+                    'product_id' => $check_product->id,
                     'color_id' => $color_id,
                     'image' => $product_colorImage,
                     'created_at' => Carbon::now(),
@@ -172,7 +181,7 @@ class ProductController extends Controller
                 if ($request->$req_size_id) {
                     foreach ($request->$req_size_id as $key => $size_id) {
                         ProductSize::insert([
-                            'product_id' => $product_id,
+                            'product_id' => $check_product->id,
                             'color_id' => $color_id,
                             'size_id' => $size_id,
                             'created_at' => Carbon::now(),
@@ -329,9 +338,10 @@ class ProductController extends Controller
         $product->meta_keyword = $request->meta_keyword;
         $product->outside_delivery = $request->outside_delivery;
         $product->return_status = $request->return_status;
-        $product->cash_delivery = $request->cash_delivery;
         $product->inside_delivery = $request->inside_delivery;
-        $product->warranty_policy = $request->warranty_policy;
+        $product->cash_delivery = trim(implode('|', $request->payment_method), '|');
+        $product->guarantee_policy = trim(implode('|', $request->guarantee_policy), '|');
+        $product->warranty_policy = trim(implode('|', $request->warranty_policy), '|');
         $product->schema = $request->schema;
         $product->product_type = $request->product_type;
         $product->status = $request->status;

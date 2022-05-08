@@ -64,27 +64,9 @@
                         		<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
 								<div class="product-info-area">
 									<h4 class="product-name">{{ $products->name }}</h4>
-									<div class="reviews">
-										<div class="reviews-inner">
-											<div class="reviewed" style="width: 80%">
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-											</div>
-											<div class="blanked">
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-											</div>
-										</div>
-										<div class="reviews-answer">
-											<span class="count-reviews">( {{ $reviews->count() }} ratings)</span>
-										</div>
-									</div>
+
+                                    {{ product_review_details_page($products->id) }}
+
 									<div class="divider"></div>
 									<div class="category-brand">
 										@if($products->brand)
@@ -105,9 +87,40 @@
                                         </div>
 									</div>
 									<div class="price">
-										<span class="product-price">৳ {{ $quick_sale_product->sale_price }}</span>
-                                        <input type="hidden" name="sale_price" value="{{ $quick_sale_product->sale_price }}">
-                                        @if ($quick_sale_product->discount > 0 )
+                                        @if ($quick_sale->discount > 0)
+                                            @php
+                                                $regular_price = $quick_sale_product->product->regular_price;
+                                                if($quick_sale->discount_type == 'Solid'){
+                                                    $sale_price = $regular_price - $quick_sale->discount;
+                                                }else{
+                                                    $dis_price = floor(($quick_sale->discount * $regular_price)/100);
+                                                    $sale_price = $regular_price - $dis_price;
+                                                }
+                                            @endphp
+                                        @else
+                                            @php
+                                                $regular_price = $quick_sale_product->product->regular_price;
+                                                if($quick_sale_product->discount_type == 'Solid'){
+                                                    $sale_price = $regular_price - $quick_sale_product->discount;
+                                                }else{
+                                                    $dis_price = floor(($quick_sale_product->discount * $regular_price)/100);
+                                                    $sale_price = $regular_price - $dis_price;
+                                                }
+                                            @endphp
+                                        @endif
+										<span class="product-price">৳ {{ $sale_price }}</span>
+                                        <input type="hidden" name="sale_price" value="{{ $sale_price }}">
+
+                                        @if ($quick_sale->discount > 0)
+                                            <div class="old-price-discount">
+                                                <del class="old-price">৳ {{$quick_sale_product->product->regular_price}} </del>
+                                                @if ($quick_sale->discount_type == 'Solid')
+                                                    <span class="discount">৳ {{ $quick_sale->discount }} Off</span>
+                                                @else
+                                                    <span class="discount">% {{ $quick_sale->discount }} Off</span>
+                                                @endif
+                                            </div>
+                                        @elseif ($quick_sale_product->discount > 0 )
                                             <div class="old-price-discount">
                                                 <del class="old-price">৳ {{ $products->regular_price }}</del>
                                                 @if ($quick_sale_product->discount_type == 'Solid')
@@ -258,8 +271,8 @@
 				<h3 class="title">Product Rating & Reviews </h3>
 				<div class="review-wrapper">
 					<div class="left-area">
-						<h2 class="rating">4.3</h2>
-						<span class="count-rating">{{ $reviews->count() }} ratings</span>
+						<h2 class="rating">{{ final_rating($products->id) }}</h2>
+						<span class="count-rating">{{ total_review($products->id) }} ratings</span>
 					</div>
 					<div class="right-area">
 						<div class="rating-wrapper">
@@ -335,7 +348,7 @@
                             <i class="bi bi-pencil-fill"></i>
                             Write a review
                         </button>
-                        <form action="{{ route('customer.review') }}" method="POST">
+                        <form id="review_form" action="{{ url('product-review') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 							<input type="hidden" value="{{ $products->id }}" name="product_id">
                             <div class="add-review-popup" id="add-review-popup">
@@ -357,19 +370,23 @@
 									<input name="rating" class="form-control" id="review-val" type="hidden" placeholder="Your Name">
                                     <div class="single-input">
                                         <label>Your Name</label>
-                                        <input name="name" class="form-control" type="text" placeholder="Your Name">
+                                        <input name="name" class="form-control" type="text" required value="@auth {{ Auth::user()->name }} @endauth" placeholder="Your Name">
                                     </div>
                                     <div class="single-input">
                                         <label >Your Email</label>
-                                        <input name="email" class="form-control" type="email" placeholder="Your Email">
+                                        <input name="email" class="form-control" type="email" value="@auth {{ Auth::user()->email }} @endauth" placeholder="Your Email">
                                     </div>
                                     <div class="single-input">
                                         <label>Your Phone</label>
-                                        <input name="phone" class="form-control" type="number" placeholder="Your Phone">
+                                        <input name="phone" class="form-control" type="number" value="@auth {{ Auth::user()->phone }} @endauth" required placeholder="Your Phone">
                                     </div>
                                     <div class="single-input">
                                         <label>Review detail</label>
                                         <textarea name="opinion" class="form-control" rows="4" type="text" placeholder="Please share your feedback about the product:Was the product as described? What is the quality like?"></textarea>
+                                    </div>
+                                    <div class="single-input">
+                                        <label>File</label>
+                                        <input type="file" class="form-control" name="image[]" multiple>
                                     </div>
                                     <div class="text-center mt-20">
                                         <button type="submit" class="submit-review">submit review</button>
@@ -387,29 +404,13 @@
                                     <li>
                                         <figure>
                                             <a href="{{ route('productdetails', $product->slug) }}">
-                                                <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
+                                                <img loading="eager|lazy" src="@if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
                                             </a>
                                         </figure>
                                         <div class="content">
-                                            <div class="reviews">
-                                                <div class="reviews-inner">
-                                                    <div class="reviewed" style="width: 80%">
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                    </div>
-                                                    <div class="blanked">
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                    </div>
-                                                </div>
-                                                <span class="count-reviews">(4)</span>
-                                            </div>
+
+                                            {{ product_review($product->id) }}
+
                                             <h3 class="product-name">
                                                 <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
                                             </h3>
@@ -425,7 +426,7 @@
 				</div>
 				<div class="reviews-area">
 					<div class="header-area">
-						<span>8 reviews</span>
+						<span>{{ total_review($products->id) }} reviews</span>
 					</div>
 					<div class="all-reviews">
                     	@if($reviews->count() > 0)
@@ -434,7 +435,7 @@
 									<div class="review-head">
 										<div class="user-area">
 											<div class="user-photo">
-												<img loading="eager|lazy" src="@if($review->user_id) {{ asset($review['reviewuser']['image']) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
+												<img loading="eager|lazy" src="@if($review->user_id) {{ asset( user_image($review->user_id) ) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
 											</div>
 											<div class="user-meta">
 												@if($review->name == NULL)
@@ -442,103 +443,8 @@
 												@else
 													<h4 class="username">{{$review->name}}</h4>
 												@endif
-												@if($review->rating == 5)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 100%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-												@elseif($review->rating == 4)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 80%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-												@elseif($review->rating == 3)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 60%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-												@elseif($review->rating == 2)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 40%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
 
-												@elseif($review->rating == 1)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 20%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-                                                @endif
+                                                {{ review_rating($review->rating) }}
 											</div>
 										</div>
 										<div class="date-area">
@@ -548,15 +454,22 @@
 										</div>
 									</div>
 									<div class="review-body">
-										<p>
-											{!! $review->opinion !!}
-										</p>
+										<p>{!! $review->opinion !!}</p>
+                                        {{ review_image($review->id) }}
 									</div>
-									<div class="review-footer">
-										<button class="helpful-btn">Helpful
-											<span class="material-icons-outlined round">thumb_up</span>
-										</button>
-									</div>
+
+                                    @include('pages.partials.replay-review')
+
+                                    @auth
+                                        @if(Auth::check() && auth()->user()->role_id == 1)
+                                            <div class="review-footer">
+                                                <button class="helpful-btn" onclick="replayReview({{ $review->id }})">
+                                                    <span class="material-icons-outlined round">replay</span> Replay
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endauth
+
 								</div>
 							@endforeach
 						@endif
@@ -574,42 +487,37 @@
                 </div>
                 <div class="row responsive">
                     @foreach($relatedProducts as $product)
-                        <div class="col-xl-2 col-md-3 col-4 px-2 mb-3">
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
                             <div class="single-product">
                                 <div class="inner-product">
                                     <figure>
-                                        <img loading="eager|lazy" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
+                                        <a href="{{ route('productdetails', $product->slug) }}">
+                                            <img loading="eager|lazy" src="@if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
+                                        </a>
                                     </figure>
                                     <div class="product-bottom">
-                                        <div class="reviews">
-                                            <div class="reviews-inner">
-                                                <div class="reviewed" style="width: 80%">
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                </div>
-                                                <div class="blanked">
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                        {{ product_review($product->id) }}
+
                                         <h3 class="product-name">
-                                            <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
+                                            <a href="{{ route('productdetails', $product->slug) }}">
+                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($product->name, $lan, 'en') }}
+                                            </a>
                                         </h3>
                                         <div class="price-cart">
                                             <div class="product-price">
                                                 <span class="current-price">৳ {{$product->sale_price}}</span>
-                                                <div class="old-price-discount">
-                                                    <del class="old-price">৳ {{$product->regular_price}} </del>
-                                                    <span class="discount">{{ $product->discount }} % </span>
-                                                </div>
+                                                @if ($product->discount > 0)
+                                                    <div class="old-price-discount">
+                                                        <del class="old-price">৳ {{$product->regular_price}} </del>
+                                                        <span class="discount">{{$product->discount}}%</span>
+                                                    </div>
+                                                @endif
                                             </div>
+                                            <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
+                                                <i class="bi bi-cart-plus"></i>
+                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

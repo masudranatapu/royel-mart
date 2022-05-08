@@ -24,9 +24,10 @@
 							<div class="product-media-area">
 								<div class="product-zoom-photo">
 									<div class="zoom-wrapper">
-										<a class="popup-image" id="zoom-trigger" href="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif">
-                                            <img width="466" height="466" id="zoomImg" src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="">
-                                        </a>
+										<div class="zoom" id="zoom">
+										    <a class="zoom-trigger" href="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif"></a>
+                                            <img width='555' height='455' src="@if(file_exists($products->thumbnail)) {{asset($products->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="Thumbnail">
+                                        </div>
 									</div>
 								</div>
 								<div class="product-photos swiper" id="image-gallery">
@@ -64,27 +65,9 @@
                         		<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
 								<div class="product-info-area">
 									<h4 class="product-name">{{ $products->name }}</h4>
-									<div class="reviews">
-										<div class="reviews-inner">
-											<div class="reviewed" style="width: 80%">
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-												<i class="bi bi-star-fill"></i>
-											</div>
-											<div class="blanked">
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-												<i class="bi bi-star"></i>
-											</div>
-										</div>
-										<div class="reviews-answer">
-											<span class="count-reviews">( {{ $reviews->count() }} ratings)</span>
-										</div>
-									</div>
+
+                                    {{ product_review_details_page($products->id) }}
+
 									<div class="divider"></div>
 									<div class="category-brand">
 										@if($products->brand)
@@ -106,6 +89,7 @@
 									</div>
 									<div class="price">
 										<span class="product-price">৳ {{ $products->sale_price }}</span>
+                                        <input type="hidden" name="regular_price" value="{{ $products->regular_price }}">
                                         <input type="hidden" name="sale_price" value="{{ $products->sale_price }}">
                                         @if ($products->discount > 0 )
                                             <div class="old-price-discount">
@@ -181,59 +165,84 @@
 								<div class="title-area">
 									<label for=""><i class="bi bi-geo-alt"></i>delivery</label>
 								</div>
-								<div class="delivery-options">
+								<div class="delivery-options text-wrap">
 									<div class="single-option">
 										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/door-to-door.png')}}" alt=""></span>
-                                        {{ $products->inside_delivery }}
+                                        <span class="text-wrap">
+                                            {{ $products->inside_delivery }}
+                                        </span>
 									</div>
 									<div class="single-option">
 										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/door-to-door.png')}}" alt=""></span>
-                                        {{ $products->outside_delivery }}
+                                        <span class="text-wrap">
+                                            {{ $products->outside_delivery }}
+                                        </span>
 									</div>
 								</div>
 								<div class="divider"></div>
 								<div class="title-area">
 									<label for=""><i class="bi bi-credit-card-fill"></i>Payment Method</label>
 								</div>
-								<div class="delivery-options">
+								<div class="delivery-options text-wrap">
 									<div class="single-option">
 										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/cash-on-delivery.png')}}" alt=""></span>
-                                        <span>
-                                            {!! $products->cash_delivery !!}
-                                        </span>
+                                        @if ($products->payment_method != NULL)
+                                            @php
+                                                $payment_method = explode("|",$products->payment_method);
+                                            @endphp
+                                            @foreach($payment_method as $key=>$payment_method)
+                                                <span class="text-wrap">
+                                                    {{ $key+1 }}. {{ $payment_method }}
+                                                </span>
+                                            @endforeach
+                                        @endif
 									</div>
 								</div>
 								<div class="divider"></div>
 								<div class="title-area">
 									<label for=""><span class="material-icons">policy</span>Return & Warranty policy</label>
 								</div>
-								<div class="return-warranty">
+								<div class="return-warranty text-wrap">
 									<div class="single-policy">
 										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/time-check.png')}}" alt=""></span>
 										<div class="wrapper">
-                                            <span>
-                                                {{ $products->return_status }}
-                                            </span>
+                                            @if ($products->guarantee_policy != NULL)
+                                                @php
+                                                    $guarantee_policy = explode("|",$products->guarantee_policy);
+                                                @endphp
+                                                @foreach($guarantee_policy as $key=>$guarantee_policy)
+                                                    <span class="text-wrap">
+                                                        {{ $key+1 }}. {{ $guarantee_policy }}
+                                                    </span>
+                                                @endforeach
+                                            @endif
 										</div>
 									</div>
 									<div class="single-policy">
 										<span class="icon"><img loading="eager|lazy" src="{{asset('frontend/images/icons/warranty.png')}}" alt=""></span>
 										<div class="wrapper">
-                                            <span>
-                                                {!! $products->warranty_policy !!}
-                                            </span>
+                                            @if ($products->warranty_policy != NULL)
+                                                @php
+                                                    $warranty_policy = explode("|",$products->warranty_policy);
+                                                @endphp
+                                                @foreach($warranty_policy as $key=>$warranty_policy)
+                                                    <span class="text-wrap">
+                                                        {{ $key+1 }}. {{ $warranty_policy }}
+                                                    </span>
+                                                @endforeach
+                                            @endif
 										</div>
 									</div>
 								</div>
-								<div class="divider"></div>
+								{{-- <div class="divider"></div>
 								<div class="title-area">
 									<label for=""><span class="material-icons">share</span>Social Share</label>
 								</div>
-								<div class="share-area">
+								<div class="share-area text-wrap">
 									<ul class="social">
                                         <div class="addthis_inline_share_toolbox_9zg8"></div>
 									 </ul>
-								</div>
+								</div> --}}
 							</div>
 						</div>
 					</div>
@@ -254,8 +263,8 @@
 				<h3 class="title">Product Rating & Reviews </h3>
 				<div class="review-wrapper">
 					<div class="left-area">
-						<h2 class="rating">4.3</h2>
-						<span class="count-rating">{{ $reviews->count() }} ratings</span>
+						<h2 class="rating">{{ final_rating($products->id) }}</h2>
+						<span class="count-rating">{{ total_review($products->id) }} ratings</span>
 					</div>
 					<div class="right-area">
 						<div class="rating-wrapper">
@@ -331,7 +340,7 @@
                             <i class="bi bi-pencil-fill"></i>
                             Write a review
                         </button>
-                        <form action="{{ route('customer.review') }}" method="POST">
+                        <form id="review_form" action="{{ url('product-review') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 							<input type="hidden" value="{{ $products->id }}" name="product_id">
                             <div class="add-review-popup" id="add-review-popup">
@@ -353,19 +362,23 @@
 									<input name="rating" class="form-control" id="review-val" type="hidden" placeholder="Your Name">
                                     <div class="single-input">
                                         <label>Your Name</label>
-                                        <input name="name" class="form-control" type="text" placeholder="Your Name">
+                                        <input name="name" class="form-control" type="text" required value="@auth {{ Auth::user()->name }} @endauth" placeholder="Your Name">
                                     </div>
                                     <div class="single-input">
                                         <label >Your Email</label>
-                                        <input name="email" class="form-control" type="email" placeholder="Your Email">
+                                        <input name="email" class="form-control" type="email" value="@auth {{ Auth::user()->email }} @endauth" placeholder="Your Email">
                                     </div>
                                     <div class="single-input">
                                         <label>Your Phone</label>
-                                        <input name="phone" class="form-control" type="number" placeholder="Your Phone">
+                                        <input name="phone" class="form-control" type="number" value="@auth {{ Auth::user()->phone }} @endauth" required placeholder="Your Phone">
                                     </div>
                                     <div class="single-input">
                                         <label>Review detail</label>
                                         <textarea name="opinion" class="form-control" rows="4" type="text" placeholder="Please share your feedback about the product:Was the product as described? What is the quality like?"></textarea>
+                                    </div>
+                                    <div class="single-input">
+                                        <label>File</label>
+                                        <input type="file" class="form-control" name="image[]" multiple>
                                     </div>
                                     <div class="text-center mt-20">
                                         <button type="submit" class="submit-review">submit review</button>
@@ -387,25 +400,9 @@
                                             </a>
                                         </figure>
                                         <div class="content">
-                                            <div class="reviews">
-                                                <div class="reviews-inner">
-                                                    <div class="reviewed" style="width: 80%">
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                    </div>
-                                                    <div class="blanked">
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                    </div>
-                                                </div>
-                                                <span class="count-reviews">(4)</span>
-                                            </div>
+
+                                            {{ product_review($product->id) }}
+
                                             <h3 class="product-name">
                                                 <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
                                             </h3>
@@ -421,7 +418,7 @@
 				</div>
 				<div class="reviews-area">
 					<div class="header-area">
-						<span>8 reviews</span>
+						<span>{{ total_review($products->id) }} reviews</span>
 					</div>
 					<div class="all-reviews">
                     	@if($reviews->count() > 0)
@@ -430,7 +427,7 @@
 									<div class="review-head">
 										<div class="user-area">
 											<div class="user-photo">
-												<img loading="eager|lazy" src="@if($review->user_id) {{ asset($review['reviewuser']['image']) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
+												<img loading="eager|lazy" src="@if($review->user_id) {{ asset( user_image($review->user_id) ) }} @else {{ asset('demomedia/demoprofile.png') }} @endif" alt="">
 											</div>
 											<div class="user-meta">
 												@if($review->name == NULL)
@@ -438,103 +435,8 @@
 												@else
 													<h4 class="username">{{$review->name}}</h4>
 												@endif
-												@if($review->rating == 5)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 100%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-												@elseif($review->rating == 4)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 80%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-												@elseif($review->rating == 3)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 60%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-												@elseif($review->rating == 2)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 40%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
 
-												@elseif($review->rating == 1)
-													<div class="reviews">
-														<div class="reviews-inner">
-															<div class="reviewed" style="width: 20%">
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-																<i class="bi bi-star-fill"></i>
-															</div>
-															<div class="blanked">
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-																<i class="bi bi-star"></i>
-															</div>
-														</div>
-													</div>
-                                                @endif
+                                                {{ review_rating($review->rating) }}
 											</div>
 										</div>
 										<div class="date-area">
@@ -544,15 +446,21 @@
 										</div>
 									</div>
 									<div class="review-body">
-										<p>
-											{!! $review->opinion !!}
-										</p>
+										<p>{!! $review->opinion !!}</p>
+                                        {{ review_image($review->id) }}
 									</div>
-									<div class="review-footer">
-										<button class="helpful-btn">Helpful
-											<span class="material-icons-outlined round">thumb_up</span>
-										</button>
-									</div>
+
+                                    {{-- {{ replay_this_review($review->id) }} --}}
+                                    @include('pages.partials.replay-review')
+                                    @auth
+                                        @if(Auth::check() && auth()->user()->role_id == 1)
+                                            <div class="review-footer">
+                                                <button class="helpful-btn" onclick="replayReview({{ $review->id }})">
+                                                    <span class="material-icons-outlined round">replay</span> Replay
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endauth
 								</div>
 							@endforeach
 						@endif
@@ -570,33 +478,18 @@
                 </div>
                 <div class="row responsive">
                     @foreach($relatedProducts as $product)
-                        <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3">
+                        <div class="col-xl-2 col-lg-3 col-md-3 col-4 px-2 mb-3 mb-3">
                             <div class="single-product">
                                 <div class="inner-product">
                                     <figure>
                                         <a href="{{ route('productdetails', $product->slug) }}">
-                                            <img loading="eager|lazy" src=" @if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
+                                            <img loading="eager|lazy" src="@if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
                                         </a>
                                     </figure>
                                     <div class="product-bottom">
-                                        <div class="reviews">
-                                            <div class="reviews-inner">
-                                                <div class="reviewed" style="width: 60%">
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <i class="bi bi-star-fill"></i>
-                                                </div>
-                                                <div class="blanked">
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                    <i class="bi bi-star"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+
+                                        {{ product_review($product->id) }}
+
                                         <h3 class="product-name">
                                             <a href="{{ route('productdetails', $product->slug) }}">
                                                 {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($product->name, $lan, 'en') }}
@@ -608,12 +501,13 @@
                                                 @if ($product->discount > 0)
                                                     <div class="old-price-discount">
                                                         <del class="old-price">৳ {{$product->regular_price}} </del>
+                                                        <span class="discount">{{$product->discount}}%</span>
                                                     </div>
                                                 @endif
                                             </div>
                                             <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
                                                 <i class="bi bi-cart-plus"></i>
-                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop Now', $lan, 'en') }}
+                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
                                             </a>
                                         </div>
                                     </div>
@@ -705,6 +599,17 @@
                     $('#cart_form').submit();
                 }
             }
+        }
+
+
+        function replayReview(review_id){
+            let popupSelector = document.querySelector('#add-review-popup');
+            popupSelector.classList.add('show');
+
+            var base_url = window.location.origin;
+            var url = base_url+"/replay-review/"+review_id;
+
+            $('#review_form').attr('action', url);
         }
 	</script>
 @endpush

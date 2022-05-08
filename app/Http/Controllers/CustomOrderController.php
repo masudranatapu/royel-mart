@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\CustomOrder;
+use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,6 @@ class CustomOrderController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -56,6 +57,7 @@ class CustomOrderController extends Controller
         $order_image->move($upload_path, $order_image_name);
 
         $order->image = $upload_path.$order_image_name;
+        $order->status = 'Pending';
         $order->save();
 
         Toastr::success('Order successfully submitted :-)','Success');

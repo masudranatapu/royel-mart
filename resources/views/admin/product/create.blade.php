@@ -223,19 +223,32 @@
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
                                                 <label>Outside Delivery </label>
-                                                <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s) 120 ৳">
+                                                <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s)">
                                             </div>
                                             <div class="col-md-12 mt-2">
                                                 <label>Inside Delivery </label>
-                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery inside Dhaka 4 - 6 day(s) 80 ৳">
+                                                <input type="text" name="inside_delivery" class="form-control" value="Home Delivery inside Dhaka 4 - 6 day(s)">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Payment Method</label>
-                                                <textarea name="cash_delivery" id="cash_delivery" cols="30" rows="3" class="form-control summernote" placeholder="Cash on Delivery Available"></textarea>
+                                                <label id="payment_method_label">
+                                                    Payment Method
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addPayment()"><i class="fa fa-plus"></i></button>
+                                                </label>
+                                                <input type="text" name="payment_method[]" class="form-control" placeholder="Payment Method">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Warranty Policy</label>
-                                                <textarea name="warranty_policy" id="warranty_policy" cols="30" rows="3" class="form-control summernote"></textarea>
+                                                <label id="guarantee_policy_label">
+                                                    Guarantee Policy
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addGuarantee()"><i class="fa fa-plus"></i></button>
+                                                </label>
+                                                <input type="text" name="guarantee_policy[]" class="form-control" placeholder="Guarantee Policy">
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label id="warranty_policy_label">
+                                                    Warranty Policy
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addWarranty()"><i class="fa fa-plus"></i></button>
+                                                </label>
+                                                <input type="text" name="warranty_policy[]" class="form-control" placeholder="Warranty Policy">
                                             </div>
                                         </div>
                                     </div>
@@ -324,6 +337,18 @@
             $("#discount_tk").val(diff);
             // $("#regular_price").val(regular_price);
         });
+
+        function addPayment(){
+            $( "#payment_method_label" ).after( '<input type="text" name="payment_method[]" class="form-control mb-2" placeholder="Another Payment Method">' );
+        }
+
+        function addGuarantee(){
+            $( "#guarantee_policy_label" ).after( '<input type="text" name="guarantee_policy[]" class="form-control mb-2" placeholder="Another Guarantee Policy">' );
+        }
+
+        function addWarranty(){
+            $( "#warranty_policy_label" ).after( '<input type="text" name="warranty_policy[]" class="form-control mb-2" placeholder="Another Warranty Policy">' );
+        }
     </script>
     <script>
         // Summernote

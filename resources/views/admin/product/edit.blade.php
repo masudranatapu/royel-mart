@@ -285,13 +285,42 @@
                                                 <label>Inside Delivery </label>
                                                 <input type="text" name="inside_delivery" class="form-control" value="{{ $products->inside_delivery }}">
                                             </div>
+
                                             <div class="col-md-12 mt-2">
-                                                <label>Payment Method</label>
-                                                <textarea name="cash_delivery" id="cash_delivery" cols="30" rows="3" class="form-control summernote">{{ $products->cash_delivery }}</textarea>
+                                                <label id="payment_method_label">
+                                                    Payment Method
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addPayment()"><i class="fa fa-plus"></i></button>
+                                                </label>
+                                                @php
+                                                    $payment_method = explode("|",$products->payment_method);
+                                                @endphp
+                                                @foreach($payment_method as $key=>$payment_method)
+                                                    <input type="text" name="payment_method[]" class="form-control mb-2" value="{{ $payment_method }}" placeholder="Payment Method">
+                                                @endforeach
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Warranty Policy</label>
-                                                <textarea name="warranty_policy" id="warranty_policy" cols="30" rows="3" class="form-control summernote">{{ $products->warranty_policy }}</textarea>
+                                                <label id="guarantee_policy_label">
+                                                    Guarantee Policy
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addGuarantee()"><i class="fa fa-plus"></i></button>
+                                                </label>
+                                                @php
+                                                    $guarantee_policy = explode("|",$products->guarantee_policy);
+                                                @endphp
+                                                @foreach($guarantee_policy as $key=>$guarantee_policy)
+                                                    <input type="text" name="guarantee_policy[]" class="form-control mb-2" value="{{ $guarantee_policy }}" placeholder="Guarantee Policy">
+                                                @endforeach
+                                            </div>
+                                            <div class="col-md-12 mt-2">
+                                                <label id="warranty_policy_label">
+                                                    Warranty Policy
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addWarranty()"><i class="fa fa-plus"></i></button>
+                                                </label>
+                                                @php
+                                                    $warranty_policy = explode("|",$products->warranty_policy);
+                                                @endphp
+                                                @foreach($warranty_policy as $key=>$warranty_policy)
+                                                    <input type="text" name="warranty_policy[]" class="form-control mb-2" value="{{ $warranty_policy }}" placeholder="Warranty Policy">
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -380,6 +409,18 @@
             $("#discount_tk").val(diff);
             // $("#regular_price").val(regular_price);
         });
+
+        function addPayment(){
+            $( "#payment_method_label" ).after( '<input type="text" name="payment_method[]" class="form-control mb-2" placeholder="Another Payment Method">' );
+        }
+
+        function addGuarantee(){
+            $( "#guarantee_policy_label" ).after( '<input type="text" name="guarantee_policy[]" class="form-control mb-2" placeholder="Another Guarantee Policy">' );
+        }
+
+        function addWarranty(){
+            $( "#warranty_policy_label" ).after( '<input type="text" name="warranty_policy[]" class="form-control mb-2" placeholder="Another Warranty Policy">' );
+        }
     </script>
     <script>
         // Summernote

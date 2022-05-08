@@ -72,7 +72,7 @@
 	<!-- End Breadcrumb -->
 	<section class="login-register-section">
 		<div class="container">
-			<h1 class="wc-title">Welcome to</h1>
+			{{-- <h1 class="wc-title">Welcome to</h1> --}}
 			<div class="logo-area">
                 <img src="{{asset( $website->log )}}" alt="">
             </div>

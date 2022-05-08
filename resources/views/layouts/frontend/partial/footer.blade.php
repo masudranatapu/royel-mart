@@ -10,10 +10,7 @@
                 <div class="single-info">
                     <h4 class="title">payment method</h4>
                     <ul class="payments">
-                        <li><img src="{{asset('frontend/images/payments/1.jpg')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/payments/2.jpg')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/payments/3.jpg')}}" alt=""></li>
-                        <li><img src="{{asset('frontend/images/payments/4.jpg')}}" alt=""></li>
+                        <li><img src="{{asset('image/all-payment-area.png')}}" alt=""></li>
                     </ul>
                 </div>
             </div>

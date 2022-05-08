@@ -70,7 +70,6 @@ class CartController extends Controller
     // add to cart with quantity in product id
     public function addToCartWithQuantity(Request $request)
     {
-        //
         $this->validate($request, [
             'quantity' => 'required',
         ]);
@@ -129,6 +128,7 @@ class CartController extends Controller
     // product add on cart with  size color and quantity
     public function addToCartWithSizeColorQuantity(Request $request)
     {
+        // return $request;
         $this->validate($request, [
             'quantity' => 'required',
         ]);
@@ -146,6 +146,7 @@ class CartController extends Controller
         }
 
         $product_id = $request->product_id;
+        $regular_price = $request->regular_price;
         $sale_price = $request->sale_price;
         $discount = $request->discount;
 
@@ -164,6 +165,7 @@ class CartController extends Controller
                     'quantity' => $request->quantity,
                     'size_id' => $sizeId,
                     'color_id' => $colorId,
+                    'regular_price' => $regular_price,
                     'price' => $sale_price,
                     'discount' => $discount,
                     'shipping_charge' => $product->shipping_charge,
@@ -207,6 +209,7 @@ class CartController extends Controller
             'quantity' => $request->quantity,
             'size_id' => $sizeId,
             'color_id' => $colorId,
+            'regular_price' => $regular_price,
             'price' => $sale_price,
             'discount' => $discount,
             'shipping_charge' => $product->shipping_charge,

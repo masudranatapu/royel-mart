@@ -232,7 +232,7 @@
                     <tr>
                         @php
                             $shipping_charge = max($temp_checkout);
-                            $total = ($sub_total + $shipping_charge) - $discount;
+                            $total = ($sub_total + $shipping_charge);
                         @endphp
                         <td>Shipping </td>
                         <input type="hidden" name="shipping_amount" id="shipping_amount" value="{{ $shipping_charge }}">
@@ -250,7 +250,7 @@
                     </tr>
                 </tbody>
             </table>
-            @if ($discount <= 0)
+            {{-- @if ($discount <= 0) --}}
                 <div class="accordion" id="promo">
                     <div class="accordion-item">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -265,7 +265,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            {{-- @endif --}}
         </div>
         </div>
         <div class="shipping-summary-wrapper mt-30">
@@ -278,7 +278,11 @@
                         <div class="single-type">
                             <div class="inner-type">
                                 <input id="cash" type="radio" name="payment_method" value="Cash">
-                                <label for="cash">Cash on Delivery</label>
+                                <label for="cash">
+                                    <ul>
+                                        <li><img src="{{asset('image/cod.png')}}" alt=""></li>
+                                    </ul>
+                                </label>
                             </div>
                         </div>
                         <div class="single-type">
@@ -286,15 +290,12 @@
                                 <input id="cards" type="radio" name="payment_method" value="Payment Cards">
                                 <label for="cards">
                                     <ul>
-                                        <li><img src="{{asset('frontend/images/payments/1.jpg')}}" alt=""></li>
-                                        <li><img src="{{asset('frontend/images/payments/2.jpg')}}" alt=""></li>
-                                        <li><img src="{{asset('frontend/images/payments/3.jpg')}}" alt=""></li>
-                                        <li><img src="{{asset('frontend/images/payments/4.jpg')}}" alt=""></li>
+                                        <li><img src="{{asset('image/ssl.png')}}" alt=""></li>
                                     </ul>
                                 </label>
                             </div>
                         </div>
-                        <div class="single-type">
+                        {{-- <div class="single-type">
                             <div class="inner-type">
                                 <input id="bkash" type="radio" name="payment_method" value="Bkash">
                                 <label for="bkash">
@@ -323,7 +324,7 @@
                                     </ul>
                                 </label>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

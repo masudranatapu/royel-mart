@@ -5,260 +5,158 @@
 @stop
 
 @push('css')
-    <link rel="stylesheet" href="{{asset('backend/select2/css/select2.css')}}">
+
 @endpush
 
 @section('content')
     <div class="pcoded-inner-content">
         <div class="main-body">
-            <div class="page-wrapper" id="invoce-area">
+            <div class="page-wrapper">
                 <div class="page-body">
                     <div class="card">
-                        <div class="row invoice-contact">
-                            <div class="col-md-10">
-                                <div class="invoice-box row">
+                        <form action="#" method="POST">
+                            @csrf
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h2>
+                                            Update Order
+                                        </h2>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Customer Name</label>
+                                        <input type="text" class="form-control" name="customer_name" id="customer_name" value="{{ $customer->name }}" placeholder="Customer Name">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Customer Name *</label>
+                                        <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="{{ $customer->phone }}" required placeholder="Customer Phone">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Customer Address *</label>
+                                        <textarea class="form-control" name="customer_address" id="customer_address" cols="30" rows="1" placeholder="Address">{{ $customer->address }}</textarea>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label>Main Category</label>
+                                        <select id="category" class="form-control select2">
+                                            <option value="">Select One</option>
+                                            @foreach($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Parent Category</label>
+                                        <select id="subcategory" class="form-control select2">
+
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Child Category</label>
+                                        <select id="subsubcategory" class="form-control select2">
+
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Products</label>
+                                        <select id="select_product_id" class="form-control select2">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="dt-responsive">
+                                    <table id="custom-order-product" class="table table-striped table-bordered nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th width="8%" class="text-center">Action</th>
+                                                <th width="7%" class="text-center">Image</th>
+                                                <th>Title</th>
+                                                <th width="10%" class="text-center">Quantity</th>
+                                                <th width="10%" class="text-center">Sale Price</th>
+                                                <th width="10%" class="text-right">Shipping</th>
+                                                <th width="10%" class="text-right">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{ ordered_product($order->id) }}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-12">
-                                        <table class="table table-responsive invoice-table table-borderless">
+                                        <table class="table table-responsive invoice-table invoice-total">
                                             <tbody>
                                                 <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Sub Total :</th>
                                                     <td>
-                                                        <img src="{{ URL::to($website->logo) }}" width="260" class="m-b-10" alt="">
-                                                        <button class="btn btn-sm btn-success ml-4" onclick="printInvoice()"><i class="fa fa-print"></i> Print</button>
+                                                        <input type="text" class="form-control text-right" readonly id="sub_total" name="sub_total" value="{{ $order->sub_total }}">
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{{ $website->title }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>{{$website->address}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="mailto:{{ $website->email }}" target="_top">{{ $website->email }}</a>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Shipping :</th>
+                                                    <td>
+                                                        <input type="text" class="form-control text-right" id="total_shipping" name="total_shipping" value="{{ $order->shipping_amount }}" onfocus="focusInTotalShipping()" onfocusout="focusOutTotalShipping()" onpaste="TotalShippingCng()" onkeyup="TotalShippingCng()" onchange="TotalShippingCng()">
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>{{ $website->phone }}</td>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Discount :</th>
+                                                    <td>
+                                                        <input type="text" class="form-control text-right" id="total_discount" name="total_discount" value="{{ $order->discount }}" onfocus="focusInTotalDiscount()" onfocusout="focusOutTotalDiscount()" onpaste="TotalDiscountCng()" onkeyup="TotalDiscountCng()" onchange="TotalDiscountCng()">
+                                                    </td>
+                                                </tr>
+                                                <tr class="text-info">
+                                                    <th></th>
+                                                    <th></th>
+                                                    <td>
+                                                        <hr>
+                                                        <h5 class="text-primary">Total :</h5>
+                                                    </td>
+                                                    <td>
+                                                        <hr>
+                                                        <input type="text" class="form-control text-right" readonly id="total" name="total" value="{{ $order->due }}">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Payment Method :</th>
+                                                    <td width="200px">
+                                                        <select class="form-control select2" name="payment_method" id="payment_method">
+                                                            <option value="Cash" selected>Cash</option>
+                                                        </select>
+                                                    </td>
+                                                    <th>Paid :</th>
+                                                    <td>
+                                                        <input type="text" class="form-control text-right" id="paid" name="paid" value="{{ $order->paid }}" onfocus="focusInPaid()" onfocusout="focusOutPaid()" onpaste="PaidCng()" onkeyup="PaidCng()" onchange="PaidCng()">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>
+                                                        <button type="submit" class="btn btn-success btn-lg">Submit</button>
+                                                    </th>
+                                                    <th>Due :</th>
+                                                    <td>
+                                                        <input type="text" class="form-control text-right" readonly id="due" name="due" value="{{ $order->due }}">
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2 pr-4">
-                                <form action="{{ route('admin.order-status-change') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="order_id" value="{{ $order->id }}">
-                                    <select name="status" id="" class="form-control select2" onchange="this.form.submit()">
-                                        <option value="">Select One</option>
-                                        <option @if($order->status == 'Pending') selected @endif disabled value="Pending">Pending</option>
-                                        <option @if($order->status == 'Confirmed') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif  value="Confirmed">Confirmed</option>
-                                        <option @if($order->status == 'Processing') selected @endif @if($order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Processing">Processing</option>
-                                        <option @if($order->status == 'Delivered') selected @endif @if($order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered">Delivered</option>
-                                        <option @if($order->status == 'Successed') selected @endif @if($order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Delivered" value="Successed">Successed</option>
-                                        <option @if($order->status == 'Canceled') selected @endif @if($order->status == 'Confirmed' || $order->status == 'Processing' || $order->status == 'Delivered'  || $order->status == 'Successed' || $order->status == 'Canceled') disabled @endif value="Canceled">Canceled</option>
-                                    </select>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="card-block">
-                            <div class="row invoive-info">
-                                <div class="col-md-4   invoice-client-info">
-                                    <h6>Shipping Information:</h6>
-                                    <h6 class="m-0">{{ $order->shipping_name }}</h6>
-                                    <p class="m-0 m-t-10">{{ $order->shipping_address }}</p>
-                                    <p class="m-0">{{ $order->shipping_phone }}</p>
-                                    <p>{{ $order->shipping_email }}</p>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <h6>Order Information :</h6>
-                                    <table class="table table-responsive invoice-table invoice-order table-borderless">
-                                        <tbody>
-                                            <tr>
-                                                <th>Date :</th>
-                                                <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y')}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Status :</th>
-                                                <td>
-                                                    <span class="label label-warning">{{ $order->status }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Id :</th>
-                                                <td>
-                                                    #{{ $order->id }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Adjust Shipping Charge : </th>
-                                                <td>
-                                                    <span class="ml-2"><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#adjust-shipping-charge">Adjust</button></span>
-                                                </td>
-                                                <div class="modal fade" id="adjust-shipping-charge" tabindex="-1" role="dialog">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Adjust Charge</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true"> &times; </span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{ route('admin.adjust-order-shipping-charge', $order->id) }}" method="POST" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-2"><strong>Shipping Charge</strong></label>
-                                                                        <div class="col-md-8">
-                                                                            <input type="number" class="form-control" name="shipping_amount" value="{{ $order->shipping_amount }}" required placeholder="Adjust Charge">
-                                                                        </div>
-                                                                        <div class="col-md-2">
-                                                                            <input type="submit" class="btn btn-success" value="Submit">
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <h6 class="m-b-20">Invoice Number
-                                        <span>#{{ $order->order_code }}</span></h6>
-                                    <h6 class="text-uppercase">Payment Method :
-                                        <span>{{ $order->payment_method }}</span>
-                                    </h6>
-                                    <h6 class="text-uppercase text-success">Total Paid :
-                                        <span>
-                                            {{ number_format($order->paid) }} ৳
-                                        </span>
-                                    </h6>
-                                    <h6 class="text-uppercase text-danger">Total Due :
-                                        <span>
-                                            {{ number_format($order->due) }} ৳
-                                            @if($order->due <= 0) <span cllass="text-success">Paid</span> @endif
-                                            @if($order->due > 0 && $order->status != 'Pending') <span cllass=""><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#due-payment-modal">Pay</button></span> @endif
-                                        </span>
-                                    </h6>
-                                    <div class="modal fade" id="due-payment-modal" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">Due Payment</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true"> &times; </span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('admin.order-due-payment', $order->id) }}" method="POST" enctype="multipart/form-data">
-                                                        @csrf
-                                                        <div class="form-group row">
-                                                            <label class="col-md-2"><strong>Due Amount</strong></label>
-                                                            <div class="col-md-8">
-                                                                <input type="number" class="form-control" name="paid" value="{{ $order->due }}" required placeholder="Due payment">
-                                                            </div>
-                                                            <div class="col-md-2">
-                                                                <input type="submit" class="btn btn-success" value="Paid">
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="table-responsive">
-                                        <table class="table  invoice-detail-table">
-                                            <thead>
-                                                <tr class="thead-default">
-                                                    <th>Description</th>
-                                                    <th class="text-right">Quantity</th>
-                                                    <th class="text-right">Amount</th>
-                                                    <th class="text-right">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($order->products as $key => $o_product)
-                                                    @php
-                                                        $product = App\Models\Product::findOrFail($o_product->product_id);
-                                                        $p_color = App\Models\ProductOrderColor::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->first();
-                                                    @endphp
-                                                    <tr>
-                                                        <td class="d-flex">
-                                                            <span>
-                                                                <img width="100" height="100" src="{{ asset($product->thumbnail) }}" alt="">
-                                                            </span>
-                                                            <span class="ml-2">
-                                                                <h6>{{ $product->name }}</h6>
-                                                                <p>
-                                                                    @if ($p_color)
-                                                                        @php
-                                                                            $color = App\Models\Color::findOrFail($p_color->color_id);
-                                                                            $p_size = App\Models\ProductOrderColorSize::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->where('color_id', $color->id)->first();
-                                                                        @endphp
-                                                                        Color: {{ $color->name }}
-                                                                        @if ($p_size)
-                                                                            @php
-                                                                                $size = App\Models\Size::findOrFail($p_size->size_id);
-                                                                            @endphp
-                                                                            ,Size: {{ $size->name }}
-                                                                        @endif
-                                                                    @endif
-                                                                </p>
-                                                            </span>
-                                                        </td>
-                                                        <td class="text-right">{{ $o_product->quantity }}</td>
-                                                        <td class="text-right">{{ number_format($o_product->sale_price) }} ৳</td>
-                                                        <td class="text-right">{{ number_format($o_product->sale_price * $o_product->quantity) }} ৳</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <table class="table table-responsive invoice-table invoice-total">
-                                        <tbody>
-                                            <tr>
-                                                <th class="text-right">Sub Total :</th>
-                                                <td class="text-right">{{ number_format($order->sub_total) }} ৳</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Shipping :</th>
-                                                <td class="text-right">{{ number_format($order->shipping_amount) }} ৳</td>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-right">Discount :</th>
-                                                <td class="text-right">{{ number_format($order->discount) }} ৳</td>
-                                            </tr>
-                                            <tr class="text-info">
-                                                <td class="text-right">
-                                                    <hr>
-                                                    <h5 class="text-primary">Total :</h5>
-                                                </td>
-                                                <td class="text-right">
-                                                    <hr>
-                                                    <h5 class="text-primary">{{ number_format($order->total) }} ৳</h5>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <h6>Terms And Condition :</h6>
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -267,17 +165,625 @@
 @endsection
 
 @push('js')
-    <script src="{{asset('backend/select2/js/select2.full.min.js')}}"></script>
     <script>
+        function mainTham(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#showTham').attr('src', e.target.result)
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+        function mainThamEdit(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.showThamEdit').attr('src', e.target.result)
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+    </script>
+    <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
+    <script type="text/javascript">
+        function deleteData(id) {
+            swal({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger',
+                buttonsStyling: false,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                    // event.preventDefault();
+                    document.getElementById('delete-form-'+id).submit();
+                } else if (
+                    // Read more about handling dismissals
+                    result.dismiss === swal.DismissReason.cancel
+                ) {
+                    swal(
+                        'Cancelled',
+                        'Your data is safe :)',
+                        'error'
+                    )
+                }
+            })
+        }
+
         $('.select2').select2();
 
-        function printInvoice(){
-            // $("#invoce-area").printThis();
-            var divToPrint=document.getElementById("invoce-area");
-            newWin= window.open("#");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
+        function updateQuickSaleProduct(){
+            $('#update-quick-sale-product-form').submit();
         }
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#category').on('change', function(){
+                var category_id = $(this).val();
+                // alert(category_id);
+                if(category_id) {
+                    $.ajax({
+                        url: "{{ route('admin.parent-category-for-product') }}",
+                        type:"POST",
+                        data:{
+                            _token: '{{csrf_token()}}',
+                            category_id: category_id,
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            $('#subsubcategory').html('');
+                            $('#subcategory').html(data['cat']);
+                            $('#select_product_id').html(data['product']);
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+
+            $('#subcategory').on('change', function(){
+                var subcategory_id = $(this).val();
+                // alert(subcategory_id);
+                if(subcategory_id) {
+                    $.ajax({
+                        url: "{{ route('admin.child-category-for-product') }}",
+                        type:"POST",
+                        data:{
+                            _token: '{{csrf_token()}}',
+                            subcategory_id: subcategory_id,
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            $('#subsubcategory').html(data['cat']);
+                            $('#select_product_id').html(data['product']);
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+
+            $('#subsubcategory').on('change', function(){
+                var subsubcategory_id = $(this).val();
+                // alert(subsubcategory_id);
+                if(subsubcategory_id) {
+                    $.ajax({
+                        url: "{{ route('admin.get-category-product-for-qs') }}",
+                        type:"POST",
+                        data:{
+                            _token: '{{csrf_token()}}',
+                            subsubcategory_id: subsubcategory_id,
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            $('#select_product_id').html(data['product']);
+                        },
+                    });
+                } else {
+                    alert('danger');
+                }
+            });
+
+            $('#select_product_id').on('change', function(){
+                var product_id = $(this).val();
+                var quick_sale_id = $('#quick_sale_id').val();
+                var tr_id = 'product_tr_'+product_id;
+                if($("#"+tr_id).length == 0) {
+                    $.ajax({
+                        url: "{{ route('admin.add-product-custom-order-list') }}",
+                        type:"POST",
+                        data:{
+                            _token: '{{csrf_token()}}',
+                            product_id: product_id,
+                        },
+                        success:function(data) {
+                            if(data == ''){
+                                swal(
+                                    'Out of stock!',
+                                    '',
+                                    'error'
+                                )
+                            }else{
+                                $('#custom-order-product > tbody:last-child').prepend(data);
+
+                                var sub_total = parseInt($('#sub_total').val());
+                                var total_discount = parseInt($('#total_discount').val());
+                                var total_shipping = parseInt($('#total_shipping').val());
+                                var total = parseInt($('#total').val());
+
+                                var pro_total = parseInt($('#pro_total_'+product_id).val());
+                                if(sub_total > 0){
+                                    var decrease_subtotal = sub_total;
+                                }else{
+                                    var decrease_subtotal = parseInt(0);
+                                }
+
+                                var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+                                if(total_shipping > 0){
+                                    var decrease_shipping = total_shipping - pro_shipping;
+                                }else{
+                                    var decrease_shipping = parseInt(0);
+                                }
+
+                                var quantity = parseInt($('#pro_quantity_'+product_id).val());
+                                var pro_sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+                                if(quantity > 0){
+                                    var subtotal = (quantity * pro_sale_price);
+                                }else{
+                                    var subtotal = parseInt(0);
+                                }
+                                if(isNaN(subtotal) ){
+                                    subtotal = 0;
+                                }
+                                $('#pro_total_'+product_id).val(subtotal);
+
+                                if(decrease_subtotal > 0){
+                                    var final_subtotal = decrease_subtotal + subtotal;
+                                }else{
+                                    var final_subtotal = subtotal;
+                                }
+                                if(isNaN(final_subtotal) || final_subtotal < 0){
+                                    final_subtotal = parseInt(0);
+                                }
+                                $('#sub_total').val(final_subtotal);
+
+                                var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+                                if(decrease_shipping > 0){
+                                    var final_shipping = (decrease_shipping + pro_shipping);
+                                }else{
+                                    var final_shipping = pro_shipping;
+                                }
+                                if(isNaN(final_shipping) || final_subtotal < 0){
+                                    final_shipping = parseInt(0);
+                                }
+                                $('#total_shipping').val(final_shipping);
+
+                                var final_total = (final_subtotal + final_shipping) - total_discount;
+                                if(isNaN(final_total) ){
+                                    final_total = parseInt(0);
+                                }
+                                $('#total').val(final_total);
+
+                                // payment----
+                                var total = parseInt($('#total').val());
+                                var paid = parseInt($('#paid').val());
+                                var due = total - paid;
+
+                                if(due > 0){
+                                    $('#due').val(due);
+                                }else{
+                                    $('#due').val(0);
+                                }
+                            }
+                        },
+                    });
+                }else{
+                    swal(
+                        'Item already added for order!',
+                        '',
+                        'error'
+                    )
+                }
+            });
+
+        });
+
+        function removeProductTr(product_id){
+            var sub_total = parseInt($('#sub_total').val());
+            var total_shipping = parseInt($('#total_shipping').val());
+
+            var pro_total = parseInt($('#pro_total_'+product_id).val());
+            var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+
+            if(sub_total > 0){
+                var final_sub_total = sub_total - pro_total;
+            }else{
+                var final_sub_total = parseInt(0);
+            }
+            $('#sub_total').val(final_sub_total);
+
+            if(total_shipping > 0){
+                var final_shipping = total_shipping - pro_shipping;
+            }else{
+                var final_shipping = parseInt(0);
+            }
+            $('#total_shipping').val(final_shipping);
+
+
+            var sub_total = parseInt($('#sub_total').val());
+            var total_shipping = parseInt($('#total_shipping').val());
+            var total_discount = parseInt($('#total_discount').val());
+
+            var final_total = (sub_total + total_shipping) - total_discount;
+            if(isNaN(final_total) ){
+                final_total = parseInt(0);
+            }
+            $('#total').val(final_total);
+
+            // payment----
+            var sub_total = parseInt($('#sub_total').val());
+            if(sub_total <= 0){
+                $('#total_shipping').val(0);
+                $('#total_discount').val(0);
+                $('#total').val(0);
+                $('#due').val(0);
+            }else{
+                var total = parseInt($('#total').val());
+                var paid = parseInt($('#paid').val());
+                var due = total - paid;
+
+                if(due > 0){
+                    $('#due').val(due);
+                }else{
+                    $('#due').val(0);
+                }
+            }
+
+            $('#product_tr_'+product_id).remove();
+        }
+
+        function focusInQuantity(product_id){
+            var pro_quantity = parseInt($('#pro_quantity_'+product_id).val());
+
+            if(pro_quantity <= 0){
+                $('#pro_quantity_'+product_id).val('');
+            }
+        }
+
+        function focusOutQuantity(product_id){
+            var pro_quantity = parseInt($('#pro_quantity_'+product_id).val());
+
+            if(isNaN(pro_quantity) || pro_quantity == '') {
+                $('#pro_quantity_'+product_id).val(0);
+            }
+        }
+
+        function QuantityCng(product_id){
+            var pro_quantity = parseInt($('#pro_quantity_'+product_id).val());
+            var pro_max_quantity = parseInt($('#pro_max_quantity_'+product_id).val());
+
+            if(isNaN(pro_quantity) || pro_quantity == '') {
+                $('#pro_quantity_'+product_id).val('');
+                var quantity = parseInt(0);
+            }else{
+                var quantity = parseInt($('#pro_quantity_'+product_id).val());
+            }
+
+            if(quantity > pro_max_quantity){
+                swal(
+                        'Out of stock!',
+                        '',
+                        'error'
+                    )
+            }else{
+                var sub_total = parseInt($('#sub_total').val());
+                var total_discount = parseInt($('#total_discount').val());
+                var total_shipping = parseInt($('#total_shipping').val());
+                var total = parseInt($('#total').val());
+
+                var pro_total = parseInt($('#pro_total_'+product_id).val());
+                if(sub_total > 0){
+                    var decrease_subtotal = sub_total - pro_total;
+                }else{
+                    var decrease_subtotal = parseInt(0);
+                }
+
+                var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+                if(total_shipping > 0){
+                    var decrease_shipping = total_shipping - pro_shipping;
+                }else{
+                    var decrease_shipping = parseInt(0);
+                }
+
+                var pro_sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+                if(quantity > 0){
+                    var subtotal = (quantity * pro_sale_price);
+                }else{
+                    var subtotal = parseInt(0);
+                }
+                if(isNaN(subtotal) ){
+                    subtotal = 0;
+                }
+                $('#pro_total_'+product_id).val(subtotal);
+
+                var pro_total = parseInt($('#pro_total_'+product_id).val());
+                if(decrease_subtotal > 0){
+                    var final_subtotal = decrease_subtotal + pro_total;
+                }else{
+                    var final_subtotal = subtotal;
+                }
+                if(isNaN(final_subtotal) || final_subtotal < 0){
+                    final_subtotal = parseInt(0);
+                }
+                $('#sub_total').val(final_subtotal);
+
+                var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+                if(decrease_shipping > 0){
+                    var final_shipping = (decrease_shipping + pro_shipping);
+                }else{
+                    var final_shipping = pro_shipping;
+                }
+                if(isNaN(final_shipping) || final_subtotal < 0){
+                    final_shipping = parseInt(0);
+                }
+                $('#total_shipping').val(final_shipping);
+
+                var final_total = (final_subtotal + final_shipping) - total_discount;
+                if(isNaN(final_total) ){
+                    final_total = parseInt(0);
+                }
+                $('#total').val(final_total);
+
+                // payment----
+                var total = parseInt($('#total').val());
+                var paid = parseInt($('#paid').val());
+                var due = total - paid;
+
+                if(due > 0){
+                    $('#due').val(due);
+                }else{
+                    $('#due').val(0);
+                }
+            }
+
+        }
+
+        function focusInSalePrice(product_id){
+            var pro_sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+
+            if(pro_sale_price <= 0){
+                $('#pro_sale_price_'+product_id).val('');
+            }
+        }
+
+        function focusOutSalePrice(product_id){
+            var sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+
+            if(isNaN(sale_price) || sale_price == '') {
+                $('#pro_sale_price_'+product_id).val(0);
+            }
+        }
+
+        function SalePriceCng(product_id){
+            var pro_sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+
+            if(isNaN(pro_sale_price) || pro_sale_price == '') {
+                $('#pro_sale_price_'+product_id).val('');
+                var pro_sale_price = parseInt(0);
+            }else{
+                var pro_sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+            }
+
+            var sub_total = parseInt($('#sub_total').val());
+            var total_discount = parseInt($('#total_discount').val());
+            var total_shipping = parseInt($('#total_shipping').val());
+            var total = parseInt($('#total').val());
+
+            var pro_total = parseInt($('#pro_total_'+product_id).val());
+            if(sub_total > 0){
+                var decrease_subtotal = sub_total - pro_total;
+            }else{
+                var decrease_subtotal = parseInt(0);
+            }
+
+            var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+            if(total_shipping > 0){
+                var decrease_shipping = total_shipping - pro_shipping;
+            }else{
+                var decrease_shipping = parseInt(0);
+            }
+
+            var quantity = parseInt($('#pro_quantity_'+product_id).val());
+            var pro_sale_price = parseInt($('#pro_sale_price_'+product_id).val());
+            if(quantity > 0){
+                var subtotal = (quantity * pro_sale_price);
+            }else{
+                var subtotal = parseInt(0);
+            }
+            if(isNaN(subtotal) ){
+                subtotal = 0;
+            }
+            $('#pro_total_'+product_id).val(subtotal);
+
+            if(decrease_subtotal > 0){
+                var final_subtotal = decrease_subtotal + subtotal;
+            }else{
+                var final_subtotal = subtotal;
+            }
+            if(isNaN(final_subtotal) || final_subtotal < 0){
+                final_subtotal = parseInt(0);
+            }
+            $('#sub_total').val(final_subtotal);
+
+            var pro_shipping = parseInt($('#pro_shipping_'+product_id).val());
+            if(decrease_shipping > 0){
+                var final_shipping = (decrease_shipping + pro_shipping);
+            }else{
+                var final_shipping = pro_shipping;
+            }
+            if(isNaN(final_shipping) || final_subtotal < 0){
+                final_shipping = parseInt(0);
+            }
+            $('#total_shipping').val(final_shipping);
+
+            var final_total = (final_subtotal + final_shipping) - total_discount;
+            if(isNaN(final_total) ){
+                final_total = parseInt(0);
+            }
+            $('#total').val(final_total);
+
+            // payment----
+            var total = parseInt($('#total').val());
+            var paid = parseInt($('#paid').val());
+            var due = total - paid;
+
+            if(due > 0){
+                $('#due').val(due);
+            }else{
+                $('#due').val(0);
+            }
+
+        }
+
+        $('#customer_phone').on('keyup', function(){
+            var customer_phone = parseInt($('#customer_phone').val());
+
+            if(isNaN(customer_phone)) {
+                $('#customer_phone').val('');
+            }
+        });
+
+        function focusInPaid(){
+            var paid = parseInt($('#paid').val());
+            if(paid <= 0){
+                $('#paid').val('');
+            }
+        }
+
+        function focusOutPaid(){
+            var paid = parseInt($('#paid').val());
+            if(isNaN(paid) || paid == '') {
+                $('#paid').val(0);
+            }
+        }
+
+        function PaidCng(){
+            var paid = parseInt($('#paid').val());
+
+            if(isNaN(paid) || paid == '') {
+                $('#paid').val('');
+                var paid = parseInt(0);
+            }else{
+                var paid = parseInt($('#paid').val());
+            }
+
+            // payment----
+            var total = parseInt($('#total').val());
+            var due = total - paid;
+
+            if(due > 0){
+                $('#due').val(due);
+            }else{
+                $('#due').val(0);
+            }
+        }
+
+        function focusInTotalShipping(){
+            var total_shipping = parseInt($('#total_shipping').val());
+            if(total_shipping <= 0){
+                $('#total_shipping').val('');
+            }
+        }
+
+        function focusOutTotalShipping(){
+            var total_shipping = parseInt($('#total_shipping').val());
+            if(isNaN(total_shipping) || total_shipping == '') {
+                $('#total_shipping').val(0);
+            }
+        }
+
+        function TotalShippingCng(){
+            var total_shipping = parseInt($('#total_shipping').val());
+
+            if(isNaN(total_shipping) || total_shipping == '') {
+                $('#total_shipping').val('');
+                var total_shipping = parseInt(0);
+            }else{
+                var total_shipping = parseInt($('#total_shipping').val());
+            }
+
+            var sub_total = parseInt($('#sub_total').val());
+            var total_discount = parseInt($('#total_discount').val());
+            var total = parseInt($('#total').val());
+
+            var final_total = (sub_total + total_shipping) - total_discount;
+            $('#total').val(final_total);
+
+            // payment----
+            var total = parseInt($('#total').val());
+            var paid = parseInt($('#paid').val());
+            var due = total - paid;
+
+            if(due > 0){
+                $('#due').val(due);
+            }else{
+                $('#due').val(0);
+            }
+        }
+
+        function focusInTotalDiscount(){
+            var total_discount = parseInt($('#total_discount').val());
+            if(total_discount <= 0){
+                $('#total_discount').val('');
+            }
+        }
+
+        function focusOutTotalDiscount(){
+            var total_discount = parseInt($('#total_discount').val());
+            if(isNaN(total_discount) || total_discount == '') {
+                $('#total_discount').val(0);
+            }
+        }
+
+        function TotalDiscountCng(){
+            var total_discount = parseInt($('#total_discount').val());
+
+            if(isNaN(total_discount) || total_discount == '') {
+                $('#total_discount').val('');
+                var total_discount = parseInt(0);
+            }else{
+                var total_discount = parseInt($('#total_discount').val());
+            }
+
+            var sub_total = parseInt($('#sub_total').val());
+            var total_shipping = parseInt($('#total_shipping').val());
+            var total = parseInt($('#total').val());
+
+            var final_total = (sub_total + total_shipping) - total_discount;
+            $('#total').val(final_total);
+
+            // payment----
+            var total = parseInt($('#total').val());
+            var paid = parseInt($('#paid').val());
+            var due = total - paid;
+
+            if(due > 0){
+                $('#due').val(due);
+            }else{
+                $('#due').val(0);
+            }
+        }
+
     </script>
 @endpush

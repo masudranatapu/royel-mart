@@ -31,24 +31,9 @@
                                             </a>
                                         </figure>
                                         <div class="product-bottom">
-                                            <div class="reviews">
-                                                <div class="reviews-inner">
-                                                    <div class="reviewed" style="width: 60%">
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <i class="bi bi-star-fill"></i>
-                                                    </div>
-                                                    <div class="blanked">
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                        <i class="bi bi-star"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
+
+                                            {{ product_review($product->id) }}
+
                                             <h3 class="product-name">
                                                 <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
                                             </h3>
@@ -57,7 +42,7 @@
                                                     <span class="current-price">৳ {{$product->sale_price}}</span>
                                                     <div class="old-price-discount">
                                                         <del class="old-price">৳ {{$product->regular_price}} </del>
-                                                        <span class="discount">{{ $product->discount }} % </span>
+                                                        <span class="discount">{{ $product->discount }}% </span>
                                                     </div>
                                                 </div>
                                                 <a class="cart-btn" href="{{ route('add_to_cart', $product->id) }}">

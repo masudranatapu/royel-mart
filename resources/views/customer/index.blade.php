@@ -81,10 +81,10 @@
 				</div>
 				<div class="main-area">
 					<div class="row">
-						<div class="col-md-4 px-2 single-profile">
+						<div class="col-md-6 px-2 single-profile">
 							<div class="card">
 							    <div class="card-header">
-							    	<button class="edit-btn" type="button">
+							    	<button class="edit-btn" type="button" onclick="updatePersonalInfo()">
                                         <i class="bi bi-pencil-square"></i>
                                     </button>
 							    	<div class="wrapper">
@@ -94,20 +94,20 @@
 							    </div>
 							    <div class="card-body">
 							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+								    	<p><label for="">name : </label><span>{{ Auth::user()->name }}</span></p>
+								    	<p><label for="">Phone : </label><span>{{ Auth::user()->phone }}</span></p>
+								    	<p><label for="">Mail : </label><span>{{ Auth::user()->email }}</span></p>
+								    	<p><label for="">Address : </label><span>{{ Auth::user()->address }}</span></p>
 							    	</div>
 							    </div>
 							</div>
 						</div>
-						<div class="col-md-4 px-2 single-profile">
+						<div class="col-md-6 px-2 single-profile">
 							<div class="card">
 							    <div class="card-header card-header-primary">
-							    	<button class="edit-btn" type="button">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
+                                        {{-- <button class="edit-btn" type="button">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button> --}}
 							    	<div class="wrapper">
 								        <h4 class="card-title">Shipping Address</h4>
 								        <p class="card-category">edit Shipping address</p>
@@ -115,15 +115,22 @@
 							    </div>
 							    <div class="card-body">
 							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+                                        @if (!empty($shipping_information))
+                                            <p><label for="">name : </label><span>{{ $shipping_information->shipping_name }}</span></p>
+                                            <p><label for="">Phone : </label><span>{{ $shipping_information->shipping_phone }}</span></p>
+                                            <p><label for="">Mail : </label><span>{{ $shipping_information->shipping_email }}</span></p>
+                                            <p><label for="">Address : </label><span>{{ $shipping_information->shipping_address }}</span></p>
+                                        @else
+                                            <p><label for="">name : </label><span>{{ Auth::user()->name }}</span></p>
+                                            <p><label for="">Phone : </label><span>{{ Auth::user()->phone }}</span></p>
+                                            <p><label for="">Mail : </label><span>{{ Auth::user()->email }}</span></p>
+                                            <p><label for="">Address : </label><span>{{ Auth::user()->address }}</span></p>
+                                        @endif
 							    	</div>
 							    </div>
 							</div>
 						</div>
-						<div class="col-md-4 px-2 single-profile">
+						{{-- <div class="col-md-4 px-2 single-profile">
 							<div class="card">
 							    <div class="card-header card-header-primary">
 							    	<button class="edit-btn" type="button">
@@ -136,15 +143,41 @@
 							    </div>
 							    <div class="card-body">
 							    	<div class="wrapper">
-								    	<p><label for="">name : </label><span>Forhad Hossain</span></p>
-								    	<p><label for="">Phone : </label><span>09877676543</span></p>
-								    	<p><label for="">Mail : </label><span>rr@gmail.com</span></p>
-								    	<p><label for="">Address : </label><span>House #8 (1st Floor), Road # 14, lorem ipsum city, Dhaka-1209.</span></p>
+								    	<p><label for="">name : </label><span>{{ Auth::user()->name }}</span></p>
+								    	<p><label for="">Phone : </label><span>{{ Auth::user()->phone }}</span></p>
+								    	<p><label for="">Mail : </label><span>{{ Auth::user()->email }}</span></p>
+								    	<p><label for="">Address : </label><span>{{ Auth::user()->address }}</span></p>
 							    	</div>
 							    </div>
 							</div>
-						</div>
+						</div> --}}
 					</div>
+                    <div class="contact-form-area mt-4 d-none" id="personal_info_area">
+                        <div class="form-wrapper">
+                            <h2 class="form-title">Update Personal Information</h2>
+                            <form action="{{ route('customer.update-personal-information') }}" method="POST">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-4 px-2 mb-3">
+                                        <input class="form-control" type="text" placeholder="Name:" name="name" value="{{ Auth::user()->name }}">
+                                    </div>
+                                    <div class="col-sm-4 px-2 mb-3">
+                                        <input class="form-control" type="email" placeholder="Email:" name="email" value="{{ Auth::user()->email }}">
+                                    </div>
+                                    <div class="col-sm-4 px-2 mb-3">
+                                        <input class="form-control" type="number" readonly placeholder="Phone:" name="phone" value="{{ Auth::user()->phone }}">
+                                    </div>
+                                    <div class="col-12 px-2 mb-3">
+                                        <textarea class="form-control" name="address" placeholder="Address" id="" cols="30" rows="3">{{ Auth::user()->address }}</textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="submit-contact">Update</button>
+                                        <button type="button" class="submit-contact" onclick="hidePersonalInfo()">Close</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -154,5 +187,15 @@
 @endsection
 
 @push('js')
+    <script>
+        function updatePersonalInfo(){
+            $("#personal_info_area").removeClass("d-none");
+            $("#personal_info_area").show();
+        }
 
+        function hidePersonalInfo(){
+            $("#personal_info_area").addClass("d-none");
+            $("#personal_info_area").hide();
+        }
+    </script>
 @endpush

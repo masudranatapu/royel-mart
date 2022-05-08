@@ -79,7 +79,7 @@
 
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
-                                                                <input type="submit" class="btn btn-success" value="Add voucher">
+                                                                <input type="submit" class="btn btn-success" value="Add Quicksale">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -213,7 +213,7 @@
 
                                                                     <div class="form-group row">
                                                                         <div class="col-md-12">
-                                                                            <input type="submit" class="btn btn-success" value="Add voucher">
+                                                                            <input type="submit" class="btn btn-success" value="Update Quicksale">
                                                                         </div>
                                                                     </div>
 
