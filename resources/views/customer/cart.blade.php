@@ -26,15 +26,14 @@
                             $total = 0;
                             $discount = 0;
                             $shipping_charge = 0;
-                            $temp_checkout[] = '';
+                            $temp_checkout = 0;
                             $i = 1;
                         @endphp
                         @if(session('cart'))
                             @foreach(session('cart') as $key => $cartdetails)
                                 @php
                                     $sub_total += ($cartdetails['regular_price'] * $cartdetails['quantity']);
-                                    // $shipping_charge += $cartdetails['shipping_charge'];
-                                    $temp_checkout[] = $cartdetails['shipping_charge'];
+                                    $shipping_charge += $cartdetails['shipping_charge'];
                                     $discount += $cartdetails['discount'];
                                 @endphp
                                 <div class="single-item">
@@ -110,7 +109,6 @@
                             </tr>
                             <tr>
                                 @php
-                                    $shipping_charge = max($temp_checkout);
                                     $total = ($sub_total + $shipping_charge) - $discount;
                                 @endphp
                                 <td>Shipping </td>

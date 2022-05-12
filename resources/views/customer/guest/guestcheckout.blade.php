@@ -52,25 +52,29 @@
                                         <label for="phone">Phone Number: </label>
                                         <input id="shipping_phone" name="shipping_phone" readonly class="form-control" type="text" value="{{ $getPhone }}" placeholder="Phone">
                                     </div>
-                                    {{-- <div class="single-input">
-                                        <div class="row mx-0">
-                                            <div class="col-6 px-3 ps-0">
-                                                <label for="phone">City</label>
-                                                <select name="shipping_division_id" id="billing_div_id" class="form-control" required>
-                                                    <option  disabled selected>Select One</option>
-                                                    @foreach($divisions as $division)
-                                                        <option value="{{ $division->id }}">{{ $division->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-6 px-3 pe-0">
-                                                <label for="phone">Area</label>
-                                                <select name="shipping_district_id" id="billing_dis_id" class="form-control" required>
-                                                    <option disabled selected>First select division</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div> --}}
+
+                                    <div class="single-input col-md-4">
+                                        <label for="phone">Division</label>
+                                        <select name="division_id" id="division_id" class="form-control" required>
+                                            <option  disabled selected>Select One</option>
+                                            @foreach($divisions as $division)
+                                                <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="single-input col-md-4">
+                                        <label for="phone">Division</label>
+                                        <select name="district_id" id="district_id" class="form-control" required>
+                                            <option disabled selected>select district</option>
+                                        </select>
+                                    </div>
+                                    <div class="single-input col-md-4">
+                                        <label for="phone">Area</label>
+                                        <select name="area_id" id="area_id" class="form-control" required>
+                                            <option disabled selected>select area</option>
+                                        </select>
+                                    </div>
+
                                     <div class="single-input col-md-12">
                                         <label for="phone">Address</label>
                                         <textarea class="form-control" name="shipping_address" placeholder="Your Address" cols="30" rows="3"></textarea>
@@ -85,14 +89,12 @@
                             $total = 0;
                             $discount = 0;
                             $shipping_charge = 0;
-                            $temp_checkout[] = '';
                         @endphp
                         @if(session('cart'))
                             @foreach(session('cart') as $key => $checkoutDetails)
                                 @php
                                     $sub_total += ($checkoutDetails['regular_price'] * $checkoutDetails['quantity']);
-                                    // $shipping_charge += $checkoutDetails['shipping_charge'];
-                                    $temp_checkout[] = $checkoutDetails['shipping_charge'];
+                                    $shipping_charge += $checkoutDetails['shipping_charge'];
                                     $discount += $checkoutDetails['discount'];
                                 @endphp
                                 <input type="hidden" name="product_id[]" value="{{ $key }}">
@@ -112,7 +114,6 @@
                                 </tr>
                                 <tr>
                                     @php
-                                        $shipping_charge = max($temp_checkout);
                                         $total = ($sub_total + $shipping_charge) - $discount;
                                     @endphp
                                     <td>Shipping </td>
@@ -227,69 +228,8 @@
 @push('js')
     <script src="{{asset('massage/sweetalert/sweetalert.all.js')}}"></script>
     <script>
-        // informaiton division
-        $("#billing_div_id").on('change', function() {
-            var billing_div_id = $("#billing_div_id").val();
-            // alert(billing_div_id);
-            var sub_total = $("#sub_total").val();
-            // alert(sub_total);
-            var grand_total = $("#grand_total").text();
-            // alert(grand_total);
-            if(billing_div_id){
-                $.ajax({
-                    url         : "{{ route('customer.division-district') }}",
-                    type        : 'POST',
-					data    : {
-						billing_div_id      : billing_div_id,
-						_token  : '{{csrf_token()}}',
-					},
-                    success     : function(data) {
-                        console.log(data);
-                        $("#billing_dis_id").empty();
-                        $('#billing_dis_id').append('<option value=""> Select One </option>');
-                        $("#vatDisplay").show();
-                        $.each(data[0], function(key, value){
-                            $('#billing_dis_id').append('<option value="'+ value.id +'">' + value.name + '</option>');
-                        });
-                        $("#delivery_amount").text(data[1]);
-                        $("#shipping_amount").val(data[1]);
-                        $("#grand_total").text(parseInt(data[1]) + parseInt(sub_total));
-                    },
-                });
-            }else {
-                alert("Select your division");
-            };
-        });
-        // informaiton distric
-        $("#billing_dis_id").on('change', function() {
-            var billing_dis_id = $("#billing_dis_id").val();
-            // alert(billing_dis_id);
-            var sub_total = $("#sub_total").val();
-            // alert(sub_total);
-            var grand_total = $("#grand_total").text();
-            // alert(grand_total);
-            if(billing_dis_id){
-                $.ajax({
-                    url         : "{{ route('customer.district-division') }}",
-                    type        : 'POST',
-					data    : {
-						billing_dis_id      : billing_dis_id,
-						_token  : '{{csrf_token()}}',
-					},
-                    success     : function(data) {
-                        console.log(data);
-                        $("#delivery_amount").text(data[0]);
-                        $("#shipping_amount").val(data[0]);
-                        $("#grand_total").text(parseInt(data[0]) + parseInt(sub_total));
-                    },
-                });
-            }else {
-                alert("Select your distric");
-            };
-        });
 
         function applyVoucher() {
-            alert('sgfdgd');
             var shipping_phone = $('#shipping_phone').val();
             var voucher_code = $('#voucher_code').val();
             var voucher_code_apply = parseInt($('#voucher_code_apply').val());
@@ -314,7 +254,7 @@
                     url: "{{ route('customer.voucher-check-with-guest') }}",
                     type: 'GET',
                     data: {
-                        shipping_phone: shipping_phone
+                        shipping_phone: shipping_phone,
                         voucher_code: voucher_code,
                         discount_amount: discount_amount,
                         total: total,
@@ -359,6 +299,62 @@
                 });
             }
         }
+
+        $('#division_id').on('change', function(){
+            var division_id = $(this).val();
+
+            $('#district_id').html('<option value="">Select One</option>');
+            $('#area_id').html('<option value="">Select One</option>');
+
+            $.ajax({
+                url: "{{ route('get-customer-district-by-division') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    division_id: division_id,
+                },
+                success:function(data) {
+                    $('#district_id').html(data);
+                },
+            });
+
+        });
+
+        $('#district_id').on('change', function(){
+            var district_id = $(this).val();
+
+            $('#area_id').html('<option value="">Select One</option>');
+
+            $.ajax({
+                url: "{{ route('get-customer-area-by-district') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    district_id: district_id,
+                },
+                success:function(data) {
+                    $('#area_id').html(data);
+                },
+            });
+
+        });
+
+        $('#area_id').on('change', function(){
+            var area_id = $(this).val();
+
+            $.ajax({
+                url: "{{ route('get-customer-area-by-district') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    area_id: area_id,
+                },
+                success:function(data) {
+                    console.log(data);
+                },
+            });
+
+        });
 
     </script>
 

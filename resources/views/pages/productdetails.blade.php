@@ -9,6 +9,8 @@
 @endsection
 
 @push('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endpush
 
@@ -611,7 +613,10 @@
 @push('js')
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-61385eedbd8b385d"></script>
 	<script>
-		 function reviewVal(val){
+
+        $('.select2').select2();
+
+		function reviewVal(val){
 			$('#review-val').val(val);
 		}
 		function getColorId(val){
