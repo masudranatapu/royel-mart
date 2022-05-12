@@ -29,7 +29,8 @@ class CheckoutController extends Controller
         $divisions = Division::latest()->get();
         $districts = District::latest()->get();
         $shipping_addresses = ShippingAddress::where('user_id', Auth::user()->id )->latest()->get();
-        return view('customer.checkout', compact('title', 'lan', 'p_cat_id', 'divisions', 'shipping_addresses', 'districts'));
+        $search = '';
+        return view('customer.checkout', compact('title', 'lan', 'p_cat_id', 'divisions', 'shipping_addresses', 'districts','search'));
     }
     // for getDivDis informaiton
     public function getDivDis($div_id)

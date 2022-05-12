@@ -16,13 +16,17 @@
     @include('layouts.frontend.partial.general-breadcrumb')
 	<!-- End Breadcrumb -->
 	<section class="category-page-slider-section">
-		<div class="category-page-slider owl-carousel">
-			@foreach($categorybanners as $categorybanner)
-				<div class="single-slide">
-					<img loading="eager|lazy" src="@if($categorybanner->image) {{ asset($categorybanner->image) }}  @else {{ asset('demomedia/category.png') }} @endif">
-				</div>
-			@endforeach
-		</div>
+		<div class="container-fluid">
+            <div class="category-page-slider owl-carousel">
+                @foreach($categorybanners as $categorybanner)
+                    <div class="single-slide">
+                        <a href="{{ $categorybanner->link }}">
+                            <img loading="eager|lazy" src="@if($categorybanner->image) {{ asset($categorybanner->image) }}  @else {{ asset('demomedia/category.png') }} @endif">
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
 	</section>
 	<!-- End Category Page Slider -->
     <section class="category-section pt-2">

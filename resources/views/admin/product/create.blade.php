@@ -67,13 +67,24 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label>Shipping Charge</label>
-                                                <input type="number" name="shipping_charge" class="form-control" value="{{ $setting->shipping_charge }}" min="0" placeholder="Shipping Charge">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>Alert Quantity</label>
-                                                <input type="number" name="alert_quantity" class="form-control" value="5" min="0" placeholder="Alert Quantity">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Inside Shipping</label>
+                                                        <input type="number" name="inside_shipping_charge" id="inside_shipping_charge" class="form-control" value="0" min="0" placeholder="Shipping Charge">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Outside Shipping</label>
+                                                        <input type="number" name="outside_shipping_charge" id="outside_shipping_charge" class="form-control" value="0" min="0" placeholder="Shipping Charge">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Shipping Type</label>
+                                                        <select class="form-control" name="free_shipping_charge" id="free_shipping_charge">
+                                                            <option value="1" selected>Paid</option>
+                                                            <option value="0">Free</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -197,6 +208,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label>Alert Quantity</label>
+                                                <input type="number" name="alert_quantity" class="form-control" value="5" min="0" placeholder="Alert Quantity">
+                                            </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label>Max Order Qty</label>
+                                                <input type="number" name="max_order" class="form-control" value="10" min="1" placeholder="Max Order Qty">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -222,34 +241,79 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
-                                                <label>Outside Delivery </label>
+                                                <label class="w-100">
+                                                    Outside Delivery
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_outside_delivery" name="show_outside_delivery" checked value="1">
+                                                    </span>
+                                                </label>
                                                 <input type="text" name="outside_delivery" class="form-control" value="Home Delivery outside Dhaka 4 - 6 day(s)">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Inside Delivery </label>
+                                                <label class="w-100">
+                                                    Inside Delivery
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_inside_delivery" name="show_inside_delivery" checked value="1">
+                                                    </span>
+                                                </label>
                                                 <input type="text" name="inside_delivery" class="form-control" value="Home Delivery inside Dhaka 4 - 6 day(s)">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label id="payment_method_label">
+                                                <label id="payment_method_label" class="w-100">
                                                     Payment Method
                                                     <button type="button" class="btn btn-sm btn-info" onclick="addPayment()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_payment_method" name="show_payment_method" checked value="1">
+                                                    </span>
                                                 </label>
+
                                                 <input type="text" name="payment_method[]" class="form-control" placeholder="Payment Method">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label id="guarantee_policy_label">
+                                                <label id="guarantee_policy_label" class="w-100">
                                                     Guarantee Policy
                                                     <button type="button" class="btn btn-sm btn-info" onclick="addGuarantee()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_guarantee" name="show_guarantee" checked value="1">
+                                                    </span>
                                                 </label>
                                                 <input type="text" name="guarantee_policy[]" class="form-control" placeholder="Guarantee Policy">
                                             </div>
+
                                             <div class="col-md-12 mt-2">
-                                                <label id="warranty_policy_label">
+                                                <label id="warranty_policy_label" class="w-100">
                                                     Warranty Policy
                                                     <button type="button" class="btn btn-sm btn-info" onclick="addWarranty()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_warranty" name="show_warranty" checked value="1">
+                                                    </span>
                                                 </label>
                                                 <input type="text" name="warranty_policy[]" class="form-control" placeholder="Warranty Policy">
                                             </div>
+
+                                            <div class="col-md-12 mt-2">
+                                                <label id="product_service_label" class="w-100">
+                                                    Service
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addService()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_product_service" name="show_product_service" checked value="1">
+                                                    </span>
+                                                </label>
+                                                <input type="text" name="product_service[]" class="form-control" placeholder="Service">
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -348,6 +412,10 @@
 
         function addWarranty(){
             $( "#warranty_policy_label" ).after( '<input type="text" name="warranty_policy[]" class="form-control mb-2" placeholder="Another Warranty Policy">' );
+        }
+
+        function addService(){
+            $( "#product_service_label" ).after( '<input type="text" name="product_service[]" class="form-control mb-2" placeholder="Another Service">' );
         }
     </script>
     <script>
@@ -467,6 +535,20 @@
                     alert('danger');
                 }
             });
+        });
+
+        $('#free_shipping_charge').on('change', function(){
+            var free_shipping_charge = $('#free_shipping_charge').val();
+            if(free_shipping_charge == '0'){
+                $('#outside_shipping_charge').val(0);
+                $('#inside_shipping_charge').val(0);
+
+                $('#outside_shipping_charge').prop('readonly', true);
+                $('#inside_shipping_charge').prop('readonly', true);
+            }else{
+                $('#outside_shipping_charge').prop('readonly', false);
+                $('#inside_shipping_charge').prop('readonly', false);
+            }
         });
     </script>
 @endpush

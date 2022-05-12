@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Area;
+use App\Models\DefaultDeliveryLocation;
+use App\Models\District;
+use App\Models\Division;
 use App\Models\ExpenseCategory;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -7,6 +11,7 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\Stock;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
 function total_review($product_id)
@@ -481,6 +486,100 @@ function user_name($id)
         return $user->name;
     }else{
         return 'N/A';
+    }
+}
+
+function division_name($id)
+{
+    $data = Division::find($id);
+    if($data){
+        return $data->name.', ';
+    }else{
+        $default_location = DefaultDeliveryLocation::latest()->first();
+        $data = Division::find($default_location->division_id);
+        return $data->name.', ';
+    }
+}
+
+function district_name($id)
+{
+    $data = District::find($id);
+    if($data){
+        return $data->name.', ';
+    }else{
+        $default_location = DefaultDeliveryLocation::latest()->first();
+        $data = District::find($default_location->district_id);
+        return $data->name.', ';
+    }
+}
+
+function area_name($id)
+{
+    $data = Area::find($id);
+    if($data){
+        return $data->name;
+    }else{
+        $default_location = DefaultDeliveryLocation::latest()->first();
+        $data = Area::find($default_location->area_id);
+        return $data->name;
+    }
+}
+
+function pro_shipping_charge($id)
+{
+    $product = Product::find($id);
+    if($product->free_shipping_charge == 1){
+        if(Auth::user()){
+            $area = Area::find(Auth::user()->area_id);
+        }else{
+            $area = Area::find(session()->get('area_id'));
+        }
+        if($area){
+            if($area->is_inside == 0){
+                return '৳ '.$product->outside_shipping_charge;
+            }else{
+                return '৳ '.$product->inside_shipping_charge;
+            }
+        }else{
+            $default_location = DefaultDeliveryLocation::latest()->first();
+            $area = Area::find($default_location->area_id);
+            if($area->is_inside == 0){
+                return '৳ '.$product->outside_shipping_charge;
+            }else{
+                return '৳ '.$product->inside_shipping_charge;
+            }
+        }
+    }else{
+        return 'Free';
+    }
+}
+
+function shipping_charge($id)
+{
+    $product = Product::find($id);
+    if($product->free_shipping_charge == 1){
+        if(Auth::user()){
+            $area = Area::find(Auth::user()->area_id);
+        }else{
+            $area = Area::find(session()->get('area_id'));
+        }
+        if($area){
+            if($area->is_inside == 0){
+                return $product->outside_shipping_charge;
+            }else{
+                return $product->inside_shipping_charge;
+            }
+        }else{
+            $default_location = DefaultDeliveryLocation::latest()->first();
+            $area = Area::find($default_location->area_id);
+            if($area->is_inside == 0){
+                return $product->outside_shipping_charge;
+            }else{
+                return $product->inside_shipping_charge;
+            }
+        }
+    }else{
+        return 'Free';
     }
 }
 

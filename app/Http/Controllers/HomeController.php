@@ -13,6 +13,7 @@ use App\Models\CategoryBanner;
 use App\Models\Policy;
 use App\Models\Website;
 use App\Models\Contact;
+use App\Models\DefaultDeliveryLocation;
 use App\Models\QuickSale;
 use App\Models\QuickSaleProduct;
 use Carbon\Carbon;
@@ -26,9 +27,15 @@ class HomeController extends Controller
         $session_count = $request->session()->get('session_count');
 
         if($session_count <= 0 || $session_count == ''){
-            $request->session()->put('session_count', 0);
+            $request->session()->put('session_count', 1);
             $request->session()->put('lan', 'en');
+
+            $default_location = DefaultDeliveryLocation::latest()->first();
+            $request->session()->put('division_id', $default_location->division_id);
+            $request->session()->put('district_id', $default_location->district_id);
+            $request->session()->put('area_id', $default_location->area_id);
         }
+
 
         $title = "Home";
         $last_id = "";
@@ -46,7 +53,9 @@ class HomeController extends Controller
         }else{
             $qs_products = NULL;
         }
-        return view('welcome', compact('title', 'p_cat_id', 'lan', 'sliders', 'banners', 'missionvissions', 'feature_categories', 'products', 'newArrivals', 'qs_products', 'quick_sale'));
+
+        $search = '';
+        return view('welcome', compact('title', 'p_cat_id', 'lan', 'sliders', 'banners', 'missionvissions', 'feature_categories', 'products', 'newArrivals', 'qs_products', 'quick_sale', 'search'));
     }
 
     public function load_more_product(Request $request)
@@ -138,7 +147,8 @@ class HomeController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $about = About::latest()->first();
-        return view('pages.aboutus', compact('title', 'p_cat_id', 'lan', 'about'));
+        $search = '';
+        return view('pages.aboutus', compact('title', 'p_cat_id', 'lan', 'about','search'));
     }
     public function contact(Request $request)
     {
@@ -146,7 +156,8 @@ class HomeController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $website = Website::latest()->first();
-        return view('pages.contact', compact('title', 'p_cat_id', 'lan', 'website'));
+        $search = '';
+        return view('pages.contact', compact('title', 'p_cat_id', 'lan', 'website','search'));
     }
     public function contactStore(Request $request)
     {
@@ -174,7 +185,8 @@ class HomeController extends Controller
         $title = $policy->name;
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
-        return view('pages.policy', compact('title', 'p_cat_id', 'lan', 'policy'));
+        $search = '';
+        return view('pages.policy', compact('title', 'p_cat_id', 'lan', 'policy','search'));
     }
     public function newArrival(Request $request)
     {
@@ -182,7 +194,8 @@ class HomeController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $products = Product::where('product_type', 'New Arrival')->inRandomOrder()->limit(18)->get();
-        return view('pages.newarrival', compact('title', 'p_cat_id', 'lan', 'products'));
+        $search = '';
+        return view('pages.newarrival', compact('title', 'p_cat_id', 'lan', 'products','search'));
     }
 
     public function load_more_newarrival_product(Request $request)
@@ -265,7 +278,8 @@ class HomeController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $qs_products = QuickSaleProduct::with('product')->where('quick_sale_id', $quick_sale->id)->where('status', 1)->paginate(24);
-        return view('pages.quick-sale-product', compact('title', 'p_cat_id', 'lan', 'quick_sale', 'qs_products'));
+        $search = '';
+        return view('pages.quick-sale-product', compact('title', 'p_cat_id', 'lan', 'quick_sale', 'qs_products','search'));
     }
     public function allProduct(Request $request)
     {
@@ -273,7 +287,8 @@ class HomeController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $products = Product::inRandomOrder()->limit(18)->get();
-        return view('pages.allproduct', compact('title', 'p_cat_id', 'lan', 'products'));
+        $search = '';
+        return view('pages.allproduct', compact('title', 'p_cat_id', 'lan', 'products','search'));
     }
 
     public function load_more_all_product(Request $request)
@@ -367,7 +382,8 @@ class HomeController extends Controller
         }
 
         $categorybanners = CategoryBanner::where('cat_id', $category->id)->where('status', 1)->latest()->get();
-        return view('pages.more-category', compact('title', 'p_cat_id', 'lan', 'categories', 'categorybanners'));
+        $search = '';
+        return view('pages.more-category', compact('title', 'p_cat_id', 'lan', 'categories', 'categorybanners','search'));
     }
 
     public function all_category(Request $request)
@@ -376,6 +392,7 @@ class HomeController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $categories = Category::latest()->paginate(24);
-        return view('pages.all-category', compact('title', 'p_cat_id', 'lan', 'categories'));
+        $search = '';
+        return view('pages.all-category', compact('title', 'p_cat_id', 'lan', 'categories','search'));
     }
 }

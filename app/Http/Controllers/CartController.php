@@ -16,7 +16,8 @@ class CartController extends Controller
         $lan = $request->session()->get('lan');
         // return $request->session()->get('cart');
         $p_cat_id = '';
-        return view('customer.cart', compact('title', 'lan', 'p_cat_id'));
+        $search = '';
+        return view('customer.cart', compact('title', 'lan', 'p_cat_id','search'));
     }
     // add to cart with product id
     public function addToCart($product_id)

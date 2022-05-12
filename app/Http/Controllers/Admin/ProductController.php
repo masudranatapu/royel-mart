@@ -12,6 +12,8 @@ use App\Models\Unit;
 use App\Models\SubUnit;
 use App\Models\Category;
 use App\Models\Color;
+use App\Models\Offer;
+use App\Models\OfferProduct;
 use App\Models\ProductColor;
 use App\Models\ProductSize;
 use App\Models\QuickSale;
@@ -132,26 +134,60 @@ class ProductController extends Controller
         $product->sale_price = $request->sale_price;
         $product->discount = $request->discount;
         $product->discount_tk = $request->discount_tk;
-        $product->shipping_charge = $request->shipping_charge;
+        $product->inside_shipping_charge = $request->inside_shipping_charge;
+        $product->outside_shipping_charge = $request->outside_shipping_charge;
+        $product->free_shipping_charge = $request->free_shipping_charge;
         $product->alert_quantity = $request->alert_quantity;
+        $product->max_order = $request->max_order;
         $product->description = $request->description;
         $product->meta_description = $request->meta_description;
         $product->meta_keyword = $request->meta_keyword;
         $product->outside_delivery = $request->outside_delivery;
+        if ($request->show_outside_delivery == '') {
+            $product->show_outside_delivery = 0;
+        } else {
+            $product->show_outside_delivery = $request->show_outside_delivery;
+        }
         $product->return_status = $request->return_status;
         $product->inside_delivery = $request->inside_delivery;
-        $product->payment_method = trim(implode('|', $request->payment_method), '|');
+        if ($request->show_inside_delivery == '') {
+            $product->show_inside_delivery = 0;
+        } else {
+            $product->show_inside_delivery = $request->show_inside_delivery;
+        }
+        $product->cash_delivery = trim(implode('|', $request->payment_method), '|');
+        if ($request->show_payment_method == '') {
+            $product->show_payment_method = 0;
+        } else {
+            $product->show_payment_method = $request->show_payment_method;
+        }
         $product->guarantee_policy = trim(implode('|', $request->guarantee_policy), '|');
+        if ($request->show_guarantee == '') {
+            $product->show_guarantee = 0;
+        } else {
+            $product->show_guarantee = $request->show_guarantee;
+        }
         $product->warranty_policy = trim(implode('|', $request->warranty_policy), '|');
+        if ($request->show_warranty == '') {
+            $product->show_warranty = 0;
+        } else {
+            $product->show_warranty = $request->show_warranty;
+        }
+        $product->product_service = trim(implode('|', $request->product_service), '|');
+        if ($request->show_product_service == '') {
+            $product->show_product_service = 0;
+        } else {
+            $product->show_product_service = $request->show_product_service;
+        }
         $product->schema = $request->schema;
         $product->product_type = $request->product_type;
         $product->status = $request->status;
 
         $check_existence = Product::where('name', $request->name)->first();
-        if($check_existence){
+        if ($check_existence) {
             Toastr::success('Product Successfully Save :-)', 'Success');
             return redirect()->back();
-        }else{
+        } else {
             $product->save();
         }
 
@@ -217,19 +253,19 @@ class ProductController extends Controller
         $product = Product::find($id);
         $check_cat = Category::find($product->category_id);
 
-        if($check_cat->parent_id != NULL && $check_cat->child_id != NULL){
+        if ($check_cat->parent_id != NULL && $check_cat->child_id != NULL) {
             $main_cat = $check_cat->parent_id;
             $parent_cat = $check_cat->child_id;
             $child_cat = $check_cat->id;
-        }elseif($check_cat->parent_id != NULL && $check_cat->child_id == NULL){
+        } elseif ($check_cat->parent_id != NULL && $check_cat->child_id == NULL) {
             $main_cat = $check_cat->parent_id;
             $parent_cat = $check_cat->id;
             $child_cat = NULL;
-        }elseif($check_cat->parent_id == NULL && $check_cat->child_id == NULL){
+        } elseif ($check_cat->parent_id == NULL && $check_cat->child_id == NULL) {
             $main_cat = $check_cat->id;
             $parent_cat = NULL;
             $child_cat = NULL;
-        }else{
+        } else {
             $main_cat = NULL;
             $parent_cat = NULL;
             $child_cat = NULL;
@@ -331,17 +367,53 @@ class ProductController extends Controller
         $product->sale_price = $request->sale_price;
         $product->discount = $request->discount;
         $product->discount_tk = $request->discount_tk;
-        $product->shipping_charge = $request->shipping_charge;
+        $product->inside_shipping_charge = $request->inside_shipping_charge;
+        $product->outside_shipping_charge = $request->outside_shipping_charge;
+        $product->free_shipping_charge = $request->free_shipping_charge;
         $product->alert_quantity = $request->alert_quantity;
+        $product->max_order = $request->max_order;
         $product->description = $request->description;
         $product->meta_description = $request->meta_description;
         $product->meta_keyword = $request->meta_keyword;
         $product->outside_delivery = $request->outside_delivery;
+        if ($request->show_outside_delivery == '') {
+            $product->show_outside_delivery = 0;
+        } else {
+            $product->show_outside_delivery = $request->show_outside_delivery;
+        }
         $product->return_status = $request->return_status;
         $product->inside_delivery = $request->inside_delivery;
+        if ($request->show_inside_delivery == '') {
+            $product->show_inside_delivery = 0;
+        } else {
+            $product->show_inside_delivery = $request->show_inside_delivery;
+        }
         $product->cash_delivery = trim(implode('|', $request->payment_method), '|');
+        if ($request->show_payment_method == '') {
+            $product->show_payment_method = 0;
+        } else {
+            $product->show_payment_method = $request->show_payment_method;
+        }
         $product->guarantee_policy = trim(implode('|', $request->guarantee_policy), '|');
+        if ($request->show_guarantee == '') {
+            $product->show_guarantee = 0;
+        } else {
+            $product->show_guarantee = $request->show_guarantee;
+        }
+
         $product->warranty_policy = trim(implode('|', $request->warranty_policy), '|');
+        if ($request->show_warranty == '') {
+            $product->show_warranty = 0;
+        } else {
+            $product->show_warranty = $request->show_warranty;
+        }
+
+        $product->product_service = trim(implode('|', $request->product_service), '|');
+        if ($request->show_product_service == '') {
+            $product->show_product_service = 0;
+        } else {
+            $product->show_product_service = $request->show_product_service;
+        }
         $product->schema = $request->schema;
         $product->product_type = $request->product_type;
         $product->status = $request->status;
@@ -572,24 +644,23 @@ class ProductController extends Controller
         $parent_id = $request->category_id;
         $subcategorys = Category::where('parent_id', $parent_id)->where('child_id', NULL)->get();
         $cat = '';
-        if($subcategorys->count() > 0){
+        if ($subcategorys->count() > 0) {
             $cat .= '<option value=""> Select One </option>';
-            foreach($subcategorys as $category){
-                $cat .= '<option value="'.$category->id.'"> '.$category->name.' </option>';
+            foreach ($subcategorys as $category) {
+                $cat .= '<option value="' . $category->id . '"> ' . $category->name . ' </option>';
             }
         }
 
         $s_product = '';
         $products = Product::where('category_id', $parent_id)->get();
-        if($products->count() > 0){
+        if ($products->count() > 0) {
             $s_product .= '<option value=""> Select One </option>';
-            foreach($products as $product){
-                $s_product .= '<option value="'.$product->id.'"> '.$product->name.' </option>';
+            foreach ($products as $product) {
+                $s_product .= '<option value="' . $product->id . '"> ' . $product->name . ' </option>';
             }
         }
 
-        return ['cat'=>$cat, 'product'=>$s_product];
-
+        return ['cat' => $cat, 'product' => $s_product];
     }
 
     public function child_category_for_product(Request $request)
@@ -597,24 +668,23 @@ class ProductController extends Controller
         $subcategory_id = $request->subcategory_id;
         $categories = Category::where('child_id', $subcategory_id)->get();
         $cat = '';
-        if($categories->count() > 0){
+        if ($categories->count() > 0) {
             $cat .= '<option value=""> Select One </option>';
-            foreach($categories as $category){
-                $cat .= '<option value="'.$category->id.'"> '.$category->name.' </option>';
+            foreach ($categories as $category) {
+                $cat .= '<option value="' . $category->id . '"> ' . $category->name . ' </option>';
             }
         }
 
         $s_product = '';
         $products = Product::where('category_id', $subcategory_id)->get();
-        if($products->count() > 0){
+        if ($products->count() > 0) {
             $s_product .= '<option value=""> Select One </option>';
-            foreach($products as $product){
-                $s_product .= '<option value="'.$product->id.'"> '.$product->name.' </option>';
+            foreach ($products as $product) {
+                $s_product .= '<option value="' . $product->id . '"> ' . $product->name . ' </option>';
             }
         }
 
-        return ['cat'=>$cat, 'product'=>$s_product];
-
+        return ['cat' => $cat, 'product' => $s_product];
     }
 
     public function get_category_product_for_qs(Request $request)
@@ -622,15 +692,14 @@ class ProductController extends Controller
         $subsubcategory_id = $request->subsubcategory_id;
         $s_product = '';
         $products = Product::where('category_id', $subsubcategory_id)->get();
-        if($products->count() > 0){
+        if ($products->count() > 0) {
             $s_product .= '<option value=""> Select One </option>';
-            foreach($products as $product){
-                $s_product .= '<option value="'.$product->id.'"> '.$product->name.' </option>';
+            foreach ($products as $product) {
+                $s_product .= '<option value="' . $product->id . '"> ' . $product->name . ' </option>';
             }
         }
 
-        return ['product'=>$s_product];
-
+        return ['product' => $s_product];
     }
 
     public function add_product_to_qs_list(Request $request)
@@ -641,30 +710,30 @@ class ProductController extends Controller
 
         $sale = QuickSale::find($quick_sale_id);
         $check_qs_product = QuickSaleProduct::where('product_id', $product_id)->where('quick_sale_id', $quick_sale_id)->first();
-        if(!$check_qs_product){
+        if (!$check_qs_product) {
             $chk_product = Product::find($product_id);
             $product .= '
-                <tr id="product_tr_'.$chk_product->id.'">
+                <tr id="product_tr_' . $chk_product->id . '">
                     <td>
                         <img src="';
 
-                        if(file_exists($chk_product->thumbnail)){
-                            $product .= ''.URL::to($chk_product->thumbnail).'';
-                        }else {
-                            $product .= 'asset("media\general-image\no-photo.jpg")';
-                        }
+            if (file_exists($chk_product->thumbnail)) {
+                $product .= '' . URL::to($chk_product->thumbnail) . '';
+            } else {
+                $product .= 'asset("media\general-image\no-photo.jpg")';
+            }
             $product .= ' " width="100%" height="100px" alt="banner image">
                     </td>
                     <td>
-                        <input type="hidden" class="form-control" name="product_id[]" value="'.$chk_product->id.'">
-                        <a href="'.route('productdetails', $chk_product->slug).'" target="_blank">'.$chk_product->name.'</a>
+                        <input type="hidden" class="form-control" name="product_id[]" value="' . $chk_product->id . '">
+                        <a href="' . route('productdetails', $chk_product->slug) . '" target="_blank">' . $chk_product->name . '</a>
                     </td>
                     <td>';
-                        if($sale->discount > 0){
-                            $product .= '<input type="text" class="form-control" name="discount[]" readonly value="'.$sale->discount.'">';
-                        }else{
-                            $product .= '<input type="text" class="form-control" name="discount[]" value="'.$chk_product->discount.'">';
-                        }
+            if ($sale->discount > 0) {
+                $product .= '<input type="text" class="form-control" name="discount[]" readonly value="' . $sale->discount . '">';
+            } else {
+                $product .= '<input type="text" class="form-control" name="discount[]" value="' . $chk_product->discount . '">';
+            }
 
 
             $product .= '  </td>
@@ -672,20 +741,20 @@ class ProductController extends Controller
                         <select class="form-control" name="discount_type[]" required id="discount_type">
                             <option value="Solid"';
 
-                            if($chk_product->discount_type == 'Solid'){
-                                $product .= ' selected ';
-                            }
-                            $product .= ' >Solid (৳)</option>
+            if ($chk_product->discount_type == 'Solid') {
+                $product .= ' selected ';
+            }
+            $product .= ' >Solid (৳)</option>
                             <option value="Percentage" ';
 
-                            if($chk_product->discount_type == 'Percentage'){
-                                $product .= ' selected ';
-                            }
-                            $product .= ' >Percentage (%)</option>
+            if ($chk_product->discount_type == 'Percentage') {
+                $product .= ' selected ';
+            }
+            $product .= ' >Percentage (%)</option>
                         </select>
                     </td>
                     <td class="text-center">
-                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData('.$chk_product->id.')">
+                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData(' . $chk_product->id . ')">
                             <i class="ml-1 fa fa-trash"></i>
                         </button>
                     </td>
@@ -694,8 +763,68 @@ class ProductController extends Controller
         }
 
         return $product;
-
     }
 
+    public function add_product_to_offer(Request $request)
+    {
+        $product_id = $request->product_id;
+        $offer_id = $request->offer_id;
+        $product = '';
 
+        $sale = Offer::find($offer_id);
+        $check_qs_product = OfferProduct::where('product_id', $product_id)->where('offer_id', $offer_id)->first();
+        if (!$check_qs_product) {
+            $chk_product = Product::find($product_id);
+            $product .= '
+                <tr id="product_tr_' . $chk_product->id . '">
+                    <td>
+                        <img src="';
+
+            if (file_exists($chk_product->thumbnail)) {
+                $product .= '' . URL::to($chk_product->thumbnail) . '';
+            } else {
+                $product .= 'asset("media\general-image\no-photo.jpg")';
+            }
+            $product .= ' " width="100%" height="100px" alt="banner image">
+                    </td>
+                    <td>
+                        <input type="hidden" class="form-control" name="product_id[]" value="' . $chk_product->id . '">
+                        <a href="' . route('productdetails', $chk_product->slug) . '" target="_blank">' . $chk_product->name . '</a>
+                    </td>
+                    <td>';
+            if ($sale->discount > 0) {
+                $product .= '<input type="text" class="form-control" name="discount[]" readonly value="' . $sale->discount . '">';
+            } else {
+                $product .= '<input type="text" class="form-control" name="discount[]" value="' . $chk_product->discount . '">';
+            }
+
+
+            $product .= '  </td>
+                    <td>
+                        <select class="form-control" name="discount_type[]" required id="discount_type">
+                            <option value="Solid"';
+
+            if ($chk_product->discount_type == 'Solid') {
+                $product .= ' selected ';
+            }
+            $product .= ' >Solid (৳)</option>
+                            <option value="Percentage" ';
+
+            if ($chk_product->discount_type == 'Percentage') {
+                $product .= ' selected ';
+            }
+            $product .= ' >Percentage (%)</option>
+                        </select>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData(' . $chk_product->id . ')">
+                            <i class="ml-1 fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            ';
+        }
+
+        return $product;
+    }
 }

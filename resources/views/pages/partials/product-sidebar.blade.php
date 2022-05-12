@@ -10,7 +10,7 @@
                             <div class="price">
                                 <span>0</span><span>-</span><span>1000</span>
                             </div>
-                            <a href="{{ route('price', ['category'=>$p_cat_id, 'min_price'=>0, 'max_price'=>1000]) }}" class="@if($check_price == 'Has' && $min_price >= 0 && $max_price <= 1000) price-filter-active @else price-filter-de-active @endif">
+                            <a href="javascript:;" class="price-range price-filter-de-active" id="price_filter_0_1000" data-price="0-1000" onclick="filterByPrice(this)">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         </div>
@@ -18,7 +18,8 @@
                             <div class="price">
                                 <span>1000</span><span>-</span><span>5000</span>
                             </div>
-                            <a href="{{ route('price', ['category'=>$p_cat_id, 'min_price'=>1000, 'max_price'=>5000]) }}" class="@if($check_price == 'Has' && $min_price >= 1000 && $max_price <= 5000) price-filter-active @else price-filter-de-active @endif">
+
+                            <a href="javascript:;" class="price-range price-filter-de-active" id="price_filter_1000_5000" data-price="1000-5000" onclick="filterByPrice(this)">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         </div>
@@ -26,7 +27,8 @@
                             <div class="price">
                                 <span>5000</span><span>-</span><span>10000</span>
                             </div>
-                            <a href="{{ route('price', ['category'=>$p_cat_id, 'min_price'=>5000, 'max_price'=>10000]) }}" class="@if($check_price == 'Has' && $min_price >= 5000 && $max_price <= 10000) price-filter-active @else price-filter-de-active @endif">
+
+                            <a href="javascript:;" class="price-range price-filter-de-active" id="price_filter_5000_10000" data-price="5000-10000" onclick="filterByPrice(this)">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         </div>
@@ -34,7 +36,8 @@
                             <div class="price">
                                 <span>10000</span><span>-</span><span>10000+</span>
                             </div>
-                            <a href="{{ route('price', ['category'=>$p_cat_id, 'min_price'=>10000, 'max_price'=>100000]) }}" class="@if($check_price == 'Has' && $min_price >= 10000 && $max_price >= 10000) price-filter-active @else price-filter-de-active @endif">
+
+                            <a href="javascript:;" class="price-range price-filter-de-active" id="price_filter_10000_10000000000000" data-price="10000-10000000000000" onclick="filterByPrice(this)">
                                 <i class="bi bi-chevron-right"></i>
                             </a>
                         </div>
@@ -52,8 +55,8 @@
                                     $brand = App\Models\Brand::find($brand->brand_id);
                                 @endphp
                                 @if ($brand)
-                                    <li class="@if($brand_id == $brand->id) active @endif">
-                                        <a href="{{ route('brand', ['category'=>$p_cat_id, 'slug'=>$brand->slug]) }}">{{ $brand->name }}</a>
+                                    <li class="filter-brand" id="filter_brand_{{ $brand->id }}">
+                                        <a href="javascript:;" onclick="filterByBrand({{ $brand->id }})">{{ $brand->name }}</a>
                                     </li>
                                 @endif
                             @endforeach
@@ -68,7 +71,9 @@
                     <div class="color-filter exerp-menu">
                         <ul class="colors">
                             @foreach ($colors as $key=>$color)
-                                <li class="@if($color_id == $color->id) active @endif"><a href="{{ route('filter-with-color', ['category'=>$p_cat_id, 'color_id'=>$color->id]) }}" class="black" style="background-color: {{ $color->code }};" href="#"></a></li>
+                                <li class="filter-color" id="filter_color_{{ $color->id }}">
+                                    <a href="javascript:;" class="black" style="background-color: {{ $color->code }};" onclick="filterByColor({{ $color->id }})"></a>
+                                </li>
                             @endforeach
                         </ul>
                     </div>
@@ -81,7 +86,7 @@
                     <div class="filter-size">
                         <ul class="filter-list">
                             @foreach ($sizes as $key=>$size)
-                                <li class="@if($size_id == $size->id) active @endif"><a href="javascript:;">{{ $size->name }}</a></li>
+                                <li class="filter-size" id="filter_size_{{ $size->id }}"><a href="javascript:;" onclick="filterBySize({{ $size->id }})">{{ $size->name }}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -98,8 +103,8 @@
                                     $unit = App\Models\Unit::find($unit->unit_id);
                                 @endphp
                                 @if ($unit)
-                                    <li class="@if($unit_id == $unit->id) active @endif">
-                                        <a href="{{ route('unit-product', ['category'=>$p_cat_id, 'unit'=>$unit->id]) }}">{{ $unit->name }}</a>
+                                    <li class="filter-unit" id="filter_unit_{{ $unit->id }}">
+                                        <a href="javascript:;" onclick="filterByUnit({{ $unit->id }})">{{ $unit->name }}</a>
                                     </li>
                                 @endif
                             @endforeach

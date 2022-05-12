@@ -16,7 +16,8 @@ class TrackingOrderController extends Controller
         $title = "Tracking Order";
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
-        return view('pages.trackingorder', compact('title', 'lan', 'p_cat_id'));
+        $search = '';
+        return view('pages.trackingorder', compact('title', 'lan', 'p_cat_id','search'));
     }
     public function trackingorderView(Request $request)
     {
@@ -36,7 +37,8 @@ class TrackingOrderController extends Controller
             return redirect()->back();
         }
         if($orders){
-            return view('pages.trackingorderview', compact('title', 'lan', 'p_cat_id', 'orders', 'products'));
+            $search = '';
+            return view('pages.trackingorderview', compact('title', 'lan', 'p_cat_id', 'orders', 'products','search'));
         }
     }
 }

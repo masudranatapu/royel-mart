@@ -175,21 +175,66 @@
     if(plusBtn){
         plusBtn.forEach((single)=>{
             single.addEventListener('click', ()=>{
-                let getInput = single.closest(".quantity-wrapper").querySelector('.input-wrapper input').value;
-                getInput ++;
-                single.closest(".quantity-wrapper").querySelector('.input-wrapper input').value = getInput;
+                var max_order_qty = parseInt($('#max_order_qty').val());
+                var pro_quantity = parseInt($('#pro_quantity').val());
+                var base_shipping_charge = parseInt($('#base_shipping_charge').val());
+                var product_id = $('#product_id').val();
+                var csrf_token = $('#form_csrf_token').val();
+
+                pro_quantity ++;
+                if(pro_quantity > max_order_qty){
+                    alert('You can order in a single order maximum quantity '+max_order_qty);
+                }else{
+                    $.ajax({
+                        url: "/quantity-wise-shipping-charge-change",
+                        type:"POST",
+                        data:{
+                            _token: csrf_token,
+                            product_id: product_id,
+                            pro_quantity: pro_quantity,
+                        },
+                        success:function(data) {
+                            console.log(data);
+                            $('#shipping_charge').val(data['shipping_charge']);
+                            $('#pro_shipping_charge').html(data['shipping_charge_html']);
+                        },
+                    });
+
+                    $('#pro_quantity').val(pro_quantity);
+                }
             });
         });
     }
     if(minusBtn){
         minusBtn.forEach((single)=>{
             single.addEventListener('click', ()=>{
-                let getInput = single.closest(".quantity-wrapper").querySelector('.input-wrapper input').value;
-                getInput --;
-                if(getInput === 0){
-                    getInput = 1
+                var pro_quantity = parseInt($('#pro_quantity').val());
+                var base_shipping_charge = parseInt($('#base_shipping_charge').val());
+
+                var product_id = $('#product_id').val();
+                var csrf_token = $('#form_csrf_token').val();
+
+                pro_quantity --;
+                if(pro_quantity === 0){
+                    pro_quantity = 1
                 }
-                single.closest(".quantity-wrapper").querySelector('.input-wrapper input').value = getInput;
+
+                $.ajax({
+                    url: "/quantity-wise-shipping-charge-change",
+                    type:"POST",
+                    data:{
+                        _token: csrf_token,
+                        product_id: product_id,
+                        pro_quantity: pro_quantity,
+                    },
+                    success:function(data) {
+                        console.log(data);
+                        $('#shipping_charge').val(data['shipping_charge']);
+                        $('#pro_shipping_charge').html(data['shipping_charge_html']);
+                    },
+                });
+
+                $('#pro_quantity').val(pro_quantity);
             });
         });
     }
@@ -198,9 +243,9 @@
     if($(window).innerWidth() >= 768) {
     	$('#zoom').zoom();
     } else {
-        
+
     }
-    
+
     $(".colors-wrapper li").click(function(){
         $(this).addClass("active").siblings().removeClass("active");
     });
@@ -387,14 +432,14 @@
     let checkSub = $(".checknav ul li").has("ul").addClass("has-sub");
     let clickElement = checkSub.find("> a");
     clickElement.prepend('<span class="open-submenu"><i class="bi bi-chevron-down"></i></span>');
-    
+
     $('.open-submenu').on('click', function (e) {
         e.stopPropagation();
         e.preventDefault();
         $(this).closest('li').toggleClass('active-menu-item');
         $(this).closest('li').find('> ul').slideToggle();
     });
-    
+
     $(".mobile-nav-trigger").click(function(){
         $(".mobile-nav").addClass("show");
         $(".overlay").fadeIn("100");

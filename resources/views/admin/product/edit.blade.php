@@ -68,13 +68,26 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label>Shipping Charge</label>
-                                                <input type="number" name="shipping_charge" class="form-control" value="{{ $products->shipping_charge }}" min="0" placeholder="Shipping Charge">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label>Alert Quantity</label>
-                                                <input type="number" name="alert_quantity" class="form-control" value="{{ $products->alert_quantity }}" placeholder="Alert Quantity">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <label>Inside Shipping</label>
+                                                        <input type="hidden" id="db_inside_shipping_charge" class="form-control" value="{{ $products->inside_shipping_charge }}">
+                                                        <input type="number" @if($products->free_shipping_charge == '0') readonly @endif name="inside_shipping_charge" id="inside_shipping_charge" class="form-control" value="{{ $products->inside_shipping_charge }}" min="0" placeholder="Shipping Charge">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Outside Shipping</label>
+                                                        <input type="hidden" id="db_outside_shipping_charge" class="form-control" value="{{ $products->outside_shipping_charge }}">
+                                                        <input type="number" @if($products->free_shipping_charge == '0') readonly @endif name="outside_shipping_charge" id="outside_shipping_charge" class="form-control" value="{{ $products->outside_shipping_charge }}" min="0" placeholder="Shipping Charge">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Shipping Type</label>
+                                                        <select class="form-control" name="free_shipping_charge" id="free_shipping_charge">
+                                                            <option value="1" @if($products->free_shipping_charge == '1') selected @endif>Paid</option>
+                                                            <option value="0" @if($products->free_shipping_charge == '0') selected @endif>Free</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="col-md-12 mt-3">
                                                 <div class="row">
@@ -253,6 +266,14 @@
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label>Alert Quantity</label>
+                                                <input type="number" name="alert_quantity" class="form-control" value="{{ $products->alert_quantity }}" min="0" placeholder="Alert Quantity">
+                                            </div>
+                                            <div class="col-md-6 mt-3">
+                                                <label>Max Order Qty</label>
+                                                <input type="number" name="max_order" class="form-control" value="{{ $products->max_order }}" min="1" placeholder="Max Order Qty">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -278,31 +299,56 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
-                                                <label>Outside Delivery </label>
+                                                <label class="w-100">
+                                                    Outside Delivery
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_outside_delivery" name="show_outside_delivery" @if($products->show_outside_delivery == '1') checked @endif value="1">
+                                                    </span>
+                                                </label>
                                                 <input type="text" name="outside_delivery" class="form-control" value="{{ $products->outside_delivery }}">
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label>Inside Delivery </label>
+                                                <label class="w-100">
+                                                    Inside Delivery
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_inside_delivery" name="show_inside_delivery" @if($products->show_inside_delivery == '1') checked @endif value="1">
+                                                    </span>
+                                                </label>
                                                 <input type="text" name="inside_delivery" class="form-control" value="{{ $products->inside_delivery }}">
                                             </div>
 
                                             <div class="col-md-12 mt-2">
-                                                <label id="payment_method_label">
+                                                <label id="payment_method_label" class="w-100">
                                                     Payment Method
                                                     <button type="button" class="btn btn-sm btn-info" onclick="addPayment()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_payment_method" name="show_payment_method" @if($products->show_payment_method == '1') checked @endif value="1">
+                                                    </span>
                                                 </label>
                                                 @php
-                                                    $payment_method = explode("|",$products->payment_method);
+                                                    $payment_method = explode("|",$products->cash_delivery);
                                                 @endphp
                                                 @foreach($payment_method as $key=>$payment_method)
                                                     <input type="text" name="payment_method[]" class="form-control mb-2" value="{{ $payment_method }}" placeholder="Payment Method">
                                                 @endforeach
                                             </div>
                                             <div class="col-md-12 mt-2">
-                                                <label id="guarantee_policy_label">
+                                                <label id="guarantee_policy_label" class="w-100">
                                                     Guarantee Policy
                                                     <button type="button" class="btn btn-sm btn-info" onclick="addGuarantee()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_guarantee" name="show_guarantee" @if($products->show_guarantee == '1') checked @endif value="1">
+                                                    </span>
                                                 </label>
+
                                                 @php
                                                     $guarantee_policy = explode("|",$products->guarantee_policy);
                                                 @endphp
@@ -310,11 +356,18 @@
                                                     <input type="text" name="guarantee_policy[]" class="form-control mb-2" value="{{ $guarantee_policy }}" placeholder="Guarantee Policy">
                                                 @endforeach
                                             </div>
+
                                             <div class="col-md-12 mt-2">
-                                                <label id="warranty_policy_label">
+                                                <label id="warranty_policy_label" class="w-100">
                                                     Warranty Policy
                                                     <button type="button" class="btn btn-sm btn-info" onclick="addWarranty()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_warranty" name="show_warranty" @if($products->show_warranty == '1') checked @endif value="1">
+                                                    </span>
                                                 </label>
+
                                                 @php
                                                     $warranty_policy = explode("|",$products->warranty_policy);
                                                 @endphp
@@ -322,6 +375,26 @@
                                                     <input type="text" name="warranty_policy[]" class="form-control mb-2" value="{{ $warranty_policy }}" placeholder="Warranty Policy">
                                                 @endforeach
                                             </div>
+
+                                            <div class="col-md-12 mt-2">
+                                                <label id="product_service_label" class="w-100">
+                                                    Service
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="addService()"><i class="fa fa-plus"></i></button>
+
+                                                    <span class="pull-right">
+                                                        <span>Show</span>
+                                                        <input type="checkbox" id="show_product_service" name="show_product_service" @if($products->show_product_service == '1') checked @endif value="1">
+                                                    </span>
+                                                </label>
+
+                                                @php
+                                                    $product_service = explode("|",$products->product_service);
+                                                @endphp
+                                                @foreach($product_service as $key=>$product_service)
+                                                    <input type="text" name="product_service[]" class="form-control mb-2" value="{{ $product_service }}" placeholder="Service">
+                                                @endforeach
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -420,6 +493,10 @@
 
         function addWarranty(){
             $( "#warranty_policy_label" ).after( '<input type="text" name="warranty_policy[]" class="form-control mb-2" placeholder="Another Warranty Policy">' );
+        }
+
+        function addService(){
+            $( "#product_service_label" ).after( '<input type="text" name="product_service[]" class="form-control mb-2" placeholder="Another Service">' );
         }
     </script>
     <script>
@@ -542,6 +619,23 @@
                     alert('danger');
                 }
             });
+        });
+
+        $('#free_shipping_charge').on('change', function(){
+            var free_shipping_charge = $('#free_shipping_charge').val();
+            if(free_shipping_charge == '0'){
+                $('#outside_shipping_charge').val(0);
+                $('#inside_shipping_charge').val(0);
+
+                $('#outside_shipping_charge').prop('readonly', true);
+                $('#inside_shipping_charge').prop('readonly', true);
+            }else{
+                $('#outside_shipping_charge').val($('#db_outside_shipping_charge').val());
+                $('#inside_shipping_charge').val($('#db_inside_shipping_charge').val());
+
+                $('#outside_shipping_charge').prop('readonly', false);
+                $('#inside_shipping_charge').prop('readonly', false);
+            }
         });
     </script>
 @endpush

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DeliveryLocationController;
 // admin controller
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WebsiteController;
@@ -21,17 +22,21 @@ use App\Http\Controllers\Admin\HappyClientController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\MissionVisionController;
 use App\Http\Controllers\Admin\CategoryBannerController;
+use App\Http\Controllers\Admin\CategoryProductShippingChargeVariant;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\PolicyController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\DistrictController;
+use App\Http\Controllers\Admin\AreaController;
+use App\Http\Controllers\Admin\DefaultDeliveryLocationController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\CategoryAdsController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\QuickSaleController;
+use App\Http\Controllers\Admin\OfferController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ExpenseCategoryController;
@@ -85,6 +90,13 @@ Route::get('policy-details/{slug}', [HomeController::class, 'policy'])->name('po
 Route::get('more-category/{slug}', [HomeController::class, 'more_category'])->name('more-category');
 Route::get('category/{slug}', [ViewController::class, 'categoryProduct'])->name('category');
 Route::post('load-more-category-product', [ViewController::class, 'load_more_category_product'])->name('load-more-category-product');
+Route::post('load-limit-range-product', [ViewController::class, 'load_limit_range_product'])->name('load-limit-range-product');
+Route::post('load-high-low-product', [ViewController::class, 'load_high_low_product'])->name('load-high-low-product');
+Route::post('product-filter-by-price-range', [ViewController::class, 'product_filter_by_price_range'])->name('product-filter-by-price-range');
+Route::post('product-filter-by-color', [ViewController::class, 'product_filter_by_color'])->name('product-filter-by-color');
+Route::post('product-filter-by-size', [ViewController::class, 'product_filter_by_size'])->name('product-filter-by-size');
+Route::post('product-filter-by-unit', [ViewController::class, 'product_filter_by_unit'])->name('product-filter-by-unit');
+Route::post('product-filter-by-brand', [ViewController::class, 'product_filter_by_brand'])->name('product-filter-by-brand');
 Route::get('brand', [ViewController::class, 'brandProduct'])->name('brand');
 Route::get('product-price', [ViewController::class, 'priceProduct'])->name('price');
 Route::get('unit-product', [ViewController::class, 'unit_product'])->name('unit-product');
@@ -126,6 +138,12 @@ Route::post('replay-review/{id}', [ProductReviewController::class, 'replay_revie
 // custom order route-------------
 Route::post('custom-order-submit', [CustomOrderController::class, 'store'])->name('custom-order-submit');
 
+// Get location and shipping charge
+Route::post('get-customer-district-by-division', [DeliveryLocationController::class, 'get_district'])->name('get-customer-district-by-division');
+Route::post('get-customer-area-by-district', [DeliveryLocationController::class, 'get_area'])->name('get-customer-area-by-district');
+Route::post('get-customer-final-delivery-location', [DeliveryLocationController::class, 'get_final_delivery_location'])->name('get-customer-final-delivery-location');
+Route::post('/quantity-wise-shipping-charge-change', [DeliveryLocationController::class, 'quantity_wise_shipping_charge_change']);
+
 
 // admin routes
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
@@ -152,6 +170,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::resource('category-banner', CategoryBannerController::class);
     Route::get('category-banner-active/{id}', [CategoryBannerController::class, 'categoryBannerActive'])->name('categorybanner.active');
     Route::get('category-banner-inactive/{id}', [CategoryBannerController::class, 'categoryBannerInactive'])->name('categorybanner.inactive');
+    // category wise product shipping charge variant
+    Route::resource('category-shipping-charge', CategoryProductShippingChargeVariant::class);
+    Route::get('category-shipping-charge-active/{id}', [CategoryProductShippingChargeVariant::class, 'category_charge_active'])->name('category-shipping-charge-active');
+    Route::get('category-shipping-charge-inactive/{id}', [CategoryProductShippingChargeVariant::class, 'category_charge_inactive'])->name('category-shipping-charge-inactive');
     // brand
     Route::resource('brand', BrandController::class);
     Route::get('brand-active/{id}', [BrandController::class, 'brandActive'])->name('brand.active');
@@ -184,6 +206,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::post('child-category-for-product', [ProductController::class, 'child_category_for_product'])->name('child-category-for-product');
     Route::post('get-category-product-for-qs', [ProductController::class, 'get_category_product_for_qs'])->name('get-category-product-for-qs');
     Route::post('add-product-to-qs-list', [ProductController::class, 'add_product_to_qs_list'])->name('add-product-to-qs-list');
+    Route::post('add-product-to-offer', [ProductController::class, 'add_product_to_offer'])->name('add-product-to-offer');
     Route::get('product-subcategory/ajax/{subcategory_id}', [ProductController::class, 'productSubcategory']);
     // slider
     Route::resource('slider', SliderController::class);
@@ -219,11 +242,20 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
 
     // location
     Route::resource('division', DivisionController::class);
+    Route::get('divisions-districts/{id}', [DivisionController::class, 'divisions_districts'])->name('divisions-districts');
     Route::get('division-active/{id}', [DivisionController::class, 'divisionActive'])->name('division.active');
     Route::get('division-inactive/{id}', [DivisionController::class, 'divisionInactive'])->name('division.inactive');
     Route::resource('district', DistrictController::class);
+    Route::get('districts-areas/{id}', [DistrictController::class, 'districts_areas'])->name('districts-areas');
     Route::get('district-active/{id}', [DistrictController::class, 'districtActive'])->name('district.active');
     Route::get('district-inactive/{id}', [DistrictController::class, 'districtInactive'])->name('district.inactive');
+    Route::resource('area', AreaController::class);
+    Route::get('area-active/{id}', [AreaController::class, 'areaActive'])->name('area.active');
+    Route::get('area-inactive/{id}', [AreaController::class, 'areaInactive'])->name('area.inactive');
+    Route::resource('delivery-location', DefaultDeliveryLocationController::class);
+    Route::post('get-district-by-division', [DefaultDeliveryLocationController::class, 'get_district'])->name('get-district-by-division');
+    Route::post('get-area-by-district', [DefaultDeliveryLocationController::class, 'get_area'])->name('get-area-by-district');
+
     // Message
     Route::resource('message', MessageController::class);
     Route::resource('category-ads', CategoryAdsController::class);
@@ -239,6 +271,13 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     Route::get('quick-sale-activity/{id}', [QuickSaleController::class, 'quick_sale_activity'])->name('quick-sale-activity');
     Route::get('quick-sale-product/{id}', [QuickSaleController::class, 'quick_sale_product'])->name('quick-sale-product');
     Route::post('update-quick-sale-product', [QuickSaleController::class, 'update_quick_sale_product'])->name('update-quick-sale-product');
+
+    // Offer routes
+    Route::resource('offer', OfferController::class);
+    Route::get('offer-activity/{id}', [OfferController::class, 'offer_activity'])->name('offer-activity');
+    Route::get('offer-product/{id}', [OfferController::class, 'offer_product'])->name('offer-product');
+    Route::post('update-offer-product', [OfferController::class, 'update_offer_product'])->name('update-offer-product');
+    Route::post('offer-product-delete', [OfferController::class, 'offer_product_delete'])->name('offer-product-delete');
 
     // Expense category routes
     Route::resource('expense-category', ExpenseCategoryController::class);

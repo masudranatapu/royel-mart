@@ -101,9 +101,6 @@
                                 <input type="hidden" name="size_id[]" value="{{ $checkoutDetails['size_id'] }}">
                                 <input type="hidden" name="color_id[]" value="{{ $checkoutDetails['color_id'] }}">
                             @endforeach
-                            @php
-                                // $total = ($sub_total + $shipping_charge);
-                            @endphp
                         @endif
                         <h3 class="area-title">Checkout Summary</h3>
                         <table class="table">
@@ -140,7 +137,7 @@
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                     Add Promo code or Gift voucher
                                     </button>
-                                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#promo">
+                                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#promo">
                                         <div class="accordion-body">
                                             <input class="form-control" name="voucher_code" id="voucher_code" type="text">
                                             <input class="form-control" id="voucher_code_apply" type="hidden" value="0">
@@ -292,6 +289,7 @@
         });
 
         function applyVoucher() {
+            alert('sgfdgd');
             var shipping_phone = $('#shipping_phone').val();
             var voucher_code = $('#voucher_code').val();
             var voucher_code_apply = parseInt($('#voucher_code_apply').val());

@@ -32,7 +32,8 @@ class GuestCheckoutController extends Controller
         $title = "Guest Checkout";
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
-        return view('customer.guest.index', compact('title', 'lan', 'p_cat_id'));
+        $search = '';
+        return view('customer.guest.index', compact('title', 'lan', 'p_cat_id','search'));
     }
 
     // for getDivDis informaiton

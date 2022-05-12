@@ -18,7 +18,6 @@ class CategoryBannerController extends Controller
      */
     public function index()
     {
-        //
         $title = "Category Banner";
         $categories = Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', '0')->orderBy('serial_number','asc')->latest()->get();
         $categorybanners = CategoryBanner::with('category')->latest()->get();

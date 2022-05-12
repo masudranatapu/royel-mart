@@ -19,8 +19,9 @@ class CreateBillingAddressesTable extends Migration
             $table->string('order_id');
             $table->string('billing_name');
             $table->string('billing_email');
-            $table->string('billing_division_id');
-            $table->string('billing_district_id')->nullable();
+            $table->integer('billing_division_id');
+            $table->integer('billing_district_id')->nullable();
+            $table->integer('billing_area_id')->nullable();
             $table->string('billing_thana_code')->nullable();
             $table->string('billing_phone');
             $table->string('billing_address');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\CategoryShippingChargeVariant;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -167,6 +168,23 @@ class CategoryController extends Controller
             $category->child_serial = $request->serial_number;
         }
         $category->show_hide = $showHideStatus;
+
+        $charge_variant = new CategoryShippingChargeVariant();
+        if($request->parent_id == '' && $request->child_id == ''){
+            $charge_variant->category_id = $request->category_id;
+        }elseif($request->parent_id != '' && $request->child_id == ''){
+            $charge_variant->category_id = $request->parent_id;
+        }elseif($request->parent_id != '' && $request->child_id != ''){
+            $charge_variant->category_id = $request->child_id;
+        }
+        $charge_variant->qty_one_charge_variant = 0;
+        $charge_variant->qty_two_charge_variant = 0;
+        $charge_variant->qty_three_charge_variant = 0;
+        $charge_variant->qty_four_charge_variant = 0;
+        $charge_variant->qty_five_charge_variant = 0;
+        $charge_variant->qty_more_than_five_charge_variant = 0;
+        $charge_variant->save();
+
         $category->save();
 
         Toastr::success('Category successfully save :-)','Success');
@@ -328,6 +346,20 @@ class CategoryController extends Controller
         }
         $category->show_hide = $showHideStatus;
         $category->save();
+
+        $variant_decrease_charge = CategoryShippingChargeVariant::where('category_id', $id)->first();
+
+        if($variant_decrease_charge == ''){
+            $charge_variant = new CategoryShippingChargeVariant();
+            $charge_variant->category_id = $id;
+            $charge_variant->qty_one_charge_variant = 0;
+            $charge_variant->qty_two_charge_variant = 0;
+            $charge_variant->qty_three_charge_variant = 0;
+            $charge_variant->qty_four_charge_variant = 0;
+            $charge_variant->qty_five_charge_variant = 0;
+            $charge_variant->qty_more_than_five_charge_variant = 0;
+            $charge_variant->save();
+        }
 
 
         Toastr::info('Category successfully updated :-)','Success');

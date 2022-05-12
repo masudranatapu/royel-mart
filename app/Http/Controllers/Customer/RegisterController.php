@@ -20,7 +20,8 @@ class RegisterController extends Controller
         $title = "Customer Register";
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
-        return view('auth.register', compact('title', 'lan', 'p_cat_id'));
+        $search = '';
+        return view('auth.register', compact('title', 'lan', 'p_cat_id','search'));
     }
     public function customerRegisterConfirm(Request $request)
     {
@@ -80,7 +81,8 @@ class RegisterController extends Controller
         $getPhone = $request->session()->get('phone');
 
         if($request->session()->get('otp_code')){
-            return view('auth.register-otp-check', compact('getName', 'getPhone', 'title', 'lan', 'p_cat_id'));
+            $search = '';
+            return view('auth.register-otp-check', compact('getName', 'getPhone', 'title', 'lan', 'p_cat_id','search'));
         }else{
             return redirect()->back();
         }
@@ -117,7 +119,8 @@ class RegisterController extends Controller
             return redirect()->back();
         }else {
             Toastr::info('Give password for create your account :-)','success');
-            return view('auth.register-confirm', compact('title', 'getName', 'getPhone', 'getEmail', 'getAddress'));
+            $search = '';
+            return view('auth.register-confirm', compact('title', 'getName', 'getPhone', 'getEmail', 'getAddress','search'));
         }
     }
 
@@ -236,7 +239,8 @@ class RegisterController extends Controller
         $getPhone = $request->session()->get('phone');
 
         if($request->session()->get('otp_code')){
-            return view('customer.guest.checkotp', compact('title', 'lan', 'p_cat_id', 'getPhone'));
+            $search = '';
+            return view('customer.guest.checkotp', compact('title', 'lan', 'p_cat_id', 'getPhone','search'));
         }else{
             return redirect()->back();
         }
@@ -316,7 +320,8 @@ class RegisterController extends Controller
         }else {
             $divisions = Division::latest()->get();
             Toastr::success('Now checkout your cart products:-)','success');
-            return view('customer.guest.guestcheckout', compact('title', 'lan', 'p_cat_id','getPhone', 'divisions'));
+            $search = '';
+            return view('customer.guest.guestcheckout', compact('title', 'lan', 'p_cat_id','getPhone', 'divisions','search'));
         }
     }
 }

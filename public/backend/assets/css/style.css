@@ -10899,7 +10899,8 @@ table tbody .border-bottom-info td {
 }
 
 .pcoded .pcoded-header .navbar-logo[logo-theme="theme1"] {
-    background-color: #404E67
+    background-color: #f6f7fb;
+    border-right: solid 1px #404e67;
 }
 
 .pcoded[sidebar-img="true"] .pcoded-navbar {
@@ -11710,7 +11711,11 @@ table tbody .border-bottom-info td {
 }
 
 .pcoded .pcoded-header[header-theme="theme1"] .navbar-logo a {
-    color: #fff
+    color: #404e67
+}
+
+.pcoded .pcoded-header[header-theme="theme1"] .navbar-logo a img{
+    width: 189px;
 }
 
 .pcoded .pcoded-header[header-theme="theme1"] .navbar-wrapper .header-search .main-search .input-group .input-group-addon {

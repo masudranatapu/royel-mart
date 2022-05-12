@@ -20,8 +20,9 @@ class CreateShippingAddressesTable extends Migration
             $table->string('shipping_name');
             $table->string('shipping_phone');
             $table->string('shipping_email');
-            $table->string('shipping_division_id');
-            $table->string('shipping_district_id')->nullable();
+            $table->integer('shipping_division_id');
+            $table->integer('shipping_district_id')->nullable();
+            $table->integer('shipping_area_id')->nullable();
             $table->string('shipping_address');
             $table->timestamps();
         });

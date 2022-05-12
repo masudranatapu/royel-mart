@@ -25,14 +25,16 @@ class InformationController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $shipping_information = ShippingAddress::where('user_id', Auth::user()->id)->latest()->first();
-        return view('customer.index', compact('title', 'lan', 'p_cat_id','shipping_information'));
+        $search = '';
+        return view('customer.index', compact('title', 'lan', 'p_cat_id','shipping_information','search'));
     }
     public function passChangeView(Request $request)
     {
         $title = "Change Password";
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
-        return view('customer.password', compact('title', 'lan', 'p_cat_id'));
+        $search = '';
+        return view('customer.password', compact('title', 'lan', 'p_cat_id','search'));
     }
     public function updatePass(Request $request, $id)
     {

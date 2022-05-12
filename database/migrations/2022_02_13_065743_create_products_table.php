@@ -29,6 +29,9 @@ class CreateProductsTable extends Migration
             $table->double('discount', 14,2)->default(0);
             $table->double('discount_tk', 14,2)->default(0);
             $table->double('shipping_charge', 14,2)->default(0);
+            $table->double('inside_shipping_charge', 14,2)->default(0);
+            $table->double('outside_shipping_charge', 14,2)->default(0);
+            $table->integer('free_shipping_charge')->default(0);
             $table->integer('alert_quantity')->default(0);
             $table->longText('description')->nullable();
             $table->text('meta_description')->nullable();

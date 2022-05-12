@@ -21,7 +21,8 @@ class WishlistController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $orders = Order::with('products')->where('user_id', Auth::user()->id)->latest()->get();
-        return view('customer.order', compact('title', 'lan', 'p_cat_id', 'orders'));
+        $search = '';
+        return view('customer.order', compact('title', 'lan', 'p_cat_id', 'orders','search'));
     }
 
     public function orderView(Request $request, $id)
@@ -31,6 +32,7 @@ class WishlistController extends Controller
         $p_cat_id = '';
         $orders = Order::find($id);
         $products = OrderProduct::where('order_code', $orders->order_code)->get();
-        return view('customer.orderview', compact('title', 'lan', 'p_cat_id', 'orders', 'products'));
+        $search = '';
+        return view('customer.orderview', compact('title', 'lan', 'p_cat_id', 'orders', 'products','search'));
     }
 }

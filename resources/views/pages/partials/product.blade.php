@@ -1,13 +1,15 @@
 <div class="products-area">
+    <input type="hidden" id="cat_id" value="{{ $cat_id }}">
     <div class="row responsive" id="product-list">
-        <input type="hidden" id="cat_id" value="{{ $cat_id }}">
         @foreach($products as $product)
             @php $last_id = $product->id; @endphp
             <div class="col-lg-3 col-md-3 col-4 px-2 mb-3">
                 <div class="single-product">
                     <div class="inner-product">
                         <figure>
-                            <img loading="eager|lazy" src=" @if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
+                            <a href="{{ route('productdetails', $product->slug) }}">
+                                <img loading="eager|lazy" src="@if(file_exists($product->thumbnail)) {{asset($product->thumbnail)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="{{ $product->name }}">
+                            </a>
                             @if ($product->product_type == 'New Arrival')
                                 <span class="arrival new">New</span>
                             @elseif ($product->product_type == 'Features')

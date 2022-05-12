@@ -26,13 +26,15 @@
                             $total = 0;
                             $discount = 0;
                             $shipping_charge = 0;
+                            $temp_checkout[] = '';
                             $i = 1;
                         @endphp
                         @if(session('cart'))
                             @foreach(session('cart') as $key => $cartdetails)
                                 @php
                                     $sub_total += ($cartdetails['regular_price'] * $cartdetails['quantity']);
-                                    $shipping_charge += $cartdetails['shipping_charge'];
+                                    // $shipping_charge += $cartdetails['shipping_charge'];
+                                    $temp_checkout[] = $cartdetails['shipping_charge'];
                                     $discount += $cartdetails['discount'];
                                 @endphp
                                 <div class="single-item">
@@ -94,9 +96,6 @@
                                     </form>
                                 </div>
                             @endforeach
-                            @php
-                                $total = ($sub_total + $shipping_charge) - $discount;
-                            @endphp
                         @endif
                     </div>
                 </div>
@@ -110,6 +109,10 @@
                                 <td>{{ $sub_total }} ৳</td>
                             </tr>
                             <tr>
+                                @php
+                                    $shipping_charge = max($temp_checkout);
+                                    $total = ($sub_total + $shipping_charge) - $discount;
+                                @endphp
                                 <td>Shipping </td>
                                 <input type="hidden" name="shipping_amount" id="shipping_amount" value="{{ $shipping_charge }}">
                                 <td> <span id="delivery_amount">{{ $shipping_charge }}</span> ৳</td>
@@ -126,7 +129,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    @if ($discount <= 0)
+                    {{-- @if ($discount <= 0)
                         <div class="accordion" id="promo">
                             <div class="accordion-item">
                                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -142,7 +145,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
                 </div>
             </div>
             <div class="text-center mt-40">

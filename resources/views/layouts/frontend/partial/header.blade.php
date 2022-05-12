@@ -59,7 +59,7 @@
                 <div class="search-area">
                     <div class="search-wrapper">
                         <form action="{{ route('searching') }}" method="get">
-                            <input name="search_product" autocomplete="off" class="form-control js--search" type="text">
+                            <input name="search_product" autocomplete="off" value="{{ $search }}" class="form-control js--search" type="text">
                             <button type="submit" class="submit-search"><i class="ri-search-line"></i></button>
                         </form>
                     </div>

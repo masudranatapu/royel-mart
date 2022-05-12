@@ -8,12 +8,12 @@
                 <span class="pcoded-mtext">Dashboard</span>
             </a>
         </li>
-        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/category-banner') || Request::is('admin/category-ads') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/category') || Request::is('admin/category-banner') || Request::is('admin/category-ads') || Request::is('admin/category-shipping-charge') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-sidebar"></i>
                 </span>
-                <span class="pcoded-mtext">Category</span>
+                <span class="pcoded-mtext">Category Manage</span>
             </a>
             <ul class="pcoded-submenu">
                 <li class="{{ Request::is('admin/category') ? 'active' : '' }}">
@@ -23,12 +23,17 @@
                 </li>
                 <li class="{{ Request::is('admin/category-banner')? 'active' : '' }}">
                     <a href="{{ route('admin.category-banner.index') }}">
-                        <span class="pcoded-mtext">Category Banner</span>
+                        <span class="pcoded-mtext">Banner</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/category-ads')? 'active' : '' }}">
                     <a href="{{ route('admin.category-ads.index') }}">
-                        <span class="pcoded-mtext">Category Ads</span>
+                        <span class="pcoded-mtext">Ads</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/category-shipping-charge') ? 'active' : '' }}">
+                    <a href="{{ route('admin.category-shipping-charge.index') }}">
+                        <span class="pcoded-mtext">Qty Wise Shipping Charge</span>
                     </a>
                 </li>
             </ul>
@@ -72,7 +77,7 @@
             </ul>
         </li>
 
-        {{-- <li class="pcoded-hasmenu {{ Request::is('admin/division') || Request::is('admin/district') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/division') || Request::is('admin/district') || Request::is('admin/area') || Request::is('admin/delivery-location') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-bookmark"></i>
@@ -90,8 +95,18 @@
                         <span class="pcoded-mtext">District</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/area') ? 'active' : '' }}">
+                    <a href="{{ route('admin.area.index') }}">
+                        <span class="pcoded-mtext">Area</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/delivery-location') ? 'active' : '' }}">
+                    <a href="{{ route('admin.delivery-location.index') }}">
+                        <span class="pcoded-mtext">Default Delivery Location</span>
+                    </a>
+                </li>
             </ul>
-        </li> --}}
+        </li>
 
         <li class="pcoded-hasmenu {{ Request::is('admin/quick-sale*') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
@@ -104,6 +119,22 @@
                 <li class="{{ Request::is('admin/quick-sale') ? 'active' : '' }}">
                     <a href="{{ route('admin.quick-sale.index') }}">
                         <span class="pcoded-mtext">Quick Sale</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="pcoded-hasmenu {{ Request::is('admin/offer*') ? 'pcoded-trigger' : '' }}">
+            <a href="javascript:void(0)">
+                <span class="pcoded-micon">
+                    <i class="feather icon-bookmark"></i>
+                </span>
+                <span class="pcoded-mtext">Offer Manage</span>
+            </a>
+            <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/offer') ? 'active' : '' }}">
+                    <a href="{{ route('admin.offer.index') }}">
+                        <span class="pcoded-mtext">Offer</span>
                     </a>
                 </li>
             </ul>
