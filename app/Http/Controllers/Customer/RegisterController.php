@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Area;
+use App\Models\District;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\User;
@@ -109,19 +111,33 @@ class RegisterController extends Controller
         $getOtpCode = $code_one.''.$code_tow.''.$code_three.''.$code_four.''.$code_five;
         $otpCode = $request->session()->get('otp_code');
 
-        $getName = $request->session()->get('name');
-        $getPhone = $request->session()->get('phone');
-        $getEmail = $request->session()->get('email');
-        $getAddress = $request->session()->get('address');
-
         if($getOtpCode != $otpCode){
             Toastr::warning('OTP code not  matched. Please give right otp code for next step :-)','success');
             return redirect()->back();
         }else {
             Toastr::info('Give password for create your account :-)','success');
-            $search = '';
-            return view('auth.register-confirm', compact('title', 'getName', 'getPhone', 'getEmail', 'getAddress','search'));
+            return redirect()->route('register-final-step');
         }
+    }
+
+    public function register_final_step(Request $request){
+        $search = '';
+        $title = "Crate Your Account";
+
+        $getName = $request->session()->get('name');
+        $getPhone = $request->session()->get('phone');
+        $getEmail = $request->session()->get('email');
+        $getAddress = $request->session()->get('address');
+
+        $division_id = session()->get('division_id');
+        $district_id = session()->get('district_id');
+        $area_id = session()->get('area_id');
+
+        $divisions = Division::get();
+        $districts = District::where('division_id', $division_id)->get();
+        $areas = Area::where('district_id', $district_id)->get();
+
+        return view('auth.register-confirm', compact('title','search', 'getName', 'getPhone', 'getEmail', 'getAddress', 'division_id', 'district_id', 'area_id', 'districts', 'divisions', 'areas'));
     }
 
     public function customerOtpResend(Request $request)
@@ -176,9 +192,13 @@ class RegisterController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'division_id' => $request->division_id,
+            'district_id' => $request->district_id,
+            'area_id' => $request->area_id,
             'address' => $request->address,
             'password' => Hash::make($request->password),
             'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ]);
 
         Auth::login($userlogin);

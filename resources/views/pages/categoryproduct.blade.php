@@ -16,16 +16,14 @@
     @include('layouts.frontend.partial.breadcrumbcategory')
 	<!-- End Breadcrumb -->
 	<section class="category-page-slider-section">
-		<div class="container-fluid">
-            <div class="category-page-slider owl-carousel">
-                @foreach($categorybanners as $categorybanner)
-                    <div class="single-slide">
-                        <a href="{{ $categorybanner->link }}">
-                            <img loading="eager|lazy" src="@if($categorybanner->image) {{ asset($categorybanner->image) }}  @else {{ asset('demomedia/category.png') }} @endif">
-                        </a>
-                    </div>
-                @endforeach
-            </div>
+        <div class="category-page-slider owl-carousel">
+            @foreach($categorybanners as $categorybanner)
+                <div class="single-slide">
+                    <a href="{{ $categorybanner->link }}">
+                        <img loading="eager|lazy" src="@if($categorybanner->image) {{ asset($categorybanner->image) }}  @else {{ asset('demomedia/category.png') }} @endif">
+                    </a>
+                </div>
+            @endforeach
         </div>
 	</section>
 	<!-- End Category Page Slider -->
@@ -53,7 +51,7 @@
 	<!-- End Featured Category -->
 	<section class="single-categories-section pb-60 pt-20">
 		<div class="container-fluid">
-            @if($relatedcategory->count() > 0)
+            {{-- @if($relatedcategory->count() > 0)
                 <div class="title-filter-area">
                     <div class="title-area w-100">
                         <h3 class="category-title">Related Categories - Royelmart.com</h3>
@@ -71,7 +69,7 @@
                         </ul>
                     </div>
                 </div>
-            @endif
+            @endif --}}
 			<div class="title-filter-area pb-40">
 				<div class="title-area">
 					<h3 class="category-title">{{ $title }} - Royelmart</h3>
@@ -127,11 +125,13 @@
         function loadHihhLowProduct() {
             $("#loadingImage").hide();
             var filter_high_low_price = $('#filter_high_low_price').val();
+            var filter_product_limit = $('#filter_product_limit').val();
             var cat_id = $('#cat_id').val();
             $.ajax({
                 type    : "POST",
                 url     : "{{ route('load-high-low-product') }}",
                 data    : {
+                    filter_product_limit : filter_product_limit,
                     filter_high_low_price : filter_high_low_price,
                     cat_id : cat_id,
                     _token  : '{{csrf_token()}}',
@@ -160,6 +160,7 @@
 
         function loadLimitProduct() {
             $("#loadingImage").hide();
+            var filter_high_low_price = $('#filter_high_low_price').val();
             var filter_product_limit = $('#filter_product_limit').val();
             var cat_id = $('#cat_id').val();
             $.ajax({
@@ -167,6 +168,7 @@
                 url     : "{{ route('load-limit-range-product') }}",
                 data    : {
                     filter_product_limit : filter_product_limit,
+                    filter_high_low_price : filter_high_low_price,
                     cat_id : cat_id,
                     _token  : '{{csrf_token()}}',
                 },

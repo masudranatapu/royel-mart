@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Area;
 use Illuminate\Http\Request;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\ProductOrderColor;
 use App\Models\ProductOrderColorSize;
+use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,10 +29,11 @@ class CheckoutController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
         $divisions = Division::latest()->get();
-        $districts = District::latest()->get();
+        $districts = District::where('division_id', Auth::user()->division_id)->latest()->get();
+        $areas = Area::where('district_id', Auth::user()->district_id)->latest()->get();
         $shipping_addresses = ShippingAddress::where('user_id', Auth::user()->id )->latest()->get();
         $search = '';
-        return view('customer.checkout', compact('title', 'lan', 'p_cat_id', 'divisions', 'shipping_addresses', 'districts','search'));
+        return view('customer.checkout', compact('title', 'lan', 'p_cat_id', 'divisions', 'shipping_addresses', 'districts', 'areas','search'));
     }
     // for getDivDis informaiton
     public function getDivDis($div_id)
@@ -100,36 +103,75 @@ class CheckoutController extends Controller
         if($request->shipp_to_id){
             $check_shipping_address = ShippingAddress::find($request->shipp_to_id);
 
+            $ck_user = User::find(Auth::user()->id);
+            if(Auth::user()->division_id == NULL){
+                $ck_user->division_id = $check_shipping_address->shipping_division_id;
+            }
+            if(Auth::user()->district_id == NULL){
+                $ck_user->district_id = $check_shipping_address->shipping_district_id;
+            }
+            if(Auth::user()->area_id == NULL){
+                $ck_user->area_id = $check_shipping_address->shipping_area_id;
+            }
+            $ck_user->save();
+
             $shipping_to = $check_shipping_address->shipping_to;
             $shipping_name = $check_shipping_address->shipping_name;
             $shipping_phone = $check_shipping_address->shipping_phone;
-            $shipping_address = $check_shipping_address->shipping_address;
+            $shipping_address = division_name($check_shipping_address->shipping_division_id ).district_name($check_shipping_address->shipping_district_id ).area_name($check_shipping_address->shipping_area_id ).', '.$check_shipping_address->shipping_address;
         }else{
+            // return $request;
             $this->validate($request, [
                 'new_shipping_to' => 'required',
                 'new_shipping_name' => 'required',
                 'new_shipping_email' => 'required',
                 'new_shipping_phone' => 'required',
+                'new_shipping_division_id' => 'required',
+                'new_shipping_district_id' => 'required',
+                'new_shipping_area_id' => 'required',
                 'new_shipping_address' => 'required',
-
             ]);
+
+            $ck_user = User::find(Auth::user()->id);
+            if(Auth::user()->division_id == NULL){
+                $ck_user->division_id = $request->new_shipping_division_id;
+            }
+            if(Auth::user()->district_id == NULL){
+                $ck_user->district_id = $request->new_shipping_district_id;
+            }
+            if(Auth::user()->area_id == NULL){
+                $ck_user->area_id = $request->new_shipping_area_id;
+            }
+            $ck_user->save();
 
             $new_shipping_address = new ShippingAddress();
             $new_shipping_address->user_id = Auth::user()->id;
             $new_shipping_address->shipping_to = $request->new_shipping_to;
             $new_shipping_address->shipping_name = $request->new_shipping_name;
-            $new_shipping_address->shipping_phone = $request->new_shipping_phone;
+
+            $three_ch = substr($request->input('new_shipping_phone'), 0, 3);
+            $two_ch = substr($request->input('new_shipping_phone'), 0, 2);
+            if($three_ch == '+88'){
+                $new_shipping_address->shipping_phone = substr($request->input('new_shipping_phone'), 3);
+            }elseif($two_ch == '+8' || $two_ch == '88'){
+                $new_shipping_address->shipping_phone = substr($request->input('new_shipping_phone'), 2);;
+            }else{
+                $new_shipping_address->shipping_phone = $request->new_shipping_phone;
+            }
+
             $new_shipping_address->shipping_email = $request->new_shipping_email;
             $new_shipping_address->shipping_division_id = $request->new_shipping_division_id;
             $new_shipping_address->shipping_district_id = $request->new_shipping_district_id;
+            $new_shipping_address->shipping_area_id = $request->new_shipping_area_id;
             $new_shipping_address->shipping_address = $request->new_shipping_address;
             $new_shipping_address->save();
 
             $shipping_to = $request->shipping_to;
             $shipping_name = $request->shipping_name;
             $shipping_phone = $request->shipping_phone;
-            $shipping_address = $request->shipping_address;
+            $shipping_address = division_name($request->shipping_division_id ).district_name($request->shipping_district_id ).area_name($request->shipping_area_id ).', '.$request->shipping_address;
         }
+
         // create order code
         $order_code = 'R'.mt_rand(111111,999999);
 
@@ -218,8 +260,9 @@ class CheckoutController extends Controller
             'shipping_name' => 'required',
             'shipping_email' => 'required',
             'shipping_phone' => 'required',
-            'shipping_division_id' => 'required',
-            'shipping_district_id' => 'required',
+            'update_division_id' => 'required',
+            'update_district_id' => 'required',
+            'update_area_id' => 'required',
             'shipping_address' => 'required',
         ]);
 
@@ -228,8 +271,9 @@ class CheckoutController extends Controller
         $shipping_address->shipping_name = $request->shipping_name;
         $shipping_address->shipping_phone = $request->shipping_phone;
         $shipping_address->shipping_email = $request->shipping_email;
-        $shipping_address->shipping_division_id = $request->shipping_division_id;
-        $shipping_address->shipping_district_id = $request->shipping_district_id;
+        $shipping_address->shipping_division_id = $request->update_division_id;
+        $shipping_address->shipping_district_id = $request->update_district_id;
+        $shipping_address->shipping_area_id = $request->update_area_id;
         $shipping_address->shipping_address = $request->shipping_address;
         $shipping_address->save();
 

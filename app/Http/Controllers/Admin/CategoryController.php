@@ -86,7 +86,7 @@ class CategoryController extends Controller
         }
 
         if($request->parent_id == '' && $request->child_id == ''){
-            $pre_check_cats = Category::where('serial_number', '<', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_check_cats = Category::where('serial_number', '<', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('serial_number', "ASC")->get();
             $pre_sl = 1;
             if($pre_check_cats->count() > 0){
                 foreach($pre_check_cats as $check_cat){
@@ -98,7 +98,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id == ''){
-            $pre_check_cats = Category::where('parent_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_check_cats = Category::where('parent_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('parent_serial', "ASC")->get();
             $pre_sl = 1;
             if($pre_check_cats->count() > 0){
                 foreach($pre_check_cats as $check_cat){
@@ -110,7 +110,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id != ''){
-            $pre_check_cats = Category::where('child_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_check_cats = Category::where('child_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('child_serial', "ASC")->get();
             $pre_sl = 1;
             if($pre_check_cats->count() > 0){
                 foreach($pre_check_cats as $check_cat){
@@ -124,7 +124,7 @@ class CategoryController extends Controller
         }
 
         if($request->parent_id == '' && $request->child_id == ''){
-            $check_cats = Category::where('serial_number', '>=', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $check_cats = Category::where('serial_number', '>=', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('serial_number', "ASC")->get();
             if($check_cats->count() > 0){
                 foreach($check_cats as $check_cat){
                     $cat = Category::find($check_cat->id);
@@ -133,7 +133,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id == ''){
-            $check_cats = Category::where('parent_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $check_cats = Category::where('parent_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('parent_serial', "ASC")->get();
             if($check_cats->count() > 0){
                 foreach($check_cats as $check_cat){
                     $cat = Category::find($check_cat->id);
@@ -142,7 +142,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id != ''){
-            $check_cats = Category::where('child_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $check_cats = Category::where('child_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('child_serial', "ASC")->get();
             if($check_cats->count() > 0){
                 foreach($check_cats as $check_cat){
                     $cat = Category::find($check_cat->id);
@@ -253,7 +253,7 @@ class CategoryController extends Controller
         }
 
         if($request->parent_id == '' && $request->child_id == ''){
-            $pre_check_cats = Category::where('serial_number', '<', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_check_cats = Category::where('serial_number', '<', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('serial_number', "ASC")->get();
             $pre_sl = 1;
             if($pre_check_cats->count() > 0){
                 foreach($pre_check_cats as $check_cat){
@@ -265,7 +265,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id == ''){
-            $pre_check_cats = Category::where('parent_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_check_cats = Category::where('parent_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('parent_serial', "ASC")->get();
             $pre_sl = 1;
             if($pre_check_cats->count() > 0){
                 foreach($pre_check_cats as $check_cat){
@@ -277,7 +277,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id != ''){
-            $pre_check_cats = Category::where('child_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $pre_check_cats = Category::where('child_serial', '<', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('child_serial', "ASC")->get();
             $pre_sl = 1;
             if($pre_check_cats->count() > 0){
                 foreach($pre_check_cats as $check_cat){
@@ -291,7 +291,7 @@ class CategoryController extends Controller
         }
 
         if($request->parent_id == '' && $request->child_id == ''){
-            $check_cats = Category::where('serial_number', '>=', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $check_cats = Category::where('serial_number', '>=', $request->serial_number)->where('parent_id', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('serial_number', "ASC")->get();
             if($check_cats->count() > 0){
                 foreach($check_cats as $check_cat){
                     $cat = Category::find($check_cat->id);
@@ -300,7 +300,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id == ''){
-            $check_cats = Category::where('parent_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $check_cats = Category::where('parent_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', NULL)->where('status', '1')->where('is_default', '0')->orderBy('parent_serial', "ASC")->get();
             if($check_cats->count() > 0){
                 foreach($check_cats as $check_cat){
                     $cat = Category::find($check_cat->id);
@@ -309,7 +309,7 @@ class CategoryController extends Controller
                 }
             }
         }elseif($request->parent_id != '' && $request->child_id != ''){
-            $check_cats = Category::where('child_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('id', "DESC")->get();
+            $check_cats = Category::where('child_serial', '>=', $request->serial_number)->where('parent_id', '!=', NULL)->where('child_id', '!=', NULL)->where('status', '1')->where('is_default', '0')->orderBy('child_serial', "ASC")->get();
             if($check_cats->count() > 0){
                 foreach($check_cats as $check_cat){
                     $cat = Category::find($check_cat->id);

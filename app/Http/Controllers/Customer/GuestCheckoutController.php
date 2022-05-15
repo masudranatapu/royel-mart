@@ -28,7 +28,6 @@ class GuestCheckoutController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $title = "Guest Checkout";
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
@@ -153,7 +152,20 @@ class GuestCheckoutController extends Controller
             $user = new User();
             $user->name = $request->shipping_name;
             $user->email  = $request->shipping_email;
-            $user->phone  = $request->shipping_phone;
+
+            $three_ch = substr($request->input('shipping_phone'), 0, 3);
+            $two_ch = substr($request->input('shipping_phone'), 0, 2);
+            if($three_ch == '+88'){
+                $user->phone = substr($request->input('shipping_phone'), 3);
+            }elseif($two_ch == '+8' || $two_ch == '88'){
+                $user->phone = substr($request->input('shipping_phone'), 2);;
+            }else{
+                $user->phone = $request->shipping_phone;
+            }
+
+            $user->division_id = $request->division_id;
+            $user->district_id = $request->district_id;
+            $user->area_id = $request->area_id;
             $user->address = $request->shipping_address;
             $user->password = Hash::make($request->shipping_phone);
             $user->save();
@@ -162,17 +174,16 @@ class GuestCheckoutController extends Controller
             $user_id = $new_user->id;
         }
 
-        // return $user_id;
-
         $shipping_address = new ShippingAddress();
         $shipping_address->user_id = $user_id;
         $shipping_address->shipping_to = $request->shipping_to;
         $shipping_address->shipping_name = $request->shipping_name;
         $shipping_address->shipping_phone = $request->shipping_phone;
         $shipping_address->shipping_email = $request->shipping_email;
-        $shipping_address->shipping_division_id = $request->shipping_division_id;
-        $shipping_address->shipping_district_id = $request->shipping_district_id;
-        $shipping_address->shipping_address = $request->shipping_address;
+        $shipping_address->shipping_division_id = $request->division_id;
+        $shipping_address->shipping_district_id = $request->district_id;
+        $shipping_address->shipping_area_id = $request->area_id;
+        $shipping_address->shipping_address = division_name($request->division_id ).district_name($request->district_id ).area_name($request->area_id ).', '.$request->shipping_address;
         $shipping_address->save();
 
         // create order code
@@ -192,7 +203,7 @@ class GuestCheckoutController extends Controller
         $order->shipping_to = $request->shipping_to;
         $order->shipping_name = $request->shipping_name;
         $order->shipping_phone = $request->shipping_phone;
-        $order->shipping_address = $request->shipping_address;
+        $order->shipping_address = division_name($request->division_id ).district_name($request->district_id ).area_name($request->area_id ).', '.$request->shipping_address;
         $order->voucher = $request->voucher_code;
         $order->note = $request->note;
         $order->pending_date = Carbon::now()->format('Y-m-d');
@@ -256,8 +267,10 @@ class GuestCheckoutController extends Controller
             'sent' => $sentMessages + 1,
         ]);
         session()->forget('cart');
+
+        $search = '';
         Toastr::success('Order successfully done :-)','Success');
-        return view('customer.guest.successcheckout', compact('title', 'lan', 'p_cat_id'));
+        return view('customer.guest.successcheckout', compact('title', 'lan', 'p_cat_id', 'search', 'order_code'));
     }
     /**
      * Display the specified resource.

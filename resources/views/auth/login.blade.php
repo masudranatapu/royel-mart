@@ -5,6 +5,7 @@
 @endsection
     @php
         $website = App\Models\Website::latest()->first();
+        $search = '';
     @endphp
 @section('meta')
 
@@ -95,7 +96,7 @@
 								<label for="Remember">Remember me</label>
 							</div>
 							<div class="single">
-								<a href="{{ route('password.request') }}">Forget password ?</a>
+								<a href="{{ route('reset-password') }}">Forget password ?</a>
 							</div>
 						</div>
 						<button type="submit" class="submit-btn">Sign In</button>

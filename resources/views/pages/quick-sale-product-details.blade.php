@@ -61,6 +61,7 @@
 						<div class="col-lg-6 mb-2">
 							<form action="{{ route('addtocart.withSizeColorQuantity') }}" method="POST" id="cart_form">
                         		@csrf
+                        		<input type="hidden" value="{{csrf_token()}}" id="form_csrf_token">
                         		<input type="hidden" name="product_id" value="{{ $products->id }}" id="product_id">
 								<div class="product-info-area">
 									<h4 class="product-name">{{ $products->name }}</h4>
@@ -83,7 +84,12 @@
                                             </div>
                                         @endif
                                         <div class="category">
-                                            <label for="">Shipping Charge:</label><a href="javascript:;">৳ {{ $products->shipping_charge }}</a>
+                                            <label for="">Shipping Charge:</label>
+                                            <input type="hidden" value="{{ shipping_charge($products->id) }}" id="base_shipping_charge">
+                                            <input type="hidden" name="shipping_charge" value="{{ shipping_charge($products->id) }}" id="shipping_charge">
+                                            <a href="javascript:;" id="pro_shipping_charge">
+                                                {{ pro_shipping_charge($products->id) }}
+                                            </a>
                                         </div>
 									</div>
 									<div class="price">
@@ -169,7 +175,8 @@
 												<i class="bi bi-dash"></i>
 											</button>
 											<div class="input-wrapper">
-												<input type="number" name="quantity" value="1">
+                                                <input type="hidden" id="max_order_qty" value="{{ $products->max_order }}">
+												<input type="number" name="quantity" id="pro_quantity" value="1" min="1" max="{{ $products->max_order }}">
 											</div>
 											<button type="button" class="qty qty-plus">
 												<i class="bi bi-plus"></i>
@@ -196,9 +203,31 @@
 					<div class="row">
 						<div class="col-12">
 							<div class="policy-area">
+                                <div class="title-area">
+                                    <label for=""><i class="bi bi-geo-alt"></i>delivery To</label>
+                                </div>
+                                <div class="delivery-options text-wrap">
+                                    <div class="single-option">
+                                        <span class="icon">
+                                            {{-- <img loading="eager|lazy" src="{{asset('frontend/images/icons/door-to-door.png')}}" alt=""> --}}
+                                        </span>
+                                        <span class="text-wrap">
+                                            <span id="final_location">
+                                                @auth
+                                                    {{ division_name(Auth::user()->division_id) }}{{ district_name(Auth::user()->district_id) }}{{ area_name(Auth::user()->area_id) }}
+                                                @else
+                                                    {{ division_name(session()->get('division_id')) }}{{ district_name(session()->get('district_id')) }}{{ area_name(session()->get('area_id')) }}
+                                                @endauth
+                                            </span>
+                                            <a href="javascript:;" onclick="changeLocation()">Change</a>
+                                        </span>
+                                        @include('pages.partials.location-change-modal')
+                                    </div>
+                                </div>
+                                <div class="divider"></div>
                                 @if ($products->show_inside_delivery == '1' || $products->show_outside_delivery == '1')
                                     <div class="title-area">
-                                        <label for=""><i class="bi bi-geo-alt"></i>delivery</label>
+                                        <label for=""><i class="bi bi-truck"></i>delivery Process</label>
                                     </div>
                                     <div class="delivery-options text-wrap">
                                         @if($products->show_inside_delivery == '1')
@@ -298,6 +327,33 @@
                                         @endif
                                     </div>
                                 @endif
+
+                                @if($products->show_product_service == '1')
+                                    <div class="title-area">
+                                        <label for=""><i class="bi bi-credit-card-fill"></i>Service</label>
+                                    </div>
+                                    <div class="return-warranty text-wrap">
+                                        <div class="single-policy">
+                                            <span class="icon">
+                                                {{-- <img loading="eager|lazy" src="{{asset('frontend/images/icons/cash-on-delivery.png')}}" alt=""> --}}
+                                            </span>
+                                            <div class="wrapper">
+                                                @if ($products->product_service != NULL)
+                                                    @php
+                                                        $services = explode("|",$products->product_service);
+                                                    @endphp
+                                                    @foreach($services as $key=>$service)
+                                                        <span class="text-wrap">
+                                                            {{ $key+1 }}. {{ $service }}
+                                                        </span>
+                                                    @endforeach
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="divider"></div>
+                                @endif
+
 								{{-- <div class="divider"></div>
 								<div class="title-area">
 									<label for=""><span class="material-icons">share</span>Social Share</label>
@@ -514,8 +570,8 @@
                                         {{ review_image($review->id) }}
 									</div>
 
+                                    {{-- {{ replay_this_review($review->id) }} --}}
                                     @include('pages.partials.replay-review')
-
                                     @auth
                                         @if(Auth::check() && auth()->user()->role_id == 1)
                                             <div class="review-footer">
@@ -525,7 +581,6 @@
                                             </div>
                                         @endif
                                     @endauth
-
 								</div>
 							@endforeach
 						@endif
@@ -664,6 +719,99 @@
                     $('#cart_form').submit();
                 }
             }
+        }
+
+
+
+        function replayReview(review_id){
+            let popupSelector = document.querySelector('#add-review-popup');
+            popupSelector.classList.add('show');
+
+            var base_url = window.location.origin;
+            var url = base_url+"/replay-review/"+review_id;
+
+            $('#review_form').attr('action', url);
+        }
+
+        function changeLocation(){
+            $('#changeLocationModal').modal('show');
+        }
+
+        function closeChangeLocationModal(){
+            $('#changeLocationModal').modal('hide');
+        }
+
+        $('#division_id').on('change', function(){
+            var division_id = $(this).val();
+
+            $('#district_id').html('<option value="">Select One</option>');
+            $('#area_id').html('<option value="">Select One</option>');
+
+            $.ajax({
+                url: "{{ route('get-customer-district-by-division') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    division_id: division_id,
+                },
+                success:function(data) {
+                    $('#district_id').html(data);
+                },
+            });
+
+        });
+
+        $('#district_id').on('change', function(){
+            var district_id = $(this).val();
+
+            $('#area_id').html('<option value="">Select One</option>');
+
+            $.ajax({
+                url: "{{ route('get-customer-area-by-district') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    district_id: district_id,
+                },
+                success:function(data) {
+                    $('#area_id').html(data);
+                },
+            });
+
+        });
+
+        function changeLocationDone(){
+            var division_id = $('#division_id').val();
+            var district_id = $('#district_id').val();
+            var area_id = $('#area_id').val();
+
+            var product_id = $('#product_id').val();
+            var pro_quantity = $('#pro_quantity').val();
+
+            if(division_id == '' || district_id == '' || area_id == ''){
+                alert('Select propery location');
+            }
+
+            $.ajax({
+                url: "{{ route('get-customer-final-delivery-location') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    division_id: division_id,
+                    district_id: district_id,
+                    area_id: area_id,
+                    product_id: product_id,
+                    pro_quantity: pro_quantity,
+                },
+                success:function(data) {
+                    console.log(data);
+                    $('#final_location').html(data['html']);
+                    $('#base_shipping_charge').val(data['shipping_charge']);
+                    $('#shipping_charge').val(data['shipping_charge']);
+                    $('#pro_shipping_charge').html(data['shipping_charge_html']);
+                    $('#changeLocationModal').modal('hide');
+                },
+            });
         }
 	</script>
 @endpush

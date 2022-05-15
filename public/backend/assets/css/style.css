@@ -5257,7 +5257,7 @@ a[data-toggle="lightbox"] .img-fluid {
 }
 
 .m-0 {
-    margin: 0px
+    margin: 0px !important;
 }
 
 .m-5 {
@@ -12849,7 +12849,12 @@ body.menu-bottom #collapse-menu {
 }
 
 .form-group {
-    margin-bottom: 1.25em
+    margin-bottom: 1.25em;
+    text-align: left;
+}
+
+.form-group label{
+    font-weight: 700;
 }
 
 .form-group .form-control-lg {

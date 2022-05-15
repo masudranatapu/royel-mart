@@ -335,7 +335,7 @@
             </ul>
         </li>
 
-        <li class="pcoded-hasmenu {{ Request::is('admin/stock-report') ? 'pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/stock-report') || Request::is('admin/inventory') || Request::is('admin/expense-report') || Request::is('admin/expense-report-search') || Request::is('admin/sale-report') || Request::is('admin/sale-report-search') || Request::is('admin/purchase-report') || Request::is('admin/purchase-report-search') || Request::is('admin/balance-sheet-report') || Request::is('admin/balance-sheet-report-search') ? 'pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-check-circle"></i>
@@ -345,6 +345,16 @@
                 </span>
             </a>
             <ul class="pcoded-submenu">
+                <li class="{{ Request::is('admin/purchase-report') || Request::is('admin/purchase-report-search') ? 'active' : '' }}">
+                    <a href="{{ route('admin.purchase-report') }}">
+                        <span class="pcoded-mtext">Purchase</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/sale-report') || Request::is('admin/sale-report-search') ? 'active' : '' }}">
+                    <a href="{{ route('admin.sale-report') }}">
+                        <span class="pcoded-mtext">Sale</span>
+                    </a>
+                </li>
                 <li class="{{ Request::is('admin/stock-report') ? 'active' : '' }}">
                     <a href="{{ route('admin.stock-report') }}">
                         <span class="pcoded-mtext">Stock Report</span>
@@ -355,10 +365,20 @@
                         <span class="pcoded-mtext">Inventory</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('admin/expense-report') || Request::is('admin/expense-report-search') ? 'active' : '' }}">
+                    <a href="{{ route('admin.expense-report') }}">
+                        <span class="pcoded-mtext">Expense</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/balance-sheet-report') || Request::is('admin/balance-sheet-report-search') ? 'active' : '' }}">
+                    <a href="{{ route('admin.balance-sheet-report') }}">
+                        <span class="pcoded-mtext">Balance Sheet</span>
+                    </a>
+                </li>
             </ul>
         </li>
 
-        <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/system-setting') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') ? 'active pcoded-trigger' : '' }}">
+        <li class="pcoded-hasmenu {{ Request::is('admin/message') || Request::is('admin/system-setting') || Request::is('admin/contact-massage') || Request::is('admin/policy') || Request::is('admin/abouts') || Request::is('admin/website') || Request::is('admin/banner') || Request::is('admin/mission-vision') || Request::is('admin/happy-client') || Request::is('admin/slider') || Request::is('admin/payment-gateway') ? 'active pcoded-trigger' : '' }}">
             <a href="javascript:void(0)">
                 <span class="pcoded-micon">
                     <i class="feather icon-globe"></i>
@@ -404,6 +424,11 @@
                 <li class="{{ Request::is('admin/contact-massage')? 'active' : '' }}">
                     <a href="{{ route('admin.contact-massage') }}">
                         <span class="pcoded-mtext">Contact Massage</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('admin/payment-gateway') ? 'active' : '' }}">
+                    <a href="{{ route('admin.payment-gateway.index') }}">
+                        <span class="pcoded-mtext">Payment Gateway</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/system-setting') ? 'active' : '' }}">

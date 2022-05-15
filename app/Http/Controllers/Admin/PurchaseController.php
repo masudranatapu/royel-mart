@@ -34,6 +34,24 @@ class PurchaseController extends Controller
         return view('admin.stock.index', compact('title', 'purchases'));
     }
 
+    public function purchase_report()
+    {
+        $from = Carbon::parse(date('Y-m-d'))->format('Y-m-d 00:00:00');
+        $to = Carbon::parse(date('Y-m-d'))->format('Y-m-d 23:59:59');
+        $title = "Purchase Report";
+        $purchases = Purchases::whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.report.purchase', compact('title', 'from', 'to', 'purchases'));
+    }
+
+    public function purchase_report_search(Request $request)
+    {
+        $from = Carbon::parse($request->from)->format('Y-m-d 00:00:00');
+        $to = Carbon::parse($request->to)->format('Y-m-d 23:59:59');
+        $title = "Purchase Report";
+        $purchases = Purchases::whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.report.purchase', compact('title', 'from', 'to', 'purchases'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

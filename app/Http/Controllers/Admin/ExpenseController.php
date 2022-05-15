@@ -27,6 +27,24 @@ class ExpenseController extends Controller
         return view('admin.expense.index', compact('title', 'exp_cats', 'expenses'));
     }
 
+    public function expense_report()
+    {
+        $from = Carbon::parse(date('Y-m-d'))->format('Y-m-d 00:00:00');
+        $to = Carbon::parse(date('Y-m-d'))->format('Y-m-d 23:59:59');
+        $title = "Expense Report";
+        $expenses = Expense::whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.report.expense', compact('title', 'from', 'to', 'expenses'));
+    }
+
+    public function expense_report_search(Request $request)
+    {
+        $from = Carbon::parse($request->from)->format('Y-m-d 00:00:00');
+        $to = Carbon::parse($request->to)->format('Y-m-d 23:59:59');
+        $title = "Expense Report";
+        $expenses = Expense::whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.report.expense', compact('title', 'from', 'to', 'expenses'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

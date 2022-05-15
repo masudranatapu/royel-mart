@@ -3,20 +3,29 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
-use Auth;
 use App\Models\Contact;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
 
     public function index()
     {
-        //
+        // $cats = Category::get();
+        // foreach($cats as $cat){
+        //     $category = Category::find($cat->id);
+        //     $category->serial_number = NULL;
+        //     $category->parent_serial = NULL;
+        //     $category->child_serial = NULL;
+        //     $category->save();
+        // }
+
         $title = "Admin Dashboard";
         return view('admin.index', compact('title'));
     }
@@ -44,7 +53,7 @@ class DashboardController extends Controller
             $upload_path = 'media/profile/';
             $profile_image_url = $upload_path.$profile_image_name;
 
-            // unlink profile image 
+            // unlink profile image
             $image = User::findOrFail($id);
             if ($image->image) {
                 unlink($image->image);
@@ -55,7 +64,7 @@ class DashboardController extends Controller
             $image = User::findOrFail($id);
             $profile_image_url = $image->image;
         }
-        
+
         $coverImage = $request->file('cover_image');
         $slug_2 = "CoverImage";
         if (isset($coverImage)) {
@@ -64,7 +73,7 @@ class DashboardController extends Controller
             $upload_path = 'media/profile/';
             $coverImage_url = $upload_path.$coverImage_name;
 
-            // unlink profile image 
+            // unlink profile image
             $image = User::findOrFail($id);
             if ($image->cover_image) {
                 unlink($image->cover_image);
@@ -75,7 +84,7 @@ class DashboardController extends Controller
             $image = User::findOrFail($id);
             $coverImage_url = $image->cover_image;
         }
-        
+
         User::findOrFail($id)->update([
             'name' => $request->name,
             'email' => $request->email,
@@ -103,16 +112,16 @@ class DashboardController extends Controller
             $userData->password = Hash::make($request->password);
             $userData->save();
             Auth::logout();
-            
+
             Toastr::success('Your password updated successfully :-)','Success');
             return redirect()->route('login');
-            
+
         }else {
             Toastr::warning('something is worng. Please try agian :-)','warning');
             return redirect()->back();
         }
     }
-    
+
     public function contactMassage()
     {
         $title = "Contact Massage";

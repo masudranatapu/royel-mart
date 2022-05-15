@@ -17,7 +17,6 @@ class SliderController extends Controller
      */
     public function index()
     {
-        //
         $title = "Slider";
         $sliders = Slider::latest()->get();
         return view('admin.slider.index', compact('title', 'sliders'));
@@ -54,7 +53,7 @@ class SliderController extends Controller
         $slider_image->move($upload_path, $slider_image_name);
 
         $image_url = $upload_path.$slider_image_name;
-        
+
         Slider::insert([
             'link'=> $request->link,
             'image' => $image_url,
@@ -93,7 +92,7 @@ class SliderController extends Controller
         Toastr::info('Slider Successfully Inactive :-)','Success');
         return redirect()->back();
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -107,7 +106,7 @@ class SliderController extends Controller
        $this->validate($request, [
             'link' => 'required',
         ]);
-        
+
         $slider_image = $request->file('image');
         $slug = 'slider';
         if(isset($slider_image)) {
@@ -120,7 +119,7 @@ class SliderController extends Controller
                 unlink($sliderimage->image);
             }
             $image_url = $upload_path.$slider_image_name;
-            
+
             Slider::findOrFail($id)->update([
                 'link'=> $request->link,
                 'image' => $image_url,

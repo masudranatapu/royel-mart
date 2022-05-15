@@ -53,7 +53,7 @@ class DeliveryLocationController extends Controller
         $division_id = $request->division_id;
         $district_id = $request->district_id;
         $area_id = $request->area_id;
-        
+
         $area = Area::find($area_id);
 
         $product_id = $request->product_id;
@@ -123,6 +123,80 @@ class DeliveryLocationController extends Controller
         $html = division_name($division_id).district_name($district_id).area_name($area_id);
 
         return ['html' => $html, 'shipping_charge_html' => $shipping_charge_html, 'shipping_charge' => $shipping_charge];
+    }
+
+    public function location_set_for_checkout(Request $request)
+    {
+        $area_id = $request->area_id;
+        $area = Area::find($area_id);
+
+        $sub_total = 0;
+        $shipping_charge = 0;
+        $discount = 0;
+
+        if(session('cart')){
+            foreach(session('cart') as $product_id => $checkoutDetails){
+                $product = Product::find($product_id);
+                $sub_total += ($checkoutDetails['regular_price'] * $checkoutDetails['quantity']);
+                $pro_quantity = $checkoutDetails['quantity'];
+                $discount += $checkoutDetails['discount'];
+
+                $check_sh_variant = CategoryShippingChargeVariant::where('category_id', $product->category_id)->first();
+                if($product->free_shipping_charge == 1){
+                    if($area->is_inside == 0){
+
+                        if($check_sh_variant){
+                            $sp_charge = 0;
+                            $temp_sp_charge = $product->outside_shipping_charge * $pro_quantity;
+                            if($pro_quantity == 1){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_one_charge_variant)/100);
+                            }elseif($pro_quantity == 2){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_two_charge_variant)/100);
+                            }elseif($pro_quantity == 3){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_three_charge_variant)/100);
+                            }elseif($pro_quantity == 4){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_four_charge_variant)/100);
+                            }elseif($pro_quantity == 5){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_five_charge_variant)/100);
+                            }elseif($pro_quantity > 5){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_more_than_five_charge_variant)/100);
+                            }
+                        }else{
+                            $sp_charge = $product->outside_shipping_charge * $pro_quantity;
+                        }
+
+                        $shipping_charge += ($sp_charge);
+                    }else{
+                        $sp_charge = 0;
+                        if($check_sh_variant){
+                            $temp_sp_charge = $product->inside_shipping_charge * $pro_quantity;
+                            if($pro_quantity == 1){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_one_charge_variant)/100);
+                            }elseif($pro_quantity == 2){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_two_charge_variant)/100);
+                            }elseif($pro_quantity == 3){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_three_charge_variant)/100);
+                            }elseif($pro_quantity == 4){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_four_charge_variant)/100);
+                            }elseif($pro_quantity == 5){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_five_charge_variant)/100);
+                            }elseif($pro_quantity > 5){
+                                $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_more_than_five_charge_variant)/100);
+                            }
+                        }else{
+                            $sp_charge = $product->inside_shipping_charge * $pro_quantity;
+                        }
+
+                        $shipping_charge += ($sp_charge);
+                    }
+                }else{
+                    $shipping_charge += 0;
+                }
+            }
+        }
+
+        $total = ($sub_total + $shipping_charge) - $discount;
+        return ['total' => $total, 'shipping_charge' => $shipping_charge];
     }
 
     public function quantity_wise_shipping_charge_change(Request $request)

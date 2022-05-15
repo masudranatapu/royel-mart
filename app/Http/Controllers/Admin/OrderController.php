@@ -33,6 +33,24 @@ class OrderController extends Controller
         return view('admin.order.index',compact('title', 'orders'));
     }
 
+    public function sale_report()
+    {
+        $from = Carbon::parse(date('Y-m-d'))->format('Y-m-d 00:00:00');
+        $to = Carbon::parse(date('Y-m-d'))->format('Y-m-d 23:59:59');
+        $title = "Sale Report";
+        $sales = Order::where('status', '!=', 'Pending')->where('status', '!=', 'Canceled')->whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.report.sale', compact('title', 'from', 'to', 'sales'));
+    }
+
+    public function sale_report_search(Request $request)
+    {
+        $from = Carbon::parse($request->from)->format('Y-m-d 00:00:00');
+        $to = Carbon::parse($request->to)->format('Y-m-d 23:59:59');
+        $title = "Sale Report";
+        $sales = Order::where('status', '!=', 'Pending')->where('status', '!=', 'Canceled')->whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.report.sale', compact('title', 'from', 'to', 'sales'));
+    }
+
     public function show($id)
     {
         $title = "Order View";
@@ -206,8 +224,6 @@ class OrderController extends Controller
 
                 }
             }
-
-            // return "dfghdfg";
 
             Order::findOrFail($ordersId)->update([
                 'status' => 'Confirmed',

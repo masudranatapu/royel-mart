@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\SaleStock;
 use App\Models\Stock;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -497,7 +498,11 @@ function division_name($id)
     }else{
         $default_location = DefaultDeliveryLocation::latest()->first();
         $data = Division::find($default_location->division_id);
-        return $data->name.', ';
+        if($data){
+            return $data->name.', ';
+        }else{
+            return '';
+        }
     }
 }
 
@@ -509,7 +514,11 @@ function district_name($id)
     }else{
         $default_location = DefaultDeliveryLocation::latest()->first();
         $data = District::find($default_location->district_id);
-        return $data->name.', ';
+        if($data){
+            return $data->name.', ';
+        }else{
+            return '';
+        }
     }
 }
 
@@ -521,7 +530,11 @@ function area_name($id)
     }else{
         $default_location = DefaultDeliveryLocation::latest()->first();
         $data = Area::find($default_location->area_id);
-        return $data->name;
+        if($data){
+            return $data->name;
+        }else{
+            return '';
+        }
     }
 }
 
@@ -543,10 +556,14 @@ function pro_shipping_charge($id)
         }else{
             $default_location = DefaultDeliveryLocation::latest()->first();
             $area = Area::find($default_location->area_id);
-            if($area->is_inside == 0){
-                return '৳ '.$product->outside_shipping_charge;
+            if($area){
+                if($area->is_inside == 0){
+                    return '৳ '.$product->outside_shipping_charge;
+                }else{
+                    return '৳ '.$product->inside_shipping_charge;
+                }
             }else{
-                return '৳ '.$product->inside_shipping_charge;
+                return '৳ 0';
             }
         }
     }else{
@@ -572,14 +589,33 @@ function shipping_charge($id)
         }else{
             $default_location = DefaultDeliveryLocation::latest()->first();
             $area = Area::find($default_location->area_id);
-            if($area->is_inside == 0){
-                return $product->outside_shipping_charge;
+            if($area){
+                if($area->is_inside == 0){
+                    return $product->outside_shipping_charge;
+                }else{
+                    return $product->inside_shipping_charge;
+                }
             }else{
-                return $product->inside_shipping_charge;
+                return 0;
             }
         }
     }else{
         return 'Free';
     }
+}
+
+
+
+function purchase_price($order_code)
+{
+    $sale_stocks = SaleStock::where('order_code', $order_code)->get();
+    $total = 0;
+    if($sale_stocks->count() > 0){
+        foreach($sale_stocks as $stock){
+            $total += $stock->buying_price * $stock->quantity;
+        }
+    }
+
+    return $total;
 }
 

@@ -343,7 +343,7 @@
             var area_id = $(this).val();
 
             $.ajax({
-                url: "{{ route('get-customer-area-by-district') }}",
+                url: "{{ route('location-set-for-checkout') }}",
                 type:"POST",
                 data:{
                     _token: '{{csrf_token()}}',
@@ -351,6 +351,11 @@
                 },
                 success:function(data) {
                     console.log(data);
+                    $('#shipping_amount').val(data['shipping_charge']);
+                    $('#total').val(data['total']);
+
+                    $('#delivery_amount').html(data['shipping_charge']);
+                    $('#grand_total').html(data['total']);
                 },
             });
 

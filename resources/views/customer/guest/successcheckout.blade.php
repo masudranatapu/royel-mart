@@ -25,7 +25,7 @@
 					</div>
 					<h2 class="greeting-title">Success!</h2>
 					<p class="greeting-desc">
-                        Your Product successfully checkouted. Please check your sms for order code.
+                        Your Product successfully checkouted. #{{ $order_code }} is you order code and you can track you order by this code.
                     </p>
 					<a href="{{ route('home') }}" class="navigation-btn">Continue Shopping</a>
 				</div>

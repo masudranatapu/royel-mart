@@ -73,7 +73,7 @@
                                 <ul class="user-nav">
                                     @auth
                                         @if(Auth::check() && auth()->user()->role_id == 1)
-                                            <li><a href="{{ route('admin.dashboard') }}" target="_blank">My Account</a></li>
+                                            <li><a href="{{ route('admin.dashboard') }}" target="_blank">Dashboard</a></li>
                                             <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                                 @csrf
@@ -81,11 +81,7 @@
                                         @endif
                                         @if(Auth::check() && auth()->user()->role_id == 2)
                                             <li><a href="{{ route('customer.information') }}">My Account</a></li>
-                                            <li><a href="#">My Orders</a></li>
-                                            <li><a href="#">My List</a></li>
-                                            <li><a href="#">My Wishlist</a></li>
-                                            <li><a href="#">My Rating Reviews</a></li>
-                                            <li><a href="#">My Points</a></li>
+                                            <li><a href="{{ route('customer.order') }}">My Orders</a></li>
                                             <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                                 @csrf

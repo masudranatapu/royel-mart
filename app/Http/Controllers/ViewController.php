@@ -84,8 +84,22 @@ class ViewController extends Controller
         $twoStarReviews = Review::where('product_id', $products->id)->where('rating', 2)->latest()->get();
         $oneStarReviews = Review::where('product_id', $products->id)->where('rating', 1)->latest()->get();
 
+        if(Auth::user()){
+            $division_id = Auth::user()->division_id;
+            $district_id = Auth::user()->district_id;
+            $area_id = Auth::user()->area_id;
+        }else{
+            $division_id = session()->get('division_id');
+            $district_id = session()->get('district_id');
+            $area_id = session()->get('area_id');
+        }
+
+        $divisions = Division::get();
+        $districts = District::where('division_id', $division_id)->get();
+        $areas = Area::where('district_id', $district_id)->get();
+
         $search = '';
-        return view('pages.quick-sale-product-details', compact('title', 'search', 'lan', 'p_cat_id', 'products', 'quick_sale', 'quick_sale_product', 'colors', 'relatedProducts', 'latestproducts', 'productsunits', 'reviews', 'fiveStarReviews', 'fourStarReviews', 'threeStarReviews', 'twoStarReviews', 'oneStarReviews'));
+        return view('pages.quick-sale-product-details', compact('title', 'search', 'lan', 'p_cat_id', 'products', 'quick_sale', 'quick_sale_product', 'colors', 'relatedProducts', 'latestproducts', 'productsunits', 'reviews', 'fiveStarReviews', 'fourStarReviews', 'threeStarReviews', 'twoStarReviews', 'oneStarReviews', 'division_id', 'district_id', 'area_id', 'districts', 'divisions', 'areas'));
     }
 
 
@@ -133,8 +147,33 @@ class ViewController extends Controller
         }
 
         $latestproducts = Product::latest()->limit(5)->get();
+
         $products = Product::where('category_id', $category->id)->latest()->limit(20)->get();
-        // $products = Product::where('category_id', $category->id)->latest()->paginate(20);
+        if($products->count() <= 0){
+            if($category->parent_id == '' && $category->child_id == ''){
+                $all_category = Category::where('parent_id',$cat_id)->orderBy('parent_serial','ASC')->get();
+
+                $products=Product::where(function ($q) use ($all_category) {
+                    foreach ($all_category as $category) {
+                        $q->orWhere('category_id',$category->id);
+
+                        $all_category = Category::where('child_id',$category->id)->orderBy('child_serial','ASC')->get();
+                        foreach ($all_category as $category) {
+                            $q->orWhere('category_id', $category->id);
+                        }
+
+                    }
+                })->latest()->limit(20)->get();
+            }else if($category->parent_id != '' && $category->child_id == ''){
+                $all_category = Category::where('child_id', $cat_id)->orderBy('child_serial','ASC')->get();
+
+                $products=Product::where(function ($q) use ($all_category) {
+                    foreach ($all_category as $category) {
+                        $q->orWhere('category_id', $category->id);
+                    }
+                })->latest()->limit(20)->get();
+            }
+        }
 
         $colors = Color::all();
         $color_id = '';
@@ -235,13 +274,14 @@ class ViewController extends Controller
         $lan = $request->session()->get('lan');
         $last_id = '';
         $cat_id = $request->cat_id;
+        $filter_product_limit = $request->filter_product_limit;
         $filter_high_low_price = $request->filter_high_low_price;
         if($filter_high_low_price == 'latest'){
-            $products = Product::where('category_id', $cat_id)->latest()->limit(20)->get();
+            $products = Product::where('category_id', $cat_id)->latest()->limit($filter_product_limit)->get();
         }elseif($filter_high_low_price == 'low'){
-            $products = Product::where('category_id', $cat_id)->orderBy('sale_price', 'ASC')->latest()->limit(20)->get();
+            $products = Product::where('category_id', $cat_id)->orderBy('sale_price', 'ASC')->latest()->limit($filter_product_limit)->get();
         }else{
-            $products = Product::where('category_id', $cat_id)->orderBy('sale_price', 'DESC')->latest()->limit(20)->get();
+            $products = Product::where('category_id', $cat_id)->orderBy('sale_price', 'DESC')->latest()->limit($filter_product_limit)->get();
         }
         $html = '';
         if($products->count() > 0){
@@ -317,7 +357,14 @@ class ViewController extends Controller
         $last_id = '';
         $cat_id = $request->cat_id;
         $filter_product_limit = $request->filter_product_limit;
-        $products = Product::where('category_id', $cat_id)->latest()->limit($filter_product_limit)->get();
+        $filter_high_low_price = $request->filter_high_low_price;
+        if($filter_high_low_price == 'latest'){
+            $products = Product::where('category_id', $cat_id)->latest()->limit($filter_product_limit)->get();
+        }elseif($filter_high_low_price == 'low'){
+            $products = Product::where('category_id', $cat_id)->orderBy('sale_price', 'ASC')->latest()->limit($filter_product_limit)->get();
+        }else{
+            $products = Product::where('category_id', $cat_id)->orderBy('sale_price', 'DESC')->latest()->limit($filter_product_limit)->get();
+        }
         $html = '';
         if($products->count() > 0){
             foreach($products as $product){

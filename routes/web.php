@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DeliveryLocationController;
 // admin controller
@@ -41,6 +42,8 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ExpenseCategoryController;
 use App\Http\Controllers\Admin\ExpenseController;
+use App\Http\Controllers\Admin\BalanceSheetController;
+use App\Http\Controllers\Admin\PaymentGatewayController;
 
 // customer controller
 use App\Http\Controllers\Customer\InformationController;
@@ -70,6 +73,20 @@ use App\Http\Controllers\ProductReviewController;
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('language-change', [HomeController::class, 'language_change'])->name('language-change');
+
+// SSLCOMMERZ Start
+Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+//SSLCOMMERZ END
 
 Auth::routes();
 Route::get('/auth/redirect/{provider}', [AuthController::class, 'redirect']);
@@ -126,7 +143,9 @@ Route::post('customer-register-confirm', [RegisterController::class, 'customerRe
 Route::get('customer-otp-send', [RegisterController::class, 'customerOtpSend'])->name('customer.otp.send');
 Route::post('customer-otp-check', [RegisterController::class, 'customerOtpCheck'])->name('customer.otp.check');
 Route::get('customer-otp-resend', [RegisterController::class, 'customerOtpResend'])->name('customer.otp.resend');
+Route::get('register-final-step', [RegisterController::class, 'register_final_step'])->name('register-final-step');
 Route::post('customer-info-save', [RegisterController::class, 'customerInfoSave'])->name('customer.info.save');
+
 // order track my order
 Route::get('tracking-order', [TrackingOrderController::class, 'trackingOrder'])->name('track.my.order');
 Route::get('tracking-order-view', [TrackingOrderController::class, 'trackingorderView'])->name('trackingorder.view');
@@ -142,8 +161,16 @@ Route::post('custom-order-submit', [CustomOrderController::class, 'store'])->nam
 Route::post('get-customer-district-by-division', [DeliveryLocationController::class, 'get_district'])->name('get-customer-district-by-division');
 Route::post('get-customer-area-by-district', [DeliveryLocationController::class, 'get_area'])->name('get-customer-area-by-district');
 Route::post('get-customer-final-delivery-location', [DeliveryLocationController::class, 'get_final_delivery_location'])->name('get-customer-final-delivery-location');
+Route::post('location-set-for-checkout', [DeliveryLocationController::class, 'location_set_for_checkout'])->name('location-set-for-checkout');
 Route::post('/quantity-wise-shipping-charge-change', [DeliveryLocationController::class, 'quantity_wise_shipping_charge_change']);
 
+// For recover password----------------
+Route::get('reset-password', [PasswordResetController::class, 'reset_password'])->name('reset-password');
+Route::post('otp-send-for-password-reset', [PasswordResetController::class, 'otp_send_for_password_reset'])->name('otp-send-for-password-reset');
+Route::get('otp-send-for-password-reset', [PasswordResetController::class, 'otp_send_for_reset'])->name('otp-send-for-password-reset');
+Route::post('recovery-otp-resend', [PasswordResetController::class, 'otp_resend_for_reset'])->name('recovery-otp-resend');
+Route::post('recovery-otp-check', [PasswordResetController::class, 'recovery_otp_check'])->name('recovery-otp-check');
+Route::post('password-recovery-done', [PasswordResetController::class, 'password_recovery_done'])->name('password-recovery-done');
 
 // admin routes
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'admin']], function () {
@@ -235,6 +262,14 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     // report---------------------
     Route::get('stock-report', [StockController::class, 'stock_report'])->name('stock-report');
     Route::get('inventory', [StockController::class, 'inventory'])->name('inventory');
+    Route::get('expense-report', [ExpenseController::class, 'expense_report'])->name('expense-report');
+    Route::get('expense-report-search', [ExpenseController::class, 'expense_report_search'])->name('expense-report-search');
+    Route::get('purchase-report', [PurchaseController::class, 'purchase_report'])->name('purchase-report');
+    Route::get('purchase-report-search', [PurchaseController::class, 'purchase_report_search'])->name('purchase-report-search');
+    Route::get('sale-report', [OrderController::class, 'sale_report'])->name('sale-report');
+    Route::get('sale-report-search', [OrderController::class, 'sale_report_search'])->name('sale-report-search');
+    Route::get('balance-sheet-report', [BalanceSheetController::class, 'balance_sheet_report'])->name('balance-sheet-report');
+    Route::get('balance-sheet-report-search', [BalanceSheetController::class, 'balance_sheet_report_search'])->name('balance-sheet-report-search');
 
     Route::post('add-product-for-purchase', [PurchaseController::class, 'add_product_for_purchase'])->name('add-product-for-purchase');
     Route::post('store-product-for-purchase', [PurchaseController::class, 'store'])->name('store-product-for-purchase');
@@ -282,6 +317,11 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => ['auth', 'a
     // Expense category routes
     Route::resource('expense-category', ExpenseCategoryController::class);
     Route::resource('expense', ExpenseController::class);
+
+    // Payment gateway routes-----------
+    Route::resource('payment-gateway', PaymentGatewayController::class);
+    Route::get('payment-gateway-active/{id}', [PaymentGatewayController::class, 'payment_gateway_active'])->name('payment-gateway-active');
+    Route::get('payment-gateway-inactive/{id}', [PaymentGatewayController::class, 'payment_gateway_inactive'])->name('payment-gateway-inactive');
 
     // Orders
     Route::resource('orders', OrderController::class);

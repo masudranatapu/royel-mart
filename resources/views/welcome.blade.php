@@ -83,7 +83,7 @@
             <div class="inner-sendlist-featuredbanner">
                 <div class="banners-area">
                     <div class="row">
-                        <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
+                        <div class="col-lg-3 col-12 px-1 mb-lg-0 mb-2 single">
                             <div class="sendlist-area">
                                 <div class="sendlist">
                                     <div class="icon">
@@ -386,7 +386,7 @@
             </div>
         </section>
     @endif
-    
+
     <!-- End All Products -->
     <section class="mission-vision-section pt-20">
         <div class="container-fluid">

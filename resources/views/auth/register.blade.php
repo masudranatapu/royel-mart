@@ -5,6 +5,7 @@
 @endsection
     @php
         $website = App\Models\Website::latest()->first();
+        $search = '';
     @endphp
 @section('meta')
 

@@ -5,6 +5,7 @@
 @endsection
     @php
         $website = App\Models\Website::latest()->first();
+        $search = '';
     @endphp
 @section('meta')
 
@@ -95,6 +96,34 @@
 						<div class="single-input">
 							<input class="form-control" readonly type="number" name="phone" value="{{ $getPhone }}">
 						</div>
+
+                        <div class="form-group mb-3">
+                            <select name="division_id" id="division_id" required class="form-control select2">
+                                <option value="" disabled selected>Select One</option>
+                                @foreach($divisions as $division)
+                                    <option value="{{$division->id}}" @if($division->id == $division_id) selected @endif>{{$division->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <select name="district_id" id="district_id" required class="form-control select2">
+                                <option value="">Select One</option>
+                                @foreach($districts as $district)
+                                    <option value="{{$district->id}}" @if($district->id == $district_id) selected @endif>{{$district->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <select name="area_id" id="area_id" required class="form-control select2">
+                                <option value="">Select One</option>
+                                @foreach($areas as $area)
+                                    <option value="{{$area->id}}" @if($area->id == $area_id) selected @endif>{{$area->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 						<div class="single-input">
 							<input class="form-control" readonly type="text" name="address" value="{{ $getAddress }}">
 						</div>
@@ -121,7 +150,7 @@
 							</div>
 						</div>
 						<div class="signup-option">
-							<label for="">Already have an account? <a href="{{ route('login') }}">Login</a></label>							
+							<label for="">Already have an account? <a href="{{ route('login') }}">Login</a></label>
 						</div>
 					</form>
 				</div>
@@ -132,5 +161,44 @@
 @endsection
 
 @push('js')
+    <script>
+        $('#division_id').on('change', function(){
+            var division_id = $(this).val();
 
+            $('#district_id').html('<option value="">Select One</option>');
+            $('#area_id').html('<option value="">Select One</option>');
+
+            $.ajax({
+                url: "{{ route('get-customer-district-by-division') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    division_id: division_id,
+                },
+                success:function(data) {
+                    $('#district_id').html(data);
+                },
+            });
+
+        });
+
+        $('#district_id').on('change', function(){
+            var district_id = $(this).val();
+
+            $('#area_id').html('<option value="">Select One</option>');
+
+            $.ajax({
+                url: "{{ route('get-customer-area-by-district') }}",
+                type:"POST",
+                data:{
+                    _token: '{{csrf_token()}}',
+                    district_id: district_id,
+                },
+                success:function(data) {
+                    $('#area_id').html(data);
+                },
+            });
+
+        });
+    </script>
 @endpush
