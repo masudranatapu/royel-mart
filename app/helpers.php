@@ -1,19 +1,25 @@
 <?php
 
 use App\Models\Area;
+use App\Models\Category;
+use App\Models\Client;
 use App\Models\DefaultDeliveryLocation;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\ExpenseCategory;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\Policy;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\SaleStock;
 use App\Models\Stock;
 use App\Models\User;
+use App\Models\Website;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 function total_review($product_id)
 {
@@ -617,5 +623,124 @@ function purchase_price($order_code)
     }
 
     return $total;
+}
+
+function clients(){
+    $clients = Client::latest()->get();
+    $html = '';
+
+    foreach($clients as $client){
+        $html .= '<li><img src="'.asset($client->image).'" alt=""></li>';
+    }
+
+    echo $html;
+}
+
+function site_policy(){
+    $policies = Policy::where('status', 1)->latest()->limit(4)->get();
+    $html = '';
+
+    foreach($policies as $policy){
+        $html .= '<li><a href="'.route('policy', $policy->slug).'">'.$policy->name.'</a></li>';
+    }
+
+    echo $html;
+}
+
+function site_icon(){
+    $website = Website::latest()->first();
+    $icon = explode("|", $website->icon);
+    $link = explode("|", $website->link);
+
+    $html = '';
+
+    foreach($icon as $key=>$icon){
+        $html .= '<li  class="'.$icon.'"><a target="blank" href="';
+                    if(isset($link[$key])){
+                        $html .= ' '.$link[$key].' ';
+                    }
+        $html .= ' "><i class="fa fa-'.$icon.'"></i></a></li>';
+    }
+
+    echo $html;
+}
+
+function site_logo(){
+    $website = Website::latest()->first();
+
+    $html = '';
+
+    $html .= ' <img  loading="eager|lazy" src=" ';
+            if($website->logo){
+                $html .= ''.asset($website->logo).'';
+            }else{
+                $html .= ''.asset('frontend/images/logo/logo.png').'';
+            }
+    $html .= '  "  alt="">';
+
+    echo $html;
+}
+
+function site_phone(){
+    $website = Website::latest()->first();
+
+    echo $website->phone;
+}
+
+function site_email(){
+    $website = Website::latest()->first();
+
+    echo $website->email;
+}
+
+function site_address(){
+    $website = Website::latest()->first();
+
+    echo $website->address;
+}
+
+function main_categories(){
+    return Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', 0)->where('status', 1)->orderBy('serial_number', 'asc')->limit(18)->get();
+}
+
+function parent_categories($category_id){
+    return Category::where('parent_id', $category_id)->where('child_id', NULL)->orderBy('parent_serial', 'asc')->get();
+}
+
+function child_categories($category_id){
+    return Category::where('child_id', $category_id)->orderBy('child_serial', 'asc')->get();
+}
+
+function language_convert($data){
+    // $lan = session()->get('lan');
+    // echo GoogleTranslate::trans($data, $lan, 'en');
+
+    echo $data;
+}
+
+function change_date_format($data){
+    echo Carbon::parse($data)->format('Y/m/d');
+}
+
+function category_breadcrumb_title($p_cat_id){
+    $html = '';
+    $check_cat = Category::find($p_cat_id);
+    if ($check_cat){
+        if ($check_cat->parent_id != NULL){
+            $b_cat = Category::find($check_cat->parent_id);
+            if ($b_cat){
+                $html .= '<li><a href="'. route('category', $b_cat->slug) .'">'. language_convert($b_cat->name) .'</a></li>';
+            }
+        }
+
+        if ($check_cat->child_id != NULL){
+            $b_cat = Category::find($check_cat->child_id);
+            if ($b_cat){
+                $html .= '<li><a href="'. route('category', $b_cat->slug) .'">'. language_convert($b_cat->name) .'</a></li>';
+            }
+        }
+    }
+
+    echo $html;
 }
 

@@ -90,7 +90,7 @@
                         </button>
 					</div>
 					<div class="verify-codes">
-						<input type="text" name="code_one" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
+						<input type="text" name="code_one" maxlength="1" size="1" min="0" max="9" autofocus pattern="[0-9]{1}">
 						<input type="text" name="code_tow" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
 						<input type="text" name="code_three" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">
 						<input type="text" name="code_four" maxlength="1" size="1" min="0" max="9" pattern="[0-9]{1}">

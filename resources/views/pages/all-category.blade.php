@@ -32,7 +32,7 @@
                                 </div>
                                 <h4 class="category-name">
                                     <a href="{{ route('category', $category->slug) }}">
-                                        {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($category->name, $lan, 'en') }}
+                                        {{ language_convert($category->name) }}
                                     </a>
                                 </h4>
                             </div>

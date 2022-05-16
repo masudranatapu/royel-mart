@@ -34,7 +34,7 @@
 
                                         <h3 class="product-name">
                                             <a href="{{ route('quick-sale-product-details', [$quick_sale->slug, $qs_product->product->slug]) }}">
-                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($qs_product->product->name, $lan, 'en') }}
+                                                {{ language_convert($qs_product->product->name) }}
                                             </a>
                                         </h3>
                                         <div class="price-cart">
@@ -89,7 +89,7 @@
                                             </div>
                                             <a class="cart-btn" href="{{ route('quick-sale-product-details', [$quick_sale->slug, $qs_product->product->slug]) }}">
                                                 <i class="bi bi-cart-plus"></i>
-                                                {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
+                                                {{ language_convert('Shop') }}
                                             </a>
                                         </div>
                                     </div>

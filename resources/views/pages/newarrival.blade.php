@@ -33,7 +33,9 @@
                                         {{ product_review($product->id) }}
 
                                         <h3 class="product-name">
-                                            <a href="{{ route('productdetails', $product->slug) }}">{{ $product->name }}</a>
+                                            <a href="{{ route('productdetails', $product->slug) }}">
+                                                {{ language_convert($product->name) }}
+                                            </a>
                                         </h3>
                                         <div class="price-cart">
                                             <div class="product-price">
@@ -47,7 +49,7 @@
                                             </div>
                                             <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
                                                 <i class="bi bi-cart-plus"></i>
-                                                Shop
+                                                {{ language_convert('Shop') }}
                                             </a>
                                         </div>
                                     </div>

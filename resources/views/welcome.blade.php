@@ -19,35 +19,26 @@
                 <div class="col-12 px-1">
                     <div class="inner-category-slider">
 						<div class="category-area checknav">
-                            @php
-                                $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('is_default', 0)->where('status', 1)->orderBy('serial_number', 'ASC')->limit(18)->get();
-                            @endphp
 							<ul class="category-list">
-                                @foreach($categories as $category)
-                                    @php
-                                        $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('parent_serial', 'ASC')->get();
-                                    @endphp
-                                    <li class="@if($parentcategories->count() > 0) has-sub @endif">
+                                @foreach(main_categories() as $category)
+                                    <li class="@if(parent_categories($category->id)->count() > 0) has-sub @endif">
                                         <a href="{{ route('category', $category->slug) }}">
                                             <img loading="eager|lazy" src="@if(file_exists($category->image)) {{ asset($category->image) }} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="Cat">
-                                            {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($category->name, $lan, 'en') }}
+                                            {{ language_convert($category->name) }}
                                         </a>
-                                        @if($parentcategories->count() > 0)
+                                        @if(parent_categories($category->id)->count() > 0)
                                             <ul>
-                                                @foreach($parentcategories as $parentcategory)
-                                                    @php
-                                                        $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->orderBy('child_serial', 'ASC')->get();
-                                                    @endphp
-                                                    <li @if($parentcategories->count() > 0) has-sub @endif>
+                                                @foreach(parent_categories($category->id) as $parentcategory)
+                                                    <li @if(parent_categories($category->id)->count() > 0) has-sub @endif>
                                                         <a href="{{ route('category', $parentcategory->slug) }}">
-                                                            {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($parentcategory->name, $lan, 'en') }}
+                                                            {{ language_convert($parentcategory->name) }}
                                                         </a>
-                                                        @if($childcategories->count() > 0)
+                                                        @if(child_categories($parentcategory->id)->count() > 0)
                                                             <ul>
-                                                                @foreach($childcategories as $childcategory)
+                                                                @foreach(child_categories($parentcategory->id) as $childcategory)
                                                                     <li>
                                                                         <a href="{{ route('category', $childcategory->slug) }}">
-                                                                            {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($childcategory->name, $lan, 'en') }}
+                                                                            {{ language_convert($childcategory->name) }}
                                                                         </a>
                                                                     </li>
                                                                 @endforeach
@@ -130,7 +121,7 @@
                     <div class="countdown-area">
                         <label class="me-4 d-lg-block d-none" for="">on sale now</label>
                         <label class="me-2" for="">ending in </label>
-                        <div class="countdown" data-time="{{ \Carbon\Carbon::parse($quick_sale->end_date_time)->format('Y/m/d')}}"></div>
+                        <div class="countdown" data-time="{{ change_date_format($quick_sale->end_date_time) }}"></div>
                     </div>
                     <div class="button-area">
                         <a href="{{ route('more-quick-sale-product', $quick_sale->slug) }}">shop more </a>
@@ -155,7 +146,7 @@
 
                                             <h3 class="product-name">
                                                 <a href="{{ route('quick-sale-product-details', [$quick_sale->slug, $qs_product->product->slug]) }}">
-                                                    {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($qs_product->product->name, $lan, 'en') }}
+                                                    {{ language_convert($qs_product->product->name) }}
                                                 </a>
                                             </h3>
                                             <div class="price-cart">
@@ -210,7 +201,7 @@
                                                 </div>
                                                 <a class="cart-btn" href="{{ route('quick-sale-product-details', [$quick_sale->slug, $qs_product->product->slug]) }}">
 													<i class="bi bi-cart-plus"></i>
-                                                    {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
+                                                    {{ language_convert('Shop') }}
 												</a>
                                             </div>
                                         </div>
@@ -230,14 +221,11 @@
         <div class="container-fluid">
             <div class="heading-area">
                 <h1 class="heading">Category</h1>
-                {{-- <div class="button-area">
-                    <a href="{{ route('all-category') }}">See More</a>
-                </div> --}}
             </div>
             <!-- End Heading Area -->
             <div class="categories-area">
                 <div class="row">
-                    @foreach($categories as $category)
+                    @foreach(main_categories() as $category)
                         <div class="col-xl-2 col-lg-3 col-md-3 col-4 mb-3">
                             <div class="single-category">
                                 <div class="icon">
@@ -247,7 +235,7 @@
                                 </div>
                                 <h4 class="category-name">
                                     <a href="{{ route('more-category', $category->slug) }}">
-                                        {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($category->name, $lan, 'en') }}
+                                        {{ language_convert($category->name) }}
                                     </a>
                                 </h4>
                             </div>
@@ -264,11 +252,11 @@
             <div class="container-fluid">
                 <div class="heading-area">
                     <h1 class="heading">
-                        {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('New Arrival', $lan, 'en') }}
+                        {{ language_convert('New Arrival') }}
                         </h1>
                     <div class="button-area">
                         <a href="{{ route('arrival') }}">
-                            {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('See More', $lan, 'en') }}
+                            {{ language_convert('See More') }}
                         </a>
                     </div>
                 </div>
@@ -290,7 +278,7 @@
 
                                             <h3 class="product-name">
                                                 <a href="{{ route('productdetails', $product->slug) }}">
-                                                    {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($product->name, $lan, 'en') }}
+                                                    {{ language_convert($product->name) }}
                                                 </a>
                                             </h3>
                                             <div class="price-cart">
@@ -305,7 +293,7 @@
                                                 </div>
                                                 <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
 													<i class="bi bi-cart-plus"></i>
-                                                    {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
+                                                    {{ language_convert('Shop') }}
 												</a>
                                             </div>
                                         </div>
@@ -324,13 +312,12 @@
         <section class="all-products-section pt-2">
             <div class="container-fluid">
                 <div class="heading-area">
-                    <!-- <h1 class="heading">Only for You</h1> -->
                     <h1 class="heading">
-                        {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Only For You', $lan, 'en') }}
+                        {{ language_convert('Only For You') }}
                     </h1>
                     <div class="button-area">
                         <a href="{{ route('allproduct') }}">
-                            {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('See More', $lan, 'en') }}
+                            {{ language_convert('See More') }}
                         </a>
                     </div>
                 </div>
@@ -353,7 +340,7 @@
 
                                             <h3 class="product-name">
                                                 <a href="{{ route('productdetails', $product->slug) }}">
-                                                    {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($product->name, $lan, 'en') }}
+                                                    {{ language_convert($product->name) }}
                                                 </a>
                                             </h3>
                                             <div class="price-cart">
@@ -368,7 +355,7 @@
                                                 </div>
                                                 <a class="cart-btn" href="{{ route('productdetails', $product->slug) }}">
 													<i class="bi bi-cart-plus"></i>
-                                                    {{ Stichoza\GoogleTranslate\GoogleTranslate::trans('Shop', $lan, 'en') }}
+                                                    {{ language_convert('Shop') }}
 												</a>
                                             </div>
                                         </div>

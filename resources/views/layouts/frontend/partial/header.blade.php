@@ -1,6 +1,4 @@
 @php
-    $website = App\Models\Website::latest()->first();
-    $policies = App\Models\Policy::where('status', 1)->oldest()->limit(4)->get();
     $lan = session()->get('lan');
 @endphp
 <header>
@@ -11,29 +9,21 @@
                     <ul class="list">
                         <li><a href="{{ route('language-change',['lan'=>'en']) }}">EN</a></li>
                         <li><a href="{{ route('language-change',['lan'=>'bn']) }}">BN </a></li>
-                        <li><a href="tel: (+88) {{ $website->phone }}"><span class="material-icons-outlined">call</span>(+88) {{ Stichoza\GoogleTranslate\GoogleTranslate::trans($website->phone, $lan, 'en') }}</a></li>
+                        <li><a href="tel: (+88) {{ site_phone() }}"><span class="material-icons-outlined">call</span>(+88) {{ site_phone() }}</a></li>
                     </ul>
                 </div>
                 <div class="right-area">
                     <ul class="list">
-                        @foreach($policies as $policy)
-                            <li><a href="{{ route('policy', $policy->slug) }}">{{ $policy->name }}</a></li>
-                        @endforeach
+                        {{ site_policy() }}
                         <li><a href="{{ route('track.my.order') }}">track my order</a></li>
                         <li><a href="{{ route('contact') }}">contact us</a></li>
                     </ul>
                     <ul class="social-list">
-                        @php
-                            $icon = explode("|", $website->icon);
-                            $link = explode("|", $website->link);
-                        @endphp
-                        @foreach($icon as $key=>$icon)
-                            <li><a target="blank" href="@if(isset($link[$key])){{$link[$key]}}@endif"><i class="fa fa-{{$icon}}"></i></a></li>
-                        @endforeach
+                        {{ site_icon() }}
                     </ul>
                     <ul class="download-area">
                         <li>
-                            <a href="#">
+                            <a href="{{ asset('image/royalmart.apk') }}">
                                 <i class="ri-download-2-fill"></i>
                                 download app
                             </a>
@@ -49,10 +39,10 @@
         <div class="container-fluid">
             <div class="inner-header-bottom">
                 <div class="logo-area">
-                    <button class="privacy-trigger"><span class="material-icons">reorder</span></button>
+                    <button class="privacy-trigger"><span class="material-icons">menu</span></button>
                     <div class="logo">
                         <a href="{{ route('home') }}">
-                            <img loading="eager|lazy" src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt="">
+                            {{ site_logo() }}
                         </a>
                     </div>
                 </div>

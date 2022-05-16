@@ -76,6 +76,9 @@
 				</div>
 				<div class="filter-area">
 					<ul class="filter-items">
+						<li class="sidebar-toggler">
+							<a class="sidebar-toggler" href="#"><i class="bi bi-toggles"></i></a>
+						</li>
 						<li>
 							<select class="form-select" aria-label="Default select" id="filter_high_low_price" onchange="filterByHighLow()">
 							    <option value="latest" selected>Latest</option>

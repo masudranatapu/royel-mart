@@ -1,8 +1,3 @@
-@php
-    $website = App\Models\Website::latest()->first();
-    $clients = App\Models\Client::latest()->get();
-    $policies = App\Models\Policy::where('status', 1)->latest()->limit(4)->get();
-@endphp
 <section class="informations-section padding-20-20">
     <div class="container-fluid">
         <div class="row justify-content-between">
@@ -18,9 +13,7 @@
                 <div class="single-info">
                     <h4 class="title text-center">client slide set</h4>
                     <ul class="client-carousel owl-carousel">
-                        @foreach($clients as $client)
-                            <li><img src="{{ asset($client->image) }}" alt=""></li>
-                        @endforeach
+                        {{ clients() }}
                     </ul>
                 </div>
             </div>
@@ -28,13 +21,7 @@
                 <div class="single-info">
                     <h4 class="title">Social Link</h4>
                     <ul class="social">
-                        @php
-                            $icon = explode("|",$website->icon);
-                            $link = explode("|",$website->link);
-                        @endphp
-                        @foreach($icon as $key=>$icon)
-                            <li class="{{$icon}}"><a href="@if(isset($link[$key])){{$link[$key]}}@endif"><i class="fa fa-{{$icon}}"></i></a></li>
-                        @endforeach
+                        {{ site_icon() }}
                     </ul>
                 </div>
             </div>
@@ -52,9 +39,9 @@
                         <a href="{{ route('home') }}"><img src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt=""></a>
                     </div>
                     <p class="footer-contact">
-                        <span class="d-block">Address : {{ $website->address }}</span>
-                        <span class="d-block">Email: {{ $website->email }}</span>
-                        <span class="d-block">Contact no: {{ $website->phone }}</span>
+                        <span class="d-block">Address : {{ site_address() }}</span>
+                        <span class="d-block">Email: {{ site_email() }}</span>
+                        <span class="d-block">Contact no: {{ site_phone() }}</span>
                     </p>
                 </div>
                 <div class="col-lg-2 col-md-3 col-6 mb-lg-0 mb-sm-4 mb-3">
@@ -69,9 +56,7 @@
                     <h3 class="footer-title">our services</h3>
                     <ul class="footer-links">
                         <li><a href="{{ route('about') }}">about us</a></li>
-                        @foreach($policies as $policy)
-                            <li><a href="{{ route('policy', $policy->slug) }}">{{ $policy->name }}</a></li>
-                        @endforeach
+                        {{ site_policy() }}
                     </ul>
                 </div>
                 <div class="col-lg-4 col-md-4 col-6 mb-lg-0 mb-sm-4 mb-3">
@@ -81,7 +66,7 @@
                             <img src="{{asset('frontend/images/icons/qrcode.png')}}" alt="">
                         </div>
                         <div class="btn-area">
-                            <a href="javascript:;"><img src="{{asset('frontend/images/icons/appstore.png')}}" alt=""></a>
+                            <a href="{{ asset('image/royalmart.apk') }}"><img src="{{asset('frontend/images/icons/appstore.png')}}" alt=""></a>
                             <a href="javascript:;"><img src="{{asset('frontend/images/icons/playstore.png')}}" alt=""></a>
                         </div>
                     </div>
@@ -105,7 +90,11 @@
             <li><a class="mobile-nav-trigger" href="javascript:;"><i class="ri-function-line"></i><span>Categories</span></a></li>
             <li><a class="shop" href="{{ route('allproduct') }}"><span class="img"><img src="{{asset('frontend/images/logo/icon.png')}}" alt=""></span><span>shop</span></a></li>
             <li><a class="mobile-search-trigger" href="javascript:;"><i class="bi bi-search"></i><span>search</span></a></li>
-            <li><a class="privacy-trigger" href="javascript:;"><i class="ri-user-line"></i><span>account</span></a></li>
+            @auth
+                <li><a class="privacy-trigger" href="javascript:;"><i class="ri-user-line"></i><span>account</span></a></li>
+            @else
+                <li><a href="{{ route('login') }}"><i class="ri-user-line"></i><span>account</span></a></li>
+            @endauth
         </ul>
     </div>
 </div>
@@ -118,13 +107,26 @@
                 <span class="material-icons">account_circle</span>
             </div>
             <div class="user-login">
-                @auth
-
-                @else
-                    <ul>
+                <ul>
+                    @auth
+                        @if(Auth::check() && auth()->user()->role_id == 1)
+                            <li><a href="{{ route('admin.dashboard') }}" target="_blank">Dashboard</a></li>
+                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @endif
+                        @if(Auth::check() && auth()->user()->role_id == 2)
+                            <li><a href="{{ route('customer.information') }}">My Account</a></li>
+                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        @endif
+                    @else
                         <li><a href="{{ route('login') }}">sign in</a></li>
-                    </ul>
-                @endauth
+                    @endauth
+                </ul>
             </div>
         </div>
         <button type="button" class="close-nav"><i class="bi bi-x"></i></button>
@@ -170,9 +172,9 @@
             <div class="bottom-nav">
                 <ul>
                     <li>
-                        <a href="tel:{{ $website->phone }}">
+                        <a href="tel:{{ site_phone() }}">
                             <i class="bi bi-telephone-plus"></i>
-                            <span><strong>helpline</strong> <br> {{ $website->phone }}</span>
+                            <span><strong>helpline</strong> <br> {{ site_phone() }}</span>
                         </a>
                     </li>
                 </ul>
@@ -180,10 +182,9 @@
             <div class="divider"></div>
             <div class="links">
                 <ul>
-                    <li><a href="#">privacy policy</a></li>
+                    <li><a href="{{ route('about') }}">about us</a></li>
                     <li><a href="{{ route('track.my.order') }}">track order</a></li>
-                    <li><a href="#">return</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    {{ site_policy() }}
                 </ul>
             </div>
         </div>
@@ -199,17 +200,7 @@
             <div class="divider"></div>
             <div class="social-area">
                 <ul class="social">
-                    @php
-                        $icon = explode("|",$website->icon);
-                        $link = explode("|",$website->link);
-                    @endphp
-                    @foreach($icon as $key=>$icon)
-                        <li class="{{$icon}}">
-                            <a href="@if(isset($link[$key])){{$link[$key]}}@endif">
-                                <i class="fa fa-{{$icon}}"></i>
-                            </a>
-                        </li>
-                    @endforeach
+                    {{ site_icon() }}
                 </ul>
             </div>
         </div>
@@ -221,58 +212,45 @@
         <div class="nav-head">
             <div class="logo-area">
                 <a href="{{ route('home') }}">
-                    <img src="@if($website->logo){{ asset($website->logo) }} @else {{ asset('frontend/images/logo/logo.png') }} @endif" alt="">
+                    {{ site_logo() }}
                 </a>
                 <button type="button" class="close-nav">
                     <i class="bi bi-x"></i>
                 </button>
             </div>
-            <div class="title-area">
-                <h3 class="title">categories</h3>
-                <a href="">see all</a>
-            </div>
         </div>
-        @php
-            $categories = App\Models\Category::where('parent_id', NULL)->where('child_id', NULL)->where('status', 1)->orderBy('serial_number', 'asc')->latest()->limit(18)->get();
-        @endphp
+
         <ul>
-            @foreach($categories as $category)
-                @if($category->id == 1)
-                @else
-                    <li>
-                        <a href="{{ route('category', $category->slug) }}">
-                            <span>{{ $category->name }}</span>
-                        </a>
-                        @php
-                            $parentcategories = App\Models\Category::where('parent_id', $category->id)->where('child_id', NULL)->orderBy('serial_number', 'asc')->get();
-                        @endphp
-                        @if($parentcategories->count() > 0)
-                            <ul>
-                                @foreach($parentcategories as $parentcategory)
-                                    <li>
-                                        <a href="{{ route('category', $parentcategory->slug) }}">
-                                            {{ $parentcategory->name }}
-                                        </a>
-                                        @php
-                                            $childcategories = App\Models\Category::where('child_id', $parentcategory->id)->latest()->get();
-                                        @endphp
-                                        @if($childcategories->count() > 0)
-                                            <ul>
-                                                @foreach($childcategories as $childcategory)
-                                                    <li>
-                                                        <a href="{{ route('category', $childcategory->slug) }}">
-                                                            {{ $childcategory->name }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </li>
-                @endif
+            @foreach(main_categories() as $category)
+                <li>
+                    <a href="{{ route('category', $category->slug) }}">
+                        <span>{{ language_convert($category->name) }}</span>
+                    </a>
+
+                    @if(parent_categories($category->id)->count() > 0)
+                        <ul>
+                            @foreach(parent_categories($category->id) as $parentcategory)
+                                <li>
+                                    <a href="{{ route('category', $parentcategory->slug) }}">
+                                        {{ language_convert($parentcategory->name) }}
+                                    </a>
+
+                                    @if(child_categories($parentcategory->id)->count() > 0)
+                                        <ul>
+                                            @foreach(child_categories($parentcategory->id) as $childcategory)
+                                                <li>
+                                                    <a href="{{ route('category', $childcategory->slug) }}">
+                                                        {{ language_convert($childcategory->name) }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </li>
             @endforeach
         </ul>
     </div>

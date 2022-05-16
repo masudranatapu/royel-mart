@@ -308,61 +308,66 @@ button.privacy-trigger {
 
 /*========= 991px Media Query Start =========*/
 @media screen and (max-width: 991px) {
-.inner-sendlist-featuredbanner .banners-area .row .single,
-.inner-sendlist-featuredbanner .banners-area .row .single:first-child {
-    width: 50%;
-    flex: 0 0 auto;
-}
-.inner-header-bottom .logo-area {
-    width: 220px;
-}
-.informations-section .chat-btn {
-    font-size: 18px;
-}
-.informations-section .chat-btn i {
-    margin-top: 4px;
-}
-.product-media-area .product-photos {
-    width: 100%;
-    order: 2;
-    margin-top: 15px;
-    max-width: 500px;
-}
-.product-media-area .product-zoom-photo {
-    padding-left: 0;
-    width: 100%;
-}
-.reviews-sidebar-area .sidebar-area {
-    width: 100%;
-    padding-right: 0;
-    max-width: 400px;
-    margin-bottom: 20px;
-}
-.reviews-sidebar-area .reviews-area {
-    width: 100%;
-}
-.reviews-sidebar-area .sidebar-area .single-widget:not(.add-review) {
-    display: none;
-}
-.shipping-summary-wrapper,
-.cart-summary-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 50px;
-    justify-content: center;
-}
-.shipping-summary-wrapper .shipping-area,
-.cart-summary-wrapper .cart-area {
-    width: 100%;
-}
-.phone-verification-section {
-    padding: 50px 0;
-}
-.phone-verification-section .title-area .title {
-    font-size: 18px;
-}
-.phone-verification-section .verification-body {
-}
+    .breadcrumb-area .breadcrumb {
+        float: left;
+    }
+    .inner-sendlist-featuredbanner .banners-area .row .single,
+    .inner-sendlist-featuredbanner .banners-area .row .single:first-child {
+        width: 50%;
+        flex: 0 0 auto;
+    }
+    .inner-header-bottom .logo-area {
+        width: 220px;
+    }
+    .informations-section .chat-btn {
+        font-size: 18px;
+        right: 5px;
+        bottom: 69px;
+    }
+    .informations-section .chat-btn i {
+        margin-top: 4px;
+    }
+    .product-media-area .product-photos {
+        width: 100%;
+        order: 2;
+        margin-top: 15px;
+        max-width: 500px;
+    }
+    .product-media-area .product-zoom-photo {
+        padding-left: 0;
+        width: 100%;
+    }
+    .reviews-sidebar-area .sidebar-area {
+        width: 100%;
+        padding-right: 0;
+        max-width: 400px;
+        margin-bottom: 20px;
+    }
+    .reviews-sidebar-area .reviews-area {
+        width: 100%;
+    }
+    .reviews-sidebar-area .sidebar-area .single-widget:not(.add-review) {
+        display: none;
+    }
+    .shipping-summary-wrapper,
+    .cart-summary-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 50px;
+        justify-content: center;
+    }
+    .shipping-summary-wrapper .shipping-area,
+    .cart-summary-wrapper .cart-area {
+        width: 100%;
+    }
+    .phone-verification-section {
+        padding: 50px 0;
+    }
+    .phone-verification-section .title-area .title {
+        font-size: 18px;
+    }
+    .phone-verification-section .verification-body {
+    }
 }
 /*========= 991px Media Query End =========*/
 
@@ -551,7 +556,7 @@ table.wishlist {
     padding: 10px 10px;
 }
 .inner-header-bottom .logo-area {
-    width: 200px;
+    width: 255px;
 }
 .heading-area {
     padding-bottom: 10px;
@@ -856,7 +861,7 @@ section.pt-20 {
     width: 50px;
 }
 .informations-section .single-info .payments li img {
-    width: 40px;
+    width: 100%;
 }
 .informations-section .single-info .client-carousel {
     padding: 0 5px;
@@ -1210,7 +1215,7 @@ section.pt-20 {
     line-height: 1.4;
 }
 .breadcrumb-area .breadcrumb li {
-    font-size: 12px;
+    font-size: 14px;
 }
 .breadcrumb-area .breadcrumb li::after {
     font-size: 10px;

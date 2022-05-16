@@ -12,7 +12,7 @@
     --theme-color: #f15a29;
 }
 body {
-    font-family: "SolaimanLipi", "Roboto", sans-serif;
+    font-family: 'SolaimanLipi','Roboto-Regular','Helvetica Neue',Helvetica,Tahoma,Arial,Sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: var(--dark-color);
@@ -1084,7 +1084,7 @@ header {
     flex: 0 0 auto;
     width: 260px;
     display: flex;
-    column-gap: 10px;
+    column-gap: 30px;
 }
 .inner-header-bottom .logo-area .logo {
 }
@@ -1773,7 +1773,7 @@ header {
     object-fit: contain;
 }
 .category-section .categories-area .single-category .category-name {
-    font-size: 14px;
+    font-size: 16px;
     font-family: "Poppins", sans-serif;
     font-weight: 400;
     text-align: center;
@@ -2332,8 +2332,8 @@ header {
     background-color: var(--border-color);
 }
 .informations-section .chat-btn {
-    position: absolute;
-    right: 0;
+    position: fixed;
+    right: 68px;
     bottom: 0;
     background-color: var(--theme-color);
     color: var(--white-color);
@@ -2353,7 +2353,7 @@ header {
 }
 .informations-section .single-info .title {
     text-transform: capitalize;
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 600;
     color: var(--dark-color);
 }
@@ -2445,7 +2445,7 @@ header {
 .footer-section .footer-top .footer-contact span {
 }
 .footer-section .footer-top .footer-title {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 500;
     text-transform: capitalize;
     letter-spacing: 1px;
