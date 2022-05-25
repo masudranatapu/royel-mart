@@ -24,12 +24,12 @@
                                     <li class="@if(parent_categories($category->id)->count() > 0) has-sub @endif">
                                         <a href="{{ route('category', $category->slug) }}">
                                             <img loading="eager|lazy" src="@if(file_exists($category->image)) {{ asset($category->image) }} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="Cat">
-                                            {{ language_convert($category->name) }}
+                                            <p class="mb-0 text-truncate-1 pe-3 text-nowrap"><span>{{ language_convert($category->name) }}</span></p>
                                         </a>
                                         @if(parent_categories($category->id)->count() > 0)
                                             <ul>
                                                 @foreach(parent_categories($category->id) as $parentcategory)
-                                                    <li @if(parent_categories($category->id)->count() > 0) has-sub @endif>
+                                                    <li class=" @if(parent_categories($category->id)->count() > 0) has-sub @endif ">
                                                         <a href="{{ route('category', $parentcategory->slug) }}">
                                                             {{ language_convert($parentcategory->name) }}
                                                         </a>
@@ -57,7 +57,7 @@
                                 @foreach($sliders as $slider)
                                     <div class="single-slide">
                                         <a href="{{ $slider->link }}">
-                                            <img loading="eager|lazy" src="@if(file_exists($slider->image)) {{asset($slider->image)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="Slider">
+                                            <img loading="eager|lazy" src="@if(file_exists($slider->image)) {{asset($slider->image)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" height="424" alt="Slider">
                                         </a>
                                     </div>
                                 @endforeach
@@ -384,12 +384,14 @@
                             <figure>
                                 <img loading="eager|lazy" src="@if(file_exists($missionvission->image)) {{asset($missionvission->image)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="Mission & Vission">
                             </figure>
-                            <div class="content">
-                                <h2 class="title">{{ $missionvission->name }}</h2>
-                                <p class="desc">
-                                    {!! $missionvission->details !!}
-                                </p>
-                            </div>
+                            @if ($missionvission->name != NULL || $missionvission->details != NULL)
+                                <div class="content">
+                                    <h2 class="title">{{ $missionvission->name }}</h2>
+                                    <p class="desc">
+                                        {!! $missionvission->details !!}
+                                    </p>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>

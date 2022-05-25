@@ -58,7 +58,7 @@
                             <form action="{{ route('admin.update-offer-product') }}" method="POST" id="update-offer-product-form">
                                 @csrf
                                 <input type="hidden" name="offer_id" id="offer_id" value="{{ $offer_id }}">
-                                <div class="dt-responsive">
+                                <div class="dt-responsive table-responsive">
                                     <table id="simpletable" class="table table-striped table-bordered nowrap qs-pro-table" style="width:100%">
                                         <thead>
                                             <tr>

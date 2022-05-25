@@ -84,8 +84,8 @@
 							<div class="card">
 							    <div class="card-header">
 							    	<div class="wrapper">
-								        <h4 class="card-title">Order  {{ $orders->order_code }}</h4>
-								        <p class="card-category">{{ \Carbon\Carbon::parse($orders->created_at)->format('d M Y') }}</p>
+								        <h4 class="card-title">Order  {{ $order->order_code }}</h4>
+								        <p class="card-category">{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</p>
 							    	</div>
 							    </div>
 							    <div class="card-body">
@@ -97,69 +97,69 @@
 							    				</div>
 							    				<div class="tracking-body">
 							    					<ul class="steps">
-							    						<li class="step @if($orders->status == 'Pending') active @endif">
+							    						<li class="step @if($order->status == 'Pending') active @endif">
 							    							<span class="icon">
                                                                 <img src="{{asset('frontend/images/icons/shopping-bag.png')}}" alt="">
                                                             </span>
 							    							<p class="mb-0">
 							    								<span class="info">Order Pending</span>
 							    							    <span class="date">
-                                                                    @if($orders->pending_date)
-                                                                        {{ \Carbon\Carbon::parse($orders->pending_date)->format('d M Y')}}
+                                                                    @if($order->pending_date)
+                                                                        {{ \Carbon\Carbon::parse($order->pending_date)->format('d M Y')}}
                                                                     @else
-                                                                        {{ \Carbon\Carbon::parse($orders->created_at)->format('d M Y')}}
+                                                                        {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y')}}
 																	@endif
                                                                 </span>
 							    							</p>
 							    						</li>
-							    						<li class="step @if($orders->status == 'Confirmed') active @endif">
+							    						<li class="step @if($order->status == 'Confirmed') active @endif">
 							    							<span class="icon">
                                                                 <img src="{{asset('frontend/images/icons/packaging.png')}}" alt="">
                                                             </span>
 							    							<p class="mb-0">
 								    							<span class="info">Order Confirmed</span>
 							    							    <span class="date">
-                                                                    @if($orders->confirmed_date)
-																		{{ \Carbon\Carbon::parse($orders->confirmed_date)->format('d M Y')}}
+                                                                    @if($order->confirmed_date)
+																		{{ \Carbon\Carbon::parse($order->confirmed_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
 							    						</li>
-							    						<li class="step @if($orders->status == 'Processing') active @endif">
+							    						<li class="step @if($order->status == 'Processing') active @endif">
 							    							<span class="icon">
                                                                 <img src="{{asset('frontend/images/icons/box.png')}}" alt="">
                                                             </span>
 							    							<p class="mb-0">
 								    							<span class="info">Order Processing</span>
 							    							    <span class="date">
-                                                                    @if($orders->processing_date)
-																		{{ \Carbon\Carbon::parse($orders->processing_date)->format('d M Y')}}
+                                                                    @if($order->processing_date)
+																		{{ \Carbon\Carbon::parse($order->processing_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
 							    						</li>
-							    						<li class="step @if($orders->status == 'Delivered') active @endif">
+							    						<li class="step @if($order->status == 'Delivered') active @endif">
 							    							<span class="icon">
                                                                 <img src="{{asset('frontend/images/icons/truck.png')}}" alt="">
                                                             </span>
 							    							<p class="mb-0">
 								    							<span class="info">Order Delivered</span>
 							    							    <span class="date">
-                                                                    @if($orders->delivered_date)
-																		{{ \Carbon\Carbon::parse($orders->delivered_date)->format('d M Y')}}
+                                                                    @if($order->delivered_date)
+																		{{ \Carbon\Carbon::parse($order->delivered_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
 							    						</li>
-							    						<li class="step @if($orders->status == 'Successed') active @endif">
+							    						<li class="step @if($order->status == 'Successed') active @endif">
 							    							<span class="icon">
                                                                 <img src="{{asset('frontend/images/icons/deliver.png')}}" alt="">
                                                             </span>
 							    							<p class="mb-0">
 								    							<span class="info">Order Successed</span>
 							    							    <span class="date">
-                                                                    @if($orders->successed_date)
-																		{{ \Carbon\Carbon::parse($orders->successed_date)->format('d M Y')}}
+                                                                    @if($order->successed_date)
+																		{{ \Carbon\Carbon::parse($order->successed_date)->format('d M Y')}}
                                                                     @endif
                                                                 </span>
 							    							</p>
@@ -173,10 +173,10 @@
 							    				<div class="card">
 							    					<div class="card-body">
 							    						<h4 class="card-title">Shipping Address:</h4>
-							    						<p><label for="">name : </label><span>{{ $orders->shipping_name }}</span></p>
-							    						<p><label for="">Phone : </label><span>{{ $orders->shipping_phone }}</span></p>
+							    						<p><label for="">name : </label><span>{{ $order->shipping_name }}</span></p>
+							    						<p><label for="">Phone : </label><span>{{ $order->shipping_phone }}</span></p>
 							    						<p><label for="">Mail : </label><span></span></p>
-							    						<p><label for="">Address : </label><span>{{ $orders->shipping_address }}</span></p>
+							    						<p><label for="">Address : </label><span>{{ $order->shipping_address }}</span></p>
 							    					</div>
 							    				</div>
 							    			</div>
@@ -184,16 +184,16 @@
 							    				<div class="card">
 							    					<div class="card-body">
 							    						<h4 class="card-title">Billing Address:</h4>
-							    						<p><label for="">name : </label><span> @auth {{ Auth::user()->name }} @else {{ App\Models\User::find($orders->user_id)->name }} @endauth</span></p>
-							    						<p><label for="">Phone : </label><span>@auth {{ Auth::user()->phone }} @else {{ App\Models\User::find($orders->user_id)->phone }} @endauth</span></p>
-							    						<p><label for="">Mail : </label><span>@auth {{ Auth::user()->email }} @else {{ App\Models\User::find($orders->user_id)->email }} @endauth</span></p>
-							    						<p><label for="">Address : </label><span>@auth {{ Auth::user()->address }} @else {{ App\Models\User::find($orders->user_id)->address }} @endauth</span></p>
+							    						<p><label for="">name : </label><span> @auth {{ Auth::user()->name }} @else {{ App\Models\User::find($order->user_id)->name }} @endauth</span></p>
+							    						<p><label for="">Phone : </label><span>@auth {{ Auth::user()->phone }} @else {{ App\Models\User::find($order->user_id)->phone }} @endauth</span></p>
+							    						<p><label for="">Mail : </label><span>@auth {{ Auth::user()->email }} @else {{ App\Models\User::find($order->user_id)->email }} @endauth</span></p>
+							    						<p><label for="">Address : </label><span>@auth {{ Auth::user()->address }} @else {{ App\Models\User::find($order->user_id)->address }} @endauth</span></p>
 							    					</div>
 							    				</div>
 							    			</div>
 							    		</div>
 							    		<div class="payment-info mb-3">
-							    			<p><label for="">Payment Method : </label><span>{{ $orders->payment_method }}</span></p>
+							    			<p><label for="">Payment Method : </label><span>{{ $order->payment_method }}</span></p>
 							    		</div>
 								    	<table class="table order-view-table">
 								    		<thead>
@@ -211,7 +211,7 @@
                                                 @foreach($products as $key => $o_product)
                                                     @php
                                                         $product = App\Models\Product::findOrFail($o_product->product_id);
-                                                        $p_color = App\Models\ProductOrderColor::where('order_code', $orders->order_code)->where('product_id', $o_product->product_id)->first();
+                                                        $p_color = App\Models\ProductOrderColor::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->first();
                                                     @endphp
                                                     <tr>
                                                         <td>
@@ -227,7 +227,7 @@
                                                                 @if ($p_color)
                                                                     @php
                                                                         $color = App\Models\Color::findOrFail($p_color->color_id);
-                                                                        $p_size = App\Models\ProductOrderColorSize::where('order_code', $orders->order_code)->where('product_id', $o_product->product_id)->where('color_id', $color->id)->first();
+                                                                        $p_size = App\Models\ProductOrderColorSize::where('order_code', $order->order_code)->where('product_id', $o_product->product_id)->where('color_id', $color->id)->first();
                                                                     @endphp
                                                                     Color: {{ $color->name }}
                                                                     @if ($p_size)
@@ -266,15 +266,15 @@
 								    		<tbody>
 								    			<tr>
 								    				<th colspan="4">Subtotal : </th>
-								    				<td width="100px"><span class="subtotal">{{$orders->sub_total}} ৳</span></td>
+								    				<td width="100px"><span class="subtotal">{{$order->sub_total}} ৳</span></td>
 								    			</tr>
 								    			<tr>
 								    				<th colspan="4">Shipping Charge : </th>
-								    				<td width="100px"><span class="charge">{{$orders->shipping_amount}} ৳</span></td>
+								    				<td width="100px"><span class="charge">{{$order->shipping_amount}} ৳</span></td>
 								    			</tr>
 								    			<tr>
 								    				<th colspan="4">Grand Total : </th>
-								    				<td width="100px"><span class="grand-total">{{$orders->total}} ৳</span></td>
+								    				<td width="100px"><span class="grand-total">{{$order->total}} ৳</span></td>
 								    			</tr>
 								    		</tbody>
 								    	</table>

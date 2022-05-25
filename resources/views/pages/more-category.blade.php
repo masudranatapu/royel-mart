@@ -16,7 +16,7 @@
     @include('layouts.frontend.partial.general-breadcrumb')
 	<!-- End Breadcrumb -->
 	<section class="category-page-slider-section">
-		<div class="container-fluid">
+		<!--<div class="container-fluid">-->
             <div class="category-page-slider owl-carousel">
                 @foreach($categorybanners as $categorybanner)
                     <div class="single-slide">
@@ -26,7 +26,7 @@
                     </div>
                 @endforeach
             </div>
-        </div>
+        <!--</div>-->
 	</section>
 	<!-- End Category Page Slider -->
     <section class="category-section pt-2">

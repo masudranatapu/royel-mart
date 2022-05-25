@@ -59,6 +59,7 @@ use App\Http\Controllers\TrackingOrderController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CustomOrderController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\SslCommerzPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,9 +76,6 @@ Route::get('/', [HomeController::class, 'welcome'])->name('home');
 Route::get('language-change', [HomeController::class, 'language_change'])->name('language-change');
 
 // SSLCOMMERZ Start
-Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
-Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
-
 Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
 Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
 

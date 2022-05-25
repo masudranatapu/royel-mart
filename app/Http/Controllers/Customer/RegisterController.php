@@ -133,9 +133,9 @@ class RegisterController extends Controller
         $district_id = session()->get('district_id');
         $area_id = session()->get('area_id');
 
-        $divisions = Division::get();
-        $districts = District::where('division_id', $division_id)->get();
-        $areas = Area::where('district_id', $district_id)->get();
+        $divisions = Division::orderBy('name')->get();
+        $districts = District::where('division_id', $division_id)->orderBy('name')->get();
+        $areas = Area::where('district_id', $district_id)->orderBy('name')->get();
 
         return view('auth.register-confirm', compact('title','search', 'getName', 'getPhone', 'getEmail', 'getAddress', 'division_id', 'district_id', 'area_id', 'districts', 'divisions', 'areas'));
     }
@@ -208,7 +208,6 @@ class RegisterController extends Controller
     }
     public function customerGuestRegisterSend(Request $request)
     {
-
         $validatedData = $request->validate([
             'phone' => 'required|max:20',
         ]);
@@ -248,6 +247,8 @@ class RegisterController extends Controller
             return redirect()->route('customer.guestotp.send');
         }else {
             session()->flush();
+            
+            Toastr::error('Here is a internal problem. Please contact or inform to authority :(','Error');
             return redirect()->back();
         }
     }
@@ -338,7 +339,7 @@ class RegisterController extends Controller
             Toastr::warning('OTP code not  matched. Please give right otp code for next step :-)','success');
             return redirect()->back();
         }else {
-            $divisions = Division::latest()->get();
+            $divisions = Division::latest()->orderBy('name')->get();
             Toastr::success('Now checkout your cart products:-)','success');
             $search = '';
             return view('customer.guest.guestcheckout', compact('title', 'lan', 'p_cat_id','getPhone', 'divisions','search'));

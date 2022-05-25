@@ -58,7 +58,7 @@
                             <form action="{{ route('admin.update-quick-sale-product') }}" method="POST" id="update-quick-sale-product-form">
                                 @csrf
                                 <input type="hidden" name="quick_sale_id" id="quick_sale_id" value="{{ $quick_sale_id }}">
-                                <div class="dt-responsive">
+                                <div class="dt-responsive table-responsive">
                                     <table id="simpletable" class="table table-striped table-bordered nowrap qs-pro-table" style="width:100%">
                                         <thead>
                                             <tr>

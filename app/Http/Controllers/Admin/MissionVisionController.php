@@ -43,9 +43,7 @@ class MissionVisionController extends Controller
     {
         //
         $this->validate($request, [
-            'name' => 'required',
             'image' => 'required',
-            'details' => 'required',
         ]);
 
         $missionvision_image = $request->file('image');
@@ -55,7 +53,7 @@ class MissionVisionController extends Controller
             $missionvision_image_name = $slug.'-'.uniqid().'.'.$missionvision_image->getClientOriginalExtension();
             $upload_path = 'media/missionvision/';
             $missionvision_image->move($upload_path, $missionvision_image_name);
-    
+
             $image_url = $upload_path.$missionvision_image_name;
         }else {
             $image_url = NULL;
@@ -111,25 +109,20 @@ class MissionVisionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
         $missionvision_image = $request->file('image');
         $slug = 'missionvision';
         if(isset($missionvision_image)) {
             $missionvision_image_name = $slug.'-'.uniqid().'.'.$missionvision_image->getClientOriginalExtension();
             $upload_path = 'media/missionvision/';
             $missionvision_image->move($upload_path, $missionvision_image_name);
-            
+
             $old_missionvision_image = MissionVision::findOrFail($id);
             if($old_missionvision_image->image){
                 unlink($old_missionvision_image->image);
             }
 
             $image_url = $upload_path.$missionvision_image_name;
-        
+
             MissionVision::findOrFail($id)->update([
                 'name' => $request->name,
                 'image' => $image_url,
@@ -164,7 +157,7 @@ class MissionVisionController extends Controller
         if(file_exists($delteImage)) {
             unlink($delteImage);
         }
-        
+
         $missionvision->delete();
         Toastr::info('Mission vision successfully delete :-)','Success');
         return redirect()->back();

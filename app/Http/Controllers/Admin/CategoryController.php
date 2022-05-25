@@ -152,11 +152,13 @@ class CategoryController extends Controller
             }
         }
 
+        $cat_slug = strtolower(str_replace(' ', '-', $request->name));
+
         $category = new Category();
         $category->parent_id = $request->parent_id;
         $category->child_id = $request->child_id;
         $category->name = $request->name;
-        $category->slug = strtolower(str_replace(' ', '-', $request->name));
+        $category->slug = $cat_slug;
         $category->image = $image_url;
         $category->menu = $menuStatus;
         $category->feature = $featureStatus;
@@ -169,14 +171,12 @@ class CategoryController extends Controller
         }
         $category->show_hide = $showHideStatus;
 
+        $category->save();
+
+        $check_category = Category::where('slug', $cat_slug)->first();
+
         $charge_variant = new CategoryShippingChargeVariant();
-        if($request->parent_id == '' && $request->child_id == ''){
-            $charge_variant->category_id = $request->category_id;
-        }elseif($request->parent_id != '' && $request->child_id == ''){
-            $charge_variant->category_id = $request->parent_id;
-        }elseif($request->parent_id != '' && $request->child_id != ''){
-            $charge_variant->category_id = $request->child_id;
-        }
+        $charge_variant->category_id = $check_category->id;
         $charge_variant->qty_one_charge_variant = 0;
         $charge_variant->qty_two_charge_variant = 0;
         $charge_variant->qty_three_charge_variant = 0;
@@ -184,8 +184,6 @@ class CategoryController extends Controller
         $charge_variant->qty_five_charge_variant = 0;
         $charge_variant->qty_more_than_five_charge_variant = 0;
         $charge_variant->save();
-
-        $category->save();
 
         Toastr::success('Category successfully save :-)','Success');
         return redirect()->back();
@@ -199,7 +197,6 @@ class CategoryController extends Controller
      */
     public function categoryActive($id)
     {
-        //
         Category::findOrFail($id)->update(['status' => '1']);
         Toastr::info('Category Successfully Active :-)','Success');
         return redirect()->back();
@@ -212,7 +209,6 @@ class CategoryController extends Controller
      */
     public function categoryInactive($id)
     {
-        //
         Category::findOrFail($id)->update(['status' => '0']);
         Toastr::info('Category Successfully Inactive :-)','Success');
         return redirect()->back();
@@ -374,7 +370,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
         $categories = Category::findOrFail($id);
 
         if(file_exists($categories->image)) {
@@ -393,16 +388,15 @@ class CategoryController extends Controller
 
     public function viewParentCategory($slug)
     {
-        //
         $main_cat = Category::where('slug', $slug)->first();
         $title = "Parent Category";
         $parentcategories = Category::where('parent_id', $main_cat->id)->where('child_id', NULL)->orderBy('parent_serial','asc')->get();
         $serial = Category::where('status', '1')->where('is_default', '0')->max('parent_serial') + 1;
         return view('admin.category.parentcategory', compact('title', 'main_cat', 'parentcategories', 'serial'));
     }
+
     public function viewChildCategory($slug)
     {
-        //
         $childcategory = Category::where('slug', $slug)->first();
         $main_cat = Category::find($childcategory->parent_id);
         $title = "Child Category";
@@ -410,4 +404,5 @@ class CategoryController extends Controller
         $serial = Category::where('status', '1')->where('is_default', '0')->max('child_serial') + 1;
         return view('admin.category.childcategory', compact('title', 'childcategory', 'childcategories', 'main_cat', 'serial'));
     }
+
 }

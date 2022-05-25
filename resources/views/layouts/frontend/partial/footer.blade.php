@@ -164,7 +164,6 @@
                                 @csrf
                             </form>
                         @endif
-                    @else
                     @endauth
                 </ul>
             </div>

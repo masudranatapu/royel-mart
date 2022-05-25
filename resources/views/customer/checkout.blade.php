@@ -228,7 +228,7 @@
                     @if(session('cart'))
                         @foreach(session('cart') as $key => $checkoutDetails)
                             @php
-                                $sub_total += ($checkoutDetails['regular_price'] * $checkoutDetails['quantity']);
+                                $sub_total += ($checkoutDetails['price'] * $checkoutDetails['quantity']);
                                 $shipping_charge += $checkoutDetails['shipping_charge'];
                                 $discount += $checkoutDetails['discount'];
                             @endphp
@@ -252,7 +252,7 @@
                             </tr>
                             <tr>
                                 @php
-                                    $total = ($sub_total + $shipping_charge) - $discount;
+                                    $total = ($sub_total + $shipping_charge);
                                 @endphp
                                 <td>Shipping </td>
                                 <input type="hidden" name="shipping_amount" id="shipping_amount" value="{{ $shipping_charge }}">
@@ -260,8 +260,8 @@
                             </tr>
                             <tr>
                                 <td>Discount </td>
-                                <input type="hidden" name="discount" id="discount" value="{{ $discount }}">
-                                <td> <span id="discount_amount">{{ $discount }}</span> ৳</td>
+                                <input type="hidden" name="discount" id="discount" value="0">
+                                <td> <span id="discount_amount">0</span> ৳</td>
                             </tr>
                             <tr>
                                 <td>Payable Total</td>
@@ -306,7 +306,7 @@
                             </div>
                             <div class="single-type">
                                 <div class="inner-type">
-                                    <input id="cards" type="radio" name="payment_method" value="Payment Cards">
+                                    <input id="cards" type="radio" name="payment_method" value="Online">
                                     <label for="cards">
                                         <ul>
                                             <li><img src="{{asset('image/ssl.png')}}" alt=""></li>

@@ -1,6 +1,8 @@
 <?php
 namespace App\Library\SslCommerz;
 
+use App\Models\PaymentGateway;
+
 class SslCommerzNotification extends AbstractSslCommerz
 {
     protected $data = [];
@@ -198,6 +200,8 @@ class SslCommerzNotification extends AbstractSslCommerz
      */
     public function makePayment(array $requestData, $type = 'checkout', $pattern = 'json')
     {
+        // return $requestData;
+
         if (empty($requestData)) {
             return "Please provide a valid information list about transaction with transaction id, amount, success url, fail url, cancel url, store id and pass at least";
         }
@@ -279,8 +283,12 @@ class SslCommerzNotification extends AbstractSslCommerz
 
     public function setAuthenticationInfo()
     {
-        $this->data['store_id'] = $this->getStoreId();
-        $this->data['store_passwd'] = $this->getStorePassword();
+        $payment_gateway = PaymentGateway::where('title', 'SSL')->first();
+        $this->data['store_id'] = $payment_gateway->store_id;
+        $this->data['store_passwd'] = $payment_gateway->password;
+
+        // $this->data['store_id'] = $this->getStoreId();
+        // $this->data['store_passwd'] = $this->getStorePassword();
 
         return $this->data;
     }
@@ -297,84 +305,37 @@ class SslCommerzNotification extends AbstractSslCommerz
         $this->setFailedUrl();
         $this->setCancelUrl();
 
-        $this->data['success_url'] = $this->getSuccessUrl(); // string (255)	Mandatory - It is the callback URL of your website where user will redirect after successful payment (Length: 255)
-        $this->data['fail_url'] = $this->getFailedUrl(); // string (255)	Mandatory - It is the callback URL of your website where user will redirect after any failure occure during payment (Length: 255)
-        $this->data['cancel_url'] = $this->getCancelUrl(); // string (255)	Mandatory - It is the callback URL of your website where user will redirect if user canceled the transaction (Length: 255)
+        $this->data['success_url'] = $this->getSuccessUrl();
+        $this->data['fail_url'] = $this->getFailedUrl();
+        $this->data['cancel_url'] = $this->getCancelUrl();
 
-        /*
-         * IPN is very important feature to integrate with your site(s).
-         * Some transaction could be pending or customer lost his/her session, in such cases back-end IPN plays a very important role to update your backend office.
-         *
-         * Type: string (255)
-         * Important! Not mandatory, however better to use to avoid missing any payment notification - It is the Instant Payment Notification (IPN) URL of your website where SSLCOMMERZ will send the transaction's status (Length: 255).
-         * The data will be communicated as SSLCOMMERZ Server to your Server. So, customer session will not work.
-         * */
         $this->data['ipn_url'] = (isset($info['ipn_url'])) ? $info['ipn_url'] : null;
 
-        /*
-         * Type: string (30)
-         * Do not Use! If you do not customize the gateway list - You can control to display the gateway list at SSLCommerz gateway selection page by providing this parameters.
-         * Multi Card:
-            brac_visa = BRAC VISA
-            dbbl_visa = Dutch Bangla VISA
-            city_visa = City Bank Visa
-            ebl_visa = EBL Visa
-            sbl_visa = Southeast Bank Visa
-            brac_master = BRAC MASTER
-            dbbl_master = MASTER Dutch-Bangla
-            city_master = City Master Card
-            ebl_master = EBL Master Card
-            sbl_master = Southeast Bank Master Card
-            city_amex = City Bank AMEX
-            qcash = QCash
-            dbbl_nexus = DBBL Nexus
-            bankasia = Bank Asia IB
-            abbank = AB Bank IB
-            ibbl = IBBL IB and Mobile Banking
-            mtbl = Mutual Trust Bank IB
-            bkash = Bkash Mobile Banking
-            dbblmobilebanking = DBBL Mobile Banking
-            city = City Touch IB
-            upay = Upay
-            tapnpay = Tap N Pay Gateway
-         * GROUP GATEWAY
-            internetbank = For all internet banking
-            mobilebank = For all mobile banking
-            othercard = For all cards except visa,master and amex
-            visacard = For all visa
-            mastercard = For All Master card
-            amexcard = For Amex Card
-         * */
         $this->data['multi_card_name'] = (isset($info['multi_card_name'])) ? $info['multi_card_name'] : null;
 
-        /*
-         * Type: string (255)
-         * Do not Use! If you do not control on transaction - You can provide the BIN of card to allow the transaction must be completed by this BIN. You can declare by coma ',' separate of these BIN.
-         * Example: 371598,371599,376947,376948,376949
-         * */
         $this->data['allowed_bin'] = (isset($info['allowed_bin'])) ? $info['allowed_bin'] : null;
 
         ##   Parameters to Handle EMI Transaction ##
-        $this->data['emi_option'] = (isset($info['emi_option'])) ? $info['emi_option'] : null; // integer (1)	Mandatory - This is mandatory if transaction is EMI enabled and Value must be 1/0. Here, 1 means customer will get EMI facility for this transaction
-        $this->data['emi_max_inst_option'] = (isset($info['emi_max_inst_option'])) ? $info['emi_max_inst_option'] : null; // integer (2)	Max instalment Option, Here customer will get 3,6, 9 instalment at gateway page
-        $this->data['emi_selected_inst'] = (isset($info['emi_selected_inst'])) ? $info['emi_selected_inst'] : null; // integer (2)	Customer has selected from your Site, So no instalment option will be displayed at gateway page
-        $this->data['emi_allow_only'] = (isset($info['emi_allow_only'])) ? $info['emi_allow_only'] : 0; 
-        
+        $this->data['emi_option'] = (isset($info['emi_option'])) ? $info['emi_option'] : null;
+        $this->data['emi_max_inst_option'] = (isset($info['emi_max_inst_option'])) ? $info['emi_max_inst_option'] : null;
+        $this->data['emi_selected_inst'] = (isset($info['emi_selected_inst'])) ? $info['emi_selected_inst'] : null;
+        $this->data['emi_allow_only'] = (isset($info['emi_allow_only'])) ? $info['emi_allow_only'] : 0;
+
         return $this->data;
     }
 
     public function setCustomerInfo(array $info)
     {
-        $this->data['cus_name'] = $info['cus_name']; // string (50)	Mandatory - Your customer name to address the customer in payment receipt email
-        $this->data['cus_email'] = $info['cus_email']; // string (50)	Mandatory - Valid email address of your customer to send payment receipt from SSLCommerz end
-        $this->data['cus_add1'] = $info['cus_add1']; // string (50)	Mandatory - Address of your customer. Not mandatory but useful if provided
-        $this->data['cus_add2'] = $info['cus_add2']; // string (50)	Address line 2 of your customer. Not mandatory but useful if provided
-        $this->data['cus_city'] = $info['cus_city']; // string (50)	Mandatory - City of your customer. Not mandatory but useful if provided
-        $this->data['cus_state'] = (isset($info['cus_state'])) ? $info['cus_state'] : null; // string (50)	State of your customer. Not mandatory but useful if provided
-        $this->data['cus_postcode'] = $info['cus_postcode']; // string (30)	Mandatory - Postcode of your customer. Not mandatory but useful if provided
-        $this->data['cus_country'] = $info['cus_country']; // string (50)	Mandatory - Country of your customer. Not mandatory but useful if provided
-        $this->data['cus_phone'] = $info['cus_phone']; // string (20)	Mandatory - The phone/mobile number of your customer to contact if any issue arises
-        $this->data['cus_fax'] = (isset($info['cus_fax'])) ? $info['cus_fax'] : null; // string (20)	Fax number of your customer. Not mandatory but useful if provided
+        $this->data['cus_name'] = $info['cus_name'];
+        $this->data['cus_email'] = $info['cus_email'];
+        $this->data['cus_add1'] = $info['cus_add1'];
+        $this->data['cus_add2'] = $info['cus_add2'];
+        $this->data['cus_city'] = $info['cus_city'];
+        $this->data['cus_state'] = (isset($info['cus_state'])) ? $info['cus_state'] : null;
+        $this->data['cus_postcode'] = $info['cus_postcode'];
+        $this->data['cus_country'] = $info['cus_country'];
+        $this->data['cus_phone'] = $info['cus_phone'];
+        $this->data['cus_fax'] = (isset($info['cus_fax'])) ? $info['cus_fax'] : null;
 
         return $this->data;
     }

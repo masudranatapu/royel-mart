@@ -55,9 +55,9 @@ class ViewController extends Controller
             $area_id = session()->get('area_id');
         }
 
-        $divisions = Division::get();
-        $districts = District::where('division_id', $division_id)->get();
-        $areas = Area::where('district_id', $district_id)->get();
+        $divisions = Division::orderBy('name')->get();
+        $districts = District::where('division_id', $division_id)->orderBy('name')->get();
+        $areas = Area::where('district_id', $district_id)->orderBy('name')->get();
 
         $search = '';
         return view('pages.productdetails', compact('title', 'search', 'lan', 'p_cat_id', 'products', 'colors', 'relatedProducts', 'latestproducts', 'productsunits', 'reviews', 'fiveStarReviews', 'fourStarReviews', 'threeStarReviews', 'twoStarReviews', 'oneStarReviews', 'division_id', 'district_id', 'area_id', 'districts', 'divisions', 'areas'));

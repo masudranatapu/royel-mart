@@ -180,6 +180,9 @@
                                                             <option value="" disabled>Select One</option>
                                                             <option @if($products->product_type == 'New Arrival') selected @endif value="New Arrival" selected>New Arrival</option>
                                                             <option @if($products->product_type == 'Features') selected @endif value="Features">Features</option>
+                                                            <option @if($products->product_type == 'Best Selling') selected @endif value="Best Selling">Best Selling</option>
+                                                            <option @if($products->product_type == 'Hot Collections') selected @endif value="Hot Collections">Hot Collections</option>
+                                                            <option @if($products->product_type == 'Trending') selected @endif value="Trending">Trending</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">

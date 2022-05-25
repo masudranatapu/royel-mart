@@ -108,7 +108,7 @@
                                             iteam in cart
                                         </h4>
                                     </div>
-                                    <div class="cart-body">
+                                    <div class="cart-body c-scrollbar">
                                         @if(session('cart'))
                                             @foreach(session('cart') as $key => $cartdetails)
                                                 <div class="single-item">
@@ -131,14 +131,14 @@
                                                 </div>
                                             @endforeach
                                         @endif
-                                        <div class="single-item cart-footer">
-                                            @auth
-                                                <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
-                                            @else
-                                                <a href="{{ route('customer.guest-checkout.index') }}" type="button" class="sm-btn">Checkout</a>
-                                            @endauth
-                                            <a href="{{ route('cart') }}" type="button" class="sm-btn">View cart</a>
-                                        </div>
+                                    </div>
+                                    <div class="cart-footer">
+                                        @auth
+                                            <a href="{{ route('customer.checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+                                        @else
+                                            <a href="{{ route('customer.guest-checkout.index') }}" type="button" class="sm-btn">Checkout</a>
+                                        @endauth
+                                        <a href="{{ route('cart') }}" type="button" class="sm-btn">View cart</a>
                                     </div>
                                 </div>
                             </div>

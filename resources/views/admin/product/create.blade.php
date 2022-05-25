@@ -161,6 +161,9 @@
                                                             <option value="" disabled>Select One</option>
                                                             <option value="New Arrival" selected>New Arrival</option>
                                                             <option value="Features">Features</option>
+                                                            <option value="Best Selling">Best Selling</option>
+                                                            <option value="Hot Collections">Hot Collections</option>
+                                                            <option value="Trending">Trending</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-6">

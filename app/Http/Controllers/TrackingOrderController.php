@@ -29,16 +29,16 @@ class TrackingOrderController extends Controller
         $lan = $request->session()->get('lan');
         $p_cat_id = '';
 
-        $orders = Order::where('order_code', $request->order_code)->latest()->first();
-        $products = OrderProduct::where('order_code', $orders->order_code)->get();
+        $order = Order::where('order_code', $request->order_code)->latest()->first();
+        $products = OrderProduct::where('order_code', $order->order_code)->get();
 
-        if(!$orders){
+        if(!$order){
             Toastr::warning('Your order not found form order table :-)','Success');
             return redirect()->back();
         }
-        if($orders){
+        if($order){
             $search = '';
-            return view('pages.trackingorderview', compact('title', 'lan', 'p_cat_id', 'orders', 'products','search'));
+            return view('pages.trackingorderview', compact('title', 'lan', 'p_cat_id', 'order', 'products','search'));
         }
     }
 }

@@ -40,7 +40,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="product-btn cart-btn" onclick="changeLocationDone()">Cgange</button>
+                    <button type="submit" class="product-btn cart-btn" onclick="changeLocationDone()">Change</button>
                 </div>
             </div>
         </div>

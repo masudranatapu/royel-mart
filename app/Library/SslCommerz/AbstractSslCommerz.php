@@ -1,6 +1,8 @@
 <?php
 namespace App\Library\SslCommerz;
 
+use App\Models\PaymentGateway;
+
 abstract class AbstractSslCommerz implements SslCommerzInterface
 {
     protected $apiUrl;
@@ -9,7 +11,9 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
 
     protected function setStoreId($storeID)
     {
-        $this->storeId = $storeID;
+        // $payment_gateway = PaymentGateway::where('title', 'SSL')->first();
+        // return $this->storeId = $payment_gateway->store_id;
+        return $this->storeId = $storeID;
     }
 
     protected function getStoreId()
@@ -19,6 +23,8 @@ abstract class AbstractSslCommerz implements SslCommerzInterface
 
     protected function setStorePassword($storePassword)
     {
+        // $payment_gateway = PaymentGateway::where('title', 'SSL')->first();
+        // $this->storePassword = $payment_gateway->password;
         $this->storePassword = $storePassword;
     }
 

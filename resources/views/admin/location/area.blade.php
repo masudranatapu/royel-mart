@@ -18,7 +18,7 @@
                             <h2>Areas <small class="badge bg-success text-white">{{ $areas->count() }}</small></h2>
                         </div>
                         <div class="card-block">
-                            <div class="dt-responsive">
+                            <div class="dt-responsive table-responsive">
                                 <table id="simpletable"class="table table-striped table-bordered nowrap" style="width:100%">
                                     <thead>
                                         <tr>

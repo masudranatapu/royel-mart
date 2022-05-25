@@ -1195,9 +1195,9 @@ header {
     transition: all 0.4s ease;
 }
 .dropdown-menu.cart {
-    width: 280px;
-    max-height: 450px;
-    overflow-y: scroll;
+    width: 320px;
+
+
 }
 .dropdown:hover .dropdown-menu,
 .dropdown-menu.show {
@@ -1217,7 +1217,7 @@ header {
     padding: 10px;
 }
 .dropdown-cart .cart-body {
-}
+max-height: 400px;overflow: auto;}
 .dropdown-cart .cart-body .single-item {
     position: relative;
     display: flex;
@@ -1271,14 +1271,14 @@ header {
 }
 .dropdown-cart .cart-body .single-item .remove i {
 }
-.dropdown-cart .cart-body .cart-footer {
+.dropdown-cart .cart-footer {
     display: flex;
     justify-content: space-between;
     padding: 15px;
     background-color: var(--white-color);
     box-shadow: 0 -5px 10px rgba(0 0 0 / 0.1);
 }
-.dropdown-cart .cart-body .cart-footer .sm-btn {
+.dropdown-cart .cart-footer .sm-btn {
     border: none;
     color: var(--white-color);
     background-color: var(--theme-color);
@@ -1287,7 +1287,7 @@ header {
     font-size: 13px;
     text-transform: capitalize;
 }
-.dropdown-cart .cart-body .cart-footer .sm-btn:last-child {
+.dropdown-cart .cart-footer .sm-btn:last-child {
     background-color: var(--dark-color);
 }
 .user-nav {
@@ -1419,7 +1419,7 @@ header {
 }
 .category-area .category-list li a {
     display: flex;
-    flex-wrap: wrap;
+
     align-items: center;
     column-gap: 10px;
     font-size: 13px;
@@ -1476,7 +1476,7 @@ header {
 }
 .slider-area .main-slider .single-slide img {
     width: 100%;
-    height: 420px;
+
     object-fit: cover;
     border-radius: 6px;
 }
@@ -2377,6 +2377,7 @@ header {
 .informations-section .single-info .client-carousel li img {
     background-color: var(--white-color);
     margin: 5px 0;
+    height: 77px;
 }
 .informations-section .single-info .social {
     display: flex;
@@ -6190,4 +6191,33 @@ table.wishlist .btn-theme {
 .close-btn{
     border: none;
     background: #fff;
+}
+
+
+.c-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    background: var(--lite-white-color);
+    border-radius: 6px;
+}
+
+.c-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.c-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--theme-color);
+    border-radius: 6px;
+}
+
+.c-scrollbar {
+    scrollbar-color: var(--theme-color);
+    scrollbar-width: thin;
+}
+
+
+.text-truncate-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1 !important;
+    -webkit-box-orient: vertical;
 }

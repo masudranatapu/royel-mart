@@ -17,7 +17,7 @@ class DeliveryLocationController extends Controller
         $division_id = $request->division_id;
         $html = '';
 
-        $districts = District::where('division_id', $division_id)->get();
+        $districts = District::where('division_id', $division_id)->orderBy('name')->get();
         if($districts->count() > 0){
             $html .= '<option value="">Select One</option>';
             foreach($districts as $district){
@@ -35,7 +35,7 @@ class DeliveryLocationController extends Controller
         $district_id = $request->district_id;
         $html = '';
 
-        $areas = Area::where('district_id', $district_id)->get();
+        $areas = Area::where('district_id', $district_id)->orderBy('name')->get();
         if($areas->count() > 0){
             $html .= '<option value="">Select One</option>';
             foreach($areas as $area){

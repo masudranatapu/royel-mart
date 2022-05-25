@@ -59,7 +59,7 @@
 
     // Clients Carousel Initialize
     $(".client-carousel").owlCarousel({
-        items: 6,
+        items: 3,
         autoplay: true,
         autoplayTimeout: 3000,
         smartSpeed: 500,
