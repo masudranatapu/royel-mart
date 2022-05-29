@@ -121,89 +121,91 @@
                                     </thead>
                                     <tbody>
                                         @foreach($categorybanners as $key => $categorybanner)
-                                            <tr>
-                                                <td class="text-center">{{  $key + 1 }}</td>
-                                                <td class="text-center">
-                                                    <img wodth="60" height="60" src="{{ asset($categorybanner->image) }}">
-                                                </td>
-                                                <td class="">
-                                                    {{ $categorybanner->category->name }}
-                                                </td>
-                                                <td class="">
-                                                    {{ $categorybanner->link }}
-                                                </td>
-                                                <td class="text-center">
-                                                    @if($categorybanner->status == 1)
-                                                        <a title="Inactive Now" href="{{ route('admin.categorybanner.inactive', $categorybanner->id) }}" class="btn btn-success">
-                                                            Active
-                                                        </a>
-                                                    @else
-                                                        <a title="Active Now" href="{{ route('admin.categorybanner.active', $categorybanner->id) }}" class="btn btn-danger">
-                                                            Inactive
-                                                        </a>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
-                                                        <i class="ml-1 fa fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $categorybanner->id }})">
-                                                        <i class="ml-1 fa fa-trash"></i>
-                                                    </button>
-                                                    <form id="delete-form-{{ $categorybanner->id }}" action="{{ route('admin.category-banner.destroy', $categorybanner->id) }}" method="POST" style="display: none;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
-                                                </td>
-                                                <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Edit client</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true"> &times; </span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{ route('admin.category-banner.update', $categorybanner->id) }}" method="POST" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Category</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="text" class="form-control" readonly value="{{ $categorybanner->category->name }}">
+                                            @if (category_exist($categorybanner->category) == 1)
+                                                <tr>
+                                                    <td class="text-center">{{  $key + 1 }}</td>
+                                                    <td class="text-center">
+                                                        <img wodth="60" height="60" src="{{ asset($categorybanner->image) }}">
+                                                    </td>
+                                                    <td class="">
+                                                        {{ $categorybanner->category->name }}
+                                                    </td>
+                                                    <td class="">
+                                                        {{ $categorybanner->link }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if($categorybanner->status == 1)
+                                                            <a title="Inactive Now" href="{{ route('admin.categorybanner.inactive', $categorybanner->id) }}" class="btn btn-success">
+                                                                Active
+                                                            </a>
+                                                        @else
+                                                            <a title="Active Now" href="{{ route('admin.categorybanner.active', $categorybanner->id) }}" class="btn btn-danger">
+                                                                Inactive
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
+                                                            <i class="ml-1 fa fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-danger waves-effect" type="button" onclick="deleteData({{ $categorybanner->id }})">
+                                                            <i class="ml-1 fa fa-trash"></i>
+                                                        </button>
+                                                        <form id="delete-form-{{ $categorybanner->id }}" action="{{ route('admin.category-banner.destroy', $categorybanner->id) }}" method="POST" style="display: none;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+                                                    </td>
+                                                    <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Edit client</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true"> &times; </span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{{ route('admin.category-banner.update', $categorybanner->id) }}" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right">Category</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="text" class="form-control" readonly value="{{ $categorybanner->category->name }}">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Link</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="text" class="form-control" name="link" value="{{ $categorybanner->link }}" placeholder="link">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right">Link</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="text" class="form-control" name="link" value="{{ $categorybanner->link }}" placeholder="link">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right">Image (1900x300)</label>
-                                                                        <div class="col-md-9">
-                                                                            <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right">Image (1900x300)</label>
+                                                                            <div class="col-md-9">
+                                                                                <input type="file" onChange="mainThamEdit(this)" name="image" class="form-control">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right"></label>
-                                                                        <div class="col-md-9 text-left">
-                                                                            <img width="100" height="100" class="showThamEdit" src="{{ asset($categorybanner->image) }}">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right"></label>
+                                                                            <div class="col-md-9 text-left">
+                                                                                <img width="100" height="100" class="showThamEdit" src="{{ asset($categorybanner->image) }}">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="form-group row">
-                                                                        <label class="col-md-3 text-right"></label>
-                                                                        <div class="col-md-9 text-left">
-                                                                            <input type="submit" class="btn btn-success" value="Update Category Banner">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-md-3 text-right"></label>
+                                                                            <div class="col-md-9 text-left">
+                                                                                <input type="submit" class="btn btn-success" value="Update Category Banner">
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                </form>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </tr>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>

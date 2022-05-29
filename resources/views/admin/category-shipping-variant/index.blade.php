@@ -121,80 +121,82 @@
                                     </thead>
                                     <tbody>
                                         @foreach($category_crgs as $key => $category_crg)
-                                            <tr>
-                                                <td class="text-center">{{ $key + 1 }}</td>
-                                                <td>{{ $category_crg->category->name }}</td>
-                                                <td>{{ $category_crg->qty_one_charge_variant }}</td>
-                                                <td>{{ $category_crg->qty_two_charge_variant }}</td>
-                                                <td>{{ $category_crg->qty_three_charge_variant }}</td>
-                                                <td>{{ $category_crg->qty_four_charge_variant }}</td>
-                                                <td>{{ $category_crg->qty_five_charge_variant }}</td>
-                                                <td>{{ $category_crg->qty_more_than_five_charge_variant }}</td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
-                                                        <i class="ml-1 fa fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                                <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Update Charge</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true"> &times; </span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form action="{{ route('admin.category-shipping-charge.update', $category_crg->id) }}" method="POST" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <div class="form-group">
-                                                                        <label class="pull-left">Category</label>
-                                                                        <input type="text" class="form-control" readonly value="{{ $category_crg->category->name }}">
-                                                                    </div>
+                                            @if (category_exist($category_crg->category) == 1)
+                                                <tr>
+                                                    <td class="text-center">{{ $key + 1 }}</td>
+                                                    <td>{{ $category_crg->category->name }}</td>
+                                                    <td>{{ $category_crg->qty_one_charge_variant }}</td>
+                                                    <td>{{ $category_crg->qty_two_charge_variant }}</td>
+                                                    <td>{{ $category_crg->qty_three_charge_variant }}</td>
+                                                    <td>{{ $category_crg->qty_four_charge_variant }}</td>
+                                                    <td>{{ $category_crg->qty_five_charge_variant }}</td>
+                                                    <td>{{ $category_crg->qty_more_than_five_charge_variant }}</td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#large-Modal-edit{{$key}}">
+                                                            <i class="ml-1 fa fa-edit"></i>
+                                                        </button>
+                                                    </td>
+                                                    <div class="modal fade" id="large-Modal-edit{{$key}}" tabindex="-1" role="dialog">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Update Charge</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true"> &times; </span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="{{ route('admin.category-shipping-charge.update', $category_crg->id) }}" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                        <div class="form-group">
+                                                                            <label class="pull-left">Category</label>
+                                                                            <input type="text" class="form-control" readonly value="{{ $category_crg->category->name }}">
+                                                                        </div>
 
-                                                                    <div class="form-group row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="pull-left">Qty One (%)</label>
-                                                                            <input type="number" class="form-control" name="qty_one_charge_variant" value="{{ $category_crg->qty_one_charge_variant }}" min="0">
+                                                                        <div class="form-group row">
+                                                                            <div class="col-md-6">
+                                                                                <label class="pull-left">Qty One (%)</label>
+                                                                                <input type="number" class="form-control" name="qty_one_charge_variant" value="{{ $category_crg->qty_one_charge_variant }}" min="0">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="pull-left">Qty Two (%)</label>
+                                                                                <input type="number" class="form-control" name="qty_two_charge_variant" value="{{ $category_crg->qty_two_charge_variant }}" min="0">
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="pull-left">Qty Two (%)</label>
-                                                                            <input type="number" class="form-control" name="qty_two_charge_variant" value="{{ $category_crg->qty_two_charge_variant }}" min="0">
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div class="form-group row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="pull-left">Qty Three (%)</label>
-                                                                            <input type="number" class="form-control" name="qty_three_charge_variant" value="{{ $category_crg->qty_three_charge_variant }}" min="0">
+                                                                        <div class="form-group row">
+                                                                            <div class="col-md-6">
+                                                                                <label class="pull-left">Qty Three (%)</label>
+                                                                                <input type="number" class="form-control" name="qty_three_charge_variant" value="{{ $category_crg->qty_three_charge_variant }}" min="0">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="pull-left">Qty Four (%)</label>
+                                                                                <input type="number" class="form-control" name="qty_four_charge_variant" value="{{ $category_crg->qty_four_charge_variant }}" min="0">
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="pull-left">Qty Four (%)</label>
-                                                                            <input type="number" class="form-control" name="qty_four_charge_variant" value="{{ $category_crg->qty_four_charge_variant }}" min="0">
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div class="form-group row">
-                                                                        <div class="col-md-6">
-                                                                            <label class="pull-left">Qty Five (%)</label>
-                                                                            <input type="number" class="form-control" name="qty_five_charge_variant" value="{{ $category_crg->qty_five_charge_variant }}" min="0">
+                                                                        <div class="form-group row">
+                                                                            <div class="col-md-6">
+                                                                                <label class="pull-left">Qty Five (%)</label>
+                                                                                <input type="number" class="form-control" name="qty_five_charge_variant" value="{{ $category_crg->qty_five_charge_variant }}" min="0">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="pull-left">Qty More Than Five (%)</label>
+                                                                                <input type="number" class="form-control" name="qty_more_than_five_charge_variant" value="{{ $category_crg->qty_more_than_five_charge_variant }}" min="0">
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="pull-left">Qty More Than Five (%)</label>
-                                                                            <input type="number" class="form-control" name="qty_more_than_five_charge_variant" value="{{ $category_crg->qty_more_than_five_charge_variant }}" min="0">
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div class="form-group">
-                                                                        <input type="submit" class="btn btn-success pull-left" value="Update">
-                                                                    </div>
-                                                                </form>
+                                                                        <div class="form-group">
+                                                                            <input type="submit" class="btn btn-success pull-left" value="Update">
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </tr>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>

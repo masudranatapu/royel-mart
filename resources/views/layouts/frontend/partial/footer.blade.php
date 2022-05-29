@@ -41,7 +41,8 @@
                     <p class="footer-contact">
                         <span class="d-block">Address : {{ site_address() }}</span>
                         <span class="d-block">Email: {{ site_email() }}</span>
-                        <span class="d-block">Contact no: {{ site_phone() }}</span>
+                        <span class="d-block">Contact no: {{ site_footer_phone() }}</span>
+                        <span class="d-block">Telephone: {{ site_telephone() }}</span>
                     </p>
                 </div>
                 <div class="col-lg-2 col-md-3 col-6 mb-lg-0 mb-sm-4 mb-3">

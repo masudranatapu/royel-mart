@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\CategoryAds;
+use App\Models\CategoryBanner;
 use App\Models\CategoryShippingChargeVariant;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
@@ -378,6 +380,14 @@ class CategoryController extends Controller
 
         $default_cat = Category::where('is_default', '1')->first();
         Product::where('category_id', $id)->update([
+            'category_id' => $default_cat->id,
+        ]);
+
+        CategoryBanner::where('category_id', $id)->update([
+            'category_id' => $default_cat->id,
+        ]);
+
+        CategoryAds::where('category_id', $id)->update([
             'category_id' => $default_cat->id,
         ]);
 

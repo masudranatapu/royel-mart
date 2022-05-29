@@ -630,7 +630,7 @@ function clients(){
     $html = '';
 
     foreach($clients as $client){
-        $html .= '<li><img src="'.asset($client->image).'" alt=""></li>';
+        $html .= '<li><a href="'.$client->link.'"><img src="'.asset($client->image).'" alt=""></a></li>';
     }
 
     echo $html;
@@ -685,6 +685,50 @@ function site_phone(){
     $website = Website::latest()->first();
 
     echo $website->phone;
+}
+
+function site_footer_phone(){
+    $website = Website::latest()->first();
+    $html = '';
+    $html .= $website->phone;
+
+    if($website->another_phone_one != ''){
+        $html .= ', </br>'.$website->another_phone_one;
+    }
+
+    if($website->another_phone_two != ''){
+        $html .= ', </br>'.$website->another_phone_two;
+    }
+
+    if($website->another_phone_three != ''){
+        $html .= ', </br>'.$website->another_phone_three;
+    }
+
+    if($website->another_phone_four != ''){
+        $html .= ', </br>'.$website->another_phone_four;
+    }
+
+    if($website->another_phone_five != ''){
+        $html .= ', </br>'.$website->another_phone_five;
+    }
+
+    echo $html;
+}
+
+function site_telephone(){
+    $website = Website::latest()->first();
+
+    echo $website->tel;
+}
+
+function category_exist($id){
+    $category = Category::find($id);
+
+    if($category){
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
 function site_email(){

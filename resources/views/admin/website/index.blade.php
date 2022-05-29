@@ -92,6 +92,42 @@
                                                 <input type="number" class="form-control" name="phone" value="{{$website->phone}}" placeholder="Phone Number">
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Another Phone One</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" name="another_phone_one" value="{{$website->another_phone_one}}" placeholder="Phone">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Another Phone Two</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" name="another_phone_two" value="{{$website->another_phone_two}}" placeholder="Phone">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Another Phone Three</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" name="another_phone_three" value="{{$website->another_phone_three}}" placeholder="Phone">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Another Phone Four</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" name="another_phone_four" value="{{$website->another_phone_four}}" placeholder="Phone">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Another Phone Five</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" name="another_phone_five" value="{{$website->another_phone_five}}" placeholder="Phone">
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Fax Number</label>
                                             <div class="col-sm-9">
@@ -247,7 +283,7 @@
             });
 
         });
-        
+
         function mainTham(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

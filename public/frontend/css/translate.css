@@ -1,0 +1,61 @@
+/* google translate */
+.translated-ltr{margin-top:-40px;}
+.translated-ltr{margin-top:-40px;}
+.goog-te-banner-frame {display: none;margin-top:-20px;}
+
+.goog-logo-link {
+   display:none !important;
+}
+
+.goog-te-gadget{
+   color: transparent !important;
+}
+
+.goog-te-gadget .goog-te-combo {
+    width: 100px !important;
+    height: 30px !important;
+    background-color: var(--theme-color);
+    color: #fff;
+    border: none;
+    position: absolute !important;
+    margin: -8px 0 0px 0 !important;
+}
+
+/* #google_translate_element{
+    padding-right: 70px;
+} */
+
+.goog-te-gadget-simple {
+    background-color: #f15a29 !important;
+    border-left: 1px solid #f05a29 !important;
+    border-top: 1px solid #f15a29 !important;
+    border-bottom: 1px solid #f15a29 !important;
+    border-right: 1px solid #f15a29 !important;
+    font-size: 10pt;
+    color: #fff;
+    display: inline-block;
+    padding-top: 1px;
+    padding-bottom: 2px;
+    cursor: pointer;
+    zoom: 1;
+    *display: inline;
+}
+.goog-te-gadget img {
+    vertical-align: middle;
+    border: none;
+    display: none !important;
+}
+.inner-header-top .left-area .list li a span {
+    font-size: 18px;
+    margin-bottom: 2px;
+    color: #fff;
+}
+.inner-header-top .left-area .list li a span:nth-child(1) {
+    content: "NEW_CONTENT" !important;
+}
+.inner-header-top .left-area .list li a span:nth-child(3) {
+    border-left: 1px solid #f15a29 !important;
+}
+.inner-header-top .left-area .list li a span:nth-child(5) {
+    display: none !important;
+}

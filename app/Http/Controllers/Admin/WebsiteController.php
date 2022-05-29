@@ -93,7 +93,7 @@ class WebsiteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // return $request;
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required',
@@ -166,29 +166,33 @@ class WebsiteController extends Controller
             $link = NULL;
         }
 
-        Website::findOrFail($id)->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'logo' => $logo_image_url,
-            'favicon' => $fav_icon_url,
-            'footer_logo' => $foot_log_url,
-            'phone' => $request->phone,
-            'fax' => $request->fax,
-            'tel' => $request->tel,
-            'description' => $request->description,
-            'meta_keyword' => $request->meta_keyword,
-            'meta_decription' => $request->meta_decription,
-            'address' => $request->address,
-            'google_map' => $request->google_map,
-            'facebook_pixel' => $request->facebook_pixel,
-            'twitter_api' => $request->twitter_api,
-            'google_analytics' => $request->google_analytics,
-            'schema' => $request->schema,
-            'canonical_link' => $request->canonical_link,
-            'icon' => $icon,
-            'link' => $link,
-            'updated_at' => Carbon::now(),
-        ]);
+        $website = Website::find($id);
+        $website->name = $request->name;
+        $website->email = $request->email;
+        $website->logo = $logo_image_url;
+        $website->favicon = $fav_icon_url;
+        $website->footer_logo = $foot_log_url;
+        $website->phone = $request->phone;
+        $website->another_phone_one = $request->another_phone_one;
+        $website->another_phone_two = $request->another_phone_two;
+        $website->another_phone_three = $request->another_phone_three;
+        $website->another_phone_four = $request->another_phone_four;
+        $website->another_phone_five = $request->another_phone_five;
+        $website->fax = $request->fax;
+        $website->tel = $request->tel;
+        $website->description = $request->description;
+        $website->meta_keyword = $request->meta_keyword;
+        $website->meta_decription = $request->meta_decription;
+        $website->address = $request->address;
+        $website->google_map = $request->google_map;
+        $website->facebook_pixel = $request->facebook_pixel;
+        $website->twitter_api = $request->twitter_api;
+        $website->google_analytics = $request->google_analytics;
+        $website->schema = $request->schema;
+        $website->canonical_link = $request->canonical_link;
+        $website->icon = $icon;
+        $website->link = $link;
+        $website->save();
 
         Toastr::success('Website updated successfully :-)','Success');
         return redirect()->back();

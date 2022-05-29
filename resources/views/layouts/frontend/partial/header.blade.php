@@ -7,8 +7,9 @@
             <div class="inner-header-top">
                 <div class="left-area">
                     <ul class="list">
-                        <li><a href="{{ route('language-change',['lan'=>'en']) }}">EN</a></li>
-                        <li><a href="{{ route('language-change',['lan'=>'bn']) }}">BN </a></li>
+                        {{-- <li><a href="{{ route('language-change',['lan'=>'en']) }}">EN</a></li>
+                        <li><a href="{{ route('language-change',['lan'=>'bn']) }}">BN </a></li> --}}
+                        <li id="google_translate_element"></li>
                         <li><a href="tel: (+88) {{ site_phone() }}"><span class="material-icons-outlined">call</span>(+88) {{ site_phone() }}</a></li>
                     </ul>
                 </div>
