@@ -63,13 +63,13 @@
 						<button type="submit" class="submit-btn">Sign In</button>
 						<div class="login-options">
 							<div class="single-option">
-								<a href="{{ url('/auth/redirect/facebook') }}">
+								<a href="{{ url('login/facebook') }}">
 									<span class="icon"><img src="{{asset('frontend/images/icons/facebook.png')}}" alt=""></span>
 									<span>SignIn With Facebook</span>
 								</a>
 							</div>
 							<div class="single-option">
-								<a href="#">
+								<a href="{{ url('login/google') }}">
 									<span class="icon"><img src="{{asset('frontend/images/icons/google.png')}}" alt=""></span>
 									<span>SignIn With Google</span>
 								</a>

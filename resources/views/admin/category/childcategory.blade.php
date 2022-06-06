@@ -30,7 +30,9 @@
                                 <div class="col-md-6">
                                     <h2>
                                         Child Category <small class="badge bg-success text-white">{{ $childcategories->count() }}</small>
-                                        <a href="{{ route('admin.view-parent-category', $main_cat->slug) }}" class="btn btn-sm btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+                                        @if ($main_cat)
+                                            <a href="{{ route('admin.view-parent-category', $main_cat->slug) }}" class="btn btn-sm btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+                                        @endif
                                     </h2>
                                 </div>
                                 <div class="col-md-6 text-right">

@@ -372,7 +372,7 @@
                 </li>
                 <li class="{{ Request::is('admin/balance-sheet-report') || Request::is('admin/balance-sheet-report-search') ? 'active' : '' }}">
                     <a href="{{ route('admin.balance-sheet-report') }}">
-                        <span class="pcoded-mtext">Balance Sheet</span>
+                        <span class="pcoded-mtext">Income Statement</span>
                     </a>
                 </li>
             </ul>
@@ -418,7 +418,7 @@
                 </li>
                 <li class="{{ Request::is('admin/mission-vision')? 'active' : '' }}">
                     <a href="{{ route('admin.mission-vision.index') }}">
-                        <span class="pcoded-mtext">Mission Vision</span>
+                        <span class="pcoded-mtext">Information</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('admin/contact-massage')? 'active' : '' }}">

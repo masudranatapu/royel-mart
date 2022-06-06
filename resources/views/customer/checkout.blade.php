@@ -220,10 +220,10 @@
 
                 <div class="summary-area">
                     @php
-                    $sub_total = 0;
-                    $total = 0;
-                    $discount = 0;
-                    $shipping_charge = 0;
+                        $sub_total = 0;
+                        $total = 0;
+                        $discount = 0;
+                        $shipping_charge = 0;
                     @endphp
                     @if(session('cart'))
                         @foreach(session('cart') as $key => $checkoutDetails)
@@ -415,11 +415,11 @@
                 },
                 success:function(data) {
                     console.log(data);
-                    $('#shipping_amount').val(data['shipping_charge']);
-                    $('#total').val(data['total']);
+                    // $('#shipping_amount').val(data['shipping_charge']);
+                    // $('#total').val(data['total']);
 
-                    $('#delivery_amount').html(data['shipping_charge']);
-                    $('#grand_total').html(data['total']);
+                    // $('#delivery_amount').html(data['shipping_charge']);
+                    // $('#grand_total').html(data['total']);
                 },
             });
         }else{
@@ -551,11 +551,11 @@
             },
             success:function(data) {
                 console.log(data);
-                $('#shipping_amount').val(data['shipping_charge']);
-                $('#total').val(data['total']);
+                // $('#shipping_amount').val(data['shipping_charge']);
+                // $('#total').val(data['total']);
 
-                $('#delivery_amount').html(data['shipping_charge']);
-                $('#grand_total').html(data['total']);
+                // $('#delivery_amount').html(data['shipping_charge']);
+                // $('#grand_total').html(data['total']);
             },
         });
     });

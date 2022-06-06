@@ -149,29 +149,33 @@ class ViewController extends Controller
         $latestproducts = Product::latest()->limit(5)->get();
 
         $products = Product::where('category_id', $category->id)->latest()->limit(20)->get();
+
         if($products->count() <= 0){
             if($category->parent_id == '' && $category->child_id == ''){
                 $all_category = Category::where('parent_id',$cat_id)->orderBy('parent_serial','ASC')->get();
-
-                $products=Product::where(function ($q) use ($all_category) {
-                    foreach ($all_category as $category) {
-                        $q->orWhere('category_id',$category->id);
-
-                        $all_category = Category::where('child_id',$category->id)->orderBy('child_serial','ASC')->get();
+                if($all_category->count() > 0){
+                    $products=Product::where(function ($q) use ($all_category) {
                         foreach ($all_category as $category) {
-                            $q->orWhere('category_id', $category->id);
-                        }
+                            $q->orWhere('category_id',$category->id);
 
-                    }
-                })->latest()->limit(20)->get();
+                            $all_category = Category::where('child_id',$category->id)->orderBy('child_serial','ASC')->get();
+                            foreach ($all_category as $category) {
+                                $q->orWhere('category_id', $category->id);
+                            }
+
+                        }
+                    })->latest()->limit(20)->get();
+                }
             }else if($category->parent_id != '' && $category->child_id == ''){
                 $all_category = Category::where('child_id', $cat_id)->orderBy('child_serial','ASC')->get();
 
-                $products=Product::where(function ($q) use ($all_category) {
-                    foreach ($all_category as $category) {
-                        $q->orWhere('category_id', $category->id);
-                    }
-                })->latest()->limit(20)->get();
+                if($all_category->count() > 0){
+                    $products=Product::where(function ($q) use ($all_category) {
+                        foreach ($all_category as $category) {
+                            $q->orWhere('category_id', $category->id);
+                        }
+                    })->latest()->limit(20)->get();
+                }
             }
         }
 

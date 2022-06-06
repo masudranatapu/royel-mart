@@ -112,17 +112,17 @@
                     @auth
                         @if(Auth::check() && auth()->user()->role_id == 1)
                             <li><a href="{{ route('admin.dashboard') }}" target="_blank">Dashboard</a></li>
-                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
+                            {{-- <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
-                            </form>
+                            </form> --}}
                         @endif
                         @if(Auth::check() && auth()->user()->role_id == 2)
-                            <li><a href="{{ route('customer.information') }}">My Account</a></li>
-                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
+                            {{-- <li><a href="{{ route('customer.information') }}">My Account</a></li> --}}
+                            {{-- <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a></li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
-                            </form>
+                            </form> --}}
                         @endif
                     @else
                         <li><a href="{{ route('login') }}">sign in</a></li>

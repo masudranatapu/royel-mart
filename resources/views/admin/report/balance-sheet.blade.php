@@ -17,7 +17,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h2>Balance Sheet</h2>
+                                    <h2>Income Statement</h2>
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <form class="row" action="{{ route('admin.balance-sheet-report-search') }}" method="GET" enctype="multipart/form-data">

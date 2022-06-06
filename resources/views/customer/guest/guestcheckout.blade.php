@@ -353,11 +353,11 @@
                 },
                 success:function(data) {
                     console.log(data);
-                    $('#shipping_amount').val(data['shipping_charge']);
-                    $('#total').val(data['total']);
+                    // $('#shipping_amount').val(data['shipping_charge']);
+                    // $('#total').val(data['total']);
 
-                    $('#delivery_amount').html(data['shipping_charge']);
-                    $('#grand_total').html(data['total']);
+                    // $('#delivery_amount').html(data['shipping_charge']);
+                    // $('#grand_total').html(data['total']);
                 },
             });
 

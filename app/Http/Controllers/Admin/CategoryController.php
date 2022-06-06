@@ -347,7 +347,7 @@ class CategoryController extends Controller
 
         $variant_decrease_charge = CategoryShippingChargeVariant::where('category_id', $id)->first();
 
-        if($variant_decrease_charge == ''){
+        if(!$variant_decrease_charge){
             $charge_variant = new CategoryShippingChargeVariant();
             $charge_variant->category_id = $id;
             $charge_variant->qty_one_charge_variant = 0;

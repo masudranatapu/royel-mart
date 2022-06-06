@@ -376,7 +376,7 @@ class HomeController extends Controller
         if ($category->parent_id != NULL && $category->child_id != NULL) {
             return redirect()->route('category', $slug);
         } elseif ($category->parent_id != NULL && $category->child_id == NULL) {
-            $categories = Category::where('child_id', $category->id)->where('is_default', '0')->orderBy('child_serial', 'ASC')->get();
+            $categories = Category::where('parent_id', $category->parent_id)->where('child_id', $category->id)->where('is_default', '0')->orderBy('child_serial', 'ASC')->get();
         } elseif ($category->parent_id == NULL && $category->child_id == NULL) {
             $categories = Category::where('parent_id', $category->id)->where('child_id', NULL)->where('is_default', '0')->orderBy('parent_serial', 'ASC')->get();
         }

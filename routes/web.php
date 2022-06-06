@@ -90,6 +90,12 @@ Auth::routes();
 Route::get('/auth/redirect/{provider}', [AuthController::class, 'redirect']);
 Route::get('/callback/{provider}', [AuthController::class, 'callback']);
 
+Route::get('/login/facebook', [AuthController::class, 'facebookRedirect']);
+Route::get('/login/facebook/callback', [AuthController::class, 'loginWithFacebook']);
+
+Route::get('/login/google', [AuthController::class, 'googleRedirect']);
+Route::get('/login/google/callback', [AuthController::class, 'loginWithGoogle']);
+
 Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
 Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy');
 Route::get('contact-us', [HomeController::class, 'contact'])->name('contact');

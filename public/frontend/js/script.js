@@ -139,6 +139,7 @@
         $(".sidebar-products-area .sidebar-area").removeClass("show");
         $(".sidebar-toggler").removeClass("active");
         $(".mobile-privacy-nav").removeClass("show");
+        $("body").removeClass("overflow-hidden");
         $(".mobile-nav").removeClass("show");
         $(".mobile-cart").removeClass("show");
     });
@@ -422,6 +423,7 @@
     // Mobile Privacy Nav
     $(".privacy-trigger").click(function(){
         $(".mobile-privacy-nav").addClass("show");
+        $("body").addClass("overflow-hidden");
         $(".overlay").fadeIn("100");
         return false;
     });
@@ -449,6 +451,7 @@
         $(".mobile-nav").removeClass("show");
         $(".overlay").fadeOut("100");
         $(".mobile-privacy-nav").removeClass("show");
+        $("body").removeClass("overflow-hidden");
         return false;
     });
 

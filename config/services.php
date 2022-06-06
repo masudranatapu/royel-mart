@@ -31,9 +31,15 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '703868887467911',
-        'client_secret' => '21e5f746014e51fd72b1fce6fe22e173',
-        'redirect' => 'http://localhost:8002/callback/facebook',
-      ],
+        'client_id' => '876554666620375',
+        'client_secret' => 'c0e8891e597a9b04a94a8dc0659c952e',
+        'redirect' => 'https://royalmart-bd.com/login/facebook/callback',
+    ],
+
+    'google' => [
+        'client_id' => '1012560364616-ibndq55bdd48nbpnev01g6ripg70h7o2.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect' => 'https://royalmart-bd.com/login/google/callback',
+    ],
 
 ];

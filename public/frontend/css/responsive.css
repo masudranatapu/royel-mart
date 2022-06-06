@@ -372,6 +372,10 @@
     }
     .phone-verification-section .verification-body {
     }
+    .banners-area .single-banner img {
+        object-fit: contain;
+        height: auto;
+    }
 }
 /*========= 991px Media Query End =========*/
 

@@ -101,7 +101,7 @@
                         @foreach($banners as $banner)
                             <div class="col-lg-3 col-6 px-1 mb-lg-0 mb-2 single">
                                 <div class="single-banner">
-                                    <a href="#">
+                                    <a href="{{ $banner->link }}">
                                         <img loading="eager|lazy" src="@if(file_exists($banner->image)) {{asset($banner->image)}} @else {{ asset('media/general-image/no-photo.jpg') }} @endif" alt="Banner">
                                     </a>
                                 </div>

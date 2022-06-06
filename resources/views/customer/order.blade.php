@@ -198,6 +198,7 @@
                                                             <div class="single">
                                                                 <label for=""><strong>total :</strong></label>
                                                                 <strong>{{$order->total}} TK</strong>
+                                                                {{-- <strong>{{$order->sub_total + $order->shipping_amount}} TK</strong> --}}
                                                             </div>
                                                         </div>
                                                     </div>

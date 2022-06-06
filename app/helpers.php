@@ -788,3 +788,20 @@ function category_breadcrumb_title($p_cat_id){
     echo $html;
 }
 
+function total_customer(){
+    echo User::where('role_id', 2)->count();
+}
+
+function total_product(){
+    echo Product::count();
+}
+
+function total_sale(){
+    $sales = Order::where('status', '!=', 'Pending')->where('status', '!=', 'Canceled')->latest()->get();
+    echo $sales->sum('total');
+}
+
+function total_order(){
+    echo Order::count();
+}
+

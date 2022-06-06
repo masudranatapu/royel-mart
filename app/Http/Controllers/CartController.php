@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
+use App\Models\CategoryShippingChargeVariant;
+use App\Models\DefaultDeliveryLocation;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
@@ -133,6 +136,76 @@ class CartController extends Controller
             $cart = session()->get('cart');
 
             $cart[$request->id]["quantity"] = $request->quantity;
+
+            if(Auth::user()){
+                if(Auth::user()->area_id == ''){
+                    $default_location = DefaultDeliveryLocation::latest()->first();
+                    $area_id = $default_location->area_id;
+                }else{
+                    $area_id = Auth::user()->area_id;
+                }
+
+                $area = Area::find($area_id);
+            }else{
+                $area_id = session()->get('area_id');
+                $area = Area::find($area_id);
+            }
+
+            $product_id = $request->id;
+            $pro_quantity = $request->quantity;
+
+            $shipping_charge = 0;
+
+            $product = Product::find($product_id);
+            $check_sh_variant = CategoryShippingChargeVariant::where('category_id', $product->category_id)->first();
+            if($product->free_shipping_charge == 1){
+                if($area->is_inside == 0){
+
+                    if($check_sh_variant){
+                        $temp_sp_charge = $product->outside_shipping_charge * $pro_quantity;
+                        if($pro_quantity == 1){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_one_charge_variant)/100);
+                        }elseif($pro_quantity == 2){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_two_charge_variant)/100);
+                        }elseif($pro_quantity == 3){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_three_charge_variant)/100);
+                        }elseif($pro_quantity == 4){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_four_charge_variant)/100);
+                        }elseif($pro_quantity == 5){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_five_charge_variant)/100);
+                        }elseif($pro_quantity > 5){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_more_than_five_charge_variant)/100);
+                        }
+                    }else{
+                        $sp_charge = $product->outside_shipping_charge * $pro_quantity;
+                    }
+                    $shipping_charge = ($sp_charge);
+                }else{
+                    if($check_sh_variant){
+                        $temp_sp_charge = $product->inside_shipping_charge * $pro_quantity;
+                        if($pro_quantity == 1){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_one_charge_variant)/100);
+                        }elseif($pro_quantity == 2){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_two_charge_variant)/100);
+                        }elseif($pro_quantity == 3){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_three_charge_variant)/100);
+                        }elseif($pro_quantity == 4){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_four_charge_variant)/100);
+                        }elseif($pro_quantity == 5){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_five_charge_variant)/100);
+                        }elseif($pro_quantity > 5){
+                            $sp_charge = $temp_sp_charge - (($temp_sp_charge * $check_sh_variant->qty_more_than_five_charge_variant)/100);
+                        }
+                    }else{
+                        $sp_charge = $product->inside_shipping_charge * $pro_quantity;
+                    }
+                    $shipping_charge = ($sp_charge);
+                }
+            }else{
+                $shipping_charge = 0;
+            }
+
+            $cart[$request->id]["shipping_charge"] = $shipping_charge;
 
             session()->put('cart', $cart);
 

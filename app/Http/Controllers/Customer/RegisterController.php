@@ -29,11 +29,34 @@ class RegisterController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:100',
-            'phone' => 'required|max:20|unique:users',
+            'phone' => 'required|min:11|max:13|unique:users',
         ]);
+
+        $three_ch = substr($request->input('phone'), 0, 3);
+        $two_ch = substr($request->input('phone'), 0, 2);
+
+        if($three_ch == '+88'){
+            $phone = substr($request->input('phone'), 3);
+        }elseif($two_ch == '+8' || $two_ch == '88'){
+            $phone = substr($request->input('phone'), 2);
+        }else{
+            $phone = $request->input('phone');
+        }
+
+        $three_ch_number = substr($phone, 0, 3);
+        if($three_ch_number != '013' || $three_ch_number != '017' || $three_ch_number != '014' || $three_ch_number != '019' || $three_ch_number != '016' || $three_ch_number != '015' || $three_ch_number != '018'){
+            Toastr::error('Invalid phone number :(','Error');
+            return redirect()->back();
+        }
+
+        if(strlen($phone) != 11){
+            Toastr::error('Invalid phone number :(','Error');
+            return redirect()->back();
+        }
+
         // get name and phone in session
         $request->session()->put('name', $request->name);
-        $request->session()->put('phone', $request->phone);
+        $request->session()->put('phone', $phone);
         $request->session()->put('email', $request->email);
         $request->session()->put('address', $request->address);
 
@@ -41,7 +64,7 @@ class RegisterController extends Controller
         $request->session()->put('otp_code', $otpCode);
 
         $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
-        $phoneNumber = $request->phone;
+        $phoneNumber = $phone;
         $messages = Message::latest()->first();
         $allmessages = $messages->message;
         $sentMessages = $messages->sent;
@@ -209,16 +232,39 @@ class RegisterController extends Controller
     public function customerGuestRegisterSend(Request $request)
     {
         $validatedData = $request->validate([
-            'phone' => 'required|max:20',
+            'phone' => 'required|min:11|max:13',
         ]);
         // get name and phone in session
-        $request->session()->put('phone', $request->phone);
+
+        $three_ch = substr($request->input('phone'), 0, 3);
+        $two_ch = substr($request->input('phone'), 0, 2);
+
+        if($three_ch == '+88'){
+            $phone = substr($request->input('phone'), 3);
+        }elseif($two_ch == '+8' || $two_ch == '88'){
+            $phone = substr($request->input('phone'), 2);
+        }else{
+            $phone = $request->input('phone');
+        }
+
+        $three_ch_number = substr($phone, 0, 3);
+        if($three_ch_number != '013' || $three_ch_number != '017' || $three_ch_number != '014' || $three_ch_number != '019' || $three_ch_number != '016' || $three_ch_number != '015' || $three_ch_number != '018'){
+            Toastr::error('Invalid phone number :(','Error');
+            return redirect()->back();
+        }
+
+        if(strlen($phone) != 11){
+            Toastr::error('Invalid phone number :(','Error');
+            return redirect()->back();
+        }
+
+        $request->session()->put('phone', $phone);
 
         $otpCode = rand(11111, 99999);
         $request->session()->put('otp_code', $otpCode);
 
         $otp = "Your Royalmart-bd.com Register OTP code id ". $otpCode . ". Do not share your pin to others.";
-        $phoneNumber = $request->phone;
+        $phoneNumber = $phone;
         $messages = Message::latest()->first();
         $allmessages = $messages->message;
         $sentMessages = $messages->sent;
@@ -247,7 +293,7 @@ class RegisterController extends Controller
             return redirect()->route('customer.guestotp.send');
         }else {
             session()->flush();
-            
+
             Toastr::error('Here is a internal problem. Please contact or inform to authority :(','Error');
             return redirect()->back();
         }

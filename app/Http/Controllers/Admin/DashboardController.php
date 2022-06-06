@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use App\Models\Contact;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -17,17 +18,11 @@ class DashboardController extends Controller
 
     public function index()
     {
-        // $cats = Category::get();
-        // foreach($cats as $cat){
-        //     $category = Category::find($cat->id);
-        //     $category->serial_number = NULL;
-        //     $category->parent_serial = NULL;
-        //     $category->child_serial = NULL;
-        //     $category->save();
-        // }
-
         $title = "Admin Dashboard";
-        return view('admin.index', compact('title'));
+        $from = Carbon::parse(date('Y-m-d'))->format('Y-m-d 00:00:00');
+        $to = Carbon::parse(date('Y-m-d'))->format('Y-m-d 23:59:59');
+        $today_order = Order::whereBetween('created_at',[$from,$to])->latest()->get();
+        return view('admin.index', compact('title','today_order'));
     }
 
     public function profile()
