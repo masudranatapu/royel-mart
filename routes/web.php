@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\HomeController;
@@ -87,14 +88,16 @@ Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
 //SSLCOMMERZ END
 
 Auth::routes();
-Route::get('/auth/redirect/{provider}', [AuthController::class, 'redirect']);
-Route::get('/callback/{provider}', [AuthController::class, 'callback']);
+Route::post('/user-login', [LoginController::class, 'login'])->name('user-login');
 
-Route::get('/login/facebook', [AuthController::class, 'facebookRedirect']);
-Route::get('/login/facebook/callback', [AuthController::class, 'loginWithFacebook']);
+// Route::get('/auth/redirect/{provider}', [AuthController::class, 'redirect']);
+// Route::get('/callback/{provider}', [AuthController::class, 'callback']);
 
-Route::get('/login/google', [AuthController::class, 'googleRedirect']);
-Route::get('/login/google/callback', [AuthController::class, 'loginWithGoogle']);
+// Route::get('/login/facebook', [AuthController::class, 'facebookRedirect']);
+// Route::get('/login/facebook/callback', [AuthController::class, 'loginWithFacebook']);
+
+// Route::get('/login/google', [AuthController::class, 'googleRedirect']);
+// Route::get('/login/google/callback', [AuthController::class, 'loginWithGoogle']);
 
 Route::get('about-us', [HomeController::class, 'aboutUs'])->name('about');
 Route::get('policy/{slug}', [HomeController::class, 'policy'])->name('policy');

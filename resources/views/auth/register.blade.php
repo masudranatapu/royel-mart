@@ -61,13 +61,13 @@
 						<label for="" class="alter">Or</label>
 						<div class="login-options">
 							<div class="single-option">
-								<a href="{{ url('login/facebook') }}">
+								<a href="#">
 									<span class="icon"><img src="{{asset('frontend/images/icons/facebook.png')}}" alt=""></span>
 									<span>SignIn With Facebook</span>
 								</a>
 							</div>
 							<div class="single-option">
-								<a href="{{ url('login/google') }}">
+								<a href="#">
 									<span class="icon"><img src="{{asset('frontend/images/icons/google.png')}}" alt=""></span>
 									<span>SignIn With Google</span>
 								</a>
